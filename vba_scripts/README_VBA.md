@@ -1,7 +1,8 @@
 # 🛠️ Hướng Dẫn Sử Dụng Bộ Macro VBA (Dành Cho Excel Bản Cũ & Offline Pro)
 
-> **Lưu ý nhanh cho người dùng Microsoft Excel 365:**
-> Bạn **KHÔNG cần cài VBA** để chạy Offline! Hãy mở ngay 6 file trong thư mục [`templates/pro_macro/`](../templates/pro_macro/) — ảnh hoạt ảnh đã được nhúng trực tiếp vào ô (`Place in Cell` + `INDEX`), chạy **100% Offline, không cần Internet, không cảnh báo Macro**!
+> **Lưu ý nhanh cho phiên bản 2.0 Final:**
+> Toàn bộ **10 mẫu chính trong [`templates/`](../templates/)** ĐÃ hoạt động **100% Offline trên mọi phiên bản Excel (2016 / 2019 / 2021 / 365 • Windows & Mac)** bằng Linked Pictures & Form Control Checkboxes — **KHÔNG cần cài VBA hay Macro**!
+> Ngoài ra, người dùng Excel 365 có thêm 10 bản ảnh nhúng trực tiếp vào ô trong [`templates/pro_macro/`](../templates/pro_macro/).
 
 Bộ script VBA trong thư mục này dành cho người dùng **Excel 2016 / 2019 / 2021** (chưa có hàm `=IMAGE()` và Checkbox gốc) hoặc muốn thêm tính năng **nhấn đúp để tick nhanh, thông báo ăn mừng chuỗi 7/14/21/30 ngày, nút Reset tháng mới & xuất PDF 1 trang**.
 

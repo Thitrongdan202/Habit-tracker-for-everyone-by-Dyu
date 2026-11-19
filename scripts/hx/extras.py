@@ -5,8 +5,8 @@ from __future__ import annotations
 
 from .core import (Canvas, Styles, acell, cell, colname, qs, rng, kpi_card, donut,
                    place_chart, axis_font, text_lines, MONTHS_EN)
-from .tracker import (C_NAME, C_D0, C_D31, C_WK0, R_H0, R_H1, R_PCT, R_DONE, R_DAY,
-                      N_HABITS, TrackerRefs, day_col)
+from .tracker import (C_NAME, C_D0, C_D31, CALC_WK_COL0, CALC_DONEN_COL, CALC_GOALN_COL,
+                      R_H0, R_H1, R_PCT, R_DONE, R_DAY, N_HABITS, TrackerRefs, day_col)
 
 
 def _finish_sheet(ws, cv: Canvas, tab_color: str, zoom: int = 90):
@@ -23,11 +23,11 @@ def _finish_sheet(ws, cv: Canvas, tab_color: str, zoom: int = 90):
 # =========================================================================== #
 #  1A. Template 1 — 🎯 Yearly Goals & Habits (Ref 2)
 # =========================================================================== #
-def build_yearly_goals_sheet(wb, styles: Styles, offline_sprites: bool = False):
+def build_yearly_goals_sheet(wb, styles: Styles, universal: bool = True, pro_365_offline: bool = False) -> dict:
     name = "🎯 Yearly Goals & Habits"
     t = styles.t
     ws = wb.add_worksheet(name)
-    cv = Canvas(wb, ws, styles, name)
+    cv = Canvas(wb, ws, styles, name, universal=universal)
 
     # Cols: 0 gutter | 1 chk | 2 MY GOALS | 3 MONTHLY | 4 WEEKLY | 5 DAILY | 6 gap | 7..8 sidebar | 9 gutter
     cv.col(0, 2.5)
@@ -129,14 +129,22 @@ def build_yearly_goals_sheet(wb, styles: Styles, offline_sprites: bool = False):
     cv.merge(rp + 1, 7, rp + 3, 7, f'=COUNTIFS({goal_rng},"?*",{chk_rng},TRUE)', bold=True,
              font_size=28, align="center", bg_color=t.card, font_color=t.primary_dark,
              font_name=t.font_title)
-    st5 = "=INDEX(_Sprites!$A$1:$A$6,6)" if offline_sprites else '=_xlfn.IMAGE(CFG_IMG_BASE&"stage_5.png")'
-    cv.merge(rp + 1, 8, rp + 3, 8, st5, align="center", bg_color=t.card)
+    linked_pics = []
+    if universal:
+        cv.merge(rp + 1, 8, rp + 3, 8, "", align="center", bg_color=t.card)
+        linked_pics.append({"sheet": name, "r1": rp + 1, "c1": 8, "r2": rp + 3, "c2": 8,
+                            "formula": "=_Assets!$B$7"})
+    elif pro_365_offline:
+        cv.merge(rp + 1, 8, rp + 3, 8, "=INDEX(_Sprites!$A$1:$A$6,6)", align="center", bg_color=t.card)
+    else:
+        cv.merge(rp + 1, 8, rp + 3, 8, '=_xlfn.IMAGE(CFG_IMG_BASE&"stage_5.png")', align="center", bg_color=t.card)
     cv.merge(rp + 4, 7, rp + 4, 8,
              f'="trên tổng "&COUNTIF({goal_rng},"?*")&" mục tiêu đã đặt"',
              font_size=9, italic=True, align="center", bg_color=t.soft, font_color=t.ink)
     cv.box(rp, 7, rp + 4, 8, t.line)
 
     _finish_sheet(ws, cv, t.primary)
+    return {"checkboxes": {name: cv.form_checkboxes}, "linked_pictures": linked_pics}
 
 
 # =========================================================================== #
@@ -263,6 +271,7 @@ def build_annual_overview_sheet(wb, styles: Styles, tr: TrackerRefs):
         cv.box(21, c1, 25, c2, t.line)
 
     _finish_sheet(ws, cv, t.primary_dark)
+    return {"checkboxes": {name: cv.form_checkboxes}}
 
 
 # =========================================================================== #
@@ -364,7 +373,7 @@ def build_reflection_notes_sheet(wb, styles: Styles, tr: TrackerRefs):
         cv.row(rr, 25)
         cv.put(rr, 1, f"WEEK {w + 1}", bold=True, font_size=9.5, align="center",
                bg_color=t.week_head[w], font_color=t.week_on[w])
-        cv.put(rr, 2, f"={tr.q}!{acell(3, C_WK0 + w)}", bold=True, font_size=10, align="center",
+        cv.put(rr, 2, f"={tr.calc_q}!{acell(2, CALC_WK_COL0 + w)}", bold=True, font_size=10, align="center",
                num_format="0%", bg_color=t.week_tint[w], font_color=t.ink)
         cv.merge(rr, 3, rr, 4, wk_notes[w][0], font_size=9, align="left", indent=1,
                  bg_color=t.card, font_color=t.ink)
@@ -374,6 +383,7 @@ def build_reflection_notes_sheet(wb, styles: Styles, tr: TrackerRefs):
     cv.box(rw, 1, rw + 6, 7, t.line)
 
     _finish_sheet(ws, cv, t.primary_dark)
+    return {"checkboxes": {name: cv.form_checkboxes}}
 
 
 # =========================================================================== #
@@ -441,8 +451,8 @@ def build_rainbow_analytics_sheet(wb, styles: Styles, tr: TrackerRefs):
         bg = t.card if i % 2 == 0 else t.page
         snm = f"{tr.q}!{cell(src_r, C_NAME)}"
         cv.put(rr, 1, f'=IF({snm}="","",{snm})', align="left", indent=1, font_size=9, bg_color=bg, font_color=t.ink)
-        cv.put(rr, 2, f'=IF({snm}="","",{tr.q}!{cell(src_r, 92)})', align="center", font_size=9, bg_color=bg)
-        cv.put(rr, 3, f'=IF({snm}="","",{tr.q}!{cell(src_r, 91)})', align="center", font_size=9, bg_color=bg)
+        cv.put(rr, 2, f'=IF({snm}="","",{tr.calc_q}!{cell(src_r, CALC_GOALN_COL)})', align="center", font_size=9, bg_color=bg)
+        cv.put(rr, 3, f'=IF({snm}="","",{tr.calc_q}!{cell(src_r, CALC_DONEN_COL)})', align="center", font_size=9, bg_color=bg)
         cv.put(rr, 4, f'=IF({snm}="","",{tr.q}!{cell(src_r, rc["progress"])})', align="center", bold=True,
                font_size=9, num_format="0%", bg_color=bg, font_color=t.primary_dark)
         cv.put(rr, 5, f'=IF({snm}="","",{tr.q}!{cell(src_r, rc["cur"])})', align="center", font_size=9, bg_color=bg)
@@ -519,16 +529,17 @@ def build_rainbow_analytics_sheet(wb, styles: Styles, tr: TrackerRefs):
     place_chart(cv, dc_ch, 18, 9, r_dt + 2, 12)
 
     _finish_sheet(ws, cv, t.primary_dark)
+    return {"checkboxes": {name: cv.form_checkboxes}}
 
 
 # =========================================================================== #
 #  4A. Template 4 (Sage Botanical) — 💰 Monthly Budget (Ref 5 Ultimate Budget!)
 # =========================================================================== #
-def build_monthly_budget_sheet(wb, styles: Styles) -> dict:
+def build_monthly_budget_sheet(wb, styles: Styles, universal: bool = True) -> dict:
     name = "💰 Monthly Budget"
     t = styles.t
     ws = wb.add_worksheet(name)
-    cv = Canvas(wb, ws, styles, name)
+    cv = Canvas(wb, ws, styles, name, universal=universal)
     q = qs(name)
 
     SAGE, SAND, CORAL, SKY = "#9FB8AD", "#E8D5B7", "#E0A899", "#B6C9DF"
@@ -797,18 +808,26 @@ def build_monthly_budget_sheet(wb, styles: Styles) -> dict:
     cv.grid(R_LOG_H, 1, R_LOG1, 12, t.line)
     cv.box(26, 1, R_LOG1, 12, t.line)
 
+    # Locale-safe range-backed dropdowns (hidden cols 20..21)
+    cv.cols(20, 21, 5, hidden=True)
+    bud_cats = ["Salary", "Side Hustle", "Bills & Rent", "Food & Groceries",
+                "Transport & Daily", "Wants & Fun", "Self-Growth", "Savings"]
+    bud_types = ["Income", "Expense", "Savings"]
+    for idx, val in enumerate(bud_cats):
+        cv.put(idx, 20, val)
+    for idx, val in enumerate(bud_types):
+        cv.put(idx, 21, val)
     ws.data_validation(rng(R_LOG0, 2, R_LOG1, 2),
-                       {"validate": "list", "source": ["Salary", "Side Hustle", "Bills & Rent",
-                                                       "Food & Groceries", "Transport & Daily",
-                                                       "Wants & Fun", "Self-Growth", "Savings"]})
+                       {"validate": "list", "source": f"={rng(0, 20, len(bud_cats) - 1, 20)}"})
     ws.data_validation(rng(R_LOG0, 8, R_LOG1, 8),
-                       {"validate": "list", "source": ["Income", "Expense", "Savings"]})
+                       {"validate": "list", "source": f"={rng(0, 21, len(bud_types) - 1, 21)}"})
 
     _finish_sheet(ws, cv, SAGE, zoom=85)
     return {
         "q": q, "income": f"{q}!{cf_inc}", "expenses": f"{q}!{cf_exp}",
         "savings": f"{q}!{cf_sav}", "left": f"{q}!{cf_lft}",
         "savings_rate": f"{q}!{sav_rate_addr}", "goal_progress": f"{q}!{goal_prog_addr}",
+        "checkboxes": {name: cv.form_checkboxes},
     }
 
 
@@ -910,16 +929,17 @@ def build_life_overview_sheet(wb, styles: Styles, tr: TrackerRefs, b: dict):
     cv.box(17, 1, 20, 8, t.line)
 
     _finish_sheet(ws, cv, t.primary_dark)
+    return {"checkboxes": {name: cv.form_checkboxes}}
 
 
 # =========================================================================== #
 #  5. Template 5 (Lavender Dream) — ✨ Gratitude & Review
 # =========================================================================== #
-def build_gratitude_sheet(wb, styles: Styles, tr: TrackerRefs, well: dict):
+def build_gratitude_sheet(wb, styles: Styles, tr: TrackerRefs, well: dict, universal: bool = True) -> dict:
     name = "✨ Gratitude & Review"
     t = styles.t
     ws = wb.add_worksheet(name)
-    cv = Canvas(wb, ws, styles, name)
+    cv = Canvas(wb, ws, styles, name, universal=universal)
 
     cv.col(0, 2.5)
     cv.col(1, 9.5)
@@ -1019,6 +1039,7 @@ def build_gratitude_sheet(wb, styles: Styles, tr: TrackerRefs, well: dict):
     cv.box(24, 6, 28, 7, t.line)
 
     _finish_sheet(ws, cv, t.primary_dark)
+    return {"checkboxes": {name: cv.form_checkboxes}}
 
 
 # =========================================================================== #
@@ -1168,3 +1189,449 @@ def build_milestones_sheet(wb, styles: Styles, tr: TrackerRefs, total_xp_ref: st
     cv.box(19, 1, 22, 4, NAVY)
 
     _finish_sheet(ws, cv, NAVY)
+
+
+# =========================================================================== #
+#  7. Template 7 (Sakura Zen Study) — 📚 Course & Reading Progress
+# =========================================================================== #
+def build_sakura_course_sheet(wb, styles: Styles, tr: TrackerRefs, study: dict) -> dict:
+    name = "📚 Course & Reading"
+    t = styles.t
+    ws = wb.add_worksheet(name)
+    cv = Canvas(wb, ws, styles, name)
+    q = qs(name)
+
+    cv.col(0, 2.5)
+    for i, w in enumerate([39, 14, 11, 11, 13, 15, 2.2, 16, 16], start=1):
+        cv.col(i, w)
+    cv.col(10, 2.5)
+    cv.cols(15, 16, 5, hidden=True)
+
+    cv.row(0, 12)
+    cv.row(1, 32)
+    cv.row(2, 10)
+    cv.row(3, 20)
+    cv.row(4, 34)
+    cv.row(5, 12)
+    cv.row(6, 24)
+    cv.row(7, 22)
+
+    cv.merge(1, 1, 1, 9, "🌸  READING & COURSE PROGRESS TRACKER — THEO DÕI HỌC TẬP & ĐỌC SÁCH",
+             font_name=t.font_title, font_size=15, bold=True, align="center",
+             bg_color=t.primary, font_color=t.on_primary)
+    cv.box(1, 1, 1, 9, t.line)
+
+    r0, r1 = 8, 19
+    pct_r = rng(r0, 5, r1, 5)
+    tot_r = rng(r0, 3, r1, 3)
+    don_r = rng(r0, 4, r1, 4)
+
+    cv.put(1, 15, f"=IFERROR(SUM({don_r})/SUM({tot_r}),0)")
+    cv.put(2, 15, f"=1-{acell(1, 15)}")
+
+    kpi_card(cv, 3, 1, 2, "⏱️  TOTAL FOCUS HOURS", f"={study['total_hrs']}", num_format='0.0" h"', value_color=t.primary_dark)
+    kpi_card(cv, 3, 3, 4, "🌸  AVG FOCUS / DAY", f"={study['avg_hrs']}", num_format='0.0" h"', value_color=t.ink)
+    kpi_card(cv, 3, 5, 6, "📚  OVERALL STUDY %", f"={acell(1, 15)}", num_format="0.0%", value_color=t.primary_dark)
+    kpi_card(cv, 3, 8, 9, "🔥  STUDY STREAK", f"={tr.a('best')}", num_format='0" ngày"', value_color=t.streak_hi)
+
+    cv.merge(6, 1, 6, 6, "📖  DANH SÁCH KHÓA HỌC & SÁCH ĐANG ĐỌC (Nhập số bài/trang → tự tính %)",
+             bold=True, font_size=9.5, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
+    for c, h in [(1, "Tên Sách / Khóa Học"), (2, "Phân loại"), (3, "Tổng"), (4, "Đã học"),
+                 (5, "Tiến độ %"), (6, "Trạng thái")]:
+        cv.put(7, c, h, bold=True, font_size=8.5, align="center", bg_color=t.soft, font_color=t.ink)
+
+    items = [
+        ("Deep Work — Cal Newport", "Sách kỹ năng", 280, 280),
+        ("Atomic Habits — James Clear", "Sách thói quen", 320, 240),
+        ("Khóa học Data Analysis & SQL", "Khóa Online", 40, 32),
+        ("Luyện thi IELTS / Tiếng Anh giao tiếp", "Ngoại ngữ", 60, 42),
+        ("Khóa Python Automation Thực Chiến", "Lập trình", 30, 18),
+        ("Tư Duy Phản Biện & Ghi Chép Zettelkasten", "Sách kỹ năng", 220, 110),
+        ("Thiết kế Slide & Storytelling", "Kỹ năng mềm", 16, 16),
+        ("Tài chính cá nhân thông minh", "Tài chính", 250, 75),
+    ]
+    for i in range(r1 - r0 + 1):
+        rr = r0 + i
+        cv.row(rr, 23)
+        bg = t.card if i % 2 == 0 else t.page
+        nm, cat, tot, dn = items[i] if i < len(items) else ("", "", "", "")
+        cv.put(rr, 1, nm, bold=bool(nm), font_size=9.5, align="left", indent=1, bg_color=bg, font_color=t.ink)
+        cv.put(rr, 2, cat, font_size=9, align="center", bg_color=bg, font_color=t.muted)
+        cv.put(rr, 3, tot, font_size=9, align="center", bg_color=bg, num_format="0")
+        cv.put(rr, 4, dn, font_size=9, bold=bool(dn), align="center", bg_color=bg, num_format="0")
+        cv.put(rr, 5, f'=IF({cell(rr, 1)}="","",IFERROR(MIN(1,{cell(rr, 4)}/{cell(rr, 3)}),0))',
+               bold=True, font_size=9, align="center", num_format="0%", bg_color=bg, font_color=t.primary_dark)
+        cv.put(rr, 6, f'=IF({cell(rr, 1)}="","",IF({cell(rr, 5)}>=1,"🌸 Hoàn thành",IF({cell(rr, 5)}>0,"📖 Đang học","📌 Sắp tới")))',
+               bold=True, font_size=8.8, align="center", bg_color=bg, font_color=t.ink)
+    cv.grid(7, 1, r1, 6, t.line)
+    cv.box(6, 1, r1, 6, t.line)
+    ws.conditional_format(pct_r, {"type": "data_bar", "bar_color": "#F2A4B8", "bar_solid": True,
+                                  "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1})
+
+    # Right Donut + Study Reflection
+    cv.merge(6, 8, 6, 9, "🌸  STUDY COMPLETION DONUT", bold=True, font_size=9.5, align="center",
+             bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(7, 8, 13, 9, f"={acell(1, 15)}", bold=True, font_size=22, align="center",
+             num_format="0%", bg_color=t.card, font_color=t.primary_dark, font_name=t.font_title)
+    d = donut(wb, f"={q}!{rng(1, 15, 2, 15)}", ["#D47D95", "#FCE6EC"], hole=68)
+    place_chart(cv, d, 7, 8, 13, 9, pad_x=22, pad_y=6)
+    cv.box(6, 8, 13, 9, t.line)
+
+    cv.merge(15, 8, 15, 9, "✨  KEY TAKEAWAYS • GHI CHÚ ĐẮT GIÁ", bold=True, font_size=9,
+             align="center", bg_color="#A8C69F", font_color="#FFFFFF")
+    cv.merge(16, 8, r1, 9,
+             "• Đọc chậm & tóm tắt bằng ngôn từ của mình giúp nhớ lâu gấp 3 lần.\n"
+             "• Hoàn thành 2 cuốn sách + 1 khóa học mỗi tháng!",
+             font_size=9, align="left", indent=1, text_wrap=True, bg_color=t.card, font_color=t.ink)
+    cv.box(15, 8, r1, 9, t.line)
+
+    _finish_sheet(ws, cv, t.primary_dark)
+    return {"checkboxes": {}}
+
+
+# =========================================================================== #
+#  8. Template 8 (Ocean Coral Fitness) — 🏅 Streak Hall of Fame
+# =========================================================================== #
+def build_ocean_hall_of_fame_sheet(wb, styles: Styles, tr: TrackerRefs, fit: dict) -> dict:
+    name = "🏅 Streak Hall of Fame"
+    t = styles.t
+    ws = wb.add_worksheet(name)
+    cv = Canvas(wb, ws, styles, name)
+    q = qs(name)
+
+    cv.col(0, 2.5)
+    for i, w in enumerate([34, 11, 11, 12, 12, 16, 2.2, 15, 15, 15], start=1):
+        cv.col(i, w)
+    cv.col(11, 2.5)
+
+    cv.row(0, 12)
+    cv.row(1, 32)
+    cv.row(2, 10)
+    cv.row(3, 20)
+    cv.row(4, 34)
+    cv.row(5, 12)
+    cv.row(6, 24)
+    cv.row(7, 22)
+
+    cv.merge(1, 1, 1, 10, "🪸  FITNESS STREAK HALL OF FAME — BẢNG VINH DANH KỶ LỤC",
+             font_name=t.font_title, font_size=15, bold=True, align="center",
+             bg_color=t.primary, font_color=t.on_primary)
+    cv.box(1, 1, 1, 10, t.line)
+
+    kpi_card(cv, 3, 1, 2, "🪸  MONTHLY FITNESS %", f"={tr.a('overall')}", num_format="0.0%", value_color=t.primary)
+    kpi_card(cv, 3, 3, 4, "⚡  AVG ENERGY", f"={fit['avg_energy']}", num_format='0.0" /5"', value_color="#C46B48")
+    kpi_card(cv, 3, 5, 6, "💧  AVG WATER", f"={fit['avg_water']}", num_format='0.0" L"', value_color=t.primary)
+    kpi_card(cv, 3, 8, 10, "🔥  ALL-TIME BEST STREAK", f"={tr.a('best')}", num_format='0" ngày"', value_color=t.primary)
+
+    cv.merge(6, 1, 6, 6, "🏅  LONGEST STREAK HALL OF FAME (Tự động xếp hạng huy chương)",
+             bold=True, font_size=9.5, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
+    for c, h in [(1, "Thói quen thể chất"), (2, "Đã làm"), (3, "Tỷ lệ %"),
+                 (4, "Streak HT"), (5, "Max Streak"), (6, "Huy chương")]:
+        cv.put(7, c, h, bold=True, font_size=8.5, align="center", bg_color=t.soft, font_color=t.ink)
+
+    r0, r1 = 8, 8 + N_HABITS - 1
+    rc = tr.right_cols
+    for i in range(N_HABITS):
+        rr = r0 + i
+        src_r = R_H0 + i
+        cv.row(rr, 22)
+        bg = t.card if i % 2 == 0 else t.page
+        snm = f"{tr.q}!{cell(src_r, C_NAME)}"
+        cv.put(rr, 1, f'=IF({snm}="","",{snm})', bold=True, font_size=9, align="left", indent=1, bg_color=bg, font_color=t.ink)
+        cv.put(rr, 2, f'=IF({snm}="","",{tr.calc_q}!{cell(src_r, CALC_DONEN_COL)})', align="center", font_size=9, bg_color=bg)
+        cv.put(rr, 3, f'=IF({snm}="","",{tr.q}!{cell(src_r, rc["progress"])})', align="center", bold=True,
+               font_size=9, num_format="0%", bg_color=bg, font_color=t.primary)
+        cv.put(rr, 4, f'=IF({snm}="","",{tr.q}!{cell(src_r, rc["cur"])})', align="center", font_size=9, bg_color=bg)
+        cv.put(rr, 5, f'=IF({snm}="","",{tr.q}!{cell(src_r, rc["long"])})', align="center", bold=True,
+               font_size=9.5, bg_color=bg, font_color=t.primary)
+        ls = cell(rr, 5)
+        cv.put(rr, 6, f'=IF({snm}="","",IF({ls}>=20,"🥇 Gold Legend",IF({ls}>=12,"🥈 Silver Pro",IF({ls}>=7,"🥉 Bronze Fire","🌊 Rising"))))',
+               bold=True, font_size=8.8, align="center", bg_color=bg, font_color=t.ink)
+    cv.grid(7, 1, r1, 6, t.line)
+    cv.box(6, 1, r1, 6, t.line)
+    ws.conditional_format(rng(r0, 5, r1, 5), {"type": "data_bar", "bar_color": "#F4A582", "bar_solid": True,
+                                              "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 31})
+
+    # Right Horizontal Streak Bar Chart (rows 6..21, cols 8..10)
+    ch = wb.add_chart({"type": "bar"})
+    ch.add_series({
+        "name": "Longest Streak (days)",
+        "categories": f"={q}!{rng(r0, 1, r0 + 9, 1)}",
+        "values": f"={q}!{rng(r0, 5, r0 + 9, 5)}",
+        "fill": {"color": "#2E7D87"},
+        "border": {"none": True},
+    })
+    ch.set_title({"name": "LONGEST STREAK BY HABIT (DAYS)",
+                  "name_font": {"name": t.font, "size": 9.5, "bold": True, "color": t.ink}})
+    ch.set_x_axis({"min": 0, "max": 31, "num_font": axis_font(t),
+                   "major_gridlines": {"visible": True, "line": {"color": t.line, "dash_type": "dash"}}})
+    ch.set_y_axis({"reverse": True, "num_font": axis_font(t, 8), "line": {"color": t.line}})
+    ch.set_legend({"none": True})
+    ch.set_chartarea({"border": {"color": t.line, "width": 0.75}, "fill": {"color": t.card}})
+    place_chart(cv, ch, 6, 8, 21, 10)
+
+    cv.merge(23, 8, 23, 10, "🪸  FITNESS RECOVERY NOTE", bold=True, font_size=9, align="center",
+             bg_color="#F4A582", font_color="#FFFFFF")
+    cv.merge(24, 8, r1, 10,
+             "Nghỉ ngơi chủ động, giãn cơ 10 phút & uống đủ nước giúp duy trì chuỗi tập luyện bền bỉ không chấn thương!",
+             font_size=9, align="center", text_wrap=True, bg_color=t.card, font_color=t.ink)
+    cv.box(23, 8, r1, 10, t.line)
+
+    _finish_sheet(ws, cv, t.primary)
+    return {"checkboxes": {}}
+
+
+# =========================================================================== #
+#  9. Template 9 (Matcha Cafe Routine) — ☕ Cozy Weekly Review
+# =========================================================================== #
+def build_matcha_weekly_review_sheet(wb, styles: Styles, tr: TrackerRefs, rt: dict) -> dict:
+    name = "☕ Cozy Weekly Review"
+    t = styles.t
+    ws = wb.add_worksheet(name)
+    cv = Canvas(wb, ws, styles, name)
+    q = qs(name)
+
+    cv.col(0, 2.5)
+    for i, w in enumerate([13, 13, 28, 28, 28], start=1):
+        cv.col(i, w)
+    cv.col(6, 2.5)
+    cv.cols(10, 11, 5, hidden=True)
+
+    cv.row(0, 12)
+    cv.row(1, 32)
+    cv.row(2, 10)
+    cv.row(3, 20)
+    cv.row(4, 34)
+    cv.row(5, 12)
+
+    cv.merge(1, 1, 1, 5, "🍵  MATCHA CAFE — MORNING vs EVENING ROUTINE & COZY REVIEW",
+             font_name=t.font_title, font_size=15, bold=True, align="center",
+             bg_color=t.primary, font_color=t.on_primary)
+    cv.box(1, 1, 1, 5, t.line)
+
+    kpi_card(cv, 3, 1, 2, "☀️  MORNING ROUTINE %", f"={rt['morning_pct']}", num_format="0.0%",
+             label_fill="#F8EFE4", value_color="#8A5E3B")
+    kpi_card(cv, 3, 3, 3, "🌙  EVENING ROUTINE %", f"={rt['evening_pct']}", num_format="0.0%",
+             label_fill="#F3ECE7", value_color="#5C4033")
+    kpi_card(cv, 3, 4, 4, "🍵  MATCHA CUPS BREWED", f"={tr.a('grown')}", num_format='0" cốc"',
+             label_fill=t.soft, value_color=t.primary_dark)
+    kpi_card(cv, 3, 5, 5, "☕  AVG DAILY MOOD", f"={rt['avg_mood']}", num_format='0.0" / 5"',
+             label_fill="#F8EFE4", value_color="#8A5E3B")
+
+    # Hidden comparison data for chart
+    cv.put(0, 10, "☀️ Morning Routine")
+    cv.put(1, 10, "🌙 Evening Routine")
+    cv.put(2, 10, "🍵 Overall Month")
+    cv.put(0, 11, f"={rt['morning_pct']}")
+    cv.put(1, 11, f"={rt['evening_pct']}")
+    cv.put(2, 11, f"={tr.a('overall')}")
+
+    for rr in range(6, 15):
+        cv.row(rr, 22)
+    ch = wb.add_chart({"type": "column"})
+    ch.add_series({
+        "name": "Consistency %",
+        "categories": f"={q}!{rng(0, 10, 2, 10)}",
+        "values": f"={q}!{rng(0, 11, 2, 11)}",
+        "points": [
+            {"fill": {"color": "#D4A373"}, "border": {"none": True}},
+            {"fill": {"color": "#5C4033"}, "border": {"none": True}},
+            {"fill": {"color": "#8FA97B"}, "border": {"none": True}},
+        ],
+        "gap": 75,
+    })
+    ch.set_title({"name": "MORNING vs. EVENING ROUTINE CONSISTENCY",
+                  "name_font": {"name": t.font, "size": 10, "bold": True, "color": t.ink}})
+    ch.set_y_axis({"min": 0, "max": 1, "major_unit": 0.25, "num_format": "0%",
+                   "num_font": axis_font(t), "line": {"none": True},
+                   "major_gridlines": {"visible": True, "line": {"color": t.line, "dash_type": "dash"}}})
+    ch.set_x_axis({"num_font": axis_font(t, 9), "line": {"color": t.line}})
+    ch.set_legend({"none": True})
+    ch.set_chartarea({"border": {"color": t.line, "width": 0.75}, "fill": {"color": t.card}})
+    ch.show_hidden_data()
+    place_chart(cv, ch, 6, 1, 14, 5)
+
+    # Cozy 5-Week Reflection Journal (rows 16..22)
+    cv.row(15, 12)
+    cv.row(16, 24)
+    cv.row(17, 22)
+    cv.merge(16, 1, 16, 5, "☕  5-WEEK COZY REFLECTION JOURNAL (Tự liên kết % hoàn thành mỗi tuần)",
+             bold=True, font_size=9.5, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
+    for c, h in [(1, "Tuần"), (2, "Tỷ lệ %"), (3, "Khoảnh khắc dịu dàng nhất"),
+                 (4, "Nghi thức yêu thích nhất"), (5, "Phần thưởng tự tặng")]:
+        cv.put(17, c, h, bold=True, font_size=8.5, align="center", bg_color=t.soft, font_color=t.ink)
+    wk_data = [
+        ("Buổi sáng mưa nhẹ bên tách matcha nóng", "Dậy sớm 6h30 mở cửa đón nắng", "Mua thêm 1 hũ bột matcha ngon"),
+        ("Hoàn thành hết việc trước tối thứ Sáu", "Đọc sách giấy 20 phút trước khi ngủ", "Đi dạo nhà sách cuối tuần"),
+        ("Giữ được sự bình tĩnh giữa tuần bận rộn", "Pha trà hoa cúc & viết nhật ký tối", "Một chiếc bánh croissant bơ tỏi"),
+        ("Cơ thể nhẹ nhõm nhờ ngủ sớm đều đặn", "Giãn cơ buổi sáng 15 phút", "Buổi cafe hẹn hò cùng bạn thân"),
+        ("Nhìn lại một tháng thật trọn vẹn & êm đềm", "Tổng kết mục tiêu tháng mới", "Ngày nghỉ ngơi trọn vẹn không deadline"),
+    ]
+    for w in range(5):
+        rr = 18 + w
+        cv.row(rr, 28)
+        bg = t.card if w % 2 == 0 else t.page
+        cv.put(rr, 1, f"WEEK {w + 1}", bold=True, font_size=9.5, align="center",
+               bg_color=t.week_head[w], font_color=t.week_on[w])
+        cv.put(rr, 2, f"={tr.calc_q}!{acell(2, CALC_WK_COL0 + w)}", bold=True, font_size=10,
+               align="center", num_format="0%", bg_color=t.week_tint[w], font_color=t.ink)
+        for ci, txt in enumerate(wk_data[w], start=3):
+            cv.put(rr, ci, txt, font_size=9, align="left", indent=1, text_wrap=True, bg_color=bg, font_color=t.ink)
+    cv.grid(17, 1, 22, 5, t.line)
+    cv.box(16, 1, 22, 5, t.line)
+
+    _finish_sheet(ws, cv, t.primary_dark)
+    return {"checkboxes": {}}
+
+
+# =========================================================================== #
+#  10. Template 10 (Aurora Glow RPG) — ⚔️ Character Sheet & Skill Breakdown
+# =========================================================================== #
+def build_aurora_character_sheet(wb, styles: Styles, tr: TrackerRefs, total_xp_ref: str,
+                                 skill_col: int, xp_col: int) -> dict:
+    name = "⚔️ Character Sheet"
+    t = styles.t
+    ws = wb.add_worksheet(name)
+    cv = Canvas(wb, ws, styles, name)
+    q = qs(name)
+
+    SLATE, MINT, VIOLET, MIST = "#242B3D", "#4FD1C5", "#9F7AEA", "#F0F4F8"
+    MINT_L, VIO_L = "#E6FFFA", "#F3EEFF"
+
+    cv.col(0, 2.5)
+    for i, w in enumerate([26, 30, 12, 15, 2.2, 24.5, 13, 14], start=1):
+        cv.col(i, w)
+    cv.col(9, 2.5)
+
+    cv.row(0, 12)
+    cv.row(1, 34)
+    cv.row(2, 10)
+    cv.row(3, 20)
+    cv.row(4, 34)
+    cv.row(5, 12)
+    cv.row(6, 24)
+    cv.row(7, 22)
+
+    cv.merge(1, 1, 1, 8, "🌌  AURORA RPG CHARACTER SHEET — HỒ SƠ NHÂN VẬT & CHỈ SỐ KỸ NĂNG",
+             font_name=t.font_title, font_size=15, bold=True, align="center",
+             bg_color=SLATE, font_color=MINT)
+    cv.box(1, 1, 1, 8, SLATE)
+
+    kpi_card(cv, 3, 1, 1, "HERO LEVEL", f'="LV. "&(1+INT({total_xp_ref}/300))', num_format="@",
+             label_fill=MINT_L, value_color=SLATE)
+    kpi_card(cv, 3, 2, 2, "CLASS RANK",
+             f'=IF({total_xp_ref}>=4500,"👑 LEGEND",IF({total_xp_ref}>=3000,"🌌 MASTER",'
+             f'IF({total_xp_ref}>=1800,"⚔️ WARRIOR",IF({total_xp_ref}>=800,"🛡️ APPRENTICE","🌱 NOVICE"))))',
+             num_format="@", label_fill=VIO_L, value_color="#5B3FA8", value_size=16)
+    kpi_card(cv, 3, 3, 4, "TOTAL RPG XP", f"={total_xp_ref}", num_format='#,##0" XP"',
+             label_fill=MINT_L, value_color=SLATE)
+    kpi_card(cv, 3, 6, 8, "BEST STREAK COMBO", f"={tr.a('best')}", num_format='0" ngày 🔥"',
+             label_fill=VIO_L, value_color="#5B3FA8")
+
+    # Left: 10 Dynamic RPG Quests (rows 6..17, cols 1..4)
+    r_q0, r_q1 = 8, 17
+    cv.merge(6, 1, 6, 4, "⚔️  RPG QUEST BOARD (Tự động mở khóa theo tiến độ thực tế)",
+             bold=True, font_size=9.5, align="left", indent=1, bg_color=SLATE, font_color="#FFFFFF")
+    for c, h in [(1, "Nhiệm vụ (Quest)"), (2, "Điều kiện hoàn thành"), (3, "Tiến độ"), (4, "Trạng thái")]:
+        cv.put(7, c, h, bold=True, font_size=8.5, align="center", bg_color=MINT_L, font_color=SLATE)
+
+    quests = [
+        ("✨  First Spark", "Hoàn thành ít nhất 1 ngày 100%", f"=MIN(1,{tr.a('perfect')}/1)"),
+        ("🔥  Combo x1.2 (7d)", "Đạt chuỗi 7 ngày liên tiếp", f"=MIN(1,{tr.a('best')}/7)"),
+        ("⚡  Combo x1.5 (14d)", "Đạt chuỗi 14 ngày liên tiếp", f"=MIN(1,{tr.a('best')}/14)"),
+        ("🛡️  Apprentice Trial", "Tích lũy từ 800 XP trở lên", f"=MIN(1,{total_xp_ref}/800)"),
+        ("⚔️  Warrior Ascension", "Tích lũy từ 1,800 XP trở lên", f"=MIN(1,{total_xp_ref}/1800)"),
+        ("🌌  Aurora Master", "Tích lũy từ 3,000 XP trở lên", f"=MIN(1,{total_xp_ref}/3000)"),
+        ("👑  Northern Legend", "Tích lũy từ 4,500 XP trở lên", f"=MIN(1,{total_xp_ref}/4500)"),
+        ("🎯  Iron Consistency", "Tỷ lệ hoàn thành tháng ≥ 75%", f"=MIN(1,{tr.a('overall')}/0.75)"),
+        ("💎  15+ Aurora Nights", "Đạt ≥ 15 ngày năng suất ≥ 75%", f"=MIN(1,{tr.a('grown')}/15)"),
+        ("🏆  150+ Quests Done", "Đạt ≥ 150 lượt hoàn thành thói quen", f"=MIN(1,{tr.a('tdone')}/150)"),
+    ]
+    for i, (qn, cond, pf) in enumerate(quests):
+        rr = r_q0 + i
+        cv.row(rr, 24)
+        bg = t.card if i % 2 == 0 else MIST
+        cv.put(rr, 1, qn, bold=True, font_size=9.2, align="left", indent=1, bg_color=bg, font_color=SLATE)
+        cv.put(rr, 2, cond, font_size=9, align="left", indent=1, bg_color=bg, font_color=t.ink)
+        cv.put(rr, 3, pf, bold=True, font_size=9, align="center", num_format="0%", bg_color=bg, font_color=SLATE)
+        cv.put(rr, 4, f'=IF({cell(rr, 3)}>=1,"🏆 CLEARED","🔒 Active")', bold=True, font_size=9,
+               align="center", bg_color=bg, font_color=t.muted)
+    cv.grid(7, 1, r_q1, 4, t.line)
+    cv.box(6, 1, r_q1, 4, SLATE)
+    ws.conditional_format(rng(r_q0, 3, r_q1, 3),
+                          {"type": "data_bar", "bar_color": MINT, "bar_solid": True,
+                           "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1})
+    ws.conditional_format(rng(r_q0, 4, r_q1, 4),
+                          {"type": "text", "criteria": "containing", "value": "CLEARED",
+                           "format": wb.add_format({"bg_color": "#E6FFFA", "font_color": "#1E6F68", "bold": True})})
+
+    # Right Top: Skill Category Breakdown Table (Health, Mind, Career, Finance) via SUMIF!
+    cv.merge(6, 6, 6, 8, "📊  SKILL CATEGORY BREAKDOWN", bold=True, font_size=9.5, align="center",
+             bg_color=SLATE, font_color=MINT)
+    cv.put(7, 6, "Nhánh kỹ năng", bold=True, font_size=8.5, align="center", bg_color=VIO_L, font_color=SLATE)
+    cv.put(7, 7, "XP tích lũy", bold=True, font_size=8.5, align="center", bg_color=VIO_L, font_color=SLATE)
+    cv.put(7, 8, "Tỷ trọng %", bold=True, font_size=8.5, align="center", bg_color=VIO_L, font_color=SLATE)
+
+    sk_rng = f"{tr.q}!{rng(R_H0, skill_col, R_H1, skill_col)}"
+    xp_rng = f"{tr.q}!{rng(R_H0, xp_col, R_H1, xp_col)}"
+    skills = [
+        ("Health", "❤️  Health (Sức khỏe)"),
+        ("Mind", "🧠  Mind (Trí tuệ)"),
+        ("Career", "💼  Career (Sự nghiệp)"),
+        ("Finance", "💰  Finance (Tài chính)"),
+    ]
+    for i, (key, label) in enumerate(skills):
+        rr = 8 + i
+        bg = t.card if i % 2 == 0 else MIST
+        cv.put(rr, 6, label, bold=True, font_size=9.2, align="left", indent=1, bg_color=bg, font_color=SLATE)
+        cv.put(rr, 7, f'=SUMIF({sk_rng},"{key}",{xp_rng})', bold=True, font_size=9.5, align="center",
+               num_format="#,##0", bg_color=bg, font_color=SLATE)
+        cv.put(rr, 8, f"=IFERROR({cell(rr, 7)}/{total_xp_ref},0)", bold=True, font_size=9,
+               align="center", num_format="0.0%", bg_color=bg, font_color="#5B3FA8")
+    cv.grid(7, 6, 11, 8, t.line)
+    cv.box(6, 6, 11, 8, SLATE)
+
+    # Right Bottom: Skill Category Breakdown Column Chart (rows 13..22, cols 6..8)
+    for rr in range(18, 23):
+        cv.row(rr, 22)
+    ch = wb.add_chart({"type": "column"})
+    ch.add_series({
+        "name": "Skill XP",
+        "categories": f"={q}!{rng(8, 6, 11, 6)}",
+        "values": f"={q}!{rng(8, 7, 11, 7)}",
+        "points": [
+            {"fill": {"color": "#F48FB1"}, "border": {"none": True}},
+            {"fill": {"color": "#9F7AEA"}, "border": {"none": True}},
+            {"fill": {"color": "#4FD1C5"}, "border": {"none": True}},
+            {"fill": {"color": "#F6C95E"}, "border": {"none": True}},
+        ],
+        "gap": 55,
+    })
+    ch.set_title({"name": "XP BY SKILL CATEGORY",
+                  "name_font": {"name": t.font, "size": 9.5, "bold": True, "color": SLATE}})
+    ch.set_y_axis({"num_format": "#,##0", "num_font": axis_font(t), "line": {"none": True},
+                   "major_gridlines": {"visible": True, "line": {"color": t.line, "dash_type": "dash"}}})
+    ch.set_x_axis({"num_font": axis_font(t, 8), "line": {"color": t.line}})
+    ch.set_legend({"none": True})
+    ch.set_chartarea({"border": {"color": SLATE, "width": 0.75}, "fill": {"color": t.card}})
+    place_chart(cv, ch, 13, 6, 22, 8)
+
+    # Left bottom: Combo Multiplier Legend Card (rows 19..22, cols 1..4)
+    cv.row(18, 10)
+    cv.merge(19, 1, 19, 4, "⚡  STREAK COMBO MULTIPLIER RULES (Nhân điểm XP theo chuỗi ngày)",
+             bold=True, font_size=9.5, align="left", indent=1, bg_color=SLATE, font_color=MINT)
+    rules = [
+        ("🌱  Chuỗi 0 – 6 ngày (×1.0):", "Nhận 100% XP gốc cho mỗi lượt hoàn thành thói quen"),
+        ("🔥  Chuỗi 7 – 13 ngày (×1.2):", "Kích hoạt Streak Combo +20% tổng điểm XP của thói quen đó!"),
+        ("🌌  Chuỗi ≥ 14 ngày (×1.5):", "Kích hoạt Aurora Overdrive +50% tổng điểm XP — thăng cấp siêu tốc!"),
+    ]
+    for i, (rl, rd) in enumerate(rules):
+        rr = 20 + i
+        bg = t.card if i % 2 == 0 else MIST
+        cv.put(rr, 1, rl, bold=True, font_size=9, align="left", indent=1, bg_color=bg, font_color=SLATE)
+        cv.merge(rr, 2, rr, 4, rd, font_size=9, align="left", indent=1, bg_color=bg, font_color=t.ink)
+        cv.hline(rr, 1, 4, t.line)
+    cv.box(19, 1, 22, 4, SLATE)
+
+    _finish_sheet(ws, cv, SLATE)
+    return {"checkboxes": {}}

@@ -48,14 +48,15 @@ ROOT = Path(__file__).resolve().parent.parent
 ASSETS_DIR = ROOT / "assets"
 PREVIEW_DIR = ROOT / "previews"
 
-OUT = 256                 # final sprite size (px)
-K = 4                     # supersampling factor
-S = OUT * K               # working canvas size (px)
+OUT = 300                 # final sprite size (px) — V2.0 high-DPI 300x300
+S = 1200                  # 4x supersampling working canvas size (px)
+K = S / 256.0             # coordinate scale from 256-unit design space -> 1200 px
 OW = 7.0                  # standard outline width (256-unit space, ~2.7%)
 BOTTOM = 239.0            # y of the lowest *fill* edge (outline ends ~246)
 
 SLUGS = ["sunflower", "cactus", "lotus_stars", "botanical",
-         "lavender_moon", "focus_rocket"]
+         "lavender_moon", "focus_rocket",
+         "sakura_zen", "ocean_coral", "matcha_cafe", "aurora_rpg"]
 
 # Shared accent colours
 SPARK_FILL = "#FFD95A"
@@ -380,7 +381,7 @@ class Sprite:
         im = self.final()
         im.save(path, optimize=True)
         # Fall back to an alpha-aware palette if the file is unexpectedly big.
-        if path.stat().st_size > 40 * 1024:
+        if path.stat().st_size > 65 * 1024:
             im.quantize(colors=256, method=Image.Quantize.FASTOCTREE,
                         dither=Image.Dither.NONE).save(path, optimize=True)
         return im
@@ -995,6 +996,310 @@ def focus_rocket(stage: int) -> Sprite:
 
 
 # --------------------------------------------------------------------------
+# Theme 7: sakura_zen (Japanese Washi & Blossoming Sakura Branch)
+# --------------------------------------------------------------------------
+SAK = dict(vase="#F4ECE3", vase_ol="#8E796D", band="#A8C69F",
+           soil="#6D5046", soil_ol="#49332C", wood="#7A5247", wood_ol="#4D3129",
+           petal="#F7C5D0", petal2="#F2A4B8", petal_ol="#C9738B",
+           center="#FFE184", leaf="#A8C69F", leaf_ol="#5F8456")
+
+
+def _sakura_flower(sp, cx, cy, r):
+    c = SAK
+    parts = [C(cx + r * 0.58 * math.cos(math.radians(a)),
+               cy + r * 0.58 * math.sin(math.radians(a)),
+               r * 0.52, c["petal"]) for a in range(-90, 270, 72)]
+    sp.group(parts, c["petal_ol"], ow=4.0)
+    sp.group([C(cx, cy, r * 0.28, c["center"])], "#D9A438", ow=2.5)
+
+
+def sakura_zen(stage: int) -> Sprite:
+    sp = Sprite()
+    c = SAK
+    if stage == 5:
+        sp.glow(128, 92, 134, "#FFD6E2", alpha=220, power=1.45)
+        corner_sparkles(sp, [(26, 30, 13), (230, 34, 11), (226, 158, 9), (26, 162, 8)])
+
+    def plant(sp):
+        # Graceful cherry trunk & branches present from stage 0 (winter bare branch!)
+        trunk = LN(quad((128, 186), (120, 145), (132, 102 if stage >= 3 else 128)), 10, c["wood"])
+        b_left = LN(quad((124, 150), (96, 136), (72, 114)), 7, c["wood"])
+        b_right = LN(quad((128, 136), (158, 122), (186, 106)), 7, c["wood"])
+        parts = [trunk, b_left, b_right]
+        if stage >= 3:
+            parts.append(LN(quad((128, 118), (94, 92), (76, 68)), 6, c["wood"]))
+            parts.append(LN(quad((130, 114), (162, 86), (180, 66)), 6, c["wood"]))
+        sp.group(parts, c["wood_ol"], ow=5.5)
+
+        if stage == 0:
+            return
+        if stage == 1:
+            # Tiny pink buds on the bare branch
+            for bx, by in [(74, 114), (130, 124), (184, 106), (104, 136)]:
+                sp.group([C(bx, by, 8.5, c["petal2"])], c["petal_ol"], ow=4.0)
+        elif stage == 2:
+            # First matcha leaves + 3 small blossoms
+            sp.group([PG(leaf_pts((110, 140), -150, 26, 13), c["leaf"]),
+                      PG(leaf_pts((154, 124), -25, 26, 13), c["leaf"])], c["leaf_ol"], ow=4.5)
+            for fx, fy, fr in [(72, 112, 16), (132, 120, 18), (186, 104, 16)]:
+                _sakura_flower(sp, fx, fy, fr)
+        elif stage == 3:
+            sp.group([PG(leaf_pts((98, 136), -155, 30, 14), c["leaf"]),
+                      PG(leaf_pts((160, 122), -20, 30, 14), c["leaf"]),
+                      PG(leaf_pts((130, 96), -90, 28, 13), c["leaf"])], c["leaf_ol"], ow=4.5)
+            for fx, fy, fr in [(68, 112, 19), (80, 72, 18), (132, 92, 21), (176, 70, 18), (188, 108, 19)]:
+                _sakura_flower(sp, fx, fy, fr)
+        elif stage >= 4:
+            # Lush sakura canopy cloud + layered flowers
+            canopy = [C(82, 100, 36, c["petal"]), C(174, 98, 36, c["petal"]),
+                      C(104, 66, 38, c["petal"]), C(152, 66, 38, c["petal"]),
+                      C(128, 56, 40 if stage == 5 else 34, c["petal"])]
+            sp.group(canopy, c["petal_ol"], ow=6.0)
+            sp.group([PG(leaf_pts((52, 112), -165, 32, 14), c["leaf"]),
+                      PG(leaf_pts((204, 110), -15, 32, 14), c["leaf"]),
+                      PG(leaf_pts((128, 108), -90, 26, 12), c["leaf"])], c["leaf_ol"], ow=4.5)
+            blooms = [(72, 98, 21), (104, 62, 22), (154, 62, 22), (184, 96, 21), (128, 86, 23)]
+            if stage == 5:
+                blooms.append((128, 44, 24))
+            for fx, fy, fr in blooms:
+                _sakura_flower(sp, fx, fy, fr)
+            if stage == 5:
+                # Floating falling sakura petals
+                for px, py, pa in [(38, 138, 25), (218, 132, -30), (50, 56, 45), (208, 54, -40)]:
+                    sp.group([PG(leaf_pts((px, py), pa, 18, 10), c["petal2"])], c["petal_ol"], ow=3.0)
+
+    classic_pot(sp, body=c["vase"], body_ol=c["vase_ol"], rim=c["vase"], rim_ol=c["vase_ol"],
+                soil=c["soil"], soil_ol=c["soil_ol"], rim_box=(72, 180, 184, 200),
+                body_top=196, top_hw=48, bot_hw=38, soil_box=(82, 172, 174, 190),
+                band=(208, 220, c["band"]), plant=plant)
+    if stage >= 3:
+        sp.face(128, 228, s=0.82)
+    return sp
+
+
+# --------------------------------------------------------------------------
+# Theme 8: ocean_coral (Coral Reef & Glowing Pearl Oyster)
+# --------------------------------------------------------------------------
+OCN = dict(sand="#F3DFC1", sand2="#E5C99E", sand_ol="#B59164",
+           teal="#2E7D87", teal2="#4FA8B0", teal_ol="#1B525A",
+           coral="#F4A582", coral2="#E88468", coral_ol="#B85D46",
+           mint="#8FD8CC", mint_ol="#4A9B90",
+           shell="#F8C8D4", shell_ol="#C27B91",
+           pearl="#FFFDF5", pearl_ol="#D4B86A")
+
+
+def ocean_coral(stage: int) -> Sprite:
+    sp = Sprite()
+    c = OCN
+    if stage == 5:
+        sp.glow(128, 124, 132, "#A8F0E8", alpha=215, power=1.45)
+        corner_sparkles(sp, [(28, 34, 13), (228, 30, 12), (232, 140, 9), (24, 146, 8)])
+
+    # Coral & reef behind sandy mound
+    if stage >= 2:
+        # Left coral branch
+        left_coral = [LN(quad((76, 204), (66, 168), (54, 134 if stage >= 3 else 156)), 14, c["coral"]),
+                      LN(quad((66, 172), (46, 160), (40, 142)), 11, c["coral"])]
+        if stage >= 4:
+            left_coral.append(LN(quad((68, 160), (88, 140), (84, 114)), 11, c["coral"]))
+        sp.group(left_coral, c["coral_ol"], ow=5.5)
+
+    if stage >= 3:
+        # Right lagoon-teal / seafoam coral branch
+        right_coral = [LN(quad((182, 204), (192, 162), (206, 122 if stage >= 4 else 144)), 14, c["teal2"]),
+                       LN(quad((190, 166), (212, 152), (218, 132)), 11, c["teal2"])]
+        if stage >= 4:
+            right_coral.append(LN(quad((188, 154), (168, 130), (172, 102)), 11, c["mint"]))
+        sp.group(right_coral, c["teal_ol"], ow=5.5)
+
+    if stage >= 4:
+        # Back seafoam kelp fronds
+        kelp = [PG(leaf_pts((114, 200), -104, 118 if stage == 5 else 96, 22), c["mint"]),
+                PG(leaf_pts((142, 200), -76, 118 if stage == 5 else 96, 22), c["mint"])]
+        sp.group(kelp, c["mint_ol"], ow=5.0)
+
+    # Sandy seabed mound (consistent base across all 6 stages!)
+    m_sand = sp.group([E((36, 186, 220, BOTTOM + 16), c["sand"])], c["sand_ol"], ow=6.5)
+    sp.detail([E((54, 212, 206, BOTTOM + 22), c["sand2"]),
+               C(68, 222, 5, "#D9B98C"), C(186, 220, 6, "#D9B98C"), C(152, 228, 4, "#D9B98C")],
+              clip=m_sand)
+
+    # Foreground center element: seashell -> budding pearl oyster -> radiant pearl!
+    if stage == 1:
+        sp.group([E((104, 174, 152, 212), c["shell"]),
+                  RR((114, 204, 142, 214), 4, c["shell"])], c["shell_ol"], ow=5.0)
+        sp.detail([C(156, 154, 6, with_alpha("#D4F1EC", 210)), C(146, 136, 4, with_alpha("#D4F1EC", 190))])
+    elif stage in (2, 3):
+        sp.group([E((96, 166, 160, 212), c["shell"])], c["shell_ol"], ow=5.5)
+        sp.detail([LN([(128, 210), (112, 174)], 3.5, c["shell_ol"]),
+                   LN([(128, 210), (128, 170)], 3.5, c["shell_ol"]),
+                   LN([(128, 210), (144, 174)], 3.5, c["shell_ol"])])
+        if stage == 3:
+            sp.face(128, 194, s=0.72)
+            for bx, by, br in [(92, 128, 7), (168, 114, 6), (128, 100, 5)]:
+                sp.group([C(bx, by, br, "#E8FAF8")], c["teal2"], ow=3.0)
+    elif stage >= 4:
+        # Open clam oyster revealing radiant glowing pearl!
+        sp.group([E((78, 126 if stage == 5 else 138, 178, 204), c["shell"])], c["shell_ol"], ow=6.0)
+        sp.group([E((84, 174, 172, 216), "#FBE0E6")], c["shell_ol"], ow=5.5)
+        if stage == 5:
+            sp.glow(128, 164, 58, "#FFF2B2", alpha=230)
+            sp.group([C(128, 164, 24, c["pearl"])], c["pearl_ol"], ow=5.0)
+            sp.detail([C(120, 156, 7, "#FFFFFF"), C(136, 172, 3, "#FFFFFF")])
+            for bx, by, br in [(64, 88, 9), (194, 82, 8), (128, 60, 7)]:
+                sp.group([C(bx, by, br, "#E8FAF8")], c["teal2"], ow=3.0)
+        else:
+            sp.group([C(128, 172, 16, c["pearl"])], c["pearl_ol"], ow=4.5)
+            sp.detail([C(123, 167, 5, "#FFFFFF")])
+        sp.face(128, 202, s=0.72)
+    return sp
+
+
+# --------------------------------------------------------------------------
+# Theme 9: matcha_cafe (Artisanal Ceremonial Matcha Latte Cup)
+# --------------------------------------------------------------------------
+MAT = dict(coaster="#C99A6B", coaster_ol="#8A5E3B",
+           cup="#FAF4EA", cup2="#EDE2D0", cup_ol="#6B4D3C",
+           matcha="#8FA97B", matcha2="#A8C294", matcha_ol="#597349",
+           foam="#FFFDF8", foam_ol="#C9B79C",
+           caramel="#D4A373", bean="#5C4033", bean_ol="#38241C")
+
+
+def matcha_cafe(stage: int) -> Sprite:
+    sp = Sprite()
+    c = MAT
+    if stage == 5:
+        sp.glow(128, 124, 134, "#D7E8C5", alpha=215, power=1.45)
+        corner_sparkles(sp, [(26, 36, 13), (230, 38, 12), (228, 166, 9), (26, 168, 8)])
+
+    # Wooden cafe coaster (consistent base!)
+    sp.group([RR((44, 218, 212, BOTTOM), 9, c["coaster"])], c["coaster_ol"], ow=6.0)
+    sp.detail([RR((54, 222, 202, 227), 3, "#DFB68B")])
+
+    if stage == 0:
+        # Single cute matcha leaf & roasted coffee bean resting on coaster
+        sp.group([PG(leaf_pts((114, 212), -145, 42, 20), c["matcha"]),
+                  E((122, 184, 162, 214), c["bean"])], c["bean_ol"], ow=5.5)
+        sp.detail([LN([(128, 190), (154, 208)], 3.5, "#8C6552")])
+        return sp
+
+    # Ceramic cup handle (right side)
+    sp.group([E((166, 126, 218, 190), c["cup"])], c["cup_ol"], ow=6.5)
+    sp.group([E((176, 140, 204, 176), "#FFFFFF")], c["cup_ol"], ow=4.5)
+    # Wait: make inner handle transparent by drawing handle as thick arc/ring instead:
+    sp = Sprite()
+    if stage == 5:
+        sp.glow(128, 124, 134, "#D7E8C5", alpha=215, power=1.45)
+        corner_sparkles(sp, [(26, 36, 13), (230, 38, 12), (228, 166, 9), (26, 168, 8)])
+    sp.group([RR((44, 218, 212, BOTTOM), 9, c["coaster"])], c["coaster_ol"], ow=6.0)
+    sp.detail([RR((54, 222, 202, 227), 3, "#DFB68B")])
+    # Handle as thick curved line so hole stays 100% transparent!
+    sp.group([LN(quad((176, 134), (218, 152), (174, 184)), 14, c["cup"])], c["cup_ol"], ow=5.5)
+
+    # Cup body
+    cup_poly = round_poly([(62, 114), (186, 114), (174, 216), (74, 216)], 18)
+    m_cup = sp.group([PG(cup_poly, c["cup"])], c["cup_ol"], ow=6.5)
+    sp.detail([RR((148, 110, 194, 220), 0, c["cup2"]),
+               RR((74, 132, 84, 190), 5, with_alpha("#FFFFFF", 180))], clip=m_cup)
+
+    # Matcha rim & fill level inside cup top
+    if stage == 1:
+        sp.group([E((66, 102, 182, 126), "#DFD3C3")], c["cup_ol"], ow=5.5)
+    elif stage == 2:
+        sp.group([E((66, 102, 182, 126), c["matcha"])], c["cup_ol"], ow=5.5)
+        # Pouring green matcha stream!
+        sp.group([LN(quad((124, 34), (120, 74), (124, 114)), 10, c["matcha2"])], c["matcha_ol"], ow=4.5)
+    elif stage == 3:
+        sp.group([E((66, 98, 182, 126), c["matcha"])], c["cup_ol"], ow=5.5)
+        sp.group([E((76, 90, 172, 120), c["foam"])], c["foam_ol"], ow=4.5)
+    elif stage >= 4:
+        # Creamy fluffy foam dome + leaf latte art!
+        sp.group([E((64, 96, 184, 126), c["matcha"])], c["cup_ol"], ow=5.5)
+        sp.group([E((72, 82, 176, 122), c["foam"]),
+                  C(96, 96, 16, c["foam"]), C(152, 96, 16, c["foam"]),
+                  C(124, 88, 20, c["foam"])], c["foam_ol"], ow=5.0)
+        # Cute green matcha leaf latte art on top of foam
+        sp.group([PG(leaf_pts((124, 110), -125, 24, 12), c["matcha"]),
+                  PG(leaf_pts((124, 110), -55, 24, 12), c["matcha"]),
+                  PG(leaf_pts((124, 108), -90, 22, 10), c["matcha2"])], c["matcha_ol"], ow=3.0)
+    if stage == 5:
+        # Cozy rising steam swirls above the cup!
+        sp.group([LN(quad((96, 68), (84, 48), (100, 30)), 5.5, "#FFFFFF"),
+                  LN(quad((124, 62), (112, 40), (128, 22)), 6.0, "#FFFFFF"),
+                  LN(quad((152, 68), (140, 48), (156, 30)), 5.5, "#FFFFFF")],
+                 c["caramel"], ow=3.2)
+    if stage >= 3:
+        sp.face(124, 172, s=0.95)
+    return sp
+
+
+# --------------------------------------------------------------------------
+# Theme 10: aurora_rpg (Nordic Rune -> Radiant Aurora Crystal & Orb)
+# --------------------------------------------------------------------------
+AUR = dict(stone="#3B4563", stone2="#242B3D", stone_ol="#151A28",
+           mint="#4FD1C5", mint_l="#A3F7EF", mint_ol="#268780",
+           violet="#9F7AEA", violet_l="#D6BCFA", violet_ol="#5B3FA8",
+           gold="#FFD95A", gold_ol="#D4A324")
+
+
+def aurora_rpg(stage: int) -> Sprite:
+    sp = Sprite()
+    c = AUR
+    if stage == 5:
+        sp.rays(128, 102, 134, c["mint"], n=14, alpha=165)
+        sp.glow(128, 102, 128, c["violet"], alpha=190, power=1.45)
+        sp.glow(128, 102, 92, c["mint_l"], alpha=210, power=1.6)
+        # Aurora orbital halo ring
+        sp.group([C(128, 102, 68, with_alpha(c["violet_l"], 65))], c["mint"], ow=5.5)
+        sp.group([C(48, 86, 10, c["mint_l"])], c["mint_ol"], ow=3.5)
+        sp.group([C(208, 118, 9, c["violet_l"])], c["violet_ol"], ow=3.5)
+        corner_sparkles(sp, [(28, 30, 14), (228, 32, 12), (226, 176, 9), (30, 178, 9)])
+    elif stage == 4:
+        sp.glow(128, 112, 105, c["mint"], alpha=155)
+        corner_sparkles(sp, [(42, 48, 10), (214, 58, 9)])
+
+    # Nordic carved stone rune pedestal (consistent base across all 6 stages!)
+    ped = round_poly([(62, 206), (194, 206), (208, BOTTOM), (48, BOTTOM)], 10)
+    mp = sp.group([PG(ped, c["stone"])], c["stone_ol"], ow=6.0)
+    sp.detail([RR((44, 224, 212, BOTTOM + 6), 0, c["stone2"])], clip=mp)
+    # Glowing rune dots on pedestal
+    rune_col = c["mint_l"] if stage >= 2 else "#647299"
+    sp.detail([C(92, 222, 4.5, rune_col), C(128, 222, 5.5, rune_col), C(164, 222, 4.5, rune_col)])
+
+    if stage == 0:
+        return sp
+    if stage == 1:
+        sp.glow(128, 182, 44, c["mint"], alpha=140)
+        sp.sparkle(128, 182, 16, fill=c["mint_l"], ol=c["mint_ol"], ow=4.0)
+        sp.dot(104, 192, 5, fill=c["violet_l"], ol=c["violet_ol"], ow=2.5)
+        sp.dot(152, 190, 5, fill=c["violet_l"], ol=c["violet_ol"], ow=2.5)
+    elif stage == 2:
+        sp.glow(128, 164, 62, c["mint"], alpha=160)
+        flame = [(128, 126), (154, 164), (144, 198), (112, 198), (102, 164)]
+        sp.group([PG(round_poly(flame, 10), c["mint"])], c["mint_ol"], ow=5.5)
+        sp.detail([PG([(128, 146), (140, 174), (128, 192), (116, 174)], c["mint_l"])])
+    elif stage == 3:
+        # Floating glowing crystal prism
+        sp.glow(128, 142, 78, c["violet"], alpha=150)
+        crys = [(128, 86), (164, 134), (128, 192), (92, 134)]
+        m = sp.group([PG(crys, c["mint"])], c["stone_ol"], ow=6.0)
+        sp.detail([PG([(128, 86), (164, 134), (128, 192)], c["violet"]),
+                   PG([(128, 102), (144, 134), (128, 168), (112, 134)], with_alpha("#FFFFFF", 130))], clip=m)
+    elif stage >= 4:
+        # Large faceted Aurora Crystal + twin side shards
+        l_sh = [(76, 114), (96, 146), (80, 186), (58, 152)]
+        r_sh = [(180, 114), (198, 152), (176, 186), (160, 146)]
+        sp.group([PG(l_sh, c["violet"]), PG(r_sh, c["mint"])], c["stone_ol"], ow=5.5)
+        top_y = 38 if stage == 5 else 54
+        crys = [(128, top_y), (172, 108), (156, 182), (128, 196), (100, 182), (84, 108)]
+        m = sp.group([PG(crys, c["mint"])], c["stone_ol"], ow=6.5)
+        sp.detail([PG([(128, top_y), (172, 108), (156, 182), (128, 196)], c["violet"]),
+                   PG([(128, top_y + 18), (150, 108), (128, 166), (106, 108)], c["mint_l"]),
+                   PG([(114, top_y + 30), (122, 104), (104, 108)], with_alpha("#FFFFFF", 180))], clip=m)
+    return sp
+
+
+# --------------------------------------------------------------------------
 # Registry, export and contact sheet
 # --------------------------------------------------------------------------
 THEMES = {
@@ -1004,6 +1309,10 @@ THEMES = {
     "botanical": botanical,
     "lavender_moon": lavender_moon,
     "focus_rocket": focus_rocket,
+    "sakura_zen": sakura_zen,
+    "ocean_coral": ocean_coral,
+    "matcha_cafe": matcha_cafe,
+    "aurora_rpg": aurora_rpg,
 }
 
 
@@ -1028,7 +1337,7 @@ def build_contact_sheet(sprites: dict[str, list[Image.Image]], path: Path):
     sheet = Image.new("RGBA", (W, H), cream + (255,))
     d = ImageDraw.Draw(sheet)
     f_head, f_lab, f_small = _font(22, True), _font(17, True), _font(12)
-    d.text((16, 16), "Habit Tracker Sprite Collection — 6 Themes × 6 Growth Stages", fill=(70, 60, 55), font=f_head)
+    d.text((16, 16), f"Habit Tracker Sprite Collection — {len(sprites)} Themes × 6 Growth Stages", fill=(70, 60, 55), font=f_head)
     for s in range(6):
         x = label_w + s * (cell + gap) + cell // 2
         d.text((x, header - 10), f"Stage {s}", fill=(110, 95, 85), font=f_lab, anchor="ms")

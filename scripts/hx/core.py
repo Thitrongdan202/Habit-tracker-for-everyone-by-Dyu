@@ -145,14 +145,16 @@ class Styles:
 class Canvas:
     """Buffered, layer-friendly worksheet writer."""
 
-    def __init__(self, wb, ws, styles: Styles, name: str):
+    def __init__(self, wb, ws, styles: Styles, name: str, universal: bool = False):
         self.wb, self.ws, self.S, self.name = wb, ws, styles, name
+        self.universal = universal
         self.t = styles.t
         self.cells: dict[tuple[int, int], dict[str, Any]] = {}
         self.merges: list[tuple[int, int, int, int]] = []
         self.widths: dict[int, float] = {}
         self.heights: dict[int, float] = {}
         self.hidden_cols: set[int] = set()
+        self.form_checkboxes: list[tuple[int, int]] = []
         self.max_col = 0
         self.max_row = 0
 
@@ -254,7 +256,13 @@ class Canvas:
     def checkbox(self, r, c, value: bool, **props):
         d = self._cell(r, c)
         d["props"].update(props)
-        d["kind"], d["value"] = "checkbox", bool(value)
+        if self.universal:
+            # Universal Excel 2016–365: store pure boolean hidden via `;;;`, overlay Form Control Checkbox via COM
+            d["props"]["num_format"] = ";;;"
+            d["kind"], d["value"] = "value", bool(value)
+            self.form_checkboxes.append((r, c))
+        else:
+            d["kind"], d["value"] = "checkbox", bool(value)
 
     def blank_row_fill(self, r, c1, c2, color):
         self.fill(r, c1, r, c2, color)
