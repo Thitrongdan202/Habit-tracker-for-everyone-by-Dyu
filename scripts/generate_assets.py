@@ -48,9 +48,9 @@ ROOT = Path(__file__).resolve().parent.parent
 ASSETS_DIR = ROOT / "assets"
 PREVIEW_DIR = ROOT / "previews"
 
-OUT = 256                 # final sprite size (px)
-K = 4                     # supersampling factor
-S = OUT * K               # working canvas size (px)
+OUT = 300                 # final sprite size (px) — V2.0 high-DPI 300x300
+S = 1200                  # 4x supersampling working canvas size (px)
+K = S / 256.0             # coordinate scale from 256-unit design space -> 1200 px
 OW = 7.0                  # standard outline width (256-unit space, ~2.7%)
 BOTTOM = 239.0            # y of the lowest *fill* edge (outline ends ~246)
 
@@ -380,7 +380,7 @@ class Sprite:
         im = self.final()
         im.save(path, optimize=True)
         # Fall back to an alpha-aware palette if the file is unexpectedly big.
-        if path.stat().st_size > 40 * 1024:
+        if path.stat().st_size > 65 * 1024:
             im.quantize(colors=256, method=Image.Quantize.FASTOCTREE,
                         dither=Image.Dither.NONE).save(path, optimize=True)
         return im
