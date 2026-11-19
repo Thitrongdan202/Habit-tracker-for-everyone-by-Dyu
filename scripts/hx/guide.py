@@ -1,12 +1,10 @@
 """
-hx.guide — Version 2.0 `📖 Hướng Dẫn` welcome screen & live animation config tab.
+hx.guide — Version 2.1 `📖 Hướng Dẫn` welcome screen & live animation config tab.
 
-Covers all 5 mandatory Vietnamese guide blocks:
-  1. Cách tick hằng ngày (click Checkbox trực tiếp — không cài gì, không Macro, không mạng)
-  2. Cách reset dữ liệu mẫu trong 5 giây
-  3. Cách tự thêm / sửa tên thói quen mà không hỏng công thức
-  4. Cách đổi Tháng / Năm động (28/29/30/31 ngày + thứ tự nhảy)
-  5. Cách tự đổi bộ ảnh hoạt ảnh (Tier A: Unhide `_Assets` -> dán 6 ảnh vào B2:B7; Tier B: `CFG_IMG_BASE`)
+Unified 4-visible-tab architecture across ALL 3 editions:
+  - `pro_xlsm`: Pro Interactive (`.xlsm`) — 4 tabs + VBA `_Database` multi-month/year persistence
+  - `offline`:  Universal Offline No-Macro (`.xlsx`) — 4 tabs, zero macros, zero security popups
+  - `gsheets`:  Google Sheets Edition (`.xlsx`) — 4 tabs + `_Database` + 1-click Apps Script
 """
 from __future__ import annotations
 
@@ -16,11 +14,13 @@ GUIDE_SHEET = "📖 Hướng Dẫn"
 
 
 def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[str, str]],
-                universal: bool = True, pro_365_offline: bool = False) -> dict:
-    """Returns manifest info for Tier A COM Linked Pictures (6 stage previews)."""
+                edition: str = "offline") -> dict:
+    """Returns manifest info for COM Linked Pictures (6 stage previews in `pro_xlsm` / `offline`)."""
     t: Theme = styles.t
+    universal = edition in ("pro_xlsm", "offline")
+    gsheets = (edition == "gsheets")
     ws = wb.add_worksheet(GUIDE_SHEET)
-    cv = Canvas(wb, ws, styles, GUIDE_SHEET, universal=universal)
+    cv = Canvas(wb, ws, styles, GUIDE_SHEET, universal=universal, gsheets=gsheets)
     q = qs(GUIDE_SHEET)
 
     cv.col(0, 3.0)
@@ -32,37 +32,63 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     # ------------------------------------------------------------------ HERO BANNER
     cv.row(1, 34)
     cv.row(2, 22)
-    cv.row(3, 21)
-    cv.merge(1, 1, 1, 6, f"{t.emoji}  {t.name}  —  HƯỚNG DẪN SỬ DỤNG (v2.0)",
+    cv.row(3, 22)
+    cv.merge(1, 1, 1, 6, f"{t.emoji}  {t.name}  —  HƯỚNG DẪN SỬ DỤNG (v2.1)",
              font_name=t.font_title, font_size=18, bold=True, align="center",
              bg_color=t.primary, font_color=t.on_primary)
     cv.merge(2, 1, 2, 6, t.tagline_vi, font_size=10.5, italic=True, align="center",
              bg_color=t.soft, font_color=t.ink)
-    mode_txt = (
-        "✨ BẢN EXCEL OFFLINE MỌI MÁY (Excel 2016 / 2019 / 2021 / 365 • Windows & Mac)  •  KHÔNG MACRO  •  KHÔNG CẦN MẠNG  •  MỞ LÀ DÙNG NGAY"
-        if universal else (
-            "⚡ BẢN EXCEL 365 PRO OFFLINE (Ảnh nhúng trực tiếp vào ô — tốc độ 0ms, không cần Internet!)"
-            if pro_365_offline else
-            "☁️ BẢN GOOGLE SHEETS & EXCEL 365 CLOUD  •  Ảnh trực tuyến nhẹ gọn  •  Checkbox gốc & Lịch động"
-        )
-    )
+
+    if edition == "pro_xlsm":
+        mode_txt = "⚡ BẢN PRO INTERACTIVE (.XLSM)  •  Gọn 4 tab  •  Tự lưu & chuyển Tháng / Năm siêu mượt (<100ms)  •  100% Offline"
+    elif edition == "offline":
+        mode_txt = "✨ BẢN EXCEL OFFLINE KHÔNG MACRO (.XLSX)  •  Gọn nhẹ 4 tab  •  Chạy mọi Excel 2016–365 Win/Mac  •  Không cảnh báo bảo mật"
+    else:
+        mode_txt = "☁️ BẢN GOOGLE SHEETS EDITION  •  Gọn 4 tab + _Database  •  Hoạt ảnh =IMAGE() động  •  Kèm Script 1-Click Checkbox & Lưu 12 Tháng!"
+
     cv.merge(3, 1, 3, 6, mode_txt, font_size=8.8, bold=True, align="center",
              bg_color=t.card, font_color=t.primary_dark)
     cv.box(1, 1, 3, 6, t.line)
-    cv.row(4, 12)
+    r = 4
 
-    # ------------------------------------------------------------------ TAB MAP
-    r = 5
+    # Google Sheets crisp 1-line 3-second tip banner right under hero!
+    if gsheets:
+        cv.row(r, 8)
+        r += 1
+        cv.row(r, 38)
+        cv.merge(
+            r, 1, r, 6,
+            "💡 Mẹo mở trên Google Sheets (3 giây): Chọn vùng ô TRUE/FALSE → Chèn (Insert) → Hộp kiểm (Checkbox) "
+            "— HOẶC vào Tiện ích mở rộng (Extensions) → Apps Script → dán file google_sheets_1click_setup.gs và chạy setupHabitTracker() để bật Checkbox & tự động lưu 12 tháng vào _Database!",
+            font_size=9.2, bold=True, align="center", text_wrap=True,
+            bg_color=t.warn_fill, font_color=t.ink,
+        )
+        cv.box(r, 1, r, 6, t.warn_line)
+        r += 1
+
+    cv.row(r, 12)
+    r += 1
+
+    # ------------------------------------------------------------------ TAB MAP (4 CLEAN TABS)
     cv.row(r, 24)
-    cv.merge(r, 1, r, 6, "🗂️  CẤU TRÚC CÁC SHEET TRONG FILE", bold=True, font_size=10,
+    cv.merge(r, 1, r, 6, "🗂️  CẤU TRÚC 4 SHEET GỌN ĐẸP TRONG FILE (v2.1)", bold=True, font_size=10,
              align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
+
+    if edition == "pro_xlsm":
+        tracker_desc = "Bảng theo dõi 31 ngày siêu gọn: đổi dropdown Tháng (B3) / Năm (B5) tự lưu tháng cũ & tải tháng mới vào _Database!"
+    elif edition == "offline":
+        tracker_desc = "Bảng theo dõi 31 ngày không Macro siêu nhẹ: lịch động, hoạt ảnh 6 giai đoạn offline & Streak Heatmap!"
+    else:
+        tracker_desc = "Bảng theo dõi 31 ngày Google Sheets: kết hợp script 1-click để bật Checkbox & tự lưu/nạp 12 tháng trong _Database!"
+
     tab_rows = [
-        (GUIDE_SHEET, "Trang chào mừng, hướng dẫn sử dụng nhanh & bảng tùy chỉnh ngưỡng tăng trưởng."),
-        (tracker_sheet, "Bảng theo dõi 31 ngày với ô tick Checkbox, hoạt ảnh 6 giai đoạn, biểu đồ & chuỗi Streak."),
+        (GUIDE_SHEET, "Trang chào mừng, hướng dẫn nhanh & bảng tùy chỉnh ngưỡng tăng trưởng 6 giai đoạn."),
+        (tracker_sheet, tracker_desc),
     ] + extra_tabs
+
     for idx, (tname, desc) in enumerate(tab_rows):
         rr = r + 1 + idx
-        cv.row(rr, 22)
+        cv.row(rr, 28)
         bg = t.card if idx % 2 == 0 else t.page
         cv.merge(rr, 1, rr, 2, f"  {tname}", bold=True, font_size=9.5, align="left",
                  bg_color=bg, font_color=t.primary_dark)
@@ -73,7 +99,6 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     r = r + len(tab_rows) + 2
     cv.row(r - 1, 12)
 
-    # Helper for crisp callout cards
     def info_card(start_r: int, c1: int, c2: int, title: str, bullets: list[str]) -> int:
         cv.row(start_r, 24)
         cv.merge(start_r, c1, start_r, c2, title, bold=True, font_size=9.8, align="left", indent=1,
@@ -82,7 +107,7 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
         cur = start_r + 1
         for b in bullets:
             lines = text_lines(b, span_w, factor=0.92)
-            h = max(25, lines * 15 + 9)
+            h = max(26, lines * 15 + 10)
             cv.row(cur, max(cv.heights.get(cur, 0), h))
             cv.merge(cur, c1, cur, c2, b, font_size=9.5, align="left", text_wrap=True,
                      bg_color=t.card, font_color=t.ink, indent=1)
@@ -92,34 +117,72 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
         return cur
 
     # ------------------------------------------------------------------ 2-COL CARDS (SEC 1 & SEC 2)
-    sec1 = [
-        "1️⃣  Mở tab Tracker chính và click thẳng vào ô vuông Checkbox (☑ / ☐) ở ngày tương ứng — KHÔNG cần gõ chữ, KHÔNG cần cài thêm gì, KHÔNG cần Internet!",
-        "2️⃣  Mỗi khi bạn tick, ô ngày sẽ tự tô màu pastel dịu mắt, thanh % Completed tăng lên, biểu tượng phía trên cột ngày tự lớn lên theo 6 giai đoạn, và Biểu đồ + Streak Heatmap cập nhật ngay lập tức.",
-        "3️⃣  Cột GOAL (Mục tiêu): nhập số ngày bạn muốn đạt trong tháng (vd: 20 ngày). Bỏ trống = mặc định tính cả tháng.",
-    ]
-    sec2 = [
-        "⚡  File đã điền sẵn ~22 ngày dữ liệu mẫu để bạn xem ngay hiệu ứng hoạt ảnh & biểu đồ. Khi muốn bắt đầu tháng của riêng mình:",
-        "🧹  Bước 1: Mở tab Tracker chính → kéo chuột chọn toàn bộ vùng ô tick từ C17 đến AG36 (hoặc nhấn Ctrl+G → gõ C17:AG36 → Enter).",
-        "🧹  Bước 2: Nhấn phím Delete (trên Mac nhấn fn + Backspace) — toàn bộ ô vuông Checkbox lập tức bỏ tick sạch sẽ, giữ nguyên 100% công thức, màu sắc & hoạt ảnh!",
-    ]
-    end1 = info_card(r, 1, 3, "📌  1. CÁCH TICK HẰNG NGÀY (MỞ LÀ DÙNG)", sec1)
-    end2 = info_card(r, 4, 6, "⚡  2. RESET DỮ LIỆU MẪU TRONG 5 GIÂY", sec2)
+    if edition == "pro_xlsm":
+        sec1 = [
+            "1️⃣  Mở file lần đầu: bấm Enable Content (Bật Macro) màu vàng 1 lần để kích hoạt bộ máy tự lưu dữ liệu Tháng/Năm siêu mượt.",
+            "2️⃣  Click thẳng vào ô Checkbox (☑ / ☐): hoạt ảnh từng ngày, Monthly Hero, Yearly Goals & Thành Tựu Năm tự lớn lên theo % thực tế (0% = chậu trống → 100% = nở rộ!).",
+            "3️⃣  Cột GOAL: nhập số ngày mục tiêu mỗi tháng (vd: 24 ngày). Bỏ trống = tính cả tháng.",
+        ]
+        sec2 = [
+            "⚡  File điền sẵn dữ liệu mẫu tháng 10/2026 để bạn trải nghiệm ngay hiệu ứng hoạt ảnh & Thành Tựu Năm.",
+            "🧹  Bắt đầu tháng mới trống 100%? Chỉ cần đổi dropdown Tháng (B3) sang November hoặc Năm (B5) sang 2027 — dữ liệu tháng cũ TỰ LƯU vào _Database & tháng mới mở TRỐNG SẠCH!",
+            "🧹  Hoặc reset tháng hiện tại: chọn vùng C17:AG36 → nhấn phím Delete (Mac: fn + Backspace).",
+        ]
+    elif edition == "offline":
+        sec1 = [
+            "1️⃣  Mở tab Tracker chính và click thẳng vào ô Checkbox (☑ / ☐) — KHÔNG Macro, KHÔNG cảnh báo bảo mật, KHÔNG cần Internet, mở cực nhanh trên mọi Excel 2016–365!",
+            "2️⃣  Hoạt ảnh động 100% theo % thực tế: 31 biểu tượng ngày, Monthly Hero, Yearly Goals & Tổng Kết Năm đều tự đổi từ Stage 0 (0%) → Stage 5 (100%)!",
+            "3️⃣  Cột GOAL: nhập số ngày mục tiêu trong tháng. Bỏ trống = mặc định tính đủ số ngày của tháng.",
+        ]
+        sec2 = [
+            "⚡  File điền sẵn ~22 ngày mẫu sinh động. Muốn reset về 0%: chọn vùng C17:AG36 → nhấn Delete (Mac: fn + Backspace) → toàn bộ ô tick về trống & cây về Stage 0!",
+            "📑  Sang tháng mới trong 2 giây (bản Không Macro): chuột phải tab Tracker → Move or Copy → tick ☑ Create a copy (hoặc nhân bản file cho tháng mới), chọn tháng ở B3 & xóa vùng tick.",
+            "💡  Mẹo: Nếu muốn lưu tự động nhiều Tháng & nhiều Năm ngay trên 1 trang duy nhất, hãy dùng bản Pro (.xlsm) trong thư mục pro_macro/!",
+        ]
+    else:
+        sec1 = [
+            "1️⃣  Tải file lên Google Drive → Mở bằng Google Sheets → Tệp → Lưu dưới dạng Google Trang tính.",
+            "2️⃣  Bật Checkbox + Lưu 12 Tháng trong 1 giây: Tiện ích mở rộng → Apps Script → dán file google_sheets_1click_setup.gs → Run setupHabitTracker()!",
+            "3️⃣  Hoặc làm nhanh không cần Script (3 giây): chọn C17:AG36 → Chèn (Insert) → Hộp kiểm (Checkbox).",
+        ]
+        sec2 = [
+            "⚡  Gọn đúng 4 tab đẹp mắt (không còn 15 tab rối mắt!) nhờ sheet ẩn _Database lưu riêng dữ liệu 12 tháng trong năm.",
+            "🧹  Reset nhanh trên Google Sheets: chọn vùng Checkbox C17:AG36 → nhấn Space (hoặc Delete) để bỏ tick sạch sẽ.",
+            "✨  Hoạt ảnh =IMAGE() động 6 giai đoạn tự cập nhật cho cả 31 ngày, Monthly Hero, Yearly Goals & Thành Tựu Năm!",
+        ]
+
+    end1 = info_card(r, 1, 3, "📌  1. CÁCH SỬ DỤNG & TICK HẰNG NGÀY", sec1)
+    end2 = info_card(r, 4, 6, "⚡  2. DỮ LIỆU MẪU, RESET & SANG THÁNG MỚI", sec2)
     r = max(end1, end2) + 1
     cv.row(r - 1, 12)
 
     # ------------------------------------------------------------------ 2-COL CARDS (SEC 3 & SEC 4)
     sec3 = [
-        "✏️  Sửa tên thói quen: Gõ đè trực tiếp lên cột tên thói quen (B17:B28) — mọi biểu đồ & chuỗi streak giữ nguyên 100%!",
-        "➕  Thêm thói quen (12 dòng Checkbox sẵn + 8 dòng mở rộng nhanh): Dòng 1–12 đã gắn sẵn ô Checkbox bấm 1 chạm; dòng 13–20 (B29:B36) đã nối sẵn công thức Streak + dropdown chọn ✓ (chỉ cần gõ tên thói quen là dùng ngay!).",
-        "🚫  Lưu ý nhỏ: Để xóa thói quen không dùng, chỉ chọn ô tên rồi bấm Delete — KHÔNG bấm Delete Row để tránh ảnh hưởng dải liên kết.",
+        "✏️  Sửa tên thói quen: Gõ đè trực tiếp lên cột tên thói quen (B17:B36) — mọi biểu đồ, hoạt ảnh & chuỗi streak tự cập nhật!",
+        "➕  Thêm thói quen: Dòng 1–12 gắn sẵn ô Checkbox 1 chạm; dòng 13–20 nối sẵn dropdown ✓ & công thức Streak!",
+        "🎯  Mục tiêu Năm: Mở tab 🎯 Yearly Goals & Habits, chọn Năm (ô I2) & tick mục tiêu đạt được — biểu tượng YOU HAVE PLANTED tự lớn từ 0% → 100%!",
     ]
-    sec4 = [
-        "📅  Đổi Tháng & Năm động: Tại thẻ góc trên bên trái bảng Tracker (ô B3 & B5), nhấn mũi tên dropdown chọn Tháng (January–December) và Năm (2024–2040).",
-        "✨  Toàn bộ số ngày (28 / 29 năm nhuận / 30 / 31) và thứ (Mon–Sun) tự động nhảy chuẩn xác! Ngày thừa cuối tháng (vd: ngày 29–31 tháng 2) tự động ẩn icon hoạt ảnh sạch sẽ.",
-        "📑  Tạo thêm tháng mới: Chuột phải vào tab Tracker → Move or Copy → tick ☑ Create a copy → đổi tên tab → chọn tháng mới & reset vùng C17:AG36 trong 5 giây!",
-    ]
-    end3 = info_card(r, 1, 3, "🧩  3. THÊM / SỬA THÓI QUEN KHÔNG HỎNG CÔNG THỨC", sec3)
-    end4 = info_card(r, 4, 6, "🗓️  4. ĐỔI THÁNG / NĂM & NHÂN BẢN SANG THÁNG MỚI", sec4)
+    if edition == "pro_xlsm":
+        sec4 = [
+            "⚡  Đổi Tháng (B3) & Năm (B5) siêu mượt: Dữ liệu tháng cũ TỰ LƯU vào _Database, tháng chưa dùng mở TRỐNG 100%, quay lại tháng cũ giữ nguyên vẹn từng ô tick!",
+            "🏆  Tổng Kết & Thành Tựu Năm: Mở tab 🏆 Tổng Kết & Thành Tựu Năm, chọn Năm (ô B3) → xem ngay 4 thẻ KPI, khu vườn 12 tháng động & 8 Huy hiệu kỷ luật!",
+            "🗓️  Chọn năm chưa có dữ liệu (vd: 2028) → hiển thị 0% / Stage 0 trống sạch, không rò rỉ dữ liệu năm khác.",
+        ]
+    elif edition == "offline":
+        sec4 = [
+            "📅  Đổi Tháng (B3) & Năm (B5) tự nhảy lịch (28/29/30/31 ngày + thứ Mon–Sun), ẩn gọn ngày thừa cuối tháng!",
+            "🏆  Tổng Kết & Thành Tựu Năm: Đồng bộ live tiến độ tháng hiện tại & Yearly Goals, tự mở khóa 8 Huy hiệu kỷ luật & hiển thị 0% / Stage 0 khi chọn năm trống (vd: 2028)!",
+            "⚡  Cần lưu lịch sử tự động 12 tháng × nhiều năm trên 1 tab? Chuyển sang dùng bản Pro (.xlsm) đã đi kèm sẵn!",
+        ]
+    else:
+        sec4 = [
+            "⚡  Khi đã chạy 1-click Script (`google_sheets_1click_setup.gs`), mỗi khi đổi dropdown Tháng (B3) trên Google Sheets, hàm onEdit(e) TỰ ĐỘNG lưu tháng cũ & nạp tháng mới từ _Database!",
+            "🏆  Tổng Kết & Thành Tựu Năm: Tự tổng hợp 12 tháng trong năm đang chọn + đồng bộ Yearly Goals + mở khóa 8 Huy hiệu kỷ luật!",
+            "🗓️  Chọn năm chưa có dữ liệu (vd: 2028) ở ô B3 tab Tổng Kết → toàn bộ biểu đồ, 12 ô tháng & huy hiệu hiển thị 0% / Stage 0 sạch sẽ!",
+        ]
+
+    end3 = info_card(r, 1, 3, "🧩  3. TÙY BIẾN THÓI QUEN & MỤC TIÊU NĂM", sec3)
+    end4 = info_card(r, 4, 6, "🏆  4. LỊCH ĐỘNG, ĐA THÁNG/NĂM & THÀNH TỰU", sec4)
     r = max(end3, end4) + 1
     cv.row(r - 1, 12)
 
@@ -127,11 +190,11 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     r_cfg = r
     cv.row(r_cfg, 24)
     cv.merge(r_cfg, 1, r_cfg, 6,
-             "🎨  5. TÙY CHỈNH ẢNH HOẠT ẢNH (CUSTOM ANIMATION) & NGƯỠNG TĂNG TRƯỞNG",
+             "🎨  5. HOẠT ẢNH 6 GIAI ĐOẠN (LIVE GROWTH ANIMATION) & TÙY CHỈNH NGƯỠNG",
              bold=True, font_size=10, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
 
     cur_r = r_cfg + 1
-    if (not universal) and (not pro_365_offline):
+    if gsheets:
         cv.row(cur_r, 26)
         cv.merge(cur_r, 1, cur_r, 2, "  🔗  Đường dẫn ảnh (CFG_IMG_BASE):", bold=True, font_size=9.5,
                  align="left", bg_color=t.soft, font_color=t.ink)
@@ -141,7 +204,6 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
         cv.hline(cur_r, 1, 6, t.line)
         cur_r += 1
 
-    # Editable thresholds row (CFG_THR_1, CFG_THR_2, CFG_THR_3)
     r_thr = cur_r
     cv.row(r_thr, 25)
     cv.put(r_thr, 1, "Ngưỡng Stage 2:", bold=True, font_size=9, align="right", bg_color=t.soft)
@@ -158,7 +220,6 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     wb.define_name("CFG_THR_3", f"={q}!{acell(r_thr, 6)}")
     cv.hline(r_thr, 1, 6, t.line)
 
-    # 6-stage sprite preview strip
     r_shead = r_thr + 1
     r_simg = r_thr + 2
     r_sdesc = r_thr + 3
@@ -182,8 +243,6 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
             cv.put(r_simg, c, "", align="center", bg_color=t.card)
             guide_sprite_slots.append({"sheet": GUIDE_SHEET, "r1": r_simg, "c1": c,
                                        "r2": r_simg, "c2": c, "formula": f"=_Assets!$B${2 + idx}"})
-        elif pro_365_offline:
-            cv.put(r_simg, c, f"=INDEX(_Sprites!$A$1:$A$6,{idx + 1})", align="center", bg_color=t.card)
         else:
             cv.put(r_simg, c, f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_{idx}.png")', align="center", bg_color=t.card)
         cv.put(r_sdesc, c, st_sub, font_size=8.5, align="center", bg_color=t.card, font_color=t.muted)
@@ -193,27 +252,26 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     if universal:
         tip_txt = (
             "✨  CÁCH TỰ ĐỔI BỘ ẢNH HOẠT ẢNH RIÊNG (KHÔNG CẦN LINK / KHÔNG CẦN MẠNG):  "
-            "1) Chuột phải vào tên bất kỳ tab nào ở thanh dưới cùng → chọn Unhide (Hiện trang tính) → chọn sheet `_Assets` → OK.  "
-            "2) Xóa 6 ảnh cũ trong các ô B2 đến B7 (tương ứng Stage 0 → Stage 5) rồi Insert Picture / dán 6 ảnh PNG/sticker của riêng bạn vào đúng giữa các ô B2:B7.  "
-            "3) Chuột phải vào tab `_Assets` → Hide để ẩn lại. Toàn bộ 31 ngày + Hero icon sẽ TỰ ĐỘNG biến thành bộ ảnh của bạn ngay lập tức!"
+            "1) Chuột phải tên tab bất kỳ → chọn Unhide → chọn `_Assets` → OK.  "
+            "2) Thay 6 ảnh trong ô B2:B7 (Stage 0 → Stage 5) bằng ảnh PNG/sticker của bạn.  "
+            "3) Ẩn lại `_Assets` → toàn bộ 31 ngày, Monthly Hero, Yearly Goals & 12 tháng Tổng Kết Năm tự động đổi theo ảnh của bạn!"
         )
     else:
         tip_txt = (
-            "💡  Muốn tự thay bộ icon riêng trên Google Sheets / Excel 365? Tạo 6 file PNG (stage_0.png → stage_5.png), "
-            "tải lên GitHub / Imgur public rồi dán đường dẫn thư mục gốc vào ô vàng CFG_IMG_BASE ở trên. "
+            "💡  Muốn tự thay bộ icon riêng trên Google Sheets? Tạo 6 file PNG (stage_0.png → stage_5.png), "
+            "tải lên GitHub public rồi dán URL thư mục gốc vào ô vàng CFG_IMG_BASE ở trên. "
             "Hoặc sửa 3 ô ngưỡng vàng (25% / 50% / 75%) để điều chỉnh tốc độ tăng trưởng!"
         )
-    cv.row(r_tip, max(44, text_lines(tip_txt, 124) * 15 + 12))
+    cv.row(r_tip, max(46, text_lines(tip_txt, 124) * 15 + 12))
     cv.merge(r_tip, 1, r_tip, 6, tip_txt, font_size=9.2, align="left", text_wrap=True,
              bg_color=t.warn_fill, font_color=t.ink, indent=1)
     cv.box(r_cfg, 1, r_tip, 6, t.line)
 
-    # Footer
     r_foot = r_tip + 2
     cv.row(r_foot - 1, 10)
     cv.row(r_foot, 22)
     cv.merge(r_foot, 1, r_foot, 6,
-             f"💛  Habit Tracker Collection v2.0 by Dyu  •  Zero-Install Universal Excel Edition  •  {REPO_URL}",
+             f"💛  Habit Tracker Collection v2.1 by Dyu  •  Unified 4-Tab Edition  •  {REPO_URL}",
              font_size=8.5, italic=True, align="center", bg_color=t.page, font_color=t.muted)
 
     ws.hide_gridlines(2)

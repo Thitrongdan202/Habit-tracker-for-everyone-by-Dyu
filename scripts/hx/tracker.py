@@ -1,20 +1,16 @@
 """
-hx.tracker — Version 2.0 universal monthly habit-tracker engine.
+hx.tracker — Version 2.1 unified monthly habit-tracker engine.
 
-Architecture
-------------
-- Tier A (universal=True): 100% Excel 2016 / 2019 / 2021 / 365 compatible:
-    * Zero `_xlfn.` functions (no IMAGE, XLOOKUP, LET, LAMBDA, SCAN)
-    * Clean hidden `_Calc` sheet holds Month lookup, KPIs, Stage Index (1..7),
-      20x31 running-streak matrix, and Donut chart helpers
-    * Rows 1..12 x 31 days (372 cells): pure boolean cells formatted `;;;`
-      ready for Form Control Checkboxes added by `excel_com_enhancer.py`
-    * Rows 13..20 x 31 days (8 expansion rows): pre-wired `"✓"` dropdown cells
-    * Row 9 (`C9:AG9`) + Hero Grown slot: clean card canvas ready for 31+1
-      Excel Native Linked Pictures bound to `=INDEX(_Assets!$B$2:$B$8, _Calc!...)`
-- Tier B (universal=False): Cloud / Google Sheets / Excel 365 lightweight edition
-    * Uses `=_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&...)` pointing to branch `version2`
-    * Uses native cell checkboxes across all 20 rows
+Supports 3 clean editions from one single codebase:
+  1. Pro Interactive (`.xlsm`, single tracker tab + hidden `_Database` + VBA persistence)
+     - 100% offline Linked Pictures (`_Assets!B2:B8`) + Form Control Checkboxes
+     - Dynamic 6-stage Monthly Hero (`Anim_MonthlyHero`) + 31 Daily Animations (`Anim_Day01..31`)
+  2. Universal Offline No-Macro (`.xlsx`, 12 independent tabs `T01..T12` + `_YearHistory`)
+     - 100% offline Linked Pictures + Form Control Checkboxes, ZERO macros, ZERO volatile formulas
+     - Each month tab `m` uses a clean 40-row stride on shared hidden `_Calc` (`rb = (m - 1) * 40`)
+  3. Google Sheets Edition (`.xlsx`, 12 independent tabs `T01..T12` + `_YearHistory`)
+     - Dynamic `=_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(<stage>-1)&".png")` for every daily & hero sprite
+     - Clean centered softly-tinted boolean cells ready for 1-click Insert->Checkbox / Apps Script
 """
 from __future__ import annotations
 
@@ -31,7 +27,8 @@ C_D31 = C_D0 + 30              # Day 31 (Col AG)
 C_GAP = 33                     # Col AH
 C_R0 = 34                      # Col AI (first right-side stat col)
 N_HABITS = 20
-N_FORM_ROWS = 12               # Tier A Form Control Checkbox rows (12 x 31 = 372)
+N_FORM_ROWS = 12               # Pro single-tab Form Control Checkbox rows (12 x 31 = 372)
+N_FORM_ROWS_12M = 10           # 12-Month Offline Form Control Checkbox rows (10 x 31 = 310/tab)
 
 R_BAND0, R_BAND1 = 1, 6
 R_IMG = 8                      # Excel row 9 (Linked Picture / IMAGE row)
@@ -42,18 +39,48 @@ R_H1 = R_H0 + N_HABITS - 1     # Excel row 36 (20th habit row)
 R_TOT = R_H1 + 1               # Excel row 37 (totals row)
 R_EXTRA = R_TOT + 2            # Excel row 39 (first extra dashboard block row)
 
-# ---- _Calc hidden sheet coordinates (0-based) ----------------------------- #
+# ---- _Calc hidden sheet coordinates (0-based, 100% NON-OVERLAPPING!) ------- #
 CALC_SHEET = "_Calc"
-CALC_MONTH_COL = 0             # A1:A12 -> January..December (locale-safe dropdown source!)
-CALC_KPI_COL = 2               # C1:C13 -> KPIs
-CALC_YEAR_COL = 3              # D1:D17 -> 2024..2040 (locale-safe dropdown source!)
-CALC_DONUT_COL = 4             # E1:E2  -> Overall Donut
-CALC_CHK_COL = 5               # F1     -> "✓" (locale-safe dropdown source!)
-CALC_WK_COL0 = 6               # G1:K5  -> Week 1..5 helpers
-CALC_STAGE_ROW = 14            # Excel row 15, cols B..AF (1..31) -> Stage Index 1..7
-CALC_RUN_ROW0 = 16             # Excel rows 17..36, cols B..AF (1..31) -> Streak runs
+CALC_STRIDE = 40               # Row stride per monthly tracker block on _Calc
+CALC_KPI_COL = 2               # Col C: rows rb+0..rb+12 = KPIs; rb+13 = HeroStageIdx!
+CALC_HERO_ROW_OFF = 13         # Row rb+13, Col C -> Monthly Hero Stage Index (1..6)
+CALC_DONUT_COL = 4             # Col E: rows rb+0..rb+1 -> Overall Donut
+CALC_WK_COL0 = 6               # Cols G..K: rows rb+0..rb+4 -> Week 1..5 helpers
+CALC_STAGE_ROW = 14            # Row rb+14, cols B..AF (1..31) -> Day 1..31 Stage Index (1..7)
+CALC_RUN_ROW0 = 16             # Rows rb+16..rb+35, cols B..AF (1..31) -> Streak runs
 CALC_DONEN_COL = 32            # Col AG (32) -> numeric done per habit
 CALC_GOALN_COL = 33            # Col AH (33) -> effective goal per habit
+
+# Global shared columns on _Calc (Cols AJ..AY = 35..50, NEVER touched by month blocks A..AH!)
+CALC_MONTH_COL = 35            # AJ1:AJ12 -> January..December (locale-safe dropdown source!)
+CALC_YEAR_COL = 36             # AK1:AK17 -> 2024..2040 (locale-safe dropdown source!)
+CALC_CHK_COL = 37              # AL1      -> "✓" (locale-safe dropdown source!)
+CALC_STATE_LBL_COL = 38        # AM1:AM12 -> Global state & hero stage labels
+CALC_STATE_VAL_COL = 39        # AN1:AN12 -> Global state & hero stage values:
+#   AN1 (row 0): ActiveTrackingYear (2026)
+#   AN2 (row 1): LastLoadedKey ("2026-10") — Pro VBA
+#   AN3 (row 2): LastGoalYear (2026)       — Pro VBA
+#   AN4 (row 3): YearlyGoalsDone (live)
+#   AN5 (row 4): YearlyGoalsTotal (live)
+#   AN6 (row 5): YearlyGoalsPct (live)
+#   AN7 (row 6): YearlyGoalsStageIdx (1..6 -> Anim_YearlyGoals)
+#   AN8 (row 7): AnnualHeroStageIdx  (1..6 -> Anim_AnnualHero)
+#   AN9 (row 8): AchBadgesStageIdx   (1..6 -> Anim_AchBadges)
+#   AN10(row 9): AnnualDonutDone
+#   AN11(row10): AnnualDonutRest
+
+CALC_ANN_COL0 = 40             # AO..AW (40..48), rows 1..12 -> 12-Month Annual summary engine
+#   AO(40): MonthNum (1..12)
+#   AP(41): MonthKey ("YYYY-MM")
+#   AQ(42): Completed
+#   AR(43): TotalGoal
+#   AS(44): OverallPct
+#   AT(45): GrownDays (>=75%)
+#   AU(46): PerfectDays (100%)
+#   AV(47): BestStreak
+#   AW(48): MonthlyStageIdx (1..6 -> Anim_AnnualM01..M12)
+CALC_ANN_YG_LBL_COL = 49       # AX1:AX3 -> Annual selected-year YearlyGoals labels
+CALC_ANN_YG_VAL_COL = 50       # AY1:AY3 -> Annual selected-year GoalsDone, GoalsTotal, GoalsPct
 
 WEEKDAYS_SHORT = '"Mon","Tue","Wed","Thu","Fri","Sat","Sun"'
 WEEKDAYS_LETTER = '"M","T","W","T","F","S","S"'
@@ -66,6 +93,55 @@ def day_col(k: int) -> int:          # k = 1..31
 def week_days(w: int):               # w = 0..4
     a = 7 * w + 1
     return list(range(a, min(a + 6, 31) + 1))
+
+
+def stage6_formula(pct_ref: str) -> str:
+    """Consistent 6-stage formula (returns 1..6 for stage_0..stage_5):
+    0% -> 1, 1-24% -> 2, 25-49% -> 3, 50-74% -> 4, 75-99% -> 5, 100% -> 6."""
+    return (f"=1+({pct_ref}>0)+({pct_ref}>=CFG_THR_1)+({pct_ref}>=CFG_THR_2)"
+            f"+({pct_ref}>=CFG_THR_3)+({pct_ref}>=0.999)")
+
+
+def init_calc_sheet(wb, active_year: int = 2026, last_loaded_key: str = "2026-10",
+                    last_goal_year: int = 2026):
+    """Create the shared hidden `_Calc` sheet with non-overlapping lookups & state cells."""
+    ws_calc = wb.add_worksheet(CALC_SHEET)
+    ws_calc.hide_gridlines(2)
+    for idx, m in enumerate(MONTHS_EN):
+        ws_calc.write(idx, CALC_MONTH_COL, m)
+    for idx, yr in enumerate(range(2024, 2041)):
+        ws_calc.write(idx, CALC_YEAR_COL, yr)
+    ws_calc.write(0, CALC_CHK_COL, CHECK_ALT)
+
+    state_init = [
+        ("ActiveTrackingYear", active_year),
+        ("LastLoadedKey", last_loaded_key),
+        ("LastGoalYear", last_goal_year),
+        ("YearlyGoalsDone", 0),
+        ("YearlyGoalsTotal", 0),
+        ("YearlyGoalsPct", 0),
+        ("YearlyGoalsStageIdx", 1),
+        ("AnnualHeroStageIdx", 1),
+        ("AchBadgesStageIdx", 1),
+        ("AnnualDonutDone", 0),
+        ("AnnualDonutRest", 1),
+    ]
+    for r_idx, (lbl, val) in enumerate(state_init):
+        ws_calc.write(r_idx, CALC_STATE_LBL_COL, lbl)
+        ws_calc.write(r_idx, CALC_STATE_VAL_COL, val)
+    return ws_calc
+
+
+def month_lookup_ref() -> str:
+    return f"{qs(CALC_SHEET)}!{rng(0, CALC_MONTH_COL, 11, CALC_MONTH_COL)}"
+
+
+def year_lookup_ref() -> str:
+    return f"{qs(CALC_SHEET)}!{rng(0, CALC_YEAR_COL, 16, CALC_YEAR_COL)}"
+
+
+def chk_lookup_ref() -> str:
+    return f"{qs(CALC_SHEET)}!{acell(0, CALC_CHK_COL)}"
 
 
 @dataclass
@@ -95,8 +171,13 @@ class TrackerSpec:
     name_width: float = 35
     img_row_height: float = 58
     habit_row_height: float = 23
-    universal: bool = True             # True = Tier A Offline (Linked Pictures), False = Tier B Cloud (=IMAGE)
-    pro_365_offline: bool = False      # True = Excel 365 embedded _Sprites + native checkboxes (0ms offline)
+    universal: bool = True             # True = Offline/Pro Linked Pictures + Form Checkboxes
+    gsheets: bool = False              # True = Google Sheets =IMAGE() + clean styled boolean cells
+    pro_mode: bool = False             # True = Pro .xlsm with VBA auto-save
+    calc_slot: int = 0                 # 0 for unified 4-tab layout
+    fixed_month: int | None = None     # None = editable Month/Year dropdown
+    sample_mode: str = "oct"           # "oct" | "sep" | "empty"
+    form_rows: int = N_FORM_ROWS       # Form Control checkbox rows when universal=True
 
 
 @dataclass
@@ -104,12 +185,16 @@ class TrackerRefs:
     sheet: str
     q: str
     calc_q: str
+    calc_row_base: int
+    stage_row: int
+    hero_stage_cell: str               # e.g. '_Calc'!$C$14
     month_cell: str
     year_cell: str
-    s: dict                             # KPI name -> fully-qualified `_Calc!$C$N` ref
+    s: dict                            # KPI name -> fully-qualified `_Calc!$C$N` ref
     c_right_end: int
     right_cols: dict
-    hero_icon_box: tuple                # (r1, c1, r2, c2) for Hero Grown Linked Picture
+    hero_icon_box: tuple               # (r1, c1, r2, c2) for Monthly Hero Linked Picture
+    ticks_2d: list = field(default_factory=list)
 
     def a(self, key):
         return self.s[key]
@@ -119,11 +204,17 @@ def _done_test(ref: str) -> str:
     return f'OR({ref}=TRUE,{ref}="{CHECK_ALT}")'
 
 
-def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec) -> TrackerRefs:
+def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=None) -> TrackerRefs:
     t = cv.t
     ws = cv.ws
     q = qs(spec.sheet)
     cq = qs(CALC_SHEET)
+    rb = spec.calc_slot * CALC_STRIDE
+
+    if ws_calc is None:
+        ws_calc = init_calc_sheet(wb, active_year=spec.year,
+                                  last_loaded_key=f"{spec.year}-{MONTHS_EN.index(spec.month) + 1:02d}",
+                                  last_goal_year=spec.year)
 
     n_right = len(spec.right_labels) + len(spec.extra_cols)
     C_RE = C_R0 + n_right - 1
@@ -144,11 +235,11 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec) -> TrackerR
 
     cv.row(0, 10)
     cv.row(R_BAND0, 19)
-    cv.row(R_BAND0 + 1, 30)        # Dedicated UNMERGED Month dropdown cell (B3)!
+    cv.row(R_BAND0 + 1, 30)        # Dedicated UNMERGED Month cell (B3)
     cv.row(R_BAND0 + 2, 15)        # Helper cue label (B4)
-    cv.row(R_BAND0 + 3, 24)        # Dedicated UNMERGED Year dropdown cell (B5)!
+    cv.row(R_BAND0 + 3, 24)        # Dedicated UNMERGED Year cell (B5)
     cv.row(R_BAND0 + 4, 18)        # Dynamic Tháng/Năm/Ngày summary (B6)
-    cv.row(R_BAND0 + 5, 16)        # Auto-calendar cue (B7)
+    cv.row(R_BAND0 + 5, 16)        # Auto-calendar / tip cue (B7)
     cv.row(7, 9)
     cv.row(R_IMG, spec.img_row_height)
     for r in (R_DONE, R_NOT, R_PCT):
@@ -162,17 +253,10 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec) -> TrackerR
     cv.row(R_TOT, 23)
     cv.row(R_TOT + 1, 14)
 
-    # ------------------------------------------------------------------ _Calc sheet setup
-    ws_calc = wb.add_worksheet(CALC_SHEET)
-    ws_calc.hide_gridlines(2)
-    for idx, m in enumerate(MONTHS_EN):
-        ws_calc.write(idx, CALC_MONTH_COL, m)
-    month_lookup_rng = f"{cq}!{rng(0, CALC_MONTH_COL, 11, CALC_MONTH_COL)}"
-    for idx, yr in enumerate(range(2024, 2041)):
-        ws_calc.write(idx, CALC_YEAR_COL, yr)
-    year_lookup_rng = f"{cq}!{rng(0, CALC_YEAR_COL, 16, CALC_YEAR_COL)}"
-    ws_calc.write(0, CALC_CHK_COL, CHECK_ALT)
-    chk_lookup_rng = f"{cq}!{acell(0, CALC_CHK_COL)}"
+    # ------------------------------------------------------------------ _Calc block for this sheet
+    month_lookup_rng = month_lookup_ref()
+    year_lookup_rng = year_lookup_ref()
+    chk_lookup_rng = chk_lookup_ref()
 
     kpi_keys = ["m", "y", "dim", "ref", "hc", "overall", "grown", "perfect",
                 "tdone", "tgoal", "best", "avg", "bestcur"]
@@ -181,8 +265,8 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec) -> TrackerR
                   "BestStreak", "AvgDaily%", "BestCurrent"]
     S = {}
     for idx, (k, lab) in enumerate(zip(kpi_keys, kpi_labels)):
-        ws_calc.write(idx, CALC_KPI_COL - 1, lab)
-        S[k] = f"{cq}!{acell(idx, CALC_KPI_COL)}"
+        ws_calc.write(rb + idx, CALC_KPI_COL - 1, f"{spec.sheet}:{lab}")
+        S[k] = f"{cq}!{acell(rb + idx, CALC_KPI_COL)}"
 
     month_cell = acell(R_BAND0 + 1, C_NAME)       # $B$3
     year_cell = acell(R_BAND0 + 3, C_NAME)        # $B$5
@@ -193,16 +277,18 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec) -> TrackerR
 
     def set_kpi(key, formula):
         idx = kpi_keys.index(key)
-        ws_calc.write_formula(idx, CALC_KPI_COL, formula)
+        ws_calc.write_formula(rb + idx, CALC_KPI_COL, formula)
 
-    set_kpi("m", f"=IFERROR(MATCH({q}!{month_cell},{month_lookup_rng},0),1)")
+    if spec.fixed_month is not None:
+        ws_calc.write_number(rb + 0, CALC_KPI_COL, spec.fixed_month)
+    else:
+        set_kpi("m", f"=IFERROR(MATCH({q}!{month_cell},{month_lookup_rng},0),1)")
     set_kpi("y", f"=IFERROR(--{q}!{year_cell},YEAR(TODAY()))")
     set_kpi("dim", f"=DAY(EOMONTH(DATE({S['y']},{S['m']},1),0))")
-    # LastActiveDay: last day with any completed habit (100% Excel 2007–365 universal!)
     set_kpi("ref", f"=IFERROR(LOOKUP(2,1/({q_done_row}>0),{q_day_row}),0)")
     set_kpi("hc", f'=COUNTIF({q_names},"?*")')
-    set_kpi("tdone", f"=SUM({rng(R_H0, CALC_DONEN_COL, R_H1, CALC_DONEN_COL)})")
-    set_kpi("tgoal", f"=SUM({rng(R_H0, CALC_GOALN_COL, R_H1, CALC_GOALN_COL)})")
+    set_kpi("tdone", f"=SUM({rng(rb + R_H0, CALC_DONEN_COL, rb + R_H1, CALC_DONEN_COL)})")
+    set_kpi("tgoal", f"=SUM({rng(rb + R_H0, CALC_GOALN_COL, rb + R_H1, CALC_GOALN_COL)})")
     set_kpi("overall", f"=IFERROR(MIN(1,{S['tdone']}/{S['tgoal']}),0)")
     set_kpi("grown", f'=COUNTIF({q_pct_row},">="&CFG_THR_3)')
     set_kpi("perfect", f'=COUNTIF({q_pct_row},">=1")')
@@ -210,60 +296,87 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec) -> TrackerR
     set_kpi("avg", f'=IFERROR(SUMIFS({q_pct_row},{q_day_row},"<="&{S["ref"]})/{S["ref"]},0)')
     set_kpi("bestcur", f"=MAX(0,{q}!{rng(R_H0, rc['cur'], R_H1, rc['cur'])})")
 
-    # Stage index row on _Calc (Excel row 15, cols B..AF = Day 1..31) -> values 1..7
-    ws_calc.write(CALC_STAGE_ROW, 0, "StageIdx(1-7)")
+    # DYNAMIC Monthly Hero Stage Index (FIX 2: driven by real Overall Monthly %!)
+    hero_stage_row = rb + CALC_HERO_ROW_OFF
+    ws_calc.write(hero_stage_row, CALC_KPI_COL - 1, f"{spec.sheet}:HeroStageIdx")
+    ws_calc.write_formula(hero_stage_row, CALC_KPI_COL, stage6_formula(S["overall"]))
+    hero_stage_cell = f"{cq}!{acell(hero_stage_row, CALC_KPI_COL)}"
+
+    # Daily Stage index row on _Calc (rb + 14, cols B..AF = Day 1..31) -> values 1..7
+    stage_row = rb + CALC_STAGE_ROW
+    ws_calc.write(stage_row, 0, f"{spec.sheet}:StageIdx(1-7)")
     for k in range(1, 32):
         c_tr = day_col(k)
         c_ca = k  # Col B (1) .. Col AF (31)
         dc = f"{q}!{acell(R_DAY, c_tr)}"
         pc = f"{q}!{acell(R_PCT, c_tr)}"
         ws_calc.write_formula(
-            CALC_STAGE_ROW, c_ca,
-            f'=IF({dc}="",7,1+({pc}>0)+({pc}>=CFG_THR_1)+({pc}>=CFG_THR_2)+({pc}>=CFG_THR_3)+({pc}>=1))'
+            stage_row, c_ca,
+            f'=IF({dc}="",7,1+({pc}>0)+({pc}>=CFG_THR_1)+({pc}>=CFG_THR_2)+({pc}>=CFG_THR_3)+({pc}>=0.999))'
         )
 
-    # Overall Donut data on _Calc!E1:E2
-    ws_calc.write_formula(0, CALC_DONUT_COL, f"={S['overall']}")
-    ws_calc.write_formula(1, CALC_DONUT_COL, f"=1-{S['overall']}")
+    # Overall Donut data on _Calc!E{rb+1}:E{rb+2}
+    ws_calc.write_formula(rb + 0, CALC_DONUT_COL, f"={S['overall']}")
+    ws_calc.write_formula(rb + 1, CALC_DONUT_COL, f"=1-{S['overall']}")
 
-    # Weekly helpers on _Calc!G1:K5
+    # Weekly helpers on _Calc!G..K (rows rb+0..rb+4)
     for w in range(5):
         days = week_days(w)
         c1, c2 = day_col(days[0]), day_col(days[-1])
         hc = CALC_WK_COL0 + w
-        ws_calc.write_formula(0, hc, f"=SUM({q}!{rng(R_DONE, c1, R_DONE, c2)})")
-        ws_calc.write_formula(1, hc, f'={S["hc"]}*COUNT({q}!{rng(R_DAY, c1, R_DAY, c2)})')
-        ws_calc.write_formula(2, hc, f"=IFERROR({cell(0, hc)}/{cell(1, hc)},0)")
-        ws_calc.write_formula(3, hc, f"=1-{cell(2, hc)}")
-        ws_calc.write_formula(4, hc, f"={cell(1, hc)}-{cell(0, hc)}")
+        ws_calc.write_formula(rb + 0, hc, f"=SUM({q}!{rng(R_DONE, c1, R_DONE, c2)})")
+        ws_calc.write_formula(rb + 1, hc, f'={S["hc"]}*COUNT({q}!{rng(R_DAY, c1, R_DAY, c2)})')
+        ws_calc.write_formula(rb + 2, hc, f"=IFERROR({cell(rb + 0, hc)}/{cell(rb + 1, hc)},0)")
+        ws_calc.write_formula(rb + 3, hc, f"=1-{cell(rb + 2, hc)}")
+        ws_calc.write_formula(rb + 4, hc, f"={cell(rb + 1, hc)}-{cell(rb + 0, hc)}")
 
-    # ------------------------------------------------------------------ title card (UNMERGED pill dropdowns!)
+    # ------------------------------------------------------------------ title card
     cv.box(R_BAND0, C_NAME, R_BAND1, C_NAME, t.line, fill=t.card)
     cv.put(R_BAND0, C_NAME, f"{t.emoji}  {spec.label_tag}", bold=True, font_size=8.5, align="center",
            font_color=t.primary_dark, bg_color=t.card)
-    # Dedicated UNMERGED Month dropdown cell B3 (fixes Bug 2 across all locales!)
-    cv.put(R_BAND0 + 1, C_NAME, spec.month, font_name=t.font_title, font_size=16, bold=True,
+
+    month_name_disp = MONTHS_EN[spec.fixed_month - 1] if spec.fixed_month else spec.month
+    cv.put(R_BAND0 + 1, C_NAME, month_name_disp, font_name=t.font_title, font_size=16, bold=True,
            align="center", bg_color=t.soft, font_color=t.ink,
            top=1, top_color=t.primary, bottom=1, bottom_color=t.primary,
            left=1, left_color=t.primary, right=1, right_color=t.primary)
-    cv.put(R_BAND0 + 2, C_NAME, "▲ Tháng (Month)   •   ▼ Năm (Year)", italic=True, font_size=7.8,
-           align="center", bg_color=t.card, font_color=t.muted)
-    # Dedicated UNMERGED Year dropdown cell B5
-    cv.put(R_BAND0 + 3, C_NAME, spec.year, font_name=t.font_title, font_size=13.5, bold=True,
-           align="center", bg_color=t.soft, font_color=t.ink, num_format="0",
-           top=1, top_color=t.primary, bottom=1, bottom_color=t.primary,
-           left=1, left_color=t.primary, right=1, right_color=t.primary)
-    cv.put(R_BAND0 + 4, C_NAME, f'="Tháng "&{S["m"]}&"/"&{S["y"]}&"  •  "&{S["dim"]}&" ngày"',
-           font_size=8.8, bold=True, align="center", bg_color=t.card, font_color=t.primary_dark)
-    cv.put(R_BAND0 + 5, C_NAME, "✓ Nhấn ô màu để đổi Tháng & Năm động", italic=True, font_size=7.6,
-           align="center", bg_color=t.card, font_color=t.muted)
-    # Range-backed Data Validation (works on ALL Windows/Mac locales, both `,` and `;`!)
-    ws.data_validation(month_cell, {"validate": "list", "source": f"={month_lookup_rng}",
-                                    "input_title": "Chọn Tháng (Month)",
-                                    "input_message": "Chọn tháng (January–December) → số ngày & thứ tự động nhảy!"})
-    ws.data_validation(year_cell, {"validate": "list", "source": f"={year_lookup_rng}",
-                                   "input_title": "Chọn Năm (Year)",
-                                   "input_message": "Chọn năm (2024–2040), tự tính cả năm nhuận!"})
+
+    if spec.fixed_month is not None:
+        cv.put(R_BAND0 + 2, C_NAME, f"Tab Tháng {spec.fixed_month:02d} độc lập  •  Năm theo dõi:",
+               italic=True, font_size=7.6, align="center", bg_color=t.card, font_color=t.muted)
+        cv.put(R_BAND0 + 3, C_NAME, f"={cq}!{acell(0, CALC_STATE_VAL_COL)}", font_name=t.font_title,
+               font_size=13.5, bold=True, align="center", bg_color=t.soft, font_color=t.ink,
+               num_format="0", top=1, top_color=t.primary, bottom=1, bottom_color=t.primary,
+               left=1, left_color=t.primary, right=1, right_color=t.primary)
+        cv.put(R_BAND0 + 4, C_NAME, f'="Tháng "&{S["m"]}&"/"&{S["y"]}&"  •  "&{S["dim"]}&" ngày"',
+               font_size=8.8, bold=True, align="center", bg_color=t.card, font_color=t.primary_dark)
+        cue_txt = ("💡 GSheets: Chọn C17:AG36 → Chèn → Hộp kiểm"
+                   if spec.gsheets else "✓ Dữ liệu lưu riêng từng tab T01–T12 (0ms)")
+        cv.put(R_BAND0 + 5, C_NAME, cue_txt, italic=True, font_size=7.5,
+               align="center", bg_color=t.card, font_color=t.muted)
+    else:
+        cv.put(R_BAND0 + 2, C_NAME, "▲ Tháng (Month)   •   ▼ Năm (Year)", italic=True, font_size=7.8,
+               align="center", bg_color=t.card, font_color=t.muted)
+        cv.put(R_BAND0 + 3, C_NAME, spec.year, font_name=t.font_title, font_size=13.5, bold=True,
+               align="center", bg_color=t.soft, font_color=t.ink, num_format="0",
+               top=1, top_color=t.primary, bottom=1, bottom_color=t.primary,
+               left=1, left_color=t.primary, right=1, right_color=t.primary)
+        cv.put(R_BAND0 + 4, C_NAME, f'="Tháng "&{S["m"]}&"/"&{S["y"]}&"  •  "&{S["dim"]}&" ngày"',
+               font_size=8.8, bold=True, align="center", bg_color=t.card, font_color=t.primary_dark)
+        cue_txt = (
+            "⚡ Tự lưu & tải dữ liệu theo từng Tháng/Năm" if spec.pro_mode else (
+                "💡 GSheets: Chạy Script 1-Click bật Checkbox & lưu 12 tháng" if spec.gsheets
+                else "✓ Đổi Tháng/Năm động • Bản Offline không Macro"
+            )
+        )
+        cv.put(R_BAND0 + 5, C_NAME, cue_txt, italic=True, font_size=7.4,
+               align="center", bg_color=t.card, font_color=t.muted)
+        ws.data_validation(month_cell, {"validate": "list", "source": f"={month_lookup_rng}",
+                                        "input_title": "Chọn Tháng (Month)",
+                                        "input_message": "Chọn tháng (January–December) → tự lưu tháng cũ & tải tháng mới!"})
+        ws.data_validation(year_cell, {"validate": "list", "source": f"={year_lookup_rng}",
+                                       "input_title": "Chọn Năm (Year)",
+                                       "input_message": "Chọn năm (2024–2040) → tự lưu & tách biệt hoàn toàn từng năm!"})
 
     # ------------------------------------------------------------------ daily progress chart
     day_row = rng(R_DAY, C_D0, R_DAY, C_D31)
@@ -308,7 +421,7 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec) -> TrackerR
         cv.merge(R_BAND0 + 1, C_R0, R_BAND1, cd1, f"={S['overall']}", bold=True, font_size=15,
                  align="center", num_format="0%", bg_color=t.card, font_name=t.font_title,
                  font_color=t.primary_dark)
-        d = donut(wb, f"={cq}!{rng(0, CALC_DONUT_COL, 1, CALC_DONUT_COL)}",
+        d = donut(wb, f"={cq}!{rng(rb + 0, CALC_DONUT_COL, rb + 1, CALC_DONUT_COL)}",
                   [t.primary, t.donut_rest], hole=70)
         place_chart(cv, d, R_BAND0 + 1, C_R0, R_BAND1, cd1, pad_y=2)
         kc = C_R0 + 3
@@ -341,15 +454,10 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec) -> TrackerR
         w = (k - 1) // 7
         dc = cell(R_DAY, c, row_abs=True)
         if spec.universal:
-            # Tier A: pure empty white card cell — COM pastes Linked Picture bound to Anim_DayNN here!
             cv.put(R_IMG, c, "", bg_color=t.card, align="center")
-        elif spec.pro_365_offline:
-            st_ref = f"{cq}!{acell(CALC_STAGE_ROW, k)}"
-            cv.put(R_IMG, c, f'=IF({dc}="","",INDEX(_Sprites!$A$1:$A$6,{st_ref}))',
-                   bg_color=t.card, align="center")
         else:
-            st_ref = f"{cq}!{acell(CALC_STAGE_ROW, k)}"
-            cv.put(R_IMG, c, f'=IF({dc}="","",_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&({st_ref}-1)&".png"))',
+            st_ref = f"{cq}!{acell(stage_row, k)}"
+            cv.put(R_IMG, c, f'=IF({dc}="","",_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN(6,MAX(1,{st_ref}))-1)&".png"))',
                    bg_color=t.card, align="center")
         col_rng = f"{colname(c)}${R_H0 + 1}:{colname(c)}${R_H1 + 1}"
         cv.put(R_DONE, c, f'=IF({dc}="","",COUNTIFS({names_local},"?*",{col_rng},TRUE)+'
@@ -362,23 +470,24 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec) -> TrackerR
     cv.grid(R_DONE, C_D0, R_PCT, C_D31, t.line)
     cv.box(R_IMG, C_D0, R_PCT, C_D31, t.line)
 
-    # ------------------------------------------------------------------ grown hero card (mid right)
+    # ------------------------------------------------------------------ DYNAMIC grown hero card (FIX 2!)
     cv.box(R_IMG, C_R0, R_PCT, C_RE, t.line, fill=t.card)
     split = C_R0 + 2
     cv.merge(R_IMG, C_R0, R_IMG, split, spec.grown_label, bold=True, font_size=8.5, align="center",
              text_wrap=True, bg_color=t.card, font_color=t.ink)
     hero_box = (R_IMG, split + 1, R_IMG, C_RE)
     if spec.universal:
+        # COM pastes DYNAMIC Linked Picture bound to Anim_MonthlyHero / Anim_Mnn_Hero here!
         cv.merge(*hero_box, "", align="center", bg_color=t.card)
-    elif spec.pro_365_offline:
-        cv.merge(*hero_box, "=INDEX(_Sprites!$A$1:$A$6,6)", align="center", bg_color=t.card)
     else:
-        cv.merge(*hero_box, '=_xlfn.IMAGE(CFG_IMG_BASE&"stage_5.png")', align="center", bg_color=t.card)
+        cv.merge(*hero_box,
+                 f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN(6,MAX(1,{hero_stage_cell}))-1)&".png")',
+                 align="center", bg_color=t.card)
     cv.merge(R_DONE, C_R0, R_PCT, split, f"={S['grown']}", bold=True, font_size=26, align="center",
              bg_color=t.card, font_color=t.primary_dark, font_name=t.font_title)
     cv.merge(R_DONE, split + 1, R_PCT, C_RE,
-             '="ngày đạt ≥ "&TEXT(CFG_THR_3,"0%")&CHAR(10)&"(trên "&' + S["dim"] + '&" ngày)"',
-             font_size=8, align="center", text_wrap=True, bg_color=t.card, font_color=t.muted)
+             '="ngày ≥"&TEXT(CFG_THR_3,"0%")&CHAR(10)&"Tháng: "&TEXT(' + S["overall"] + ',"0%")',
+             font_size=8.2, bold=True, align="center", text_wrap=True, bg_color=t.card, font_color=t.muted)
 
     # ------------------------------------------------------------------ week band / headers
     cv.merge(R_WEEK, C_NAME, R_WD, C_NAME, f"{spec.habits_label}", bold=True, font_size=11,
@@ -408,41 +517,50 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec) -> TrackerR
         cv.vline(c, R_WEEK, R_DAY, t.card, where="right")
 
     # ------------------------------------------------------------------ habit rows
-    rnd = random.Random(spec.seed)
-    tick_grid = _sample_matrix_v2(rnd, spec.habits, active_days=22)
+    rnd = random.Random(spec.seed + (100 if spec.sample_mode == "sep" else 0))
+    if spec.sample_mode == "oct":
+        tick_grid = _sample_matrix_v2(rnd, spec.habits, mode="oct")
+    elif spec.sample_mode == "sep":
+        tick_grid = _sample_matrix_v2(rnd, spec.habits, mode="sep")
+    else:
+        tick_grid = [[False] * 31 for _ in range(len(spec.habits))]
+
+    full_ticks_20 = [tick_grid[i] if i < len(tick_grid) else [False] * 31 for i in range(N_HABITS)]
+
     for i in range(N_HABITS):
         r = R_H0 + i
         h = spec.habits[i] if i < len(spec.habits) else None
         X = r + 1
+        r_calc = rb + r
+        X_calc = r_calc + 1
         cv.put(r, C_NAME, h.name if h else "", align="left", indent=1, bg_color=t.card,
                font_color=t.ink, font_size=9.5)
-        ticks = tick_grid[i] if i < len(tick_grid) else [False] * 31
+        ticks = full_ticks_20[i]
         for k in range(1, 32):
             c = day_col(k)
             w = (k - 1) // 7
-            if spec.universal and i >= N_FORM_ROWS:
-                # Rows 13..20 in Tier A: fast expansion rows with "✓" dropdown
+            if spec.universal and i >= spec.form_rows:
                 cv.put(r, c, "", align="center", font_size=11, bold=True,
                        font_color=t.week_check[w], bg_color=t.card)
             else:
                 cv.checkbox(r, c, ticks[k - 1], align="center",
                             font_color=t.week_check[w], bg_color=t.card)
 
-        # Running streak matrix on _Calc (cols B..AF = 1..31, row = r)
+        # Running streak matrix on _Calc (cols B..AF = 1..31, row = r_calc)
         for k in range(1, 32):
             tr_ref = f"{q}!{cell(r, day_col(k))}"
-            prev = "0" if k == 1 else cell(r, k - 1)
-            ws_calc.write_formula(r, k, f'=IF(AND({k}<={S["dim"]},{_done_test(tr_ref)}),{prev}+1,0)')
+            prev = "0" if k == 1 else cell(r_calc, k - 1)
+            ws_calc.write_formula(r_calc, k, f'=IF(AND({k}<={S["dim"]},{_done_test(tr_ref)}),{prev}+1,0)')
 
-        run_calc = f"{cq}!$B{X}:$AF{X}"
+        run_calc = f"{cq}!$B{X_calc}:$AF{X_calc}"
         nm_q = f"{q}!${colname(C_NAME)}{X}"
         goal_q = f"{q}!${colname(rc['goal'])}{X}"
-        ws_calc.write_formula(r, CALC_DONEN_COL, f'=IF({nm_q}="",0,COUNTIF($B{X}:$AF{X},">0"))')
-        ws_calc.write_formula(r, CALC_GOALN_COL, f'=IF({nm_q}="",0,IF({goal_q}="",{S["dim"]},MIN({goal_q},{S["dim"]})))')
+        ws_calc.write_formula(r_calc, CALC_DONEN_COL, f'=IF({nm_q}="",0,COUNTIF($B{X_calc}:$AF{X_calc},">0"))')
+        ws_calc.write_formula(r_calc, CALC_GOALN_COL, f'=IF({nm_q}="",0,IF({goal_q}="",{S["dim"]},MIN({goal_q},{S["dim"]})))')
 
         nm = f"${colname(C_NAME)}{X}"
-        dn = f"{cq}!$AG{X}"
-        gn = f"{cq}!$AH{X}"
+        dn = f"{cq}!$AG{X_calc}"
+        gn = f"{cq}!$AH{X_calc}"
         cv.put(r, rc["goal"], h.goal if (h and h.goal) else "", align="center", font_color=t.muted,
                bg_color=t.card, font_size=9, num_format="0")
         cv.put(r, rc["done"], f'=IF({nm}="","",{dn}&" / "&{gn})', align="center", font_size=9,
@@ -472,13 +590,12 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec) -> TrackerR
     for k in (7, 14, 21, 28):
         cv.vline(day_col(k), R_H0, R_H1, t.week_head[(k - 1) // 7], where="right")
 
-    # Subtle separator line between 12 checkbox rows and 8 quick-expand rows in Tier A
     if spec.universal:
-        cv.hline(R_H0 + N_FORM_ROWS - 1, C_NAME, C_D31, t.primary, where="bottom")
-        exp_rng = rng(R_H0 + N_FORM_ROWS, C_D0, R_H1, C_D31)
+        cv.hline(R_H0 + spec.form_rows - 1, C_NAME, C_D31, t.primary, where="bottom")
+        exp_rng = rng(R_H0 + spec.form_rows, C_D0, R_H1, C_D31)
         ws.data_validation(exp_rng, {"validate": "list", "source": f"={chk_lookup_rng}",
-                                     "input_title": "Dòng mở rộng nhanh (13–20)",
-                                     "input_message": "Chọn ✓ để đánh dấu hoàn thành, hoặc copy 1 dòng Checkbox phía trên xuống!"})
+                                     "input_title": f"Dòng mở rộng nhanh ({spec.form_rows + 1}–20)",
+                                     "input_message": "Chọn ✓ để đánh dấu hoàn thành!"})
 
     # totals row
     cv.put(R_TOT, C_NAME, "TOTAL  •  TỔNG KẾT", bold=True, font_size=9, align="left", indent=1,
@@ -516,8 +633,12 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec) -> TrackerR
         days = week_days(w)
         a = rng(R_H0, day_col(days[0]), R_H1, day_col(days[-1]), absolute=False)
         tl = cell(R_H0, day_col(days[0]))
+        cf_props = {"bg_color": t.week_tint[w]}
+        if spec.gsheets:
+            cf_props["font_color"] = t.week_check[w]
+            cf_props["bold"] = True
         ws.conditional_format(a, {"type": "formula", "criteria": f'=OR({tl}=TRUE,{tl}="{CHECK_ALT}")',
-                                  "format": wb.add_format({"bg_color": t.week_tint[w]})})
+                                  "format": wb.add_format(cf_props)})
     for r in (R_WD, R_DAY, R_DONE, R_NOT, R_PCT, R_TOT):
         ws.conditional_format(rng(r, C_D0, r, C_D31, absolute=False),
                               {"type": "formula", "criteria": f'={colname(C_D0)}${R_DAY + 1}=""',
@@ -544,7 +665,6 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec) -> TrackerR
                        {"validate": "any", "input_title": "Tên thói quen",
                         "input_message": "Gõ tên thói quen mới — công thức, checkbox & streak đã được nối sẵn!"})
 
-    ws_calc.hide()
     ws.hide_gridlines(2)
     ws.set_zoom(85)
     ws.freeze_panes(0, 2)
@@ -554,26 +674,36 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec) -> TrackerR
     ws.fit_to_pages(1, 0)
     ws.set_margins(0.3, 0.3, 0.4, 0.4)
 
-    return TrackerRefs(sheet=spec.sheet, q=q, calc_q=cq, month_cell=month_cell, year_cell=year_cell,
-                       s=S, c_right_end=C_RE, right_cols=rc, hero_icon_box=hero_box)
+    return TrackerRefs(sheet=spec.sheet, q=q, calc_q=cq, calc_row_base=rb, stage_row=stage_row,
+                       hero_stage_cell=hero_stage_cell, month_cell=month_cell, year_cell=year_cell,
+                       s=S, c_right_end=C_RE, right_cols=rc, hero_icon_box=hero_box,
+                       ticks_2d=full_ticks_20)
 
 
-def _sample_matrix_v2(rnd: random.Random, habits: list, active_days: int = 22):
-    """Pre-populate ~22 days of varied, inspiring habit data showcasing all 6 growth stages;
-    Days 23..31 remain empty (stage 0) so the user can continue ticking right away!"""
+def _sample_matrix_v2(rnd: random.Random, habits: list, mode: str = "oct"):
+    """Pre-populate varied, inspiring habit data showcasing all 6 growth stages."""
     n = len(habits)
     if n == 0:
         return []
-    # 22 active days with organic ups/downs covering stages 1..5 + 9 upcoming days (stage 0)
-    wave22 = [
-        1.00, 1.00, 0.88, 0.75, 0.62, 0.38, 0.75,   # Week 1: strong start + mid dip (stage 2)
-        0.88, 1.00, 1.00, 0.88, 1.00, 0.75, 0.88,   # Week 2: full bloom momentum
-        1.00, 0.50, 0.18, 0.62, 0.88, 1.00, 1.00,   # Week 3: realistic busy day (stage 1!) -> comeback
-        1.00,                                        # Day 22: glowing bloom today!
-    ]
-    shift = rnd.randint(0, 3)
-    wave = wave22[:2] + wave22[2 + shift:20] + wave22[2:2 + shift] + wave22[20:]
-    wave = wave + [0.0] * (31 - len(wave))
+    if mode == "sep":
+        # 26 active days in September (30 days total), ~74% monthly completion -> distinct from Oct!
+        wave = [
+            0.88, 1.00, 0.75, 0.88, 1.00, 0.62, 0.50,
+            1.00, 1.00, 0.88, 0.75, 0.88, 1.00, 1.00,
+            0.75, 0.88, 1.00, 0.62, 0.88, 1.00, 1.00,
+            0.88, 0.75, 0.88, 1.00, 0.88, 0.0, 0.0, 0.0, 0.0, 0.0,
+        ]
+    else:
+        # 22 active days in October (~65% monthly completion -> Monthly Hero shows living Stage 3/4, NOT frozen Stage 5!)
+        wave22 = [
+            1.00, 1.00, 0.88, 0.75, 0.62, 0.38, 0.75,
+            0.88, 1.00, 1.00, 0.88, 1.00, 0.75, 0.88,
+            1.00, 0.50, 0.18, 0.62, 0.88, 1.00, 1.00,
+            1.00,
+        ]
+        shift = rnd.randint(0, 3)
+        wave = wave22[:2] + wave22[2 + shift:20] + wave22[2:2 + shift] + wave22[20:]
+        wave = wave + [0.0] * (31 - len(wave))
 
     order = sorted(range(n), key=lambda i: (-habits[i].p, rnd.random()))
     grid = [[False] * 31 for _ in range(n)]
@@ -594,13 +724,42 @@ def _sample_matrix_v2(rnd: random.Random, habits: list, active_days: int = 22):
     return grid
 
 
-def attach_offline_sprites_sheet(wb, slug: str, assets_root):
-    """Embed 6 high-DPI PNGs inside hidden `_Sprites` sheet for 0ms Excel 365 Pro Offline edition."""
-    import os
-    sp = wb.add_worksheet("_Sprites")
-    sp.set_column(0, 0, 14)
-    for i in range(6):
-        sp.set_row(i, 64)
-        sp.embed_image(i, 0, os.path.join(str(assets_root), slug, f"stage_{i}.png"))
-    sp.hide()
-    return sp
+def compute_month_summary_py(habits: list[Habit], ticks_20: list[list[bool]], year: int, month: int) -> dict:
+    """Compute exact summary metrics matching Excel formulas (used to pre-seed _Database & _YearHistory)."""
+    import calendar
+    dim = calendar.monthrange(year, month)[1]
+    n_active = len(habits)
+    total_done = 0
+    total_goal = 0
+    best_streak = 0
+    for i, h in enumerate(habits):
+        row = ticks_20[i]
+        eff_goal = min(h.goal, dim) if h.goal else dim
+        total_goal += eff_goal
+        run = 0
+        for d in range(dim):
+            if row[d]:
+                total_done += 1
+                run += 1
+                if run > best_streak:
+                    best_streak = run
+            else:
+                run = 0
+    grown_days = 0
+    perfect_days = 0
+    if n_active > 0:
+        for d in range(dim):
+            done_d = sum(1 for i in range(n_active) if ticks_20[i][d])
+            pct_d = done_d / n_active
+            if pct_d >= 0.75:
+                grown_days += 1
+            if pct_d >= 0.999:
+                perfect_days += 1
+    overall = min(1.0, total_done / total_goal) if total_goal > 0 else 0.0
+    return {
+        "key": f"{year:04d}-{month:02d}",
+        "year": year, "month": month,
+        "completed": total_done, "total_goal": total_goal,
+        "overall": overall, "grown_days": grown_days,
+        "perfect_days": perfect_days, "best_streak": best_streak,
+    }
