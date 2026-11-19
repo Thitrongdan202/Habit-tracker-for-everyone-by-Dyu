@@ -129,7 +129,7 @@ def run_test_b_reactivity(xl, wb, label: str):
     xl.EnableEvents = False
     try:
         # --- Case 1: 0% (All checkboxes FALSE!) ---
-        blank_grid = [[False] * 31 if r < 12 else [""] * 31 for r in range(20)]
+        blank_grid = [[False] * 31 for _ in range(20)]
         ws_tr.Range("C17:AG36").Value = blank_grid
         ws_yg.Range("B6:B25").Value = [[False] for _ in range(20)]
         xl.CalculateFull()
@@ -145,7 +145,7 @@ def run_test_b_reactivity(xl, wb, label: str):
 
         # --- Case 2: ~40% checkboxes TRUE -> Monthly Hero MUST be Stage 3 (stage_2.png), NOT Stage 6! ---
         # Check 10 active days across all 10 habits -> ~100/260 ≈ 38% (strictly in 25%-49% -> Stage 3!)
-        mid_grid = [[(d < 10) for d in range(31)] if r < 12 else [""] * 31 for r in range(20)]
+        mid_grid = [[(d < 10) for d in range(31)] for _ in range(20)]
         ws_tr.Range("C17:AG36").Value = mid_grid
         xl.CalculateFull()
         m_pct = float(ws_calc.Range("C6").Value)
@@ -154,7 +154,7 @@ def run_test_b_reactivity(xl, wb, label: str):
         assert m_stg_mid == 3, f"{label} [~40%={m_pct:.1%}]: Monthly Hero stage={m_stg_mid}, expected 3!"
 
         # --- Case 3: 100% checkboxes TRUE -> ALL Hero icons MUST reach Stage 6 (stage_5.png)! ---
-        full_grid = [[True] * 31 if r < 12 else [""] * 31 for r in range(20)]
+        full_grid = [[True] * 31 for _ in range(20)]
         ws_tr.Range("C17:AG36").Value = full_grid
         ws_yg.Range("B6:B25").Value = [[True] if r < 10 else [False] for r in range(20)]
         xl.CalculateFull()

@@ -107,6 +107,23 @@ def qs(sheet: str) -> str:
     return "'" + sheet.replace("'", "''") + "'"
 
 
+def checked_pastel_bg(head_hex: str, tint_hex: str) -> str:
+    """Return a crisp, joyful pastel fill for checked (TRUE) checkbox cells:
+    boosts contrast slightly over ultra-pale `tint_hex` while keeping dark themes readable."""
+    def _rgb(h: str):
+        h = h.lstrip("#")
+        return int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
+    r, g, b = _rgb(head_hex)
+    lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255.0
+    # Light/pastel headers (Cactus, Rainbow, Sunflower, Sakura): richer pastel blend (~58% head)
+    # Dark headers (Navy, Aurora, Ocean): gentle soft blend (~22% head) so dark checkbox stays super sharp
+    alpha = 0.58 if lum > 0.72 else (0.36 if lum > 0.45 else 0.18)
+    mr = int(round(r * alpha + 255 * (1 - alpha)))
+    mg = int(round(g * alpha + 255 * (1 - alpha)))
+    mb = int(round(b * alpha + 255 * (1 - alpha)))
+    return f"#{mr:02X}{mg:02X}{mb:02X}"
+
+
 def text_lines(text: str, width_chars: float, factor: float = 1.0) -> int:
     """Estimate wrapped line count for Segoe UI 10 in a cell `width_chars` wide."""
     usable = max(8.0, width_chars * 1.18 * factor)
@@ -257,18 +274,16 @@ class Canvas:
     def checkbox(self, r, c, value: bool, **props):
         d = self._cell(r, c)
         d["props"].update(props)
-        if self.universal:
-            # Universal Excel 2016–365 & Pro .xlsm: store pure boolean hidden via `;;;`, overlay Form Control Checkbox via COM
-            d["props"]["num_format"] = ";;;"
-            d["kind"], d["value"] = "value", bool(value)
-            self.form_checkboxes.append((r, c))
-        elif self.gsheets:
+        if self.gsheets:
             # Google Sheets Edition: clean centered, softly styled boolean cells ready for 1-click Insert -> Checkbox or Apps Script!
             d["props"].setdefault("align", "center")
             d["props"]["font_size"] = 7.5
             d["props"]["font_color"] = self.t.muted
             d["kind"], d["value"] = "value", bool(value)
         else:
+            # Pro .xlsm & Universal Offline .xlsx: Excel Native Cell Checkboxes with theme/week pastel colors!
+            d["props"].setdefault("align", "center")
+            d["props"].setdefault("font_size", 11.5)
             d["kind"], d["value"] = "checkbox", bool(value)
 
     def blank_row_fill(self, r, c1, c2, color):
