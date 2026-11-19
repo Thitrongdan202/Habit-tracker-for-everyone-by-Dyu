@@ -16,7 +16,7 @@ GUIDE_SHEET = "📖 Hướng Dẫn"
 
 
 def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[str, str]],
-                universal: bool = True) -> dict:
+                universal: bool = True, pro_365_offline: bool = False) -> dict:
     """Returns manifest info for Tier A COM Linked Pictures (6 stage previews)."""
     t: Theme = styles.t
     ws = wb.add_worksheet(GUIDE_SHEET)
@@ -40,8 +40,11 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
              bg_color=t.soft, font_color=t.ink)
     mode_txt = (
         "✨ BẢN EXCEL OFFLINE MỌI MÁY (Excel 2016 / 2019 / 2021 / 365 • Windows & Mac)  •  KHÔNG MACRO  •  KHÔNG CẦN MẠNG  •  MỞ LÀ DÙNG NGAY"
-        if universal else
-        "☁️ BẢN GOOGLE SHEETS & EXCEL 365 CLOUD  •  Ảnh trực tuyến nhẹ gọn  •  Checkbox gốc & Lịch động"
+        if universal else (
+            "⚡ BẢN EXCEL 365 PRO OFFLINE (Ảnh nhúng trực tiếp vào ô — tốc độ 0ms, không cần Internet!)"
+            if pro_365_offline else
+            "☁️ BẢN GOOGLE SHEETS & EXCEL 365 CLOUD  •  Ảnh trực tuyến nhẹ gọn  •  Checkbox gốc & Lịch động"
+        )
     )
     cv.merge(3, 1, 3, 6, mode_txt, font_size=8.8, bold=True, align="center",
              bg_color=t.card, font_color=t.primary_dark)
@@ -128,7 +131,7 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
              bold=True, font_size=10, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
 
     cur_r = r_cfg + 1
-    if not universal:
+    if (not universal) and (not pro_365_offline):
         cv.row(cur_r, 26)
         cv.merge(cur_r, 1, cur_r, 2, "  🔗  Đường dẫn ảnh (CFG_IMG_BASE):", bold=True, font_size=9.5,
                  align="left", bg_color=t.soft, font_color=t.ink)
@@ -179,6 +182,8 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
             cv.put(r_simg, c, "", align="center", bg_color=t.card)
             guide_sprite_slots.append({"sheet": GUIDE_SHEET, "r1": r_simg, "c1": c,
                                        "r2": r_simg, "c2": c, "formula": f"=_Assets!$B${2 + idx}"})
+        elif pro_365_offline:
+            cv.put(r_simg, c, f"=INDEX(_Sprites!$A$1:$A$6,{idx + 1})", align="center", bg_color=t.card)
         else:
             cv.put(r_simg, c, f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_{idx}.png")', align="center", bg_color=t.card)
         cv.put(r_sdesc, c, st_sub, font_size=8.5, align="center", bg_color=t.card, font_color=t.muted)

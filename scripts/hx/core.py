@@ -16,7 +16,7 @@ from typing import Any
 
 from xlsxwriter.utility import xl_rowcol_to_cell, xl_col_to_name
 
-REPO_RAW = "https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu/version2/assets/"
+REPO_RAW = "https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu/main/assets/"
 REPO_URL = "https://github.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu"
 
 MONTHS_EN = ["January", "February", "March", "April", "May", "June", "July",

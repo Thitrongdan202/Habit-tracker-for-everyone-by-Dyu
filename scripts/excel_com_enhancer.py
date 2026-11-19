@@ -32,7 +32,7 @@ from hx.tracker import CALC_SHEET
 from hx.guide import GUIDE_SHEET
 
 ASSETS_DIR = ROOT / "assets"
-OFFLINE_DIR = ROOT / "templates" / "excel_universal_offline"
+OFFLINE_DIR = ROOT / "templates"
 PREVIEWS_DIR = ROOT / "previews"
 
 
@@ -200,7 +200,7 @@ def enhance_one(xl, meta: dict):
 
 def main():
     manifests = build_all_base_tier_a()
-    print("\nCompiling 6 Tier-A Universal Offline `.xlsx` files via Excel COM...", flush=True)
+    print(f"\nCompiling {len(manifests)} Primary Universal Offline `.xlsx` files into templates/ via Excel COM...", flush=True)
     xl = win32.DispatchEx("Excel.Application")
     xl.Visible = False
     xl.DisplayAlerts = False
@@ -209,7 +209,7 @@ def main():
             enhance_one(xl, meta)
     finally:
         xl.Quit()
-    print("\nAll 6 Tier-A Universal Offline workbooks compiled & screenshotted!", flush=True)
+    print(f"\nAll {len(manifests)} Primary Universal Offline workbooks compiled & screenshotted!", flush=True)
 
 
 if __name__ == "__main__":

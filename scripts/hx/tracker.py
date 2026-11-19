@@ -44,9 +44,11 @@ R_EXTRA = R_TOT + 2            # Excel row 39 (first extra dashboard block row)
 
 # ---- _Calc hidden sheet coordinates (0-based) ----------------------------- #
 CALC_SHEET = "_Calc"
-CALC_MONTH_COL = 0             # A1:A12 -> January..December
+CALC_MONTH_COL = 0             # A1:A12 -> January..December (locale-safe dropdown source!)
 CALC_KPI_COL = 2               # C1:C13 -> KPIs
+CALC_YEAR_COL = 3              # D1:D17 -> 2024..2040 (locale-safe dropdown source!)
 CALC_DONUT_COL = 4             # E1:E2  -> Overall Donut
+CALC_CHK_COL = 5               # F1     -> "✓" (locale-safe dropdown source!)
 CALC_WK_COL0 = 6               # G1:K5  -> Week 1..5 helpers
 CALC_STAGE_ROW = 14            # Excel row 15, cols B..AF (1..31) -> Stage Index 1..7
 CALC_RUN_ROW0 = 16             # Excel rows 17..36, cols B..AF (1..31) -> Streak runs
@@ -93,7 +95,8 @@ class TrackerSpec:
     name_width: float = 35
     img_row_height: float = 58
     habit_row_height: float = 23
-    universal: bool = True             # True = Tier A Offline, False = Tier B Cloud
+    universal: bool = True             # True = Tier A Offline (Linked Pictures), False = Tier B Cloud (=IMAGE)
+    pro_365_offline: bool = False      # True = Excel 365 embedded _Sprites + native checkboxes (0ms offline)
 
 
 @dataclass
@@ -140,9 +143,12 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec) -> TrackerR
     cv.col(C_RE + 1, 2.4)
 
     cv.row(0, 10)
-    for r in range(R_BAND0, R_BAND1 + 1):
-        cv.row(r, 21)
     cv.row(R_BAND0, 19)
+    cv.row(R_BAND0 + 1, 30)        # Dedicated UNMERGED Month dropdown cell (B3)!
+    cv.row(R_BAND0 + 2, 15)        # Helper cue label (B4)
+    cv.row(R_BAND0 + 3, 24)        # Dedicated UNMERGED Year dropdown cell (B5)!
+    cv.row(R_BAND0 + 4, 18)        # Dynamic Tháng/Năm/Ngày summary (B6)
+    cv.row(R_BAND0 + 5, 16)        # Auto-calendar cue (B7)
     cv.row(7, 9)
     cv.row(R_IMG, spec.img_row_height)
     for r in (R_DONE, R_NOT, R_PCT):
@@ -162,6 +168,11 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec) -> TrackerR
     for idx, m in enumerate(MONTHS_EN):
         ws_calc.write(idx, CALC_MONTH_COL, m)
     month_lookup_rng = f"{cq}!{rng(0, CALC_MONTH_COL, 11, CALC_MONTH_COL)}"
+    for idx, yr in enumerate(range(2024, 2041)):
+        ws_calc.write(idx, CALC_YEAR_COL, yr)
+    year_lookup_rng = f"{cq}!{rng(0, CALC_YEAR_COL, 16, CALC_YEAR_COL)}"
+    ws_calc.write(0, CALC_CHK_COL, CHECK_ALT)
+    chk_lookup_rng = f"{cq}!{acell(0, CALC_CHK_COL)}"
 
     kpi_keys = ["m", "y", "dim", "ref", "hc", "overall", "grown", "perfect",
                 "tdone", "tgoal", "best", "avg", "bestcur"]
@@ -226,22 +237,33 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec) -> TrackerR
         ws_calc.write_formula(3, hc, f"=1-{cell(2, hc)}")
         ws_calc.write_formula(4, hc, f"={cell(1, hc)}-{cell(0, hc)}")
 
-    # ------------------------------------------------------------------ title card
+    # ------------------------------------------------------------------ title card (UNMERGED pill dropdowns!)
     cv.box(R_BAND0, C_NAME, R_BAND1, C_NAME, t.line, fill=t.card)
     cv.put(R_BAND0, C_NAME, f"{t.emoji}  {spec.label_tag}", bold=True, font_size=8.5, align="center",
            font_color=t.primary_dark, bg_color=t.card)
-    cv.merge(R_BAND0 + 1, C_NAME, R_BAND0 + 2, C_NAME, spec.month, font_name=t.font_month,
-             font_size=22, align="center", bg_color=t.card, font_color=t.ink, bold=t.font_month != "Segoe Script")
-    cv.put(R_BAND0 + 3, C_NAME, spec.year, font_name=t.font_title, font_size=15, align="center",
-           bg_color=t.card, font_color=t.ink, num_format="0", bold=True)
-    cv.put(R_BAND0 + 4, C_NAME, f'="Tháng "&{S["m"]}&"/"&{S["y"]}&"  •  "&{S["dim"]}&" ngày"',
-           font_size=9, align="center", bg_color=t.card, font_color=t.muted)
-    cv.put(R_BAND0 + 5, C_NAME, "▼ chọn Tháng & Năm ở ô phía trên", italic=True, font_size=8,
+    # Dedicated UNMERGED Month dropdown cell B3 (fixes Bug 2 across all locales!)
+    cv.put(R_BAND0 + 1, C_NAME, spec.month, font_name=t.font_title, font_size=16, bold=True,
+           align="center", bg_color=t.soft, font_color=t.ink,
+           top=1, top_color=t.primary, bottom=1, bottom_color=t.primary,
+           left=1, left_color=t.primary, right=1, right_color=t.primary)
+    cv.put(R_BAND0 + 2, C_NAME, "▲ Tháng (Month)   •   ▼ Năm (Year)", italic=True, font_size=7.8,
            align="center", bg_color=t.card, font_color=t.muted)
-    ws.data_validation(month_cell, {"validate": "list", "source": MONTHS_EN,
-                                    "input_title": "Chọn tháng", "input_message": "Chọn tháng để lịch tự cập nhật"})
-    ws.data_validation(year_cell, {"validate": "list", "source": [str(y) for y in range(2024, 2041)],
-                                   "input_title": "Chọn năm", "input_message": "Chọn năm (2024–2040)"})
+    # Dedicated UNMERGED Year dropdown cell B5
+    cv.put(R_BAND0 + 3, C_NAME, spec.year, font_name=t.font_title, font_size=13.5, bold=True,
+           align="center", bg_color=t.soft, font_color=t.ink, num_format="0",
+           top=1, top_color=t.primary, bottom=1, bottom_color=t.primary,
+           left=1, left_color=t.primary, right=1, right_color=t.primary)
+    cv.put(R_BAND0 + 4, C_NAME, f'="Tháng "&{S["m"]}&"/"&{S["y"]}&"  •  "&{S["dim"]}&" ngày"',
+           font_size=8.8, bold=True, align="center", bg_color=t.card, font_color=t.primary_dark)
+    cv.put(R_BAND0 + 5, C_NAME, "✓ Nhấn ô màu để đổi Tháng & Năm động", italic=True, font_size=7.6,
+           align="center", bg_color=t.card, font_color=t.muted)
+    # Range-backed Data Validation (works on ALL Windows/Mac locales, both `,` and `;`!)
+    ws.data_validation(month_cell, {"validate": "list", "source": f"={month_lookup_rng}",
+                                    "input_title": "Chọn Tháng (Month)",
+                                    "input_message": "Chọn tháng (January–December) → số ngày & thứ tự động nhảy!"})
+    ws.data_validation(year_cell, {"validate": "list", "source": f"={year_lookup_rng}",
+                                   "input_title": "Chọn Năm (Year)",
+                                   "input_message": "Chọn năm (2024–2040), tự tính cả năm nhuận!"})
 
     # ------------------------------------------------------------------ daily progress chart
     day_row = rng(R_DAY, C_D0, R_DAY, C_D31)
@@ -319,8 +341,12 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec) -> TrackerR
         w = (k - 1) // 7
         dc = cell(R_DAY, c, row_abs=True)
         if spec.universal:
-            # Tier A: pure white card cell — COM pastes Linked Picture bound to Anim_DayNN here!
+            # Tier A: pure empty white card cell — COM pastes Linked Picture bound to Anim_DayNN here!
             cv.put(R_IMG, c, "", bg_color=t.card, align="center")
+        elif spec.pro_365_offline:
+            st_ref = f"{cq}!{acell(CALC_STAGE_ROW, k)}"
+            cv.put(R_IMG, c, f'=IF({dc}="","",INDEX(_Sprites!$A$1:$A$6,{st_ref}))',
+                   bg_color=t.card, align="center")
         else:
             st_ref = f"{cq}!{acell(CALC_STAGE_ROW, k)}"
             cv.put(R_IMG, c, f'=IF({dc}="","",_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&({st_ref}-1)&".png"))',
@@ -344,6 +370,8 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec) -> TrackerR
     hero_box = (R_IMG, split + 1, R_IMG, C_RE)
     if spec.universal:
         cv.merge(*hero_box, "", align="center", bg_color=t.card)
+    elif spec.pro_365_offline:
+        cv.merge(*hero_box, "=INDEX(_Sprites!$A$1:$A$6,6)", align="center", bg_color=t.card)
     else:
         cv.merge(*hero_box, '=_xlfn.IMAGE(CFG_IMG_BASE&"stage_5.png")', align="center", bg_color=t.card)
     cv.merge(R_DONE, C_R0, R_PCT, split, f"={S['grown']}", bold=True, font_size=26, align="center",
@@ -448,7 +476,7 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec) -> TrackerR
     if spec.universal:
         cv.hline(R_H0 + N_FORM_ROWS - 1, C_NAME, C_D31, t.primary, where="bottom")
         exp_rng = rng(R_H0 + N_FORM_ROWS, C_D0, R_H1, C_D31)
-        ws.data_validation(exp_rng, {"validate": "list", "source": [CHECK_ALT],
+        ws.data_validation(exp_rng, {"validate": "list", "source": f"={chk_lookup_rng}",
                                      "input_title": "Dòng mở rộng nhanh (13–20)",
                                      "input_message": "Chọn ✓ để đánh dấu hoàn thành, hoặc copy 1 dòng Checkbox phía trên xuống!"})
 
@@ -564,3 +592,15 @@ def _sample_matrix_v2(rnd: random.Random, habits: list, active_days: int = 22):
         for idx in scored[:k]:
             grid[idx][d] = True
     return grid
+
+
+def attach_offline_sprites_sheet(wb, slug: str, assets_root):
+    """Embed 6 high-DPI PNGs inside hidden `_Sprites` sheet for 0ms Excel 365 Pro Offline edition."""
+    import os
+    sp = wb.add_worksheet("_Sprites")
+    sp.set_column(0, 0, 14)
+    for i in range(6):
+        sp.set_row(i, 64)
+        sp.embed_image(i, 0, os.path.join(str(assets_root), slug, f"stage_{i}.png"))
+    sp.hide()
+    return sp

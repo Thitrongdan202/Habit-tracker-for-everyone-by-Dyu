@@ -405,3 +405,334 @@ def add_focus_rank_top_card(wb, cv: Canvas, tr: TrackerRefs, total_xp_addr: str)
     cv.ws.conditional_format(rng(R_BAND1, mid + 1, R_BAND1, C_RE),
                              {"type": "data_bar", "bar_color": t.bar, "bar_solid": True,
                               "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1})
+
+
+# --------------------------------------------------------------------------- #
+#  Template 7 (Sakura Zen Study): Daily Focus Hours Log + Focus Hours Chart
+# --------------------------------------------------------------------------- #
+def add_sakura_study_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 77) -> dict:
+    t = cv.t
+    ws = cv.ws
+    q = tr.q
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23)
+    cv.row(r0 + 1, 24)
+    cv.row(r0 + 2, 23)
+
+    cv.put(r0, C_NAME, "🌸  DAILY FOCUS HOURS", bold=True, font_size=9.5, align="left", indent=1,
+           bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_D0, r0, C_D31, "SỐ GIỜ HỌC TẬP / DEEP WORK MỖI NGÀY (NHẬP SỐ GIỜ TỪ 0 – 12)",
+             bold=True, font_size=8.5, align="center", bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_R0, r0, C_RE, "📚  STUDY SUMMARY", bold=True, font_size=8.5, align="center",
+             bg_color=t.primary, font_color=t.on_primary)
+
+    r_hrs, r_pom = r0 + 1, r0 + 2
+    cv.put(r_hrs, C_NAME, "⏱️  Giờ tập trung (Focus Hours)", bold=True, font_size=9, align="left",
+           indent=1, bg_color=t.soft, font_color=t.ink)
+    cv.put(r_pom, C_NAME, "🍅  Pomodoro (25m sessions)", bold=True, font_size=9, align="left",
+           indent=1, bg_color=t.card, font_color=t.muted)
+
+    rnd = random.Random(seed)
+    for k in range(1, 32):
+        c = day_col(k)
+        if k > 22:
+            cv.put(r_hrs, c, "", align="center", font_size=8.5, bg_color=t.card, num_format="0.0")
+            cv.put(r_pom, c, f'=IF({cell(r_hrs, c)}="","",ROUND({cell(r_hrs, c)}*2,0))',
+                   align="center", font_size=8.5, bg_color=t.card, font_color=t.muted)
+            continue
+        hrs = rnd.choice([2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 3.5, 4.0, 2.0, 5.5])
+        cv.put(r_hrs, c, hrs, align="center", font_size=8.5, bold=True, bg_color=t.card,
+               font_color=t.ink, num_format="0.0")
+        cv.put(r_pom, c, f'=IF({cell(r_hrs, c)}="","",ROUND({cell(r_hrs, c)}*2,0))',
+               align="center", font_size=8.5, bg_color=t.card, font_color=t.muted)
+
+    hrs_rng = rng(r_hrs, C_D0, r_hrs, C_D31)
+    cv.grid(r_hrs, C_NAME, r_pom, C_D31, t.line)
+    cv.box(r0, C_NAME, r_pom, C_D31, t.line)
+    ws.conditional_format(hrs_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 0,
+                                    "mid_type": "num", "mid_value": 3, "max_type": "num", "max_value": 6,
+                                    "min_color": "#FFFBF7", "mid_color": "#FCE0E7", "max_color": "#E899AE"})
+
+    tot_hrs_addr = acell(r_hrs, C_R0 + 3)
+    avg_hrs_addr = acell(r_pom, C_R0 + 3)
+    cv.merge(r_hrs, C_R0, r_hrs, C_R0 + 2, "Tổng giờ học tháng:", font_size=9, align="left", indent=1,
+             bg_color=t.card, font_color=t.muted)
+    cv.merge(r_hrs, C_R0 + 3, r_hrs, C_RE, f"=SUM({hrs_rng})", bold=True, font_size=11, align="center",
+             num_format='0.0" h"', bg_color=t.soft, font_color=t.primary_dark)
+    cv.merge(r_pom, C_R0, r_pom, C_R0 + 2, "Trung bình / ngày học:", font_size=9, align="left", indent=1,
+             bg_color=t.card, font_color=t.muted)
+    cv.merge(r_pom, C_R0 + 3, r_pom, C_RE, f"=IFERROR(AVERAGE({hrs_rng}),0)", bold=True, font_size=10,
+             align="center", num_format='0.0" h/ngày"', bg_color=t.card, font_color=t.ink)
+    cv.hline(r_hrs, C_R0, C_RE, t.line)
+    cv.box(r0, C_R0, r_pom, C_RE, t.line)
+
+    # Focus Hours Column Chart below
+    r_ch0, r_ch1 = r_pom + 2, r_pom + 9
+    cv.row(r_ch0 - 1, 10)
+    for rr in range(r_ch0, r_ch1 + 1):
+        cv.row(rr, 20)
+    ch = wb.add_chart({"type": "column"})
+    ch.add_series({
+        "name": "Focus Hours",
+        "categories": f"={q}!{rng(R_DAY, C_D0, R_DAY, C_D31)}",
+        "values": f"={q}!{hrs_rng}",
+        "fill": {"color": "#F2A4B8"},
+        "border": {"none": True},
+        "gap": 50,
+    })
+    ch.set_title({"name": "DAILY DEEP WORK & STUDY HOURS (GIỜ TẬP TRUNG MỖI NGÀY)",
+                  "name_font": {"name": t.font, "size": 9.5, "bold": True, "color": t.ink}})
+    ch.set_y_axis({"min": 0, "max": 8, "major_unit": 2, "num_format": '0"h"',
+                   "num_font": axis_font(t), "line": {"none": True},
+                   "major_gridlines": {"visible": True, "line": {"color": t.line, "dash_type": "dash"}}})
+    ch.set_x_axis({"num_font": axis_font(t, 7.5), "line": {"color": t.line}})
+    ch.set_legend({"none": True})
+    ch.set_chartarea({"border": {"color": t.line, "width": 0.75}, "fill": {"color": t.card}})
+    place_chart(cv, ch, r_ch0, C_NAME, r_ch1, C_D31)
+
+    cv.merge(r_ch0, C_R0, r_ch0, C_RE, "🌸  ZEN STUDY NOTES", bold=True, font_size=9, align="center",
+             bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r_ch0 + 1, C_R0, r_ch0 + 4, C_RE,
+             "• Ưu tiên 2 phiên Deep Work 90 phút vào buổi sáng.\n• Tắt thông báo điện thoại khi học.\n• Ôn tập lại ghi chú mỗi tối Chủ nhật.",
+             font_size=9, align="left", indent=1, text_wrap=True, bg_color=t.card, font_color=t.ink)
+    cv.merge(r_ch0 + 5, C_R0, r_ch1, C_RE,
+             f'="🌸 Ngày nở hoa: "&{tr.s["grown"]}&" ngày"&CHAR(10)&"🍅 Tổng Pomodoro: "&SUM({rng(r_pom, C_D0, r_pom, C_D31)})&" phiên"',
+             bold=True, font_size=9.5, align="center", text_wrap=True, bg_color=t.soft, font_color=t.primary_dark)
+    cv.box(r_ch0, C_R0, r_ch1, C_RE, t.line)
+    return {"total_hrs": f"{q}!{tot_hrs_addr}", "avg_hrs": f"{q}!{avg_hrs_addr}"}
+
+
+# --------------------------------------------------------------------------- #
+#  Template 8 (Ocean Coral Fitness): Energy + Water Bar + 5 Weekly Donut Gauges
+# --------------------------------------------------------------------------- #
+def add_ocean_fitness_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 88) -> dict:
+    t = cv.t
+    ws = cv.ws
+    q = tr.q
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23)
+    cv.row(r0 + 1, 22)
+    cv.row(r0 + 2, 22)
+
+    cv.put(r0, C_NAME, "🪸  ENERGY & HYDRATION LOG", bold=True, font_size=9.5, align="left", indent=1,
+           bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_D0, r0, C_D31, "NĂNG LƯỢNG MỖI NGÀY (1–5)  •  LƯỢNG NƯỚC UỐNG (LÍT)",
+             bold=True, font_size=8.5, align="center", bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_R0, r0, C_RE, "💧  FITNESS VITALS", bold=True, font_size=8.5, align="center",
+             bg_color=t.primary, font_color=t.on_primary)
+
+    r_en, r_wat = r0 + 1, r0 + 2
+    cv.put(r_en, C_NAME, "⚡  Năng lượng (Energy 1–5)", bold=True, font_size=9, align="left",
+           indent=1, bg_color=t.soft, font_color=t.ink)
+    cv.put(r_wat, C_NAME, "💧  Lượng nước (Water Liters)", bold=True, font_size=9, align="left",
+           indent=1, bg_color=t.card, font_color=t.ink)
+
+    rnd = random.Random(seed)
+    for k in range(1, 32):
+        c = day_col(k)
+        if k > 22:
+            cv.put(r_en, c, "", align="center", font_size=8.5, bg_color=t.card, num_format="0")
+            cv.put(r_wat, c, "", align="center", font_size=8.5, bg_color=t.card, num_format="0.0")
+            continue
+        cv.put(r_en, c, rnd.choice([3, 4, 4, 5, 4, 5, 3, 5, 4]), align="center", font_size=9,
+               bold=True, bg_color=t.card, font_color=t.ink, num_format="0")
+        cv.put(r_wat, c, rnd.choice([1.8, 2.0, 2.2, 2.5, 2.5, 2.8, 2.0, 2.4, 3.0]), align="center",
+               font_size=8.5, bg_color=t.card, font_color=t.ink, num_format="0.0")
+
+    en_rng = rng(r_en, C_D0, r_en, C_D31)
+    wat_rng = rng(r_wat, C_D0, r_wat, C_D31)
+    cv.grid(r_en, C_NAME, r_wat, C_D31, t.line)
+    cv.box(r0, C_NAME, r_wat, C_D31, t.line)
+    ws.conditional_format(en_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 1,
+                                   "mid_type": "num", "mid_value": 3, "max_type": "num", "max_value": 5,
+                                   "min_color": "#FDECE6", "mid_color": "#F8D5C4", "max_color": "#F4A582"})
+    ws.conditional_format(wat_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 1.0,
+                                    "mid_type": "num", "mid_value": 2.0, "max_type": "num", "max_value": 3.0,
+                                    "min_color": "#FFFFFF", "mid_color": "#D4F1EC", "max_color": "#64BFB8"})
+
+    avg_en_addr = acell(r_en, C_R0 + 3)
+    avg_wat_addr = acell(r_wat, C_R0 + 3)
+    cv.merge(r_en, C_R0, r_en, C_R0 + 2, "Năng lượng TB (/5):", font_size=9, align="left", indent=1,
+             bg_color=t.card, font_color=t.muted)
+    cv.merge(r_en, C_R0 + 3, r_en, C_RE, f"=IFERROR(AVERAGE({en_rng}),0)", bold=True, font_size=10,
+             align="center", num_format='0.0" ⚡"', bg_color="#FDF1EC", font_color="#C46B48")
+    cv.merge(r_wat, C_R0, r_wat, C_R0 + 2, "Nước uống TB / ngày:", font_size=9, align="left", indent=1,
+             bg_color=t.card, font_color=t.muted)
+    cv.merge(r_wat, C_R0 + 3, r_wat, C_RE, f"=IFERROR(AVERAGE({wat_rng}),0)", bold=True, font_size=10,
+             align="center", num_format='0.0" L"', bg_color=t.soft, font_color=t.primary)
+    cv.hline(r_en, C_R0, C_RE, t.line)
+    cv.box(r0, C_R0, r_wat, C_RE, t.line)
+
+    # 5 Weekly Lagoon & Coral Donut Gauges right below
+    rd = r_wat + 2
+    cv.row(rd - 1, 10)
+    for rr in range(rd, rd + 5):
+        cv.row(rr, 22)
+    cv.merge(rd, C_NAME, rd + 4, C_NAME, "🌊  WEEKLY FITNESS GAUGES\nTiến độ 5 tuần", bold=True,
+             font_size=10.5, align="center", text_wrap=True, bg_color=t.card, font_color=t.primary,
+             font_name=t.font_title)
+    spans = [(2, 7), (8, 13), (14, 19), (20, 25), (26, 32)]
+    dcols = ["#2E7D87", "#48A9A6", "#F4A582", "#3B9A9C", "#E88B68"]
+    for w, (c1, c2) in enumerate(spans):
+        hc = CALC_WK_COL0 + w
+        cv.merge(rd, c1, rd, c2, f"WEEK {w + 1}", bold=True, font_size=8.5, align="center",
+                 bg_color=t.week_head[w], font_color=t.week_on[w])
+        cv.merge(rd + 1, c1, rd + 4, c2, f"={tr.calc_q}!{acell(2, hc)}", bold=True, font_size=13,
+                 align="center", num_format="0%", bg_color=t.card, font_color=dcols[w], font_name=t.font_title)
+        dch = donut(wb, f"={tr.calc_q}!{rng(2, hc, 3, hc)}", [dcols[w], t.donut_rest], hole=70)
+        place_chart(cv, dch, rd + 1, c1, rd + 4, c2, pad_x=10, pad_y=2)
+        cv.vline(c2, rd, rd + 4, t.line, where="right")
+    cv.box(rd, C_NAME, rd + 4, C_D31, t.line)
+
+    cv.merge(rd, C_R0, rd, C_RE, "🪸  REEF MILESTONE", bold=True, font_size=9, align="center",
+             bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(rd + 1, C_R0, rd + 4, C_RE,
+             f'="🦪 Ngày rạn san hô tỏa sáng: "&{tr.s["grown"]}&" ngày"&CHAR(10)&'
+             f'"🔥 Kỷ lục Streak: "&{tr.s["best"]}&" ngày"&CHAR(10)&'
+             f'"💧 Tổng nước tháng: "&TEXT(SUM({wat_rng}),"0.0")&" Lít"',
+             bold=True, font_size=9.5, align="center", text_wrap=True, bg_color=t.card, font_color=t.ink)
+    cv.box(rd, C_R0, rd + 4, C_RE, t.line)
+    return {"avg_energy": f"{q}!{avg_en_addr}", "avg_water": f"{q}!{avg_wat_addr}"}
+
+
+# --------------------------------------------------------------------------- #
+#  Template 9 (Matcha Cafe Routine): Morning vs Evening Ratio + Mood + Cozy Box
+# --------------------------------------------------------------------------- #
+def add_matcha_routine_block(wb, cv: Canvas, tr: TrackerRefs, morning_count: int = 5,
+                             evening_count: int = 5, seed: int = 99) -> dict:
+    from .tracker import R_H0, CALC_DONEN_COL, CALC_GOALN_COL
+    t = cv.t
+    ws = cv.ws
+    q = tr.q
+    cq = tr.calc_q
+    C_RE = tr.c_right_end
+
+    r0 = R_EXTRA
+    cv.row(r0, 23)
+    cv.row(r0 + 1, 24)
+    cv.row(r0 + 2, 10)
+    for rr in range(r0 + 3, r0 + 8):
+        cv.row(rr, 22)
+
+    # Daily Mood Check-in Row (1..5)
+    cv.put(r0, C_NAME, "🍵  DAILY CAFE MOOD CHECK-IN", bold=True, font_size=9.5, align="left", indent=1,
+           bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_D0, r0, C_D31, "TÂM TRẠNG & NĂNG LƯỢNG HẰNG NGÀY (THANG 1 – 5)",
+             bold=True, font_size=8.5, align="center", bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_R0, r0, C_RE, "☕  MOOD AVG", bold=True, font_size=8.5, align="center",
+             bg_color=t.primary, font_color=t.on_primary)
+
+    r_mood = r0 + 1
+    cv.put(r_mood, C_NAME, "✨  Tâm trạng trong ngày (1–5)", bold=True, font_size=9, align="left",
+           indent=1, bg_color=t.soft, font_color=t.ink)
+    rnd = random.Random(seed)
+    for k in range(1, 32):
+        c = day_col(k)
+        val = "" if k > 22 else rnd.choice([3, 4, 4, 5, 4, 5, 4, 3, 5])
+        cv.put(r_mood, c, val, align="center", font_size=9, bold=True, bg_color=t.card,
+               font_color=t.ink, num_format="0")
+    mood_rng = rng(r_mood, C_D0, r_mood, C_D31)
+    cv.grid(r_mood, C_NAME, r_mood, C_D31, t.line)
+    cv.box(r0, C_NAME, r_mood, C_D31, t.line)
+    ws.conditional_format(mood_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 1,
+                                     "mid_type": "num", "mid_value": 3, "max_type": "num", "max_value": 5,
+                                     "min_color": "#F7ECE1", "mid_color": "#E8D5BA", "max_color": "#A8C294"})
+    cv.merge(r_mood, C_R0, r_mood, C_RE, f'=IFERROR(AVERAGE({mood_rng}),0)', bold=True, font_size=12,
+             align="center", num_format='0.0" / 5 ☕"', bg_color=t.card, font_color=t.primary_dark)
+    cv.box(r0, C_R0, r_mood, C_RE, t.line)
+
+    # Bottom Split Cards: Morning Routine % | Evening Routine % | Cozy Weekly Reflection Box
+    rc0 = r0 + 3
+    m_done = f"{cq}!{rng(R_H0, CALC_DONEN_COL, R_H0 + morning_count - 1, CALC_DONEN_COL)}"
+    m_goal = f"{cq}!{rng(R_H0, CALC_GOALN_COL, R_H0 + morning_count - 1, CALC_GOALN_COL)}"
+    e_done = f"{cq}!{rng(R_H0 + morning_count, CALC_DONEN_COL, R_H0 + morning_count + evening_count - 1, CALC_DONEN_COL)}"
+    e_goal = f"{cq}!{rng(R_H0 + morning_count, CALC_GOALN_COL, R_H0 + morning_count + evening_count - 1, CALC_GOALN_COL)}"
+
+    m_pct_addr = acell(rc0 + 1, C_NAME)
+    e_pct_addr = acell(rc0 + 1, C_D0)
+
+    # Card 1: Morning Routine Ratio (Col B)
+    cv.put(rc0, C_NAME, "☀️  MORNING ROUTINE (SÁNG)", bold=True, font_size=9.5, align="center",
+           bg_color="#D4A373", font_color="#FFFFFF")
+    cv.merge(rc0 + 1, C_NAME, rc0 + 3, C_NAME, f"=IFERROR(SUM({m_done})/SUM({m_goal}),0)", bold=True,
+             font_size=22, align="center", num_format="0%", bg_color=t.card, font_color="#8A5E3B",
+             font_name=t.font_title)
+    cv.put(rc0 + 4, C_NAME, f'=SUM({m_done})&" / "&SUM({m_goal})&" lượt sáng hoàn thành"',
+           font_size=8.8, align="center", bg_color="#F8EFE4", font_color=t.ink)
+    cv.box(rc0, C_NAME, rc0 + 4, C_NAME, t.line)
+
+    # Card 2: Evening Routine Ratio (Cols C..L)
+    cv.merge(rc0, C_D0, rc0, C_D0 + 9, "🌙  EVENING ROUTINE (TỐI)", bold=True, font_size=9.5,
+             align="center", bg_color="#5C4033", font_color="#FFFFFF")
+    cv.merge(rc0 + 1, C_D0, rc0 + 3, C_D0 + 9, f"=IFERROR(SUM({e_done})/SUM({e_goal}),0)", bold=True,
+             font_size=22, align="center", num_format="0%", bg_color=t.card, font_color="#5C4033",
+             font_name=t.font_title)
+    cv.merge(rc0 + 4, C_D0, rc0 + 4, C_D0 + 9, f'=SUM({e_done})&" / "&SUM({e_goal})&" lượt tối hoàn thành"',
+             font_size=8.8, align="center", bg_color="#F3ECE7", font_color=t.ink)
+    cv.box(rc0, C_D0, rc0 + 4, C_D0 + 9, t.line)
+
+    # Card 3: Cozy Weekly Reflection Box (Cols M..AG + Right side!)
+    cv.merge(rc0, C_D0 + 11, rc0, C_RE, "☕  COZY WEEKLY REFLECTION • GÓC NHÂM NHI & SUY NGẪM",
+             bold=True, font_size=9.5, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
+    reflections = [
+        "• Nghi thức buổi sáng yêu thích nhất tuần này: Pha ly matcha ấm & viết 3 mục tiêu trong yên tĩnh.",
+        "• Điều giúp buổi tối nhẹ nhàng hơn: Tắt màn hình sớm 30 phút & đọc sách giấy dưới đèn vàng.",
+        "• Phần thưởng nhỏ cho bản thân cuối tuần: Ghé quán cafe yên tĩnh yêu thích & nghỉ ngơi trọn vẹn.",
+        "",
+    ]
+    for i, line in enumerate(reflections):
+        cv.merge(rc0 + 1 + i, C_D0 + 11, rc0 + 1 + i, C_RE, line, font_size=9, align="left", indent=1,
+                 bg_color=t.card, font_color=t.ink)
+        cv.hline(rc0 + 1 + i, C_D0 + 11, C_RE, t.line)
+    cv.box(rc0, C_D0 + 11, rc0 + 4, C_RE, t.line)
+
+    return {"morning_pct": f"{q}!{m_pct_addr}", "evening_pct": f"{q}!{e_pct_addr}",
+            "avg_mood": f"{q}!{acell(r_mood, C_R0)}"}
+
+
+# --------------------------------------------------------------------------- #
+#  Template 10 (Aurora Glow RPG): Hero Level, Rank & Combo XP Card
+# --------------------------------------------------------------------------- #
+def add_aurora_rpg_top_card(wb, cv: Canvas, tr: TrackerRefs, total_xp_addr: str):
+    """Nordic Slate + Aurora Mint/Violet RPG Hero Level & Rank Card in R_BAND0..R_BAND1."""
+    t = cv.t
+    C_RE = tr.c_right_end
+    xp = total_xp_addr
+    mid = C_R0 + 3
+    cv.box(R_BAND0, C_R0, R_BAND1, C_RE, t.primary, fill=t.card)
+    cv.merge(R_BAND0, C_R0, R_BAND0, C_RE, "⚔️  RPG HERO STATUS & AURORA LEVEL", bold=True,
+             font_size=8.5, align="center", bg_color=t.primary, font_color="#4FD1C5")
+
+    # Left half: Character Level + Total XP (with Streak Combo Multiplier!)
+    cv.merge(R_BAND0 + 1, C_R0, R_BAND0 + 2, mid,
+             f'="LV. "&(1+INT({xp}/300))&"  •  "&TEXT({xp},"#,##0")&" XP"',
+             bold=True, font_size=14, align="center", bg_color=t.card, font_color=t.primary,
+             font_name=t.font_title)
+    cv.merge(R_BAND0 + 3, C_R0, R_BAND0 + 3, mid,
+             f'="Consistency: "&TEXT({tr.s["overall"]},"0%")&"  •  Best Combo: "&{tr.s["best"]}&"d"',
+             bold=True, font_size=8.2, align="center", bg_color=t.soft, font_color=t.ink)
+    cv.merge(R_BAND0 + 4, C_R0, R_BAND1, mid,
+             f'="✨ Aurora Days (≥75%): "&{tr.s["grown"]}&"  •  Perfect 100%: "&{tr.s["perfect"]}',
+             font_size=8.2, align="center", bg_color=t.card, font_color=t.muted)
+
+    # Right half: Rank Badge (Novice -> Apprentice -> Warrior -> Master -> Legend)
+    cv.merge(R_BAND0 + 1, mid + 1, R_BAND0 + 1, C_RE, "HERO RANK CLASS", bold=True, font_size=7.5,
+             align="center", bg_color=t.card, font_color=t.muted)
+    cv.merge(R_BAND0 + 2, mid + 1, R_BAND0 + 3, C_RE,
+             f'=IF({xp}>=4500,"👑 LEGEND",IF({xp}>=3000,"🌌 MASTER",IF({xp}>=1800,"⚔️ WARRIOR",'
+             f'IF({xp}>=800,"🛡️ APPRENTICE","🌱 NOVICE"))))',
+             bold=True, font_size=12, align="center", bg_color="#EDE9FE", font_color="#5B3FA8",
+             font_name=t.font_title)
+    cv.merge(R_BAND0 + 4, mid + 1, R_BAND0 + 4, C_RE,
+             f'=IF({xp}>=4500,"Đã đạt cảnh giới Legend!",'
+             f'IF({xp}>=3000,"Còn "&(4500-{xp})&" XP → Legend",'
+             f'IF({xp}>=1800,"Còn "&(3000-{xp})&" XP → Master",'
+             f'IF({xp}>=800,"Còn "&(1800-{xp})&" XP → Warrior","Còn "&(800-{xp})&" XP → Apprentice"))))',
+             font_size=7.8, italic=True, align="center", bg_color=t.card, font_color=t.muted)
+    cv.merge(R_BAND1, mid + 1, R_BAND1, C_RE, f"=MIN(1,{xp}/4500)", bold=True, font_size=8.5,
+             align="center", num_format='0%" → Legend"', bg_color=t.card, font_color=t.primary)
+    cv.ws.conditional_format(rng(R_BAND1, mid + 1, R_BAND1, C_RE),
+                             {"type": "data_bar", "bar_color": "#4FD1C5", "bar_solid": True,
+                              "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1})

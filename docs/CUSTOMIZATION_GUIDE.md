@@ -41,5 +41,5 @@ Trên tab **`📖 Hướng Dẫn`**, bạn có thể sửa trực tiếp 3 ô ng
 ---
 
 ## 5. Đổi Tháng / Năm & Nhân bản sang tháng mới
-1. Chọn Tháng (`B3`) và Năm (`B5`) từ dropdown ở thẻ góc trên bên trái — toàn bộ số ngày (28/29/30/31) và thứ (`Mon–Sun`) tự cập nhật.
+1. Nhấn trực tiếp vào 2 ô pill màu riêng biệt ở góc trên bên trái bảng Tracker: **Tháng (`B3`)** và **Năm (`B5`)** → chọn từ danh sách thả xuống (tương thích mọi cài đặt ngôn ngữ/vùng miền trên Windows & Mac). Toàn bộ số ngày (28 / 29 năm nhuận / 30 / 31) và thứ (`Mon–Sun`) tự nhảy chuẩn xác!
 2. Để tạo tháng mới: Chuột phải vào tab Tracker → **Move or Copy...** → tick **☑ Create a copy** → đổi tên tab → đổi Tháng ở `B3` → reset vùng `C17:AG36` bằng phím `Delete`.
