@@ -11,7 +11,7 @@ ALL dynamic 6-stage hero & monthly growth animations cleanly across all 3 editio
 from __future__ import annotations
 
 from .core import (Canvas, Styles, acell, cell, colname, qs, rng, donut,
-                   place_chart, axis_font, text_lines, MONTHS_EN)
+                   place_chart, axis_font, text_lines, MONTHS_EN, checked_pastel_bg)
 from .tracker import (CALC_SHEET, CALC_STATE_VAL_COL, CALC_ANN_COL0, CALC_ANN_YG_LBL_COL,
                       CALC_ANN_YG_VAL_COL, N_HABITS, Habit, TrackerRefs,
                       stage6_formula, year_lookup_ref, compute_month_summary_py)
@@ -127,7 +127,7 @@ def build_yearly_goals_v21(wb, styles: Styles, ws_calc, year: int = 2026,
             chk, g, m, w, d = False, "", "", "", ""
             cv.row(rr, 23)
         bg = t.card if i % 2 == 0 else t.page
-        cv.checkbox(rr, 1, chk, align="center", font_color=t.week_check[0], bg_color=bg)
+        cv.checkbox(rr, 1, chk, align="center", font_size=12, font_color=t.primary_dark, bg_color=bg)
         cv.put(rr, 2, g, bold=bool(g), font_size=9.5, align="left", text_wrap=True, bg_color=bg, font_color=t.ink)
         cv.put(rr, 3, m, font_size=9, align="left", text_wrap=True, bg_color=bg, font_color=t.ink)
         cv.put(rr, 4, w, font_size=9, align="left", text_wrap=True, bg_color=bg, font_color=t.ink)
@@ -140,7 +140,8 @@ def build_yearly_goals_v21(wb, styles: Styles, ws_calc, year: int = 2026,
     chk_col_rng = rng(r0, 1, r0 + total_rows - 1, 1, absolute=False)
     ws.conditional_format(chk_col_rng, {
         "type": "formula", "criteria": f"=B{r0 + 1}=TRUE",
-        "format": wb.add_format({"bg_color": t.soft, "font_color": t.primary_dark, "bold": True}),
+        "format": wb.add_format({"bg_color": checked_pastel_bg(t.primary, t.soft),
+                                 "font_color": t.primary_dark, "bold": True}),
     })
 
     # Wire LIVE YearlyGoals stats + 6-Stage Hero index onto _Calc!AN4:AN7
@@ -691,10 +692,7 @@ def build_database_sheet(wb, styles: Styles, habits: list[Habit],
                 ws.write(raw_r, 3, "")
             row_ticks = ticks_20[i] if i < len(ticks_20) else [False] * 31
             for d in range(31):
-                if i < 12:
-                    ws.write_boolean(raw_r, 4 + d, bool(row_ticks[d]))
-                else:
-                    ws.write(raw_r, 4 + d, "✓" if row_ticks[d] else "")
+                ws.write_boolean(raw_r, 4 + d, bool(row_ticks[d]))
             raw_r += 1
 
         s = compute_month_summary_py(habits, ticks_20, yr, mo)

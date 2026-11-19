@@ -13,7 +13,7 @@ Option Explicit
 Private Const CALC_SHEET As String = "_Calc"
 Private Const DB_SHEET As String = "_Database"
 Private Const N_HABITS As Long = 20
-Private Const N_FORM_ROWS As Long = 12
+Private Const N_FORM_ROWS As Long = 20
 Private Const N_GOALS As Long = 20
 
 Private Function MonthNameToNum(ByVal mName As String) As Long

@@ -159,7 +159,7 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     # ------------------------------------------------------------------ 2-COL CARDS (SEC 3 & SEC 4)
     sec3 = [
         "✏️  Sửa tên thói quen: Gõ đè trực tiếp lên cột tên thói quen (B17:B36) — mọi biểu đồ, hoạt ảnh & chuỗi streak tự cập nhật!",
-        "➕  Thêm thói quen: Dòng 1–12 gắn sẵn ô Checkbox 1 chạm; dòng 13–20 nối sẵn dropdown ✓ & công thức Streak!",
+        "➕  Thêm thói quen: Toàn bộ 20 dòng (B17:B36) đã gắn sẵn ô Checkbox màu pastel đặc trưng của chủ đề + công thức Streak & biểu đồ tự động!",
         "🎯  Mục tiêu Năm: Mở tab 🎯 Yearly Goals & Habits, chọn Năm (ô I2) & tick mục tiêu đạt được — biểu tượng YOU HAVE PLANTED tự lớn từ 0% → 100%!",
     ]
     if edition == "pro_xlsm":

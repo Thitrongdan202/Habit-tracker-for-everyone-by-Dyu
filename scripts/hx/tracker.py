@@ -18,7 +18,7 @@ import random
 from dataclasses import dataclass, field
 
 from .core import (Canvas, Styles, Theme, MONTHS_EN, CHECK_ALT, acell, cell, colname,
-                   qs, rng, donut, place_chart, axis_font)
+                   qs, rng, donut, place_chart, axis_font, checked_pastel_bg)
 
 # ---- fixed geometry (0-based) --------------------------------------------- #
 C_NAME = 1
@@ -539,12 +539,9 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
         for k in range(1, 32):
             c = day_col(k)
             w = (k - 1) // 7
-            if spec.universal and i >= spec.form_rows:
-                cv.put(r, c, "", align="center", font_size=11, bold=True,
-                       font_color=t.week_check[w], bg_color=t.card)
-            else:
-                cv.checkbox(r, c, ticks[k - 1], align="center",
-                            font_color=t.week_check[w], bg_color=t.card)
+            # ALL 20 habit rows get colorful Excel Native Cell Checkboxes matching each Week's signature palette!
+            cv.checkbox(r, c, ticks[k - 1], align="center", font_size=11.5,
+                        font_color=t.week_check[w], bg_color=t.card)
 
         # Running streak matrix on _Calc (cols B..AF = 1..31, row = r_calc)
         for k in range(1, 32):
@@ -590,13 +587,6 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
     for k in (7, 14, 21, 28):
         cv.vline(day_col(k), R_H0, R_H1, t.week_head[(k - 1) // 7], where="right")
 
-    if spec.universal:
-        cv.hline(R_H0 + spec.form_rows - 1, C_NAME, C_D31, t.primary, where="bottom")
-        exp_rng = rng(R_H0 + spec.form_rows, C_D0, R_H1, C_D31)
-        ws.data_validation(exp_rng, {"validate": "list", "source": f"={chk_lookup_rng}",
-                                     "input_title": f"Dòng mở rộng nhanh ({spec.form_rows + 1}–20)",
-                                     "input_message": "Chọn ✓ để đánh dấu hoàn thành!"})
-
     # totals row
     cv.put(R_TOT, C_NAME, "TOTAL  •  TỔNG KẾT", bold=True, font_size=9, align="left", indent=1,
            bg_color=t.soft, font_color=t.ink)
@@ -633,9 +623,9 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
         days = week_days(w)
         a = rng(R_H0, day_col(days[0]), R_H1, day_col(days[-1]), absolute=False)
         tl = cell(R_H0, day_col(days[0]))
-        cf_props = {"bg_color": t.week_tint[w]}
+        chk_bg = checked_pastel_bg(t.week_head[w], t.week_tint[w])
+        cf_props = {"bg_color": chk_bg, "font_color": t.week_check[w]}
         if spec.gsheets:
-            cf_props["font_color"] = t.week_check[w]
             cf_props["bold"] = True
         ws.conditional_format(a, {"type": "formula", "criteria": f'=OR({tl}=TRUE,{tl}="{CHECK_ALT}")',
                                   "format": wb.add_format(cf_props)})
