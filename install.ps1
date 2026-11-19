@@ -1,4 +1,4 @@
-﻿#Requires -Version 5.1
+# Habit Tracker Collection v2.0 Installer (PowerShell 5.1+ / 7+)
 <#
 .SYNOPSIS
     Habit Tracker Collection v2.0 — Interactive Zero-Install Downloader (Windows PowerShell)
