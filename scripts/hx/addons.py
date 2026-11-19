@@ -6,7 +6,7 @@ from __future__ import annotations
 import random
 
 from .core import Canvas, acell, cell, colname, rng, donut, place_chart, axis_font
-from .tracker import (C_NAME, C_D0, C_D31, C_R0, C_WK0, R_BAND0, R_BAND1, R_DONE, R_NOT,
+from .tracker import (C_NAME, C_D0, C_D31, C_R0, CALC_WK_COL0, R_BAND0, R_BAND1, R_DONE, R_NOT,
                       R_PCT, R_DAY, R_EXTRA, TrackerRefs, day_col, week_days)
 
 
@@ -33,10 +33,10 @@ def add_cactus_weekly_strip(wb, cv: Canvas, tr: TrackerRefs):
     for w in range(5):
         days = week_days(w)
         c1, c2 = day_col(days[0]), day_col(days[-1])
-        hc = C_WK0 + w
-        pct_ref = cell(3, hc)
-        done_ref = cell(1, hc)
-        tot_ref = cell(2, hc)
+        hc = CALC_WK_COL0 + w
+        pct_ref = f"{tr.calc_q}!{acell(2, hc)}"
+        done_ref = f"{tr.calc_q}!{acell(0, hc)}"
+        tot_ref = f"{tr.calc_q}!{acell(1, hc)}"
         cv.merge(r, c1, r, c2, f"WEEK {w + 1}  ({days[0]}–{days[-1]})", bold=True, font_size=8.5,
                  align="center", bg_color=t.week_head[w], font_color=t.week_on[w])
         cv.merge(r + 1, c1, r + 1, c2, f"={pct_ref}", bold=True, font_size=15, align="center",
@@ -94,12 +94,12 @@ def add_rainbow_bottom_blocks(wb, cv: Canvas, tr: TrackerRefs):
     spans = [(2, 7), (8, 13), (14, 19), (20, 25), (26, 32)]
     donut_colors = ["#77BBD9", "#7ECF9B", "#EB9BBF", "#F2BD6B", "#A9C96E"]
     for w, (c1, c2) in enumerate(spans):
-        hc = C_WK0 + w
+        hc = CALC_WK_COL0 + w
         cv.merge(r0, c1, r0, c2, f"WEEK {w + 1}", bold=True, font_size=8.5, align="center",
                  bg_color=t.week_head[w], font_color=t.week_on[w])
-        cv.merge(r0 + 1, c1, r0 + 4, c2, f"={cell(3, hc)}", bold=True, font_size=13, align="center",
+        cv.merge(r0 + 1, c1, r0 + 4, c2, f"={tr.calc_q}!{acell(2, hc)}", bold=True, font_size=13, align="center",
                  num_format="0%", bg_color=t.card, font_color=donut_colors[w], font_name=t.font_title)
-        dch = donut(wb, f"={q}!{rng(3, hc, 4, hc)}", [donut_colors[w], t.donut_rest], hole=70)
+        dch = donut(wb, f"={tr.calc_q}!{rng(2, hc, 3, hc)}", [donut_colors[w], t.donut_rest], hole=70)
         place_chart(cv, dch, r0 + 1, c1, r0 + 4, c2, pad_x=10, pad_y=2)
         cv.vline(c2, r0, r0 + 4, t.line, where="right")
 
@@ -234,8 +234,8 @@ def add_wellness_mood_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 55) -> 
     rnd = random.Random(seed)
     for k in range(1, 32):
         c = day_col(k)
-        if k == 31:
-            # Leave day 31 blank so user can try entering values
+        if k > 22:
+            # Leave Days 23..31 blank ready for the user to log
             for rr, _, nf in rows_meta:
                 cv.put(rr, c, "", align="center", font_size=9, bg_color=t.card, num_format=nf)
             continue
@@ -290,6 +290,7 @@ def add_wellness_mood_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 55) -> 
     # normalized Mood% (=Mood/5) & Sleep% (=MIN(1,Sleep/8)) in hidden cols 60..90 at rows r_mood & r_sleep!
     # Wait: cols 60..90 are ALREADY hidden! So row r_mood cols 60..90 = Mood/5, row r_sleep cols 60..90 = MIN(1,Sleep/8)!
     C_HID_NORM = 60
+    cv.cols(C_HID_NORM, C_HID_NORM + 30, 5, hidden=True)
     for k in range(1, 32):
         c = day_col(k)
         hc = C_HID_NORM + k - 1

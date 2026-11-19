@@ -5,8 +5,8 @@ from __future__ import annotations
 
 from .core import (Canvas, Styles, acell, cell, colname, qs, rng, kpi_card, donut,
                    place_chart, axis_font, text_lines, MONTHS_EN)
-from .tracker import (C_NAME, C_D0, C_D31, C_WK0, R_H0, R_H1, R_PCT, R_DONE, R_DAY,
-                      N_HABITS, TrackerRefs, day_col)
+from .tracker import (C_NAME, C_D0, C_D31, CALC_WK_COL0, CALC_DONEN_COL, CALC_GOALN_COL,
+                      R_H0, R_H1, R_PCT, R_DONE, R_DAY, N_HABITS, TrackerRefs, day_col)
 
 
 def _finish_sheet(ws, cv: Canvas, tab_color: str, zoom: int = 90):
@@ -23,11 +23,11 @@ def _finish_sheet(ws, cv: Canvas, tab_color: str, zoom: int = 90):
 # =========================================================================== #
 #  1A. Template 1 — 🎯 Yearly Goals & Habits (Ref 2)
 # =========================================================================== #
-def build_yearly_goals_sheet(wb, styles: Styles, offline_sprites: bool = False):
+def build_yearly_goals_sheet(wb, styles: Styles, universal: bool = True) -> dict:
     name = "🎯 Yearly Goals & Habits"
     t = styles.t
     ws = wb.add_worksheet(name)
-    cv = Canvas(wb, ws, styles, name)
+    cv = Canvas(wb, ws, styles, name, universal=universal)
 
     # Cols: 0 gutter | 1 chk | 2 MY GOALS | 3 MONTHLY | 4 WEEKLY | 5 DAILY | 6 gap | 7..8 sidebar | 9 gutter
     cv.col(0, 2.5)
@@ -129,14 +129,20 @@ def build_yearly_goals_sheet(wb, styles: Styles, offline_sprites: bool = False):
     cv.merge(rp + 1, 7, rp + 3, 7, f'=COUNTIFS({goal_rng},"?*",{chk_rng},TRUE)', bold=True,
              font_size=28, align="center", bg_color=t.card, font_color=t.primary_dark,
              font_name=t.font_title)
-    st5 = "=INDEX(_Sprites!$A$1:$A$6,6)" if offline_sprites else '=_xlfn.IMAGE(CFG_IMG_BASE&"stage_5.png")'
-    cv.merge(rp + 1, 8, rp + 3, 8, st5, align="center", bg_color=t.card)
+    linked_pics = []
+    if universal:
+        cv.merge(rp + 1, 8, rp + 3, 8, "", align="center", bg_color=t.card)
+        linked_pics.append({"sheet": name, "r1": rp + 1, "c1": 8, "r2": rp + 3, "c2": 8,
+                            "formula": "=_Assets!$B$7"})
+    else:
+        cv.merge(rp + 1, 8, rp + 3, 8, '=_xlfn.IMAGE(CFG_IMG_BASE&"stage_5.png")', align="center", bg_color=t.card)
     cv.merge(rp + 4, 7, rp + 4, 8,
              f'="trên tổng "&COUNTIF({goal_rng},"?*")&" mục tiêu đã đặt"',
              font_size=9, italic=True, align="center", bg_color=t.soft, font_color=t.ink)
     cv.box(rp, 7, rp + 4, 8, t.line)
 
     _finish_sheet(ws, cv, t.primary)
+    return {"checkboxes": {name: cv.form_checkboxes}, "linked_pictures": linked_pics}
 
 
 # =========================================================================== #
@@ -263,6 +269,7 @@ def build_annual_overview_sheet(wb, styles: Styles, tr: TrackerRefs):
         cv.box(21, c1, 25, c2, t.line)
 
     _finish_sheet(ws, cv, t.primary_dark)
+    return {"checkboxes": {name: cv.form_checkboxes}}
 
 
 # =========================================================================== #
@@ -364,7 +371,7 @@ def build_reflection_notes_sheet(wb, styles: Styles, tr: TrackerRefs):
         cv.row(rr, 25)
         cv.put(rr, 1, f"WEEK {w + 1}", bold=True, font_size=9.5, align="center",
                bg_color=t.week_head[w], font_color=t.week_on[w])
-        cv.put(rr, 2, f"={tr.q}!{acell(3, C_WK0 + w)}", bold=True, font_size=10, align="center",
+        cv.put(rr, 2, f"={tr.calc_q}!{acell(2, CALC_WK_COL0 + w)}", bold=True, font_size=10, align="center",
                num_format="0%", bg_color=t.week_tint[w], font_color=t.ink)
         cv.merge(rr, 3, rr, 4, wk_notes[w][0], font_size=9, align="left", indent=1,
                  bg_color=t.card, font_color=t.ink)
@@ -374,6 +381,7 @@ def build_reflection_notes_sheet(wb, styles: Styles, tr: TrackerRefs):
     cv.box(rw, 1, rw + 6, 7, t.line)
 
     _finish_sheet(ws, cv, t.primary_dark)
+    return {"checkboxes": {name: cv.form_checkboxes}}
 
 
 # =========================================================================== #
@@ -441,8 +449,8 @@ def build_rainbow_analytics_sheet(wb, styles: Styles, tr: TrackerRefs):
         bg = t.card if i % 2 == 0 else t.page
         snm = f"{tr.q}!{cell(src_r, C_NAME)}"
         cv.put(rr, 1, f'=IF({snm}="","",{snm})', align="left", indent=1, font_size=9, bg_color=bg, font_color=t.ink)
-        cv.put(rr, 2, f'=IF({snm}="","",{tr.q}!{cell(src_r, 92)})', align="center", font_size=9, bg_color=bg)
-        cv.put(rr, 3, f'=IF({snm}="","",{tr.q}!{cell(src_r, 91)})', align="center", font_size=9, bg_color=bg)
+        cv.put(rr, 2, f'=IF({snm}="","",{tr.calc_q}!{cell(src_r, CALC_GOALN_COL)})', align="center", font_size=9, bg_color=bg)
+        cv.put(rr, 3, f'=IF({snm}="","",{tr.calc_q}!{cell(src_r, CALC_DONEN_COL)})', align="center", font_size=9, bg_color=bg)
         cv.put(rr, 4, f'=IF({snm}="","",{tr.q}!{cell(src_r, rc["progress"])})', align="center", bold=True,
                font_size=9, num_format="0%", bg_color=bg, font_color=t.primary_dark)
         cv.put(rr, 5, f'=IF({snm}="","",{tr.q}!{cell(src_r, rc["cur"])})', align="center", font_size=9, bg_color=bg)
@@ -519,16 +527,17 @@ def build_rainbow_analytics_sheet(wb, styles: Styles, tr: TrackerRefs):
     place_chart(cv, dc_ch, 18, 9, r_dt + 2, 12)
 
     _finish_sheet(ws, cv, t.primary_dark)
+    return {"checkboxes": {name: cv.form_checkboxes}}
 
 
 # =========================================================================== #
 #  4A. Template 4 (Sage Botanical) — 💰 Monthly Budget (Ref 5 Ultimate Budget!)
 # =========================================================================== #
-def build_monthly_budget_sheet(wb, styles: Styles) -> dict:
+def build_monthly_budget_sheet(wb, styles: Styles, universal: bool = True) -> dict:
     name = "💰 Monthly Budget"
     t = styles.t
     ws = wb.add_worksheet(name)
-    cv = Canvas(wb, ws, styles, name)
+    cv = Canvas(wb, ws, styles, name, universal=universal)
     q = qs(name)
 
     SAGE, SAND, CORAL, SKY = "#9FB8AD", "#E8D5B7", "#E0A899", "#B6C9DF"
@@ -809,6 +818,7 @@ def build_monthly_budget_sheet(wb, styles: Styles) -> dict:
         "q": q, "income": f"{q}!{cf_inc}", "expenses": f"{q}!{cf_exp}",
         "savings": f"{q}!{cf_sav}", "left": f"{q}!{cf_lft}",
         "savings_rate": f"{q}!{sav_rate_addr}", "goal_progress": f"{q}!{goal_prog_addr}",
+        "checkboxes": {name: cv.form_checkboxes},
     }
 
 
@@ -910,16 +920,17 @@ def build_life_overview_sheet(wb, styles: Styles, tr: TrackerRefs, b: dict):
     cv.box(17, 1, 20, 8, t.line)
 
     _finish_sheet(ws, cv, t.primary_dark)
+    return {"checkboxes": {name: cv.form_checkboxes}}
 
 
 # =========================================================================== #
 #  5. Template 5 (Lavender Dream) — ✨ Gratitude & Review
 # =========================================================================== #
-def build_gratitude_sheet(wb, styles: Styles, tr: TrackerRefs, well: dict):
+def build_gratitude_sheet(wb, styles: Styles, tr: TrackerRefs, well: dict, universal: bool = True) -> dict:
     name = "✨ Gratitude & Review"
     t = styles.t
     ws = wb.add_worksheet(name)
-    cv = Canvas(wb, ws, styles, name)
+    cv = Canvas(wb, ws, styles, name, universal=universal)
 
     cv.col(0, 2.5)
     cv.col(1, 9.5)
@@ -1019,6 +1030,7 @@ def build_gratitude_sheet(wb, styles: Styles, tr: TrackerRefs, well: dict):
     cv.box(24, 6, 28, 7, t.line)
 
     _finish_sheet(ws, cv, t.primary_dark)
+    return {"checkboxes": {name: cv.form_checkboxes}}
 
 
 # =========================================================================== #

@@ -1,52 +1,61 @@
-# 🌸 Habit Tracker Collection for Everyone — by Dyu
+# 🌸 Habit Tracker Collection v2.0 — Universal Zero-Install Excel Edition (by Dyu)
 
-> **Bộ sưu tập 6 mẫu Excel / Google Sheets Habit Tracker thẩm mỹ chuẩn Digital Planner** với **hoạt ảnh tăng trưởng 6 giai đoạn theo thời gian thực**, bảng điều khiển biểu đồ tương tác, lịch động tự cập nhật tháng/năm, bản **Offline Pro nhúng ảnh sẵn**, và tab **`📖 Hướng Dẫn`** tiếng Việt tích hợp trong từng file.
+> **Tải 1 file `.xlsx` duy nhất → Nhấn đúp mở bằng Microsoft Excel (2016 / 2019 / 2021 / 365 • Windows & Mac) → Dùng ngay 100% Offline!**
+> **KHÔNG cần cài Python • KHÔNG Macro (`.xlsm`) / không cảnh báo bảo mật • KHÔNG cần kết nối Internet.**
+> Tích hợp sẵn Checkbox bấm trực tiếp, hoạt ảnh cây/icon lớn dần theo 6 giai đoạn (Excel Native Linked Pictures), biểu đồ tương tác, lịch động & trang **`📖 Hướng Dẫn`** tiếng Việt trong từng file.
 
-![Excel 365](https://img.shields.io/badge/Excel_365-Native_Checkboxes_%26_IMAGE()-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white)
-![Google Sheets](https://img.shields.io/badge/Google_Sheets-100%25_Compatible-34A853?style=for-the-badge&logo=googlesheets&logoColor=white)
-![Templates](https://img.shields.io/badge/6_Aesthetic_Themes-36_Custom_Sprites-D8A7A7?style=for-the-badge)
-![Zero Errors](https://img.shields.io/badge/Verified-Zero_Formula_Errors-4E9F76?style=for-the-badge)
-
----
-
-## ✨ Điểm Nổi Bật (Key Features)
-
-- 🌱 **Hoạt ảnh tăng trưởng 6 giai đoạn (`0% → 100%`):** Mỗi ngày hoàn thành thói quen sẽ tự động biến đổi minh họa phía trên cột ngày (từ đất trống / hạt mầm → chồi non → nụ hoa → nở rộ phát sáng rực rỡ ✨) bằng hàm `=IMAGE(...)` (Excel 365 & Google Sheets) hoặc ảnh nhúng 100% Offline trong `templates/pro_macro/`.
-- 📅 **Lịch động thông minh (Dynamic Calendar Engine):** Đổi dropdown **Tháng / Năm** → tự tính chuẩn 28 / 29 (năm nhuận) / 30 / 31 ngày, tự đổi thứ (`Mon–Sun`), tự ẩn sạch ngày thừa cuối tháng!
-- 📊 **Dashboard & Biểu đồ thời gian thực:** Biểu đồ miền mượt (`Daily Progress`), biểu đồ Donut tổng tháng & 5 tuần, thanh tiến độ Data Bar cho từng thói quen, và **Streak Heatmap** xanh ngọc tự động chuyển sắc theo độ dài chuỗi ngày.
-- 🧩 **20 dòng thói quen nối sẵn công thức:** Chỉ cần gõ thêm tên thói quen vào dòng trống và tick — mọi biểu đồ, tổng kết và streak tự động mở rộng mà **không bao giờ hỏng công thức**.
-- 📖 **Tự chứa hướng dẫn chi tiết (`📖 Hướng Dẫn`):** Tab đầu tiên trong mọi file hướng dẫn đầy đủ bằng tiếng Việt + bảng cấu hình trực tiếp đường dẫn ảnh (`CFG_IMG_BASE`) & ngưỡng phần trăm (`CFG_THR_1..3`).
+![Excel 2016-365](https://img.shields.io/badge/Excel_2016%E2%80%93365-100%25_Offline_.xlsx-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white)
+![Zero Macro](https://img.shields.io/badge/Zero_Macros-No_Security_Popups-4E9F76?style=for-the-badge)
+![Google Sheets](https://img.shields.io/badge/Google_Sheets-Cloud_Edition_Included-34A853?style=for-the-badge&logo=googlesheets&logoColor=white)
+![Zero Errors](https://img.shields.io/badge/Verified-0_Formula_Errors_%E2%80%A2_0__xlfn-D8A7A7?style=for-the-badge)
 
 ---
 
-## 🎨 Bộ Sưu Tập 6 Mẫu Template Độc Đáo
+## 📦 Chọn Phiên Bản Phù Hợp (Quick Download)
 
-### 1. 🌻 Sunflower Garden Blush (`01_Sunflower_Garden_Blush.xlsx`)
-- **Bảng màu:** Dusty Rose (`#D8A7A7`) · Warm Blush (`#F5E6E6`) · Cream (`#FFFDFB`) · Emerald Streak (`#4E9F76`)
-- **Hoạt ảnh:** Hoa hướng dương lớn dần từ chậu đất → mầm xanh → nụ vàng → bông hướng dương tỏa nắng
-- **Các sheet:** `📖 Hướng Dẫn` · `🌻 Monthly Tracker` · `🎯 Yearly Goals & Habits` (kèm bộ đếm *You Have Planted*) · `📊 Annual Overview` (tổng kết 12 tháng & biểu đồ năm)
-- **Tải về:** [Universal (Excel 365 & Google Sheets)](templates/01_Sunflower_Garden_Blush.xlsx) · [Offline Pro (Excel 365 không cần mạng)](templates/pro_macro/01_Sunflower_Garden_Blush_Offline_Pro.xlsx)
+| Phiên bản | Phù hợp với | Thư mục tải về | Tính năng nổi bật |
+|---|---|---|---|
+| **⭐ Bản Excel Offline Mọi Máy *(Khuyên dùng)*** | **Excel 2016 / 2019 / 2021 / 365** (Windows & Mac) | [`templates/excel_universal_offline/`](templates/excel_universal_offline/) | **100% Offline • Pure `.xlsx` (0 Macro)** • Form Control Checkboxes bấm trực tiếp • Hoạt ảnh 6 giai đoạn bằng Linked Pictures (`_Assets!B2:B7`) • Tự đổi ảnh riêng trong 3 bước! |
+| **☁️ Bản Google Sheets & Excel 365 Cloud** | **Google Sheets** (miễn phí) hoặc **Excel 365 Web** | [`templates/google_sheets_and_excel365/`](templates/google_sheets_and_excel365/) | File siêu nhẹ (~40–50 KB) • Dùng hàm `=IMAGE(...)` trực tuyến từ nhánh `version2` • Native checkboxes gốc. |
 
-![Sunflower Garden Tracker Preview](previews/01_sunflower_tracker.png)
+---
+
+## ✨ Điểm Đột Phá Của Version 2.0
+
+- 🔌 **Zero-Install, Zero-Macro, Zero-Internet (Tier A):** Tải về máy bất kỳ có Excel là chạy trọn vẹn ngay lập tức — không yêu cầu Office 365, không cảnh báo Macro, không lỗi `#NAME?` hay `_xlfn.`.
+- 🪴 **Hoạt ảnh tăng trưởng 6 giai đoạn Offline (Native Camera / Linked Pictures):** 31 khung ảnh động (`Anim_Day01`..`Anim_Day31`) liên kết `=INDEX(_Assets!$B$2:$B$8, ...)` tự động lớn lên mượt mà từ `0%` → `100%` ngay khi bạn tick Checkbox!
+- 🎨 **Tự đổi bộ icon của riêng bạn không cần link:** Chỉ cần chuột phải tab dưới cùng → **Unhide → `_Assets`** → dán 6 ảnh PNG/sticker bất kỳ vào `B2:B7` → toàn bộ 31 ngày + Hero icon tự biến hình ngay lập tức!
+- ☑️ **Checkbox bấm 1 chạm + 8 dòng mở rộng nhanh:** 12 dòng đầu (372 ô) gắn sẵn Form Control Checkboxes căn giữa từng ô + tô nền pastel dịu mắt khi tick; 8 dòng mở rộng bên dưới (`13–20`) nối sẵn công thức Streak & dropdown `✓`.
+- 📅 **Lịch động & Streak chuẩn xác:** Đổi Tháng/Năm tự nhảy 28/29/30/31 ngày (tự ẩn icon ở ngày thừa cuối tháng); `Current Streak` tự tính đến ngày hoạt động gần nhất (`LastActiveDay`).
+
+---
+
+## 🎨 Bộ Sưu Tập 6 Mẫu Template (Ảnh Chụp Thực Tế Từ Bản Offline `.xlsx`)
+
+### 1. 🌻 Sunflower Garden Blush
+- **Tải về:** [**⭐ Excel Offline (Mọi máy)**](templates/excel_universal_offline/01_Sunflower_Garden_Blush.xlsx) · [☁️ Google Sheets / Excel 365](templates/google_sheets_and_excel365/01_Sunflower_Garden_Blush.xlsx)
+- **Palette:** Dusty Rose (`#D8A7A7`) · Warm Blush (`#F5E6E6`) · Cream (`#FFFDFB`) · Emerald Streak (`#4E9F76`)
+- **Tabs:** `📖 Hướng Dẫn` · `🌻 Monthly Tracker` · `🎯 Yearly Goals & Habits` *(kèm bộ đếm You Have Planted)* · `📊 Annual Overview`
+
+![Sunflower Garden Tracker v2 Preview](previews/01_sunflower_tracker.png)
 
 <details>
-<summary>📸 Xem thêm các tab phụ: Hướng Dẫn, Yearly Goals & Annual Overview</summary>
+<summary>📸 Xem thêm: Trang Hướng Dẫn v2.0, Yearly Goals & Annual Overview</summary>
 
+![Hướng Dẫn v2.0](previews/01_sunflower_guide.png)
 ![Yearly Goals & Habits](previews/01_sunflower_yearly_goals.png)
 ![Annual Overview](previews/01_sunflower_annual.png)
-![Hướng Dẫn tab](previews/01_sunflower_guide.png)
 
 </details>
 
 ---
 
-### 2. 🌵 Cactus Bloom Pastel Weeks (`02_Cactus_Bloom_Pastel_Weeks.xlsx`)
-- **Bảng màu 5 tuần pastel:** W1 Hồng phấn (`#F8D7E8`) · W2 Tím oải hương (`#E2D7F8`) · W3 Xanh trời (`#D7EAF8`) · W4 Xanh bạc hà (`#D7F8E5`) · W5 Vàng bơ (`#FAF2CC`)
-- **Hoạt ảnh:** Chậu xương rồng đất nung dễ thương mọc nhánh & nở hoa hồng trên đỉnh
-- **Các sheet:** `📖 Hướng Dẫn` · `🌵 Monthly Tracker` (biểu đồ *Daily Productivity* xanh có điểm đánh dấu + dải tổng kết 5 tuần pastel + Side Stats) · `📝 Reflection & Notes`
-- **Tải về:** [Universal](templates/02_Cactus_Bloom_Pastel_Weeks.xlsx) · [Offline Pro](templates/pro_macro/02_Cactus_Bloom_Pastel_Weeks_Offline_Pro.xlsx)
+### 2. 🌵 Cactus Bloom Pastel Weeks
+- **Tải về:** [**⭐ Excel Offline (Mọi máy)**](templates/excel_universal_offline/02_Cactus_Bloom_Pastel_Weeks.xlsx) · [☁️ Google Sheets / Excel 365](templates/google_sheets_and_excel365/02_Cactus_Bloom_Pastel_Weeks.xlsx)
+- **Palette 5 tuần:** Pink (`#F8D7E8`) · Lavender (`#E2D7F8`) · Sky (`#D7EAF8`) · Mint (`#D7F8E5`) · Butter (`#FAF2CC`)
+- **Tabs:** `📖 Hướng Dẫn` · `🌵 Monthly Tracker` *(Daily Productivity area chart có markers + dải tổng kết 5 tuần + Side Stats)* · `📝 Reflection & Notes`
 
-![Cactus Bloom Pastel Weeks Preview](previews/02_cactus_tracker.png)
+![Cactus Bloom Pastel Weeks v2 Preview](previews/02_cactus_tracker.png)
 
 <details>
 <summary>📸 Xem tab Reflection & Notes</summary>
@@ -57,13 +66,12 @@
 
 ---
 
-### 3. 🌈 Rainbow Executive Donuts (`03_Rainbow_Executive_Donuts.xlsx`)
-- **Bảng màu:** Cầu vồng pastel (Ice Blue · Sage Mint · Rose Pink · Peach Apricot · Soft Olive) trên thẻ trắng sắc nét
-- **Hoạt ảnh:** Lọ thủy tinh gom sao phát sáng & nở hoa sen hồng trên nắp khi đạt 100%
-- **Các sheet:** `📖 Hướng Dẫn` · `🌈 Habit Dashboard` (Area Chart + Overall Donut + **5 Weekly Progress Donut Charts** + Weekly Habits Checklist + Notes Card) · `📈 Analytics` (Leaderboard & phân tích hiệu suất Thứ 2–Chủ nhật)
-- **Tải về:** [Universal](templates/03_Rainbow_Executive_Donuts.xlsx) · [Offline Pro](templates/pro_macro/03_Rainbow_Executive_Donuts_Offline_Pro.xlsx)
+### 3. 🌈 Rainbow Executive Donuts
+- **Tải về:** [**⭐ Excel Offline (Mọi máy)**](templates/excel_universal_offline/03_Rainbow_Executive_Donuts.xlsx) · [☁️ Google Sheets / Excel 365](templates/google_sheets_and_excel365/03_Rainbow_Executive_Donuts.xlsx)
+- **Palette:** Pastel Rainbow (Ice Blue · Sage Mint · Rose Pink · Peach Apricot · Soft Olive)
+- **Tabs:** `📖 Hướng Dẫn` · `🌈 Habit Dashboard` *(Top Area Chart + Overall Donut + **5 Weekly Progress Donuts** + Weekly Habits Checklist + Notes)* · `📈 Analytics`
 
-![Rainbow Executive Donuts Preview](previews/03_rainbow_dashboard.png)
+![Rainbow Executive Donuts v2 Preview](previews/03_rainbow_dashboard.png)
 
 <details>
 <summary>📸 Xem tab Analytics (Habit Leaderboard & Day-of-Week Breakdown)</summary>
@@ -74,31 +82,29 @@
 
 ---
 
-### 4. 🌿 Sage Botanical Habit & Budget (`04_Sage_Botanical_Habit_And_Budget.xlsx`)
-- **Bảng màu:** Sage Green (`#9FB8AD`) · Warm Sand (`#E8D5B7`) · Dusty Coral (`#E0A899`) · Ivory (`#FAF9F6`)
-- **Hoạt ảnh:** Chậu cây Monstera xanh mướt nở hoa san hô rực rỡ
-- **Các sheet:** `📖 Hướng Dẫn` · `🌿 Daily Habits` · `💰 Monthly Budget` (Cash Flow Donut, Budget vs Actual Bar Chart, Savings Goals Progress Bar, Bills Checklist & Transaction Log tự động tính `SUMIF`) · `🔗 Life Overview` (kết hợp **Habit % + Savings Rate %**)
-- **Tải về:** [Universal](templates/04_Sage_Botanical_Habit_And_Budget.xlsx) · [Offline Pro](templates/pro_macro/04_Sage_Botanical_Habit_And_Budget_Offline_Pro.xlsx)
+### 4. 🌿 Sage Botanical Habit & Budget
+- **Tải về:** [**⭐ Excel Offline (Mọi máy)**](templates/excel_universal_offline/04_Sage_Botanical_Habit_And_Budget.xlsx) · [☁️ Google Sheets / Excel 365](templates/google_sheets_and_excel365/04_Sage_Botanical_Habit_And_Budget.xlsx)
+- **Palette:** Sage Green (`#9FB8AD`) · Warm Sand (`#E8D5B7`) · Dusty Coral (`#E0A899`) · Ivory (`#FAF9F6`)
+- **Tabs:** `📖 Hướng Dẫn` · `🌿 Daily Habits` · `💰 Monthly Budget` *(Cash Flow Donut, Budget vs Actual, Savings Goals, Bills Checklist & Transaction Log)* · `🔗 Life Overview` *(Habit % + Savings Rate %)*
 
-![Sage Botanical Daily Habits Preview](previews/04_botanical_habits.png)
+![Sage Botanical Daily Habits v2 Preview](previews/04_botanical_habits.png)
 
 <details>
 <summary>📸 Xem tab Monthly Budget & Life Overview</summary>
 
 ![Monthly Budget Planner](previews/04_botanical_budget.png)
-![Life Overview Dashboard](previews/04_botanical_life_overview.png)
+![Life Overview](previews/04_botanical_life_overview.png)
 
 </details>
 
 ---
 
-### 5. 🌙 Lavender Dream Wellness & Mood (`05_Lavender_Dream_Wellness_Mood.xlsx`)
-- **Bảng màu:** Soft Lilac (`#C8B6E2`) · Periwinkle (`#A594F9`) · Mist Lavender (`#F3EFFB`) · Charcoal Ink (`#2D2A32`)
-- **Hoạt ảnh:** Chu kỳ mặt trăng (Trăng non → Trăng tròn phát sáng) cùng nhánh hoa oải hương nở rộ
-- **Các sheet:** `📖 Hướng Dẫn` · `🌙 Habit & Wellness` (Thói quen + Nhật ký Giờ ngủ / Tâm trạng 1–5 / Năng lượng 1–5 / Thư thái + Biểu đồ tương quan Habit vs Mood & Sleep) · `✨ Gratitude & Review` (Nhật ký 31 ngày biết ơn & bộ đếm Self-care)
-- **Tải về:** [Universal](templates/05_Lavender_Dream_Wellness_Mood.xlsx) · [Offline Pro](templates/pro_macro/05_Lavender_Dream_Wellness_Mood_Offline_Pro.xlsx)
+### 5. 🌙 Lavender Dream Wellness & Mood
+- **Tải về:** [**⭐ Excel Offline (Mọi máy)**](templates/excel_universal_offline/05_Lavender_Dream_Wellness_Mood.xlsx) · [☁️ Google Sheets / Excel 365](templates/google_sheets_and_excel365/05_Lavender_Dream_Wellness_Mood.xlsx)
+- **Palette:** Soft Lilac (`#C8B6E2`) · Periwinkle (`#A594F9`) · Mist Lavender (`#F3EFFB`) · Charcoal Ink (`#2D2A32`)
+- **Tabs:** `📖 Hướng Dẫn` · `🌙 Habit & Wellness` *(Daily Habits + Sleep Hours + Mood / Energy / Calm 1–5 + Correlation Chart)* · `✨ Gratitude & Review`
 
-![Lavender Wellness & Mood Preview](previews/05_lavender_wellness.png)
+![Lavender Wellness & Mood v2 Preview](previews/05_lavender_wellness.png)
 
 <details>
 <summary>📸 Xem tab Gratitude & Review</summary>
@@ -109,13 +115,12 @@
 
 ---
 
-### 6. 🚀 Midnight Navy Blush Focus (`06_Midnight_Navy_Blush_Focus.xlsx`)
-- **Bảng màu:** Deep Navy (`#2B3452`) · Soft Blush (`#F2D7D9`) · Slate Blue (`#5C6B9C`) · Crisp White (`#FFFFFF`)
-- **Hoạt ảnh:** Tên lửa phóng lên quỹ đạo vũ trụ với vầng hào quang & hành tinh mini
-- **Các sheet:** `📖 Hướng Dẫn` · `🚀 Focus Tracker` (hệ thống **Gamification XP/Day & Total XP**, thẻ xếp hạng tự động: `🌱 Beginner → ⚡ Consistent → 🔥 Unstoppable → 👑 Master`) · `🏆 Milestones` (10 Huy hiệu thành tích tự động mở khóa `🏆 UNLOCKED` & biểu đồ đóng góp XP)
-- **Tải về:** [Universal](templates/06_Midnight_Navy_Blush_Focus.xlsx) · [Offline Pro](templates/pro_macro/06_Midnight_Navy_Blush_Focus_Offline_Pro.xlsx)
+### 6. 🚀 Midnight Navy Blush Focus
+- **Tải về:** [**⭐ Excel Offline (Mọi máy)**](templates/excel_universal_offline/06_Midnight_Navy_Blush_Focus.xlsx) · [☁️ Google Sheets / Excel 365](templates/google_sheets_and_excel365/06_Midnight_Navy_Blush_Focus.xlsx)
+- **Palette:** Deep Navy (`#2B3452`) · Soft Blush (`#F2D7D9`) · Slate Blue (`#5C6B9C`) · Crisp White (`#FFFFFF`)
+- **Tabs:** `📖 Hướng Dẫn` · `🚀 Focus Tracker` *(Gamification XP/Day, Total XP, Rank Tiers: Beginner → Consistent → Unstoppable → Master)* · `🏆 Milestones` *(10 Huy hiệu thành tích tự mở khóa)*
 
-![Midnight Navy Focus Tracker Preview](previews/06_navy_focus_tracker.png)
+![Midnight Navy Focus Tracker v2 Preview](previews/06_navy_focus_tracker.png)
 
 <details>
 <summary>📸 Xem tab Milestones & Rank Ladder</summary>
@@ -126,69 +131,45 @@
 
 ---
 
-## 🖼️ Bộ 36 Sprite Hoạt Ảnh Tăng Trưởng (256×256px Transparent PNG)
+## 🖼️ Bộ 36 Sprite Hoạt Ảnh 300×300px (6 Chủ Đề × 6 Giai Đoạn)
 
-Toàn bộ 36 icon (6 chủ đề × 6 giai đoạn) đều được thiết kế bằng code vector 4× supersampling sắc nét, dễ nhìn ngay cả ở kích thước ô Excel 44px:
-
-![Sprite Collection Contact Sheet](previews/assets_contact_sheet.png)
+![Sprite Contact Sheet](previews/assets_contact_sheet.png)
 
 ---
 
-## 🚀 Hướng Dẫn Bắt Đầu Nhanh (Quick Start)
-
-| Bạn đang dùng... | Chọn file nào? | Cách mở & sử dụng |
-|---|---|---|
-| **Microsoft Excel 365** (có mạng) | `templates/01..06_*.xlsx` | Mở trực tiếp → nếu hiện thanh vàng *Connected Images*, bấm **Enable / Trust**. |
-| **Microsoft Excel 365** (Offline, không muốn bật mạng) | `templates/pro_macro/*_Offline_Pro.xlsx` | Mở & dùng ngay! 6 ảnh hoạt ảnh đã nhúng sẵn trong file (`_Sprites` + `INDEX`), tốc độ 0ms! |
-| **Google Sheets** (miễn phí 100%) | `templates/01..06_*.xlsx` | Upload lên Google Drive → Mở bằng Google Sheets → **Tệp → Lưu dưới dạng Google Trang tính**. |
-| **Excel 2016 / 2019 / 2021** | `templates/01..06_*.xlsx` + `vba_scripts/` | Nhập `TRUE` hoặc `✓` để tick; cài thêm macro trong [`vba_scripts/README_VBA.md`](vba_scripts/README_VBA.md) để bật click-toggle & đổi ảnh offline. |
-
-Xem hướng dẫn tùy biến chuyên sâu (thêm thói quen, đổi bộ ảnh icon riêng, chỉnh ngưỡng %) tại: **[`docs/CUSTOMIZATION_GUIDE.md`](docs/CUSTOMIZATION_GUIDE.md)**.
-
----
-
-## 📁 Cấu Trúc Thư Mục (Repository Structure)
+## 📁 Cấu Trúc Repository (Branch `version2`)
 
 ```text
-Habit-tracker-for-everyone-by-Dyu/
+Habit-tracker-for-everyone-by-Dyu/ (branch: version2)
 ├── README.md
-├── assets/                     # 36 ảnh PNG 256×256 nền trong suốt (6 chủ đề × 6 giai đoạn)
-│   ├── sunflower/
-│   ├── cactus/
-│   ├── lotus_stars/
-│   ├── botanical/
-│   ├── lavender_moon/
-│   └── focus_rocket/
-├── templates/                  # 6 file .xlsx tương thích Excel 365 & Google Sheets
-│   ├── 01_Sunflower_Garden_Blush.xlsx
-│   ├── 02_Cactus_Bloom_Pastel_Weeks.xlsx
-│   ├── 03_Rainbow_Executive_Donuts.xlsx
-│   ├── 04_Sage_Botanical_Habit_And_Budget.xlsx
-│   ├── 05_Lavender_Dream_Wellness_Mood.xlsx
-│   ├── 06_Midnight_Navy_Blush_Focus.xlsx
-│   └── pro_macro/              # 6 bản Offline Pro (ảnh nhúng sẵn, không cần Internet)
-├── vba_scripts/                # Macro VBA cho Excel bản cũ (click-toggle, offline sprites, PDF)
-├── previews/                   # Ảnh chụp thực tế từ Microsoft Excel 365 của tất cả template
-├── scripts/                    # Mã nguồn Python tái tạo toàn bộ ảnh, workbook & kiểm thử Excel
-│   ├── generate_assets.py
-│   ├── build_all.py
-│   ├── verify_and_render.py
-│   └── hx/
+├── assets/                                # 36 PNG 300×300px nền trong suốt (6 themes × 6 stages)
+├── templates/
+│   ├── excel_universal_offline/           # ⭐ Tier A: 6 file .xlsx Offline mọi phiên bản Excel (2016–365)
+│   └── google_sheets_and_excel365/        # ☁️ Tier B: 6 file .xlsx Cloud (=IMAGE từ branch version2)
+├── previews/                              # Ảnh chụp thực tế từ Microsoft Excel Desktop
+├── scripts/
+│   ├── generate_assets.py                 # Sinh 36 sprite 300×300px (4× supersampling)
+│   ├── excel_builder.py                   # Tạo khung workbook chuẩn, _Calc, _Assets & manifest
+│   ├── excel_com_enhancer.py              # Biên dịch COM: nhúng ảnh, Linked Pictures, Form Checkboxes & preview
+│   ├── build_cloud_edition.py             # Sinh 6 file Tier B (Google Sheets / Excel 365)
+│   ├── verify_v2.py                       # Kiểm toán 0 lỗi công thức, 0 _xlfn, test tick checkbox & đổi tháng
+│   └── hx/                                # Module UI/UX, guide, tracker, addons & extras
 └── docs/
     └── CUSTOMIZATION_GUIDE.md
 ```
 
 ---
 
-## 🔧 Tự Sinh Lại Toàn Bộ Dự Án (Reproducible Build)
+## 🔧 Tự Biên Dịch Lại Từ Mã Nguồn (Dành Cho Developer — Người Dùng Cuối KHÔNG Cần)
 
 ```bash
 pip install openpyxl xlsxwriter pillow numpy pywin32
-python scripts/generate_assets.py   # Tạo 36 ảnh PNG + contact sheet
-python scripts/build_all.py         # Sinh 6 file Universal + 6 file Offline Pro
-python scripts/verify_and_render.py # Kiểm tra lỗi công thức & chụp preview bằng Excel Desktop
+python scripts/generate_assets.py      # 1. Tạo 36 ảnh 300x300px + contact sheet
+python scripts/build_cloud_edition.py  # 2. Sinh 6 file Tier B (Google Sheets / Excel 365)
+python scripts/excel_com_enhancer.py   # 3. Biên dịch 6 file Tier A Offline qua Excel COM + chụp preview
+python scripts/verify_v2.py            # 4. Kiểm tra 0 lỗi công thức, 0 _xlfn & test reactivity thực tế
 ```
 
 ---
 
-<p align="center">Made with 💛 for everyone building better daily habits — <b>by Dyu</b></p>
+<p align="center">Built with 💛 for everyone — <b>Zero Install, Zero Macro, 100% Pure Excel `.xlsx`</b> — by Dyu</p>
