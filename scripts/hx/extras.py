@@ -373,7 +373,7 @@ def build_reflection_notes_sheet(wb, styles: Styles, tr: TrackerRefs):
         cv.row(rr, 25)
         cv.put(rr, 1, f"WEEK {w + 1}", bold=True, font_size=9.5, align="center",
                bg_color=t.week_head[w], font_color=t.week_on[w])
-        cv.put(rr, 2, f"={tr.calc_q}!{acell(2, CALC_WK_COL0 + w)}", bold=True, font_size=10, align="center",
+        cv.put(rr, 2, f"={tr.calc_q}!{acell(tr.calc_row_base + 2, CALC_WK_COL0 + w)}", bold=True, font_size=10, align="center",
                num_format="0%", bg_color=t.week_tint[w], font_color=t.ink)
         cv.merge(rr, 3, rr, 4, wk_notes[w][0], font_size=9, align="left", indent=1,
                  bg_color=t.card, font_color=t.ink)
@@ -451,8 +451,8 @@ def build_rainbow_analytics_sheet(wb, styles: Styles, tr: TrackerRefs):
         bg = t.card if i % 2 == 0 else t.page
         snm = f"{tr.q}!{cell(src_r, C_NAME)}"
         cv.put(rr, 1, f'=IF({snm}="","",{snm})', align="left", indent=1, font_size=9, bg_color=bg, font_color=t.ink)
-        cv.put(rr, 2, f'=IF({snm}="","",{tr.calc_q}!{cell(src_r, CALC_GOALN_COL)})', align="center", font_size=9, bg_color=bg)
-        cv.put(rr, 3, f'=IF({snm}="","",{tr.calc_q}!{cell(src_r, CALC_DONEN_COL)})', align="center", font_size=9, bg_color=bg)
+        cv.put(rr, 2, f'=IF({snm}="","",{tr.calc_q}!{cell(tr.calc_row_base + src_r, CALC_GOALN_COL)})', align="center", font_size=9, bg_color=bg)
+        cv.put(rr, 3, f'=IF({snm}="","",{tr.calc_q}!{cell(tr.calc_row_base + src_r, CALC_DONEN_COL)})', align="center", font_size=9, bg_color=bg)
         cv.put(rr, 4, f'=IF({snm}="","",{tr.q}!{cell(src_r, rc["progress"])})', align="center", bold=True,
                font_size=9, num_format="0%", bg_color=bg, font_color=t.primary_dark)
         cv.put(rr, 5, f'=IF({snm}="","",{tr.q}!{cell(src_r, rc["cur"])})', align="center", font_size=9, bg_color=bg)
@@ -535,11 +535,11 @@ def build_rainbow_analytics_sheet(wb, styles: Styles, tr: TrackerRefs):
 # =========================================================================== #
 #  4A. Template 4 (Sage Botanical) — 💰 Monthly Budget (Ref 5 Ultimate Budget!)
 # =========================================================================== #
-def build_monthly_budget_sheet(wb, styles: Styles, universal: bool = True) -> dict:
+def build_monthly_budget_sheet(wb, styles: Styles, universal: bool = True, gsheets: bool = False) -> dict:
     name = "💰 Monthly Budget"
     t = styles.t
     ws = wb.add_worksheet(name)
-    cv = Canvas(wb, ws, styles, name, universal=universal)
+    cv = Canvas(wb, ws, styles, name, universal=universal, gsheets=gsheets)
     q = qs(name)
 
     SAGE, SAND, CORAL, SKY = "#9FB8AD", "#E8D5B7", "#E0A899", "#B6C9DF"
@@ -935,11 +935,12 @@ def build_life_overview_sheet(wb, styles: Styles, tr: TrackerRefs, b: dict):
 # =========================================================================== #
 #  5. Template 5 (Lavender Dream) — ✨ Gratitude & Review
 # =========================================================================== #
-def build_gratitude_sheet(wb, styles: Styles, tr: TrackerRefs, well: dict, universal: bool = True) -> dict:
+def build_gratitude_sheet(wb, styles: Styles, tr: TrackerRefs, well: dict,
+                          universal: bool = True, gsheets: bool = False) -> dict:
     name = "✨ Gratitude & Review"
     t = styles.t
     ws = wb.add_worksheet(name)
-    cv = Canvas(wb, ws, styles, name, universal=universal)
+    cv = Canvas(wb, ws, styles, name, universal=universal, gsheets=gsheets)
 
     cv.col(0, 2.5)
     cv.col(1, 9.5)
@@ -1338,7 +1339,7 @@ def build_ocean_hall_of_fame_sheet(wb, styles: Styles, tr: TrackerRefs, fit: dic
         bg = t.card if i % 2 == 0 else t.page
         snm = f"{tr.q}!{cell(src_r, C_NAME)}"
         cv.put(rr, 1, f'=IF({snm}="","",{snm})', bold=True, font_size=9, align="left", indent=1, bg_color=bg, font_color=t.ink)
-        cv.put(rr, 2, f'=IF({snm}="","",{tr.calc_q}!{cell(src_r, CALC_DONEN_COL)})', align="center", font_size=9, bg_color=bg)
+        cv.put(rr, 2, f'=IF({snm}="","",{tr.calc_q}!{cell(tr.calc_row_base + src_r, CALC_DONEN_COL)})', align="center", font_size=9, bg_color=bg)
         cv.put(rr, 3, f'=IF({snm}="","",{tr.q}!{cell(src_r, rc["progress"])})', align="center", bold=True,
                font_size=9, num_format="0%", bg_color=bg, font_color=t.primary)
         cv.put(rr, 4, f'=IF({snm}="","",{tr.q}!{cell(src_r, rc["cur"])})', align="center", font_size=9, bg_color=bg)
@@ -1473,7 +1474,7 @@ def build_matcha_weekly_review_sheet(wb, styles: Styles, tr: TrackerRefs, rt: di
         bg = t.card if w % 2 == 0 else t.page
         cv.put(rr, 1, f"WEEK {w + 1}", bold=True, font_size=9.5, align="center",
                bg_color=t.week_head[w], font_color=t.week_on[w])
-        cv.put(rr, 2, f"={tr.calc_q}!{acell(2, CALC_WK_COL0 + w)}", bold=True, font_size=10,
+        cv.put(rr, 2, f"={tr.calc_q}!{acell(tr.calc_row_base + 2, CALC_WK_COL0 + w)}", bold=True, font_size=10,
                align="center", num_format="0%", bg_color=t.week_tint[w], font_color=t.ink)
         for ci, txt in enumerate(wk_data[w], start=3):
             cv.put(rr, ci, txt, font_size=9, align="left", indent=1, text_wrap=True, bg_color=bg, font_color=t.ink)

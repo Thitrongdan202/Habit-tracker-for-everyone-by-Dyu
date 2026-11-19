@@ -145,9 +145,10 @@ class Styles:
 class Canvas:
     """Buffered, layer-friendly worksheet writer."""
 
-    def __init__(self, wb, ws, styles: Styles, name: str, universal: bool = False):
+    def __init__(self, wb, ws, styles: Styles, name: str, universal: bool = False, gsheets: bool = False):
         self.wb, self.ws, self.S, self.name = wb, ws, styles, name
         self.universal = universal
+        self.gsheets = gsheets
         self.t = styles.t
         self.cells: dict[tuple[int, int], dict[str, Any]] = {}
         self.merges: list[tuple[int, int, int, int]] = []
@@ -257,10 +258,16 @@ class Canvas:
         d = self._cell(r, c)
         d["props"].update(props)
         if self.universal:
-            # Universal Excel 2016–365: store pure boolean hidden via `;;;`, overlay Form Control Checkbox via COM
+            # Universal Excel 2016–365 & Pro .xlsm: store pure boolean hidden via `;;;`, overlay Form Control Checkbox via COM
             d["props"]["num_format"] = ";;;"
             d["kind"], d["value"] = "value", bool(value)
             self.form_checkboxes.append((r, c))
+        elif self.gsheets:
+            # Google Sheets Edition: clean centered, softly styled boolean cells ready for 1-click Insert -> Checkbox or Apps Script!
+            d["props"].setdefault("align", "center")
+            d["props"]["font_size"] = 7.5
+            d["props"]["font_color"] = self.t.muted
+            d["kind"], d["value"] = "value", bool(value)
         else:
             d["kind"], d["value"] = "checkbox", bool(value)
 

@@ -30,13 +30,14 @@ def add_cactus_weekly_strip(wb, cv: Canvas, tr: TrackerRefs):
              font_size=9, align="center", text_wrap=True, bg_color=t.card, font_color=t.ink)
     cv.box(r, C_NAME, r + 3, C_NAME, t.line)
 
+    rb = tr.calc_row_base
     for w in range(5):
         days = week_days(w)
         c1, c2 = day_col(days[0]), day_col(days[-1])
         hc = CALC_WK_COL0 + w
-        pct_ref = f"{tr.calc_q}!{acell(2, hc)}"
-        done_ref = f"{tr.calc_q}!{acell(0, hc)}"
-        tot_ref = f"{tr.calc_q}!{acell(1, hc)}"
+        pct_ref = f"{tr.calc_q}!{acell(rb + 2, hc)}"
+        done_ref = f"{tr.calc_q}!{acell(rb + 0, hc)}"
+        tot_ref = f"{tr.calc_q}!{acell(rb + 1, hc)}"
         cv.merge(r, c1, r, c2, f"WEEK {w + 1}  ({days[0]}–{days[-1]})", bold=True, font_size=8.5,
                  align="center", bg_color=t.week_head[w], font_color=t.week_on[w])
         cv.merge(r + 1, c1, r + 1, c2, f"={pct_ref}", bold=True, font_size=15, align="center",
@@ -91,15 +92,16 @@ def add_rainbow_bottom_blocks(wb, cv: Canvas, tr: TrackerRefs):
            bg_color=t.card, font_color=t.muted)
 
     # 5 Weekly Donuts spanning cols C_D0..C_D31 (6, 6, 6, 6, 7 cols -> super balanced!)
+    rb = tr.calc_row_base
     spans = [(2, 7), (8, 13), (14, 19), (20, 25), (26, 32)]
     donut_colors = ["#77BBD9", "#7ECF9B", "#EB9BBF", "#F2BD6B", "#A9C96E"]
     for w, (c1, c2) in enumerate(spans):
         hc = CALC_WK_COL0 + w
         cv.merge(r0, c1, r0, c2, f"WEEK {w + 1}", bold=True, font_size=8.5, align="center",
                  bg_color=t.week_head[w], font_color=t.week_on[w])
-        cv.merge(r0 + 1, c1, r0 + 4, c2, f"={tr.calc_q}!{acell(2, hc)}", bold=True, font_size=13, align="center",
+        cv.merge(r0 + 1, c1, r0 + 4, c2, f"={tr.calc_q}!{acell(rb + 2, hc)}", bold=True, font_size=13, align="center",
                  num_format="0%", bg_color=t.card, font_color=donut_colors[w], font_name=t.font_title)
-        dch = donut(wb, f"={tr.calc_q}!{rng(2, hc, 3, hc)}", [donut_colors[w], t.donut_rest], hole=70)
+        dch = donut(wb, f"={tr.calc_q}!{rng(rb + 2, hc, rb + 3, hc)}", [donut_colors[w], t.donut_rest], hole=70)
         place_chart(cv, dch, r0 + 1, c1, r0 + 4, c2, pad_x=10, pad_y=2)
         cv.vline(c2, r0, r0 + 4, t.line, where="right")
 
@@ -573,15 +575,16 @@ def add_ocean_fitness_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 88) -> 
     cv.merge(rd, C_NAME, rd + 4, C_NAME, "🌊  WEEKLY FITNESS GAUGES\nTiến độ 5 tuần", bold=True,
              font_size=10.5, align="center", text_wrap=True, bg_color=t.card, font_color=t.primary,
              font_name=t.font_title)
+    rb = tr.calc_row_base
     spans = [(2, 7), (8, 13), (14, 19), (20, 25), (26, 32)]
     dcols = ["#2E7D87", "#48A9A6", "#F4A582", "#3B9A9C", "#E88B68"]
     for w, (c1, c2) in enumerate(spans):
         hc = CALC_WK_COL0 + w
         cv.merge(rd, c1, rd, c2, f"WEEK {w + 1}", bold=True, font_size=8.5, align="center",
                  bg_color=t.week_head[w], font_color=t.week_on[w])
-        cv.merge(rd + 1, c1, rd + 4, c2, f"={tr.calc_q}!{acell(2, hc)}", bold=True, font_size=13,
+        cv.merge(rd + 1, c1, rd + 4, c2, f"={tr.calc_q}!{acell(rb + 2, hc)}", bold=True, font_size=13,
                  align="center", num_format="0%", bg_color=t.card, font_color=dcols[w], font_name=t.font_title)
-        dch = donut(wb, f"={tr.calc_q}!{rng(2, hc, 3, hc)}", [dcols[w], t.donut_rest], hole=70)
+        dch = donut(wb, f"={tr.calc_q}!{rng(rb + 2, hc, rb + 3, hc)}", [dcols[w], t.donut_rest], hole=70)
         place_chart(cv, dch, rd + 1, c1, rd + 4, c2, pad_x=10, pad_y=2)
         cv.vline(c2, rd, rd + 4, t.line, where="right")
     cv.box(rd, C_NAME, rd + 4, C_D31, t.line)
@@ -645,10 +648,11 @@ def add_matcha_routine_block(wb, cv: Canvas, tr: TrackerRefs, morning_count: int
 
     # Bottom Split Cards: Morning Routine % | Evening Routine % | Cozy Weekly Reflection Box
     rc0 = r0 + 3
-    m_done = f"{cq}!{rng(R_H0, CALC_DONEN_COL, R_H0 + morning_count - 1, CALC_DONEN_COL)}"
-    m_goal = f"{cq}!{rng(R_H0, CALC_GOALN_COL, R_H0 + morning_count - 1, CALC_GOALN_COL)}"
-    e_done = f"{cq}!{rng(R_H0 + morning_count, CALC_DONEN_COL, R_H0 + morning_count + evening_count - 1, CALC_DONEN_COL)}"
-    e_goal = f"{cq}!{rng(R_H0 + morning_count, CALC_GOALN_COL, R_H0 + morning_count + evening_count - 1, CALC_GOALN_COL)}"
+    rb = tr.calc_row_base
+    m_done = f"{cq}!{rng(rb + R_H0, CALC_DONEN_COL, rb + R_H0 + morning_count - 1, CALC_DONEN_COL)}"
+    m_goal = f"{cq}!{rng(rb + R_H0, CALC_GOALN_COL, rb + R_H0 + morning_count - 1, CALC_GOALN_COL)}"
+    e_done = f"{cq}!{rng(rb + R_H0 + morning_count, CALC_DONEN_COL, rb + R_H0 + morning_count + evening_count - 1, CALC_DONEN_COL)}"
+    e_goal = f"{cq}!{rng(rb + R_H0 + morning_count, CALC_GOALN_COL, rb + R_H0 + morning_count + evening_count - 1, CALC_GOALN_COL)}"
 
     m_pct_addr = acell(rc0 + 1, C_NAME)
     e_pct_addr = acell(rc0 + 1, C_D0)
