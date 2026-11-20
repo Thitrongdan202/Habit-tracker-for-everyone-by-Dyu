@@ -21,16 +21,25 @@ try {
 $REPO_RAW = "https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu/main"
 
 $Templates = @(
-    @{ Id = 1;  Stem = "01_Sunflower_Garden_Blush";          Title = "Vuon Huong Duong Pastel (Sunflower Garden)" }
-    @{ Id = 2;  Stem = "02_Cactus_Bloom_Pastel_Weeks";       Title = "Xuong Rong No Hoa - 5 Tuan Pastel" }
-    @{ Id = 3;  Stem = "03_Rainbow_Executive_Donuts";        Title = "Cau Vong Dashboard & 5 Bieu Do Tron" }
-    @{ Id = 4;  Stem = "04_Sage_Botanical_Habit_And_Budget"; Title = "La Xanh Thoi Quen & Song Xanh" }
-    @{ Id = 5;  Stem = "05_Lavender_Dream_Wellness_Mood";    Title = "Oai Huong Cham Soc Giac Ngu & Tam Trang" }
-    @{ Id = 6;  Stem = "06_Midnight_Navy_Blush_Focus";       Title = "Navy Tap Trung Deep Work & Diem XP" }
-    @{ Id = 7;  Stem = "07_Sakura_Zen_Study_Planner";        Title = "Hoa Anh Dao Hoc Tap & Gio Focus" }
-    @{ Id = 8;  Stem = "08_Ocean_Coral_Fitness_Energy";      Title = "San Ho Dai Duong Tap Luyen & Nang Luong" }
-    @{ Id = 9;  Stem = "09_Matcha_Cafe_Daily_Routine";       Title = "Matcha Cafe Lich Trinh Sang / Toi" }
-    @{ Id = 10; Stem = "10_Aurora_Glow_RPG_Quest_Tracker";   Title = "Cuc Quang RPG Thang Cap Thoi Quen" }
+    @{ Id = 1;  Stem = "01_Sunflower_Garden_Blush";           Title = "Vuon Huong Duong Pastel (Sunflower Garden)" }
+    @{ Id = 2;  Stem = "02_Cactus_Bloom_Pastel_Weeks";        Title = "Xuong Rong No Hoa - 5 Tuan Pastel" }
+    @{ Id = 3;  Stem = "03_Rainbow_Executive_Donuts";         Title = "Cau Vong Dashboard & 5 Bieu Do Tron" }
+    @{ Id = 4;  Stem = "04_Sage_Botanical_Habit_And_Budget";  Title = "La Xanh Thoi Quen & Song Xanh" }
+    @{ Id = 5;  Stem = "05_Lavender_Dream_Wellness_Mood";     Title = "Oai Huong Cham Soc Giac Ngu & Tam Trang" }
+    @{ Id = 6;  Stem = "06_Midnight_Navy_Blush_Focus";        Title = "Navy Tap Trung Deep Work & Diem XP" }
+    @{ Id = 7;  Stem = "07_Sakura_Zen_Study_Planner";         Title = "Hoa Anh Dao Hoc Tap & Gio Focus" }
+    @{ Id = 8;  Stem = "08_Ocean_Coral_Fitness_Energy";       Title = "San Ho Dai Duong Tap Luyen & Nang Luong" }
+    @{ Id = 9;  Stem = "09_Matcha_Cafe_Daily_Routine";        Title = "Matcha Cafe Lich Trinh Sang / Toi" }
+    @{ Id = 10; Stem = "10_Aurora_Glow_RPG_Quest_Tracker";    Title = "Cuc Quang RPG Thang Cap Thoi Quen" }
+    @{ Id = 11; Stem = "11_Velvet_Rose_Garden";               Title = "Vuon Hong Nhung Tim Lavender (Velvet Rose)" }
+    @{ Id = 12; Stem = "12_Blue_Tulip_Mint_Breeze";           Title = "Tulip Xanh Lam - Dai Mau Mint Chanh" }
+    @{ Id = 13; Stem = "13_Buttercream_Blossom_Bars";         Title = "Kem Bo Bieu Do Cot Caramel & Hoa No" }
+    @{ Id = 14; Stem = "14_Emerald_Forest_Gold_Stars";        Title = "Rung Ngoc Bich & Sao Vang (Gold Stars)" }
+    @{ Id = 15; Stem = "15_Mocha_Rose_Terracotta_Sunflower";  Title = "Huong Duong Mocha & Hong Dat Terracotta" }
+    @{ Id = 16; Stem = "16_Dream_Home_Architect_Builder";     Title = "Xay Ngoi Nha Mo Uoc (6 Cap Do Kien Truc)" }
+    @{ Id = 17; Stem = "17_Wildflower_Bloom_Daily_Mood";      Title = "Hoa Dai 5 Canh & Tam Trang Moi Ngay" }
+    @{ Id = 18; Stem = "18_Plum_Oak_Master_Suite";            Title = "Cay Soi Tim Man & Bang Tuan/Thang Toan Dien" }
+    @{ Id = 19; Stem = "19_Meadow_Emerald_Sunflower";         Title = "Huong Duong Dong Co Xanh Ngoc Luc Bao" }
 )
 
 function Resolve-TargetFolder {
@@ -101,16 +110,16 @@ function Parse-TemplateIds([string]$Raw) {
             $a = [int]$Matches[1]; $b = [int]$Matches[2]
             if ($a -gt $b) { $tmp = $a; $a = $b; $b = $tmp }
             for ($n = $a; $n -le $b; $n++) {
-                if ($n -ge 1 -and $n -le 10 -and -not $selectedIds.Contains($n)) { $selectedIds.Add($n) }
+                if ($n -ge 1 -and $n -le 19 -and -not $selectedIds.Contains($n)) { $selectedIds.Add($n) }
             }
         } elseif ($u -match '^\d+$') {
             $n = [int]$u
-            if ($n -ge 1 -and $n -le 10 -and -not $selectedIds.Contains($n)) { $selectedIds.Add($n) }
+            if ($n -ge 1 -and $n -le 19 -and -not $selectedIds.Contains($n)) { $selectedIds.Add($n) }
         }
     }
     if ($all) {
         $selectedIds.Clear()
-        1..10 | ForEach-Object { $selectedIds.Add($_) }
+        1..19 | ForEach-Object { $selectedIds.Add($_) }
     }
     return @{ Ids = @($selectedIds); Quit = $quit }
 }
@@ -120,7 +129,7 @@ New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 
 Write-Host ""
 Write-Host "========================================================================" -ForegroundColor Magenta
-Write-Host "   HABIT TRACKER COLLECTION v2.3 - BY DYU (4 EDITIONS: DESKTOP + MOBILE)" -ForegroundColor Yellow
+Write-Host "   HABIT TRACKER COLLECTION v2.4 - BY DYU (19 THEMES x 4 EDITIONS)" -ForegroundColor Yellow
 Write-Host "   Hoat anh dong 6 giai doan | Luu data da thang/nam | Thanh Tuu Nam"   -ForegroundColor Cyan
 Write-Host "========================================================================" -ForegroundColor Magenta
 Write-Host "  Thu muc luu file: $OutDir" -ForegroundColor Green
@@ -154,17 +163,17 @@ if ($edChoice -eq "M" -or $edChoice -eq "MOBILE") { $edChoice = "4" }
 if ($edChoice -notin @("1", "2", "3", "4")) { $edChoice = "1" }
 
 Write-Host ""
-Write-Host "  BUOC 2 - CHON MAU THOI QUEN (10 CHU DE THAM MY):" -ForegroundColor White
+Write-Host "  BUOC 2 - CHON MAU THOI QUEN (19 CHU DE THAM MY):" -ForegroundColor White
 Write-Host "  ----------------------------------------------------------------------" -ForegroundColor DarkGray
 foreach ($t in $Templates) {
     $num = ("[{0}]" -f $t.Id).PadRight(5)
     Write-Host ("  {0} {1,-38} - {2}" -f $num, $t.Stem, $t.Title) -ForegroundColor White
 }
 Write-Host "  ----------------------------------------------------------------------" -ForegroundColor DarkGray
-Write-Host "  [A]   Tai TOAN BO 10 mau (Download All)" -ForegroundColor Green
+Write-Host "  [A]   Tai TOAN BO 19 mau (Download All)" -ForegroundColor Green
 Write-Host "  [0]   Thoat" -ForegroundColor DarkGray
 Write-Host ""
-Write-Host "  Goi y: Nhap 1 so (vd: 1), nhieu so (vd: 1,3,7), dai (vd: 1-5), hoac A" -ForegroundColor Yellow
+Write-Host "  Goi y: Nhap 1 so (vd: 16), nhieu so (vd: 1,11,16), dai (vd: 11-19), hoac A" -ForegroundColor Yellow
 
 if ($env:HABIT_CHOICE) {
     $choice = $env:HABIT_CHOICE

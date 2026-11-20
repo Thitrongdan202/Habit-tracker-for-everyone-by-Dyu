@@ -7,7 +7,7 @@ import random
 
 from .core import Canvas, acell, cell, colname, rng, donut, place_chart, axis_font
 from .tracker import (C_NAME, C_D0, C_D31, C_R0, CALC_WK_COL0, R_BAND0, R_BAND1, R_DONE, R_NOT,
-                      R_PCT, R_DAY, R_EXTRA, TrackerRefs, day_col, week_days)
+                      R_PCT, R_DAY, R_EXTRA, TrackerRefs, day_col, week_days, mood_lookup_ref)
 
 
 # --------------------------------------------------------------------------- #
@@ -740,3 +740,229 @@ def add_aurora_rpg_top_card(wb, cv: Canvas, tr: TrackerRefs, total_xp_addr: str)
     cv.ws.conditional_format(rng(R_BAND1, mid + 1, R_BAND1, C_RE),
                              {"type": "data_bar", "bar_color": "#4FD1C5", "bar_solid": True,
                               "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1})
+
+
+# --------------------------------------------------------------------------- #
+#  Template 16 (Dream Home Architect): Success Notes + Failure / Lessons Notes
+# --------------------------------------------------------------------------- #
+def add_dream_house_notes_block(wb, cv: Canvas, tr: TrackerRefs):
+    """Side-by-side Emerald Success Notes + Coral Failure/Lessons Notes + Architect Milestone Card."""
+    t = cv.t
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 24)
+    for rr in range(r0 + 1, r0 + 6):
+        cv.row(rr, 22)
+
+    # Left half: SUCCESS NOTES (Emerald Green #0D9468) — Col B .. Col Q (1..16)
+    c_mid = 16
+    cv.merge(r0, C_NAME, r0, c_mid, "🏆  SUCCESS NOTES  •  ĐIỂM SÁNG & THÀNH CÔNG TRONG THÁNG",
+             bold=True, font_size=9.5, align="left", indent=1, bg_color="#0D9468", font_color="#FFFFFF")
+    success_lines = [
+        "✓  Duy trì tập thể dục buổi sáng đều đặn 5 buổi/tuần — tinh thần tỉnh táo hẳn lên!",
+        "✓  Hoàn thành kỷ luật tắt điện thoại trước 22h30 giúp ngủ sâu hơn mỗi đêm.",
+        "✓  Kiểm soát chi tiêu tốt hơn nhờ ghi chép đều đặn cuối ngày.",
+        "",
+        "",
+    ]
+    for i, txt in enumerate(success_lines):
+        cv.merge(r0 + 1 + i, C_NAME, r0 + 1 + i, c_mid, txt, font_size=9.5, align="left", indent=1,
+                 bg_color="#FFFFFF", font_color=t.ink)
+        cv.hline(r0 + 1 + i, C_NAME, c_mid, "#D1FAE5")
+    cv.box(r0, C_NAME, r0 + 5, c_mid, "#0D9468")
+
+    # Middle half: FAILURE / LESSONS NOTES (Coral Red #E63956) — Col S .. Col AG (18..32)
+    c_fail0 = c_mid + 2
+    cv.merge(r0, c_fail0, r0, C_D31, "💡  FAILURE / LESSONS NOTES  •  BÀI HỌC & ĐIỀU CẦN CẢI THIỆN",
+             bold=True, font_size=9.5, align="left", indent=1, bg_color="#E63956", font_color="#FFFFFF")
+    fail_lines = [
+        "•  Giữa tuần hơi lơ là đọc sách vì thức khuya làm việc → đặt báo thức 21h30.",
+        "•  Hạn chế đồ ăn nhanh vào cuối tuần còn khó → chuẩn bị sẵn đồ ăn nhẹ lành mạnh.",
+        "•  Chủ nhật nên lên kế hoạch tuần sớm hơn để tránh quá tải sáng thứ Hai.",
+        "",
+        "",
+    ]
+    for i, txt in enumerate(fail_lines):
+        cv.merge(r0 + 1 + i, c_fail0, r0 + 1 + i, C_D31, txt, font_size=9.5, align="left", indent=1,
+                 bg_color="#FFFFFF", font_color=t.ink)
+        cv.hline(r0 + 1 + i, c_fail0, C_D31, "#FFE4E6")
+    cv.box(r0, c_fail0, r0 + 5, C_D31, "#E63956")
+
+    # Right summary card: DREAM HOME ARCHITECT STATUS (C_R0..C_RE)
+    cv.merge(r0, C_R0, r0, C_RE, "🏡  ARCHITECT MILESTONE", bold=True, font_size=9, align="center",
+             bg_color="#F5B800", font_color="#1E293B")
+    cv.merge(r0 + 1, C_R0, r0 + 2, C_RE,
+             f'=IF({tr.s["overall"]}>=0.99,"🏛️ LUXURY VILLA",'
+             f'IF({tr.s["overall"]}>=0.75,"🏡 2-STORY HOUSE",'
+             f'IF({tr.s["overall"]}>=0.5,"🏠 COZY COTTAGE",'
+             f'IF({tr.s["overall"]}>=0.25,"🛖 WOODEN HUT",'
+             f'IF({tr.s["overall"]}>0,"⛺ CAMPING TENT","🔥 CAMPFIRE")))))',
+             bold=True, font_size=12, align="center", bg_color="#FFFFFF", font_color="#0D9468",
+             font_name=t.font_title)
+    cv.merge(r0 + 3, C_R0, r0 + 3, C_RE,
+             f'="Tiến độ xây nhà: "&TEXT({tr.s["overall"]},"0%")',
+             bold=True, font_size=9, align="center", bg_color="#ECFDF5", font_color="#065F46")
+    cv.merge(r0 + 4, C_R0, r0 + 5, C_RE,
+             f'="🏗️ Hoàn thành: "&{tr.s["tdone"]}&" / "&{tr.s["tgoal"]}&" lượt"&CHAR(10)&'
+             f'"🔥 Chuỗi bền nhất: "&{tr.s["best"]}&" ngày"',
+             font_size=8.8, align="center", text_wrap=True, bg_color="#FFFFFF", font_color=t.ink)
+    cv.box(r0, C_R0, r0 + 5, C_RE, "#F5B800")
+
+
+# --------------------------------------------------------------------------- #
+#  Template 17 (Wildflower Bloom): Daily Mood Emoji Check-in Row + Mood Counter
+# --------------------------------------------------------------------------- #
+def add_wildflower_mood_row(wb, cv: Canvas, tr: TrackerRefs, seed: int = 171):
+    """Dedicated Daily Mood Emoji dropdown row (😊 / 😐 / 😢) directly beneath habit grid."""
+    t = cv.t
+    ws = cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23)
+    cv.row(r0 + 1, 20)
+    cv.row(r0 + 2, 28)
+
+    cv.merge(r0, C_NAME, r0, C_D31,
+             "🌸  DAILY MOOD CHECK-IN  •  TÂM TRẠNG MỖI NGÀY   (Chọn ô ngày bên dưới:  😊 Vui vẻ  •  😐 Bình thường  •  😢 Mệt mỏi)",
+             bold=True, font_size=9.5, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_R0, r0, C_RE, "💛  MOOD SUMMARY", bold=True, font_size=9, align="center",
+             bg_color=t.primary, font_color=t.on_primary)
+
+    cv.put(r0 + 1, C_NAME, "Ngày trong tháng (Day 1–31)", bold=True, font_size=8.5, align="left",
+           indent=1, bg_color=t.soft, font_color=t.muted)
+    cv.put(r0 + 2, C_NAME, "Tâm trạng hôm nay (Click chọn)", bold=True, font_size=9.5,
+           align="left", indent=1, bg_color=t.card, font_color=t.ink)
+
+    rnd = random.Random(seed)
+    mood_pool = ["😊", "😊", "😊", "😊", "😐", "😐", "😢"]
+    for k in range(1, 32):
+        c = day_col(k)
+        w = (k - 1) // 7
+        dc = cell(R_DAY, c, row_abs=True)
+        cv.put(r0 + 1, c, f'=IF({dc}="","",{k})', align="center", font_size=8, bold=True,
+               bg_color=t.week_tint[w], font_color=t.ink)
+        val = rnd.choice(mood_pool) if k <= 22 else ""
+        cv.put(r0 + 2, c, val, align="center", font_size=13, bg_color=t.card, font_color=t.ink)
+
+    mood_rng = rng(r0 + 2, C_D0, r0 + 2, C_D31)
+    ws.data_validation(mood_rng, {
+        "validate": "list",
+        "source": f"={mood_lookup_ref()}",
+        "input_title": "Chọn Tâm Trạng (Daily Mood)",
+        "input_message": "😊 = Vui vẻ  |  😐 = Bình thường  |  😢 = Mệt mỏi",
+    })
+    # Subtle pastel highlight per mood emoji
+    tl = cell(r0 + 2, C_D0)
+    ws.conditional_format(mood_rng, {"type": "formula", "criteria": f'={tl}="😊"',
+                                     "format": wb.add_format({"bg_color": "#DCFCE7"})})
+    ws.conditional_format(mood_rng, {"type": "formula", "criteria": f'={tl}="😐"',
+                                     "format": wb.add_format({"bg_color": "#FEF3C7"})})
+    ws.conditional_format(mood_rng, {"type": "formula", "criteria": f'={tl}="😢"',
+                                     "format": wb.add_format({"bg_color": "#FFE4E6"})})
+
+    cv.grid(r0 + 1, C_NAME, r0 + 2, C_D31, t.line)
+    cv.box(r0, C_NAME, r0 + 2, C_D31, t.line)
+
+    # Right Mood Counter Card (3 auto COUNTIF pills side-by-side!)
+    cv.merge(r0 + 1, C_R0, r0 + 1, C_R0 + 1, "😊 Vui vẻ", bold=True, font_size=8.5, align="center",
+             bg_color="#DCFCE7", font_color="#166534")
+    cv.merge(r0 + 1, C_R0 + 2, r0 + 1, C_R0 + 3, "😐 Bình thường", bold=True, font_size=8.5, align="center",
+             bg_color="#FEF3C7", font_color="#92400E")
+    cv.put(r0 + 1, C_RE, "😢 Mệt mỏi", bold=True, font_size=8, align="center",
+           bg_color="#FFE4E6", font_color="#9F1239")
+
+    cv.merge(r0 + 2, C_R0, r0 + 2, C_R0 + 1, f'=COUNTIF({mood_rng},"😊")&" ngày"', bold=True,
+             font_size=10.5, align="center", bg_color=t.card, font_color="#166534")
+    cv.merge(r0 + 2, C_R0 + 2, r0 + 2, C_R0 + 3, f'=COUNTIF({mood_rng},"😐")&" ngày"', bold=True,
+             font_size=10.5, align="center", bg_color=t.card, font_color="#92400E")
+    cv.put(r0 + 2, C_RE, f'=COUNTIF({mood_rng},"😢")&" d"', bold=True,
+           font_size=10.5, align="center", bg_color=t.card, font_color="#9F1239")
+    cv.grid(r0 + 1, C_R0, r0 + 2, C_RE, t.line)
+    cv.box(r0, C_R0, r0 + 2, C_RE, t.line)
+
+
+# --------------------------------------------------------------------------- #
+#  Template 18 (Plum Oak Master Suite): Weekly Habits + Monthly Habits + Notes
+# --------------------------------------------------------------------------- #
+def add_plum_oak_master_panels(wb, cv: Canvas, tr: TrackerRefs):
+    """Compact side-by-side Weekly Habits (5-week grid) + Monthly Habits + Notes below tracker."""
+    t = cv.t
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23)
+    cv.row(r0 + 1, 20)
+    for i in range(6):
+        cv.row(r0 + 2 + i, 22)
+
+    # Banner across full width
+    cv.merge(r0, C_NAME, r0, C_RE,
+             "🌳  WEEKLY & MONTHLY HABITS MASTER SUITE  •  THÓI QUEN TUẦN, THÁNG & GHI CHÚ",
+             bold=True, font_size=9.5, align="center", bg_color=t.primary, font_color=t.on_primary)
+
+    # Panel 1 (Left, Col B..P = 1..15): WEEKLY HABITS (task + 5 week checkboxes W1..W5!)
+    cv.merge(r0 + 1, C_NAME, r0 + 1, 5, "WEEKLY HABITS • THÓI QUEN TUẦN", bold=True, font_size=8.5,
+             align="left", indent=1, bg_color="#B8D4F5", font_color="#1E3A5F")
+    w_chk_cols = [6, 8, 10, 12, 14]
+    for w_idx, wc in enumerate(w_chk_cols):
+        cv.merge(r0 + 1, wc, r0 + 1, wc + 1, f"W{w_idx + 1}", bold=True, font_size=8.5, align="center",
+                 bg_color=t.week_head[w_idx], font_color=t.week_on[w_idx])
+
+    weekly_rows = [
+        ("Dọn dẹp nhà cửa & bàn làm việc", [True, True, True, True, False]),
+        ("Chuẩn bị thực đơn & Meal Prep", [True, True, False, True, False]),
+        ("Đi bộ công viên / thiên nhiên 1h", [True, False, True, True, False]),
+        ("Tổng kết tài chính cá nhân", [True, True, True, False, False]),
+        ("Gọi điện / gặp gỡ gia đình", [True, True, True, True, False]),
+        ("", [False, False, False, False, False]),
+    ]
+    for i, (task, states) in enumerate(weekly_rows):
+        rr = r0 + 2 + i
+        cv.merge(rr, C_NAME, rr, 5, task, bold=bool(task), font_size=9, align="left", indent=1,
+                 bg_color=t.card, font_color=t.ink)
+        for w_idx, wc in enumerate(w_chk_cols):
+            # Place checkbox in unmerged left cell `wc`, visual padding in `wc+1`
+            cv.checkbox(rr, wc, states[w_idx], align="center", font_color=t.week_check[w_idx], bg_color=t.card)
+            cv.put(rr, wc + 1, "", bg_color=t.card)
+    cv.grid(r0 + 1, C_NAME, r0 + 7, 15, t.line)
+    cv.box(r0 + 1, C_NAME, r0 + 7, 15, t.line)
+
+    # Panel 2 (Middle, Col R..AC = 17..28): MONTHLY HABITS (task + DONE checkbox!)
+    c_m0, c_m1 = 17, 28
+    cv.merge(r0 + 1, c_m0, r0 + 1, c_m1 - 1, "MONTHLY HABITS • MỤC TIÊU THÁNG", bold=True, font_size=8.5,
+             align="left", indent=1, bg_color="#C9E4C5", font_color="#1E4620")
+    cv.put(r0 + 1, c_m1, "DONE", bold=True, font_size=8, align="center",
+           bg_color="#C9E4C5", font_color="#1E4620")
+    monthly_rows = [
+        ("Hoàn thành ít nhất 1 cuốn sách phát triển bản thân", True),
+        ("Dọn gọn tủ đồ & tối giản không gian sống", True),
+        ("Lập ngân sách & trích quỹ tiết kiệm đầu tháng", True),
+        ("Chăm sóc sức khỏe / khám định kỳ", False),
+        ("Sao lưu ảnh & tài liệu quan trọng", True),
+        ("", False),
+    ]
+    for i, (task, done) in enumerate(monthly_rows):
+        rr = r0 + 2 + i
+        cv.merge(rr, c_m0, rr, c_m1 - 1, task, bold=bool(task), font_size=9, align="left", indent=1,
+                 bg_color=t.card, font_color=t.ink)
+        cv.checkbox(rr, c_m1, done, align="center", font_color=t.primary, bg_color=t.card)
+    cv.grid(r0 + 1, c_m0, r0 + 7, c_m1, t.line)
+    cv.box(r0 + 1, c_m0, r0 + 7, c_m1, t.line)
+
+    # Panel 3 (Right, Col AE..C_RE = 30..C_RE): MONTHLY NOTES & REFLECTION
+    c_n0 = 30
+    cv.merge(r0 + 1, c_n0, r0 + 1, C_RE, "📝  NOTES • GHI CHÚ & TỔNG KẾT THÁNG", bold=True, font_size=8.5,
+             align="left", indent=1, bg_color="#A66E8A", font_color="#FFFFFF")
+    notes = [
+        "• Giữ vững chuỗi thói quen sáng để cây Sồi ra hoa đỏ cuối tháng!",
+        "• Chủ nhật cuối tháng tổng kết ngân sách & kế hoạch tháng mới.",
+        "• Dành 1 buổi cuối tuần nghỉ ngơi trọn vẹn không mạng xã hội.",
+        "",
+        "",
+        "",
+    ]
+    for i, txt in enumerate(notes):
+        rr = r0 + 2 + i
+        cv.merge(rr, c_n0, rr, C_RE, txt, font_size=9, align="left", indent=1,
+                 bg_color=t.card, font_color=t.ink)
+        cv.hline(rr, c_n0, C_RE, t.line)
+    cv.box(r0 + 1, c_n0, r0 + 7, C_RE, t.line)

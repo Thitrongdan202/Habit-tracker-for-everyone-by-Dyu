@@ -112,6 +112,9 @@ def init_calc_sheet(wb, active_year: int = 2026, last_loaded_key: str = "2026-10
     for idx, yr in enumerate(range(2024, 2041)):
         ws_calc.write(idx, CALC_YEAR_COL, yr)
     ws_calc.write(0, CALC_CHK_COL, CHECK_ALT)
+    # Daily Mood lookup list (for Template 17 Wildflower Mood dropdown) -> _Calc!$AL$3:$AL$5
+    for idx_m, emo in enumerate(("😊", "😐", "😢")):
+        ws_calc.write(2 + idx_m, CALC_CHK_COL, emo)
 
     state_init = [
         ("ActiveTrackingYear", active_year),
@@ -142,6 +145,10 @@ def year_lookup_ref() -> str:
 
 def chk_lookup_ref() -> str:
     return f"{qs(CALC_SHEET)}!{acell(0, CALC_CHK_COL)}"
+
+
+def mood_lookup_ref() -> str:
+    return f"{qs(CALC_SHEET)}!{rng(2, CALC_CHK_COL, 4, CALC_CHK_COL)}"
 
 
 @dataclass
@@ -381,32 +388,57 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
     # ------------------------------------------------------------------ daily progress chart
     day_row = rng(R_DAY, C_D0, R_DAY, C_D31)
     pct_row = rng(R_PCT, C_D0, R_PCT, C_D31)
-    ch = wb.add_chart({"type": "area"})
-    ch.add_series({
-        "name": "% Completed",
-        "categories": f"={q}!{day_row}",
-        "values": f"={q}!{pct_row}",
-        "fill": {"color": t.chart_fill, "transparency": 45},
-        "border": {"none": True},
-    })
-    ln = wb.add_chart({"type": "line"})
-    line_series = {"name": "Trend", "categories": f"={q}!{day_row}", "values": f"={q}!{pct_row}",
-                   "line": {"color": t.chart_line, "width": 1.75}}
-    if t.chart_markers:
-        line_series["marker"] = {"type": "circle", "size": 5, "fill": {"color": t.chart_line},
-                                 "border": {"color": "#FFFFFF", "width": 0.75}}
+    if t.chart_kind == "column":
+        ch = wb.add_chart({"type": "column"})
+        ch.add_series({
+            "name": "% Completed",
+            "categories": f"={q}!{day_row}",
+            "values": f"={q}!{pct_row}",
+            "fill": {"color": t.chart_line},
+            "border": {"none": True},
+            "gap": 45,
+        })
+    elif t.chart_kind == "line":
+        ch = wb.add_chart({"type": "line"})
+        ch.add_series({
+            "name": "% Completed",
+            "categories": f"={q}!{day_row}",
+            "values": f"={q}!{pct_row}",
+            "line": {"color": t.chart_line, "width": 2.0},
+            "smooth": True,
+            "marker": {"type": "circle", "size": 5, "fill": {"color": t.chart_line},
+                       "border": {"color": "#FFFFFF", "width": 0.9}},
+        })
     else:
-        line_series["marker"] = {"type": "none"}
-    ln.add_series(line_series)
-    ch.combine(ln)
+        ch = wb.add_chart({"type": "area"})
+        ch.add_series({
+            "name": "% Completed",
+            "categories": f"={q}!{day_row}",
+            "values": f"={q}!{pct_row}",
+            "fill": {"color": t.chart_fill, "transparency": 45},
+            "border": {"none": True},
+        })
+        ln = wb.add_chart({"type": "line"})
+        line_series = {"name": "Trend", "categories": f"={q}!{day_row}", "values": f"={q}!{pct_row}",
+                       "line": {"color": t.chart_line, "width": 1.75}}
+        if t.chart_markers:
+            line_series["marker"] = {"type": "circle", "size": 5, "fill": {"color": t.chart_line},
+                                     "border": {"color": "#FFFFFF", "width": 0.75}}
+        else:
+            line_series["marker"] = {"type": "none"}
+        ln.add_series(line_series)
+        ch.combine(ln)
     ch.set_title({"name": t.chart_title, "name_font": {"name": t.font, "size": 9, "bold": True,
                                                        "color": t.ink}, "overlay": False})
     ch.set_y_axis({"min": 0, "max": 1, "major_unit": 0.25, "num_format": "0%",
                    "num_font": axis_font(t), "line": {"none": True},
                    "major_gridlines": {"visible": True, "line": {"color": t.line, "width": 0.5,
                                                                   "dash_type": "dash"}}})
-    ch.set_x_axis({"num_font": axis_font(t, 7.5), "line": {"color": t.line},
-                   "major_tick_mark": "none", "minor_tick_mark": "none", "position_axis": "on_tick"})
+    x_ax = {"num_font": axis_font(t, 7.5), "line": {"color": t.line},
+            "major_tick_mark": "none", "minor_tick_mark": "none"}
+    if t.chart_kind != "column":
+        x_ax["position_axis"] = "on_tick"
+    ch.set_x_axis(x_ax)
     ch.set_legend({"none": True})
     ch.set_chartarea({"border": {"color": t.line, "width": 0.75}, "fill": {"color": t.card}})
     ch.set_plotarea({"layout": {"x": 0.045, "y": 0.2, "width": 0.94, "height": 0.62}})
@@ -475,7 +507,8 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
     cv.box(R_IMG, C_R0, R_PCT, C_RE, t.line, fill=t.card)
     split = C_R0 + 2
     cv.merge(R_IMG, C_R0, R_IMG, split, spec.grown_label, bold=True, font_size=8.5, align="center",
-             text_wrap=True, bg_color=t.card, font_color=t.ink)
+             text_wrap=True, bg_color=t.hero_header_bg or t.card,
+             font_color=t.hero_header_fg or t.ink)
     hero_box = (R_IMG, split + 1, R_IMG, C_RE)
     if spec.universal:
         # COM pastes DYNAMIC Linked Picture bound to Anim_MonthlyHero / Anim_Mnn_Hero here!
@@ -624,7 +657,7 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
         days = week_days(w)
         a = rng(R_H0, day_col(days[0]), R_H1, day_col(days[-1]), absolute=False)
         tl = cell(R_H0, day_col(days[0]))
-        chk_bg = checked_pastel_bg(t.week_head[w], t.week_tint[w])
+        chk_bg = t.check_fill_override or checked_pastel_bg(t.week_head[w], t.week_tint[w])
         cf_props = {"bg_color": chk_bg, "font_color": t.week_check[w]}
         if spec.gsheets:
             cf_props["bold"] = True
@@ -634,9 +667,19 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
         ws.conditional_format(rng(r, C_D0, r, C_D31, absolute=False),
                               {"type": "formula", "criteria": f'={colname(C_D0)}${R_DAY + 1}=""',
                                "format": wb.add_format({"bg_color": t.page}), "stop_if_true": True})
-    ws.conditional_format(pct_row, {"type": "3_color_scale", "min_type": "num", "min_value": 0,
-                                    "mid_type": "num", "mid_value": 0.5, "max_type": "num", "max_value": 1,
-                                    "min_color": "#FFFFFF", "mid_color": t.week_tint[0], "max_color": t.bar})
+    if t.pct_traffic_light:
+        # Traffic-Light % Completed Heatmap (Ref 15 Mocha Sunflower): >=75% Emerald, 50-74% Amber, <50% Coral
+        pct_tl = cell(R_PCT, C_D0)
+        ws.conditional_format(pct_row, {"type": "formula", "criteria": f'=AND({pct_tl}<>"",{pct_tl}>=0.75)',
+                                        "format": wb.add_format({"bg_color": "#A7F3D0", "font_color": "#065F46", "bold": True})})
+        ws.conditional_format(pct_row, {"type": "formula", "criteria": f'=AND({pct_tl}<>"",{pct_tl}>=0.5,{pct_tl}<0.75)',
+                                        "format": wb.add_format({"bg_color": "#FDE68A", "font_color": "#92400E", "bold": True})})
+        ws.conditional_format(pct_row, {"type": "formula", "criteria": f'=AND({pct_tl}<>"",{pct_tl}>0,{pct_tl}<0.5)',
+                                        "format": wb.add_format({"bg_color": "#FECACA", "font_color": "#991B1B", "bold": True})})
+    else:
+        ws.conditional_format(pct_row, {"type": "3_color_scale", "min_type": "num", "min_value": 0,
+                                        "mid_type": "num", "mid_value": 0.5, "max_type": "num", "max_value": 1,
+                                        "min_color": "#FFFFFF", "mid_color": t.week_tint[0], "max_color": t.bar})
     prog = rng(R_H0, rc["progress"], R_H1, rc["progress"])
     ws.conditional_format(prog, {"type": "data_bar", "bar_color": t.bar, "bar_solid": True,
                                  "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1,
