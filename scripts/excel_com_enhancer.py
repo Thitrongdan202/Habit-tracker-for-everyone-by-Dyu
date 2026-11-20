@@ -364,6 +364,10 @@ def derive_offline_from_pro(xl, only: list[str] | None = None):
             ws_g.Range("E20").Value = (
                 "⚡  Cần lưu lịch sử tự động 12 tháng × nhiều năm trên 1 tab? Chuyển sang dùng bản Pro (.xlsm) đã đi kèm sẵn!"
             )
+            # Ensure generous vertical padding on Offline instruction rows (zero clipping!)
+            for r_inst in (13, 14, 15, 18, 19, 20):
+                if ws_g.Rows(r_inst).RowHeight < 66:
+                    ws_g.Rows(r_inst).RowHeight = 66
             # Update tracker cue line B7
             ws_tr = wb.Worksheets(tdef.tracker_name)
             ws_tr.Range("B7").Value = "✓ Đổi Tháng/Năm động • Bản Offline không Macro"

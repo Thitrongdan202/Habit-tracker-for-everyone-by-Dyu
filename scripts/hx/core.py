@@ -35,10 +35,10 @@ class Theme:
     name: str                    # e.g. "SUNFLOWER GARDEN"
     emoji: str
     tagline_vi: str
-    # typography
+    # typography — strictly unified ONE clean font family (`Segoe UI`) across 100% of cells & charts!
     font: str = "Segoe UI"
-    font_title: str = "Segoe UI Semibold"
-    font_month: str = "Segoe Script"
+    font_title: str = "Segoe UI"
+    font_month: str = "Segoe UI"
     # palette
     page: str = "#FFFDFB"        # sheet background (gutters)
     card: str = "#FFFFFF"        # card background

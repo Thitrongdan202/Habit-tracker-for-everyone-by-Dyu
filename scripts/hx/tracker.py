@@ -168,9 +168,9 @@ class TrackerSpec:
     extra_cols: list = field(default_factory=list)
     top_right: str = "donut"           # "donut" | "custom"
     day_width: float = 5.6
-    name_width: float = 35
+    name_width: float = 36.5
     img_row_height: float = 58
-    habit_row_height: float = 23
+    habit_row_height: float = 24
     universal: bool = True             # True = Offline/Pro Linked Pictures + Form Checkboxes
     gsheets: bool = False              # True = Google Sheets =IMAGE() + clean styled boolean cells
     pro_mode: bool = False             # True = Pro .xlsm with VBA auto-save
@@ -443,8 +443,9 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
     cv.box(R_IMG, C_NAME, R_PCT, C_NAME, t.line, fill=t.card)
     cv.put(R_IMG, C_NAME, f"{t.emoji}  {spec.garden_label}", bold=True, font_size=11, align="center",
            bg_color=t.card, font_color=t.primary_dark, font_name=t.font_title)
-    for r, lab in ((R_DONE, "COMPLETED  ✓"), (R_NOT, "NOT COMPLETED"), (R_PCT, "% COMPLETED")):
-        cv.put(r, C_NAME, lab, align="right", font_size=8.5, bold=True, font_color=t.ink,
+    for r, lab, is_b in ((R_DONE, "COMPLETED  ✓", True), (R_NOT, "NOT COMPLETED", False), (R_PCT, "% COMPLETED", True)):
+        cv.put(r, C_NAME, lab, align="right", font_size=8.5, bold=is_b,
+               font_color=t.ink if is_b else t.muted,
                bg_color=t.card, indent=1, top=1 if r == R_DONE else None, top_color=t.line)
     cv.hline(R_IMG, C_D0, C_D31, t.line, where="bottom")
 
@@ -503,8 +504,8 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
         for k in days:
             c = day_col(k)
             cv.put(R_WD, c, f'=IF({k}<={S["dim"]},CHOOSE(WEEKDAY(DATE({S["y"]},{S["m"]},{k}),2),{wd_list}),"")',
-                   align="center", font_size=7.5, bg_color=t.week_tint[w], font_color=t.ink)
-            cv.put(R_DAY, c, f'=IF({k}<={S["dim"]},{k},"")', align="center", font_size=8.5, bold=True,
+                   align="center", font_size=8, bg_color=t.week_tint[w], font_color=t.muted)
+            cv.put(R_DAY, c, f'=IF({k}<={S["dim"]},{k},"")', align="center", font_size=8.5, bold=False,
                    bg_color=t.week_tint[w], font_color=t.ink)
         cv.vline(c2, R_WEEK, R_TOT, t.line, where="right")
 
@@ -533,8 +534,8 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
         X = r + 1
         r_calc = rb + r
         X_calc = r_calc + 1
-        cv.put(r, C_NAME, h.name if h else "", align="left", indent=1, bg_color=t.card,
-               font_color=t.ink, font_size=9.5)
+        cv.put(r, C_NAME, h.name if h else "", bold=True, align="left", indent=1, bg_color=t.card,
+               font_color=t.ink, font_size=10)
         ticks = full_ticks_20[i]
         for k in range(1, 32):
             c = day_col(k)
