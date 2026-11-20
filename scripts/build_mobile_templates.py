@@ -38,7 +38,8 @@ OUT_DIR = ROOT / "templates" / "mobile_portrait_sheets"
 ASSETS_DIR = ROOT / "assets"
 PREVIEWS_DIR = ROOT / "previews"
 
-PREVIEW_KEYS = {"01_sunflower", "02_cactus", "07_sakura", "10_aurora"}
+PREVIEW_KEYS = {"01_sunflower", "02_cactus", "07_sakura", "10_aurora",
+                "11_velvet_rose", "16_dream_house", "18_plum_oak"}
 
 
 def _grab_png(ws, rng_str: str, out_path: Path, retries: int = 5):
@@ -185,12 +186,22 @@ def main():
                 # Ensure gridlines off on all 3 visible tabs & land on `📱 Tuần Này`!
                 for nm in (MOBILE_GUIDE_SHEET, MOBILE_GOALS_SHEET, MOBILE_WEEK_SHEET):
                     ws = wb.Worksheets(nm)
-                    ws.Activate()
-                    xl.ActiveWindow.DisplayGridlines = False
-                    ws.Range("A1").Select()
+                    for _att in range(6):
+                        try:
+                            ws.Activate()
+                            xl.ActiveWindow.DisplayGridlines = False
+                            ws.Range("A1").Select()
+                            break
+                        except Exception:
+                            time.sleep(0.25)
 
-                xl.CalculateFullRebuild()
-                wb.Save()
+                for _att in range(6):
+                    try:
+                        xl.CalculateFullRebuild()
+                        wb.Save()
+                        break
+                    except Exception:
+                        time.sleep(0.25)
             finally:
                 wb.Close(SaveChanges=False)
 

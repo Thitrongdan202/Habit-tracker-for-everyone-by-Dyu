@@ -1,9 +1,9 @@
-# 🌸 Habit Tracker Collection for Everyone — by Dyu (v2.3)
+# 🌸 Habit Tracker Collection for Everyone — by Dyu (v2.4 — 19 Themes × 4 Editions)
 
-> **Bộ sưu tập 10 mẫu Habit Tracker thẩm mỹ chuẩn Digital Planner — Đủ 4 phiên bản cho Máy tính & Điện thoại (iOS/Android)!**
+> **Bộ sưu tập 19 mẫu Habit Tracker thẩm mỹ chuẩn Digital Planner — Đủ 4 phiên bản cho Máy tính & Điện thoại (76 file hoàn chỉnh)!**
 > **Hoạt ảnh động 6 giai đoạn theo % thực tế • Checkbox màu Pastel đặc trưng từng tuần • Lưu dữ liệu đa Tuần / Tháng / Năm siêu mượt • Hệ thống Huy hiệu Thành Tựu Năm • 100% Offline trên Excel Desktop & Khổ dọc 0 cuộn ngang trên Điện thoại!**
 
-![Version 2.3](https://img.shields.io/badge/Version-2.3_Desktop_%2B_Mobile-B57A7A?style=for-the-badge)
+![Version 2.4](https://img.shields.io/badge/Version-2.4_19_Themes_x_4_Editions-B57A7A?style=for-the-badge)
 ![Pro Interactive](https://img.shields.io/badge/Pro_Interactive-.XLSM_Auto--Save-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white)
 ![Zero Macro Offline](https://img.shields.io/badge/Offline_No--Macro-.XLSX_Excel_2016--365-4E9F76?style=for-the-badge)
 ![Mobile Portrait](https://img.shields.io/badge/Mobile_Portrait-iOS_%26_Android_0_Scroll-9E9AD1?style=for-the-badge)
@@ -13,7 +13,7 @@
 
 ## ⚡ Cài Đặt & Tải Nhanh Bằng 1 Dòng Lệnh (Interactive Installer)
 
-Chạy **1 dòng lệnh duy nhất** — trình cài đặt sẽ cho bạn chọn **Phiên bản** (`[1] Pro .xlsm`, `[2] Excel Offline Không Macro .xlsx`, `[3] Google Sheets Desktop`, **`[4] / [M] Điện Thoại Khổ Dọc Mobile Portrait`**) và chọn **Mẫu yêu thích** (`1`, `1,3,7`, `1-5`, hoặc `A` tải toàn bộ 10 mẫu) vào thư mục `template/`:
+Chạy **1 dòng lệnh duy nhất** — trình cài đặt sẽ cho bạn chọn **Phiên bản** (`[1] Pro .xlsm`, `[2] Excel Offline Không Macro .xlsx`, `[3] Google Sheets Desktop`, **`[4] / [M] Điện Thoại Khổ Dọc Mobile Portrait`**) và chọn **Mẫu yêu thích** (`16`, `1,11,16`, `11-19`, hoặc `A` tải toàn bộ **19 mẫu**) vào thư mục `template/`:
 
 ### 🪟 Windows (PowerShell)
 ```powershell
@@ -50,20 +50,25 @@ curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-ev
 <table>
   <tr>
     <td align="center"><img src="previews/mobile_01_sunflower.png" width="210" alt="Mobile Sunflower"/><br/><sub><b>🌻 Sunflower Portrait</b></sub></td>
-    <td align="center"><img src="previews/mobile_02_cactus.png" width="210" alt="Mobile Cactus"/><br/><sub><b>🌵 Cactus Pastel Portrait</b></sub></td>
-    <td align="center"><img src="previews/mobile_07_sakura.png" width="210" alt="Mobile Sakura"/><br/><sub><b>🌸 Sakura Zen Portrait</b></sub></td>
-    <td align="center"><img src="previews/mobile_10_aurora.png" width="210" alt="Mobile Aurora"/><br/><sub><b>🌌 Aurora RPG Portrait</b></sub></td>
+    <td align="center"><img src="previews/mobile_11_velvet_rose.png" width="210" alt="Mobile Velvet Rose"/><br/><sub><b>🌹 Velvet Rose Portrait</b></sub></td>
+    <td align="center"><img src="previews/mobile_16_dream_house.png" width="210" alt="Mobile Dream House"/><br/><sub><b>🏡 Dream Home Portrait</b></sub></td>
+    <td align="center"><img src="previews/mobile_18_plum_oak.png" width="210" alt="Mobile Plum Oak"/><br/><sub><b>🌳 Plum Oak Portrait</b></sub></td>
   </tr>
 </table>
 
 <details>
-<summary>📸 Xem thêm màn hình Mobile: Tiến độ & Biểu đồ tuần, Mục Tiêu & Thành Tựu, Hướng Dẫn khổ dọc</summary>
+<summary>📸 Xem thêm màn hình Mobile: Cactus, Sakura, Aurora, Tiến độ & Biểu đồ tuần, Mục Tiêu & Hướng Dẫn</summary>
 
 <table>
   <tr>
-    <td align="center"><img src="previews/mobile_01_sunflower_bottom.png" width="260" alt="Mobile Bottom Cards"/><br/><sub><b>📊 Tiến độ & Biểu đồ Tuần</b></sub></td>
-    <td align="center"><img src="previews/mobile_01_goals.png" width="260" alt="Mobile Goals"/><br/><sub><b>🎯 Mục Tiêu & 6 Huy Hiệu</b></sub></td>
-    <td align="center"><img src="previews/mobile_01_guide.png" width="260" alt="Mobile Guide"/><br/><sub><b>📖 Hướng Dẫn Mobile (2×3)</b></sub></td>
+    <td align="center"><img src="previews/mobile_02_cactus.png" width="210" alt="Mobile Cactus"/><br/><sub><b>🌵 Cactus Pastel</b></sub></td>
+    <td align="center"><img src="previews/mobile_07_sakura.png" width="210" alt="Mobile Sakura"/><br/><sub><b>🌸 Sakura Zen</b></sub></td>
+    <td align="center"><img src="previews/mobile_10_aurora.png" width="210" alt="Mobile Aurora"/><br/><sub><b>🌌 Aurora RPG</b></sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="previews/mobile_01_sunflower_bottom.png" width="210" alt="Mobile Bottom Cards"/><br/><sub><b>📊 Tiến độ & Biểu đồ Tuần</b></sub></td>
+    <td align="center"><img src="previews/mobile_01_goals.png" width="210" alt="Mobile Goals"/><br/><sub><b>🎯 Mục Tiêu & 6 Huy Hiệu</b></sub></td>
+    <td align="center"><img src="previews/mobile_01_guide.png" width="210" alt="Mobile Guide"/><br/><sub><b>📖 Hướng Dẫn Mobile (2×3)</b></sub></td>
   </tr>
 </table>
 
@@ -92,7 +97,7 @@ curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-ev
 
 ---
 
-## 📋 Bảng Tải Trực Tiếp 10 Mẫu Template (Đủ 4 Phiên Bản)
+## 📋 Bảng Tải Trực Tiếp 19 Mẫu Template (Đủ 4 Phiên Bản — 76 Tệp)
 
 | # | Tên Mẫu & Chủ Đề | ⚡ Pro Interactive | ✨ Excel Offline | ☁️ GSheets Desktop | 📱 Mobile Portrait |
 |---|---|---|---|---|---|
@@ -106,6 +111,15 @@ curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-ev
 | **08** | 🪸 **Ocean Coral Fitness & Energy** | [`_Pro.xlsm`](templates/pro_macro/08_Ocean_Coral_Fitness_Energy_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/08_Ocean_Coral_Fitness_Energy.xlsx) | [Desktop](templates/google_sheets_edition/08_Ocean_Coral_Fitness_Energy.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/08_Ocean_Coral_Fitness_Energy_Mobile.xlsx) |
 | **09** | 🍵 **Matcha Cafe Daily Routine** | [`_Pro.xlsm`](templates/pro_macro/09_Matcha_Cafe_Daily_Routine_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/09_Matcha_Cafe_Daily_Routine.xlsx) | [Desktop](templates/google_sheets_edition/09_Matcha_Cafe_Daily_Routine.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/09_Matcha_Cafe_Daily_Routine_Mobile.xlsx) |
 | **10** | 🌌 **Aurora Glow RPG Quest Tracker** | [`_Pro.xlsm`](templates/pro_macro/10_Aurora_Glow_RPG_Quest_Tracker_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/10_Aurora_Glow_RPG_Quest_Tracker.xlsx) | [Desktop](templates/google_sheets_edition/10_Aurora_Glow_RPG_Quest_Tracker.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/10_Aurora_Glow_RPG_Quest_Tracker_Mobile.xlsx) |
+| **11** | 🌹 **Velvet Rose Garden** *(Mới!)* | [`_Pro.xlsm`](templates/pro_macro/11_Velvet_Rose_Garden_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/11_Velvet_Rose_Garden.xlsx) | [Desktop](templates/google_sheets_edition/11_Velvet_Rose_Garden.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/11_Velvet_Rose_Garden_Mobile.xlsx) |
+| **12** | 🌷 **Blue Tulip Mint Breeze** *(Mới!)* | [`_Pro.xlsm`](templates/pro_macro/12_Blue_Tulip_Mint_Breeze_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/12_Blue_Tulip_Mint_Breeze.xlsx) | [Desktop](templates/google_sheets_edition/12_Blue_Tulip_Mint_Breeze.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/12_Blue_Tulip_Mint_Breeze_Mobile.xlsx) |
+| **13** | 🌸 **Buttercream Blossom Bars** *(Mới!)* | [`_Pro.xlsm`](templates/pro_macro/13_Buttercream_Blossom_Bars_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/13_Buttercream_Blossom_Bars.xlsx) | [Desktop](templates/google_sheets_edition/13_Buttercream_Blossom_Bars.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/13_Buttercream_Blossom_Bars_Mobile.xlsx) |
+| **14** | 🌳 **Emerald Forest Gold Stars** *(Mới!)* | [`_Pro.xlsm`](templates/pro_macro/14_Emerald_Forest_Gold_Stars_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/14_Emerald_Forest_Gold_Stars.xlsx) | [Desktop](templates/google_sheets_edition/14_Emerald_Forest_Gold_Stars.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/14_Emerald_Forest_Gold_Stars_Mobile.xlsx) |
+| **15** | 🌻 **Mocha Rose Terracotta Sunflower** *(Mới!)* | [`_Pro.xlsm`](templates/pro_macro/15_Mocha_Rose_Terracotta_Sunflower_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/15_Mocha_Rose_Terracotta_Sunflower.xlsx) | [Desktop](templates/google_sheets_edition/15_Mocha_Rose_Terracotta_Sunflower.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/15_Mocha_Rose_Terracotta_Sunflower_Mobile.xlsx) |
+| **16** | 🏡 **Dream Home Architect Builder** *(Mới!)* | [`_Pro.xlsm`](templates/pro_macro/16_Dream_Home_Architect_Builder_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/16_Dream_Home_Architect_Builder.xlsx) | [Desktop](templates/google_sheets_edition/16_Dream_Home_Architect_Builder.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/16_Dream_Home_Architect_Builder_Mobile.xlsx) |
+| **17** | 🌺 **Wildflower Bloom & Daily Mood** *(Mới!)* | [`_Pro.xlsm`](templates/pro_macro/17_Wildflower_Bloom_Daily_Mood_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/17_Wildflower_Bloom_Daily_Mood.xlsx) | [Desktop](templates/google_sheets_edition/17_Wildflower_Bloom_Daily_Mood.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/17_Wildflower_Bloom_Daily_Mood_Mobile.xlsx) |
+| **18** | 🌳 **Plum Oak Master Suite** *(Mới!)* | [`_Pro.xlsm`](templates/pro_macro/18_Plum_Oak_Master_Suite_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/18_Plum_Oak_Master_Suite.xlsx) | [Desktop](templates/google_sheets_edition/18_Plum_Oak_Master_Suite.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/18_Plum_Oak_Master_Suite_Mobile.xlsx) |
+| **19** | 🌻 **Meadow Emerald Sunflower** *(Mới!)* | [`_Pro.xlsm`](templates/pro_macro/19_Meadow_Emerald_Sunflower_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/19_Meadow_Emerald_Sunflower.xlsx) | [Desktop](templates/google_sheets_edition/19_Meadow_Emerald_Sunflower.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/19_Meadow_Emerald_Sunflower_Mobile.xlsx) |
 
 ---
 
@@ -235,19 +249,131 @@ curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-ev
 
 ---
 
+### 11. 🌹 Velvet Rose Garden *(Mới v2.4!)*
+![Velvet Rose Garden](previews/11_velvet_rose_tracker.png)
+<details>
+<summary>📸 Xem thêm: Yearly Goals & Tổng Kết Thành Tựu Năm (Velvet Rose)</summary>
+
+![Velvet Rose Yearly Goals](previews/11_velvet_rose_yearly_goals.png)
+![Velvet Rose Annual Achievements](previews/11_velvet_rose_annual_achievements.png)
+
+</details>
+
+---
+
+### 12. 🌷 Blue Tulip Mint Breeze *(Mới v2.4!)*
+![Blue Tulip Mint Breeze](previews/12_blue_tulip_tracker.png)
+<details>
+<summary>📸 Xem thêm: Yearly Goals & Tổng Kết Thành Tựu Năm (Blue Tulip)</summary>
+
+![Blue Tulip Yearly Goals](previews/12_blue_tulip_yearly_goals.png)
+![Blue Tulip Annual Achievements](previews/12_blue_tulip_annual_achievements.png)
+
+</details>
+
+---
+
+### 13. 🌸 Buttercream Blossom Bars *(Mới v2.4!)*
+![Buttercream Blossom Bars](previews/13_buttercream_blossom_tracker.png)
+<details>
+<summary>📸 Xem thêm: Yearly Goals & Tổng Kết Thành Tựu Năm (Buttercream Blossom)</summary>
+
+![Buttercream Yearly Goals](previews/13_buttercream_blossom_yearly_goals.png)
+![Buttercream Annual Achievements](previews/13_buttercream_blossom_annual_achievements.png)
+
+</details>
+
+---
+
+### 14. 🌳 Emerald Forest Gold Stars *(Mới v2.4!)*
+![Emerald Forest Gold Stars](previews/14_emerald_forest_tracker.png)
+<details>
+<summary>📸 Xem thêm: Yearly Goals & Tổng Kết Thành Tựu Năm (Emerald Forest)</summary>
+
+![Emerald Forest Yearly Goals](previews/14_emerald_forest_yearly_goals.png)
+![Emerald Forest Annual Achievements](previews/14_emerald_forest_annual_achievements.png)
+
+</details>
+
+---
+
+### 15. 🌻 Mocha Rose Terracotta Sunflower *(Mới v2.4!)*
+![Mocha Rose Terracotta Sunflower](previews/15_mocha_sunflower_tracker.png)
+<details>
+<summary>📸 Xem thêm: Yearly Goals & Tổng Kết Thành Tựu Năm (Mocha Sunflower)</summary>
+
+![Mocha Sunflower Yearly Goals](previews/15_mocha_sunflower_yearly_goals.png)
+![Mocha Sunflower Annual Achievements](previews/15_mocha_sunflower_annual_achievements.png)
+
+</details>
+
+---
+
+### 16. 🏡 Dream Home Architect Builder *(Mới v2.4!)*
+![Dream Home Architect Builder](previews/16_dream_house_tracker.png)
+<details>
+<summary>📸 Xem thêm: Yearly Goals & Tổng Kết Thành Tựu Năm (Dream Home)</summary>
+
+![Dream Home Yearly Goals](previews/16_dream_house_yearly_goals.png)
+![Dream Home Annual Achievements](previews/16_dream_house_annual_achievements.png)
+
+</details>
+
+---
+
+### 17. 🌺 Wildflower Bloom & Daily Mood *(Mới v2.4!)*
+![Wildflower Bloom & Daily Mood](previews/17_wildflower_mood_tracker.png)
+<details>
+<summary>📸 Xem thêm: Yearly Goals & Tổng Kết Thành Tựu Năm (Wildflower Mood)</summary>
+
+![Wildflower Yearly Goals](previews/17_wildflower_mood_yearly_goals.png)
+![Wildflower Annual Achievements](previews/17_wildflower_mood_annual_achievements.png)
+
+</details>
+
+---
+
+### 18. 🌳 Plum Oak Master Suite *(Mới v2.4!)*
+![Plum Oak Master Suite](previews/18_plum_oak_tracker.png)
+<details>
+<summary>📸 Xem thêm: Yearly Goals & Tổng Kết Thành Tựu Năm (Plum Oak)</summary>
+
+![Plum Oak Yearly Goals](previews/18_plum_oak_yearly_goals.png)
+![Plum Oak Annual Achievements](previews/18_plum_oak_annual_achievements.png)
+
+</details>
+
+---
+
+### 19. 🌻 Meadow Emerald Sunflower *(Mới v2.4!)*
+![Meadow Emerald Sunflower](previews/19_meadow_sunflower_tracker.png)
+<details>
+<summary>📸 Xem thêm: Yearly Goals & Tổng Kết Thành Tựu Năm (Meadow Sunflower)</summary>
+
+![Meadow Sunflower Yearly Goals](previews/19_meadow_sunflower_yearly_goals.png)
+![Meadow Sunflower Annual Achievements](previews/19_meadow_sunflower_annual_achievements.png)
+
+</details>
+
+---
+
 ## ☁️ Kích Hoạt Google Sheets Trong 10 Giây (1-Click Setup)
 
-1. Tải mẫu từ [`templates/google_sheets_edition/`](templates/google_sheets_edition/) lên Google Drive → **Mở bằng Google Sheets** → **Tệp → Lưu dưới dạng Google Trang tính**.
+1. Tải mẫu từ [`templates/google_sheets_edition/`](templates/google_sheets_edition/) hoặc [`templates/mobile_portrait_sheets/`](templates/mobile_portrait_sheets/) lên Google Drive → **Mở bằng Google Sheets** → **Tệp → Lưu dưới dạng Google Trang tính**.
 2. Chọn **Tiện ích mở rộng (Extensions) → Apps Script** → dán toàn bộ code trong [`scripts/google_sheets_1click_setup.gs`](scripts/google_sheets_1click_setup.gs) → **Lưu (`Ctrl+S`)** → bấm **Run `setupHabitTracker`**.
-3. Toàn bộ ô `TRUE/FALSE` lập tức trở thành **Checkbox màu Pastel** + tự động lưu/nạp dữ liệu 12 tháng vào `_Database` mỗi khi đổi Tháng (`B3`) hoặc Năm (`B5`)!
+3. Toàn bộ ô `TRUE/FALSE` lập tức trở thành **Checkbox màu Pastel** + tự động lưu/nạp dữ liệu đa Tuần/Tháng/Năm vào `_Database` mỗi khi đổi Tháng (`B3`), Tuần (`F5`), hoặc Năm (`B5`)!
 
 Xem hướng dẫn chi tiết tại [`docs/GOOGLE_SHEETS_GUIDE.md`](docs/GOOGLE_SHEETS_GUIDE.md) và hướng dẫn tự đổi ảnh hoạt ảnh tại [`docs/CUSTOMIZATION_GUIDE.md`](docs/CUSTOMIZATION_GUIDE.md).
 
 ---
 
-## 🎭 Bộ 60 Ảnh Hoạt Ảnh 6 Giai Đoạn (`assets/`)
+## 🎭 Bộ 114 Ảnh Hoạt Ảnh 6 Giai Đoạn (`assets/` — 19 Chủ Đề)
 
+### Batch 1 (Chủ đề `01`–`10` — 60 Sprites)
 ![60 Sprites Contact Sheet](previews/assets_contact_sheet.png)
+
+### Batch 2 (Chủ đề `11`–`19` — 54 Sprites Mới!)
+![54 Sprites Contact Sheet Batch 2](previews/assets_contact_sheet_batch2.png)
 
 ---
 

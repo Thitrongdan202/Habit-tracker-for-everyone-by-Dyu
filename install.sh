@@ -27,6 +27,15 @@ STEMS=(
   "08_Ocean_Coral_Fitness_Energy"
   "09_Matcha_Cafe_Daily_Routine"
   "10_Aurora_Glow_RPG_Quest_Tracker"
+  "11_Velvet_Rose_Garden"
+  "12_Blue_Tulip_Mint_Breeze"
+  "13_Buttercream_Blossom_Bars"
+  "14_Emerald_Forest_Gold_Stars"
+  "15_Mocha_Rose_Terracotta_Sunflower"
+  "16_Dream_Home_Architect_Builder"
+  "17_Wildflower_Bloom_Daily_Mood"
+  "18_Plum_Oak_Master_Suite"
+  "19_Meadow_Emerald_Sunflower"
 )
 
 TITLES=(
@@ -41,6 +50,15 @@ TITLES=(
   "San Hô Đại Dương Tập Luyện & Năng Lượng"
   "Matcha Cafe Lịch Trình Sáng / Tối"
   "Cực Quang RPG Thăng Cấp Thói Quen"
+  "Vườn Hồng Nhung Tím Lavender (Velvet Rose)"
+  "Tulip Xanh Lam — Dải Màu Mint Chanh"
+  "Kem Bơ Biểu Đồ Cột Caramel & Hoa Nở"
+  "Rừng Ngọc Bích & Sao Vàng (Gold Stars)"
+  "Hướng Dương Mocha & Hồng Đất Terracotta"
+  "Xây Ngôi Nhà Mơ Ước (6 Cấp Độ Kiến Trúc)"
+  "Hoa Dại 5 Cánh & Tâm Trạng Mỗi Ngày"
+  "Cây Sồi Tím Mận & Bảng Tuần/Tháng Toàn Diện"
+  "Hướng Dương Đồng Cỏ Xanh Ngọc Lục Bảo"
 )
 
 resolve_out_dir() {
@@ -107,7 +125,7 @@ OUT_DIR="$(resolve_out_dir)"
 mkdir -p "$OUT_DIR"
 
 printf "\n%s========================================================================%s\n" "$C_MAGENTA" "$C_RESET"
-printf "%s   HABIT TRACKER COLLECTION v2.3 — BY DYU (4 EDITIONS: DESKTOP + MOBILE)%s\n" "$C_YELLOW" "$C_RESET"
+printf "%s   HABIT TRACKER COLLECTION v2.4 — BY DYU (19 THEMES × 4 EDITIONS)%s\n" "$C_YELLOW" "$C_RESET"
 printf "%s   Hoạt ảnh động 6 giai đoạn • Lưu data đa tháng/năm • Thành Tựu Năm%s\n" "$C_CYAN" "$C_RESET"
 printf "%s========================================================================%s\n" "$C_MAGENTA" "$C_RESET"
 printf "  %sThư mục lưu file:%s %s\n\n" "$C_GREEN" "$C_RESET" "$OUT_DIR"
@@ -144,15 +162,15 @@ case "$ED_CHOICE" in
   *) ED_CHOICE="1" ;;
 esac
 
-printf "\n  %sBƯỚC 2 — CHỌN MẪU THÓI QUEN (10 CHỦ ĐỀ THẨM MỸ):%s\n" "$C_BOLD" "$C_RESET"
+printf "\n  %sBƯỚC 2 — CHỌN MẪU THÓI QUEN (19 CHỦ ĐỀ THẨM MỸ):%s\n" "$C_BOLD" "$C_RESET"
 printf "  %s----------------------------------------------------------------------%s\n" "$C_DIM" "$C_RESET"
-for i in 1 2 3 4 5 6 7 8 9 10; do
+for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19; do
   printf "  [%-2d] %-38s — %s\n" "$i" "${STEMS[$i]}" "${TITLES[$i]}"
 done
 printf "  %s----------------------------------------------------------------------%s\n" "$C_DIM" "$C_RESET"
-printf "  %s[A]%s  Tải TOÀN BỘ 10 mẫu (Download All)\n" "$C_GREEN" "$C_RESET"
+printf "  %s[A]%s  Tải TOÀN BỘ 19 mẫu (Download All)\n" "$C_GREEN" "$C_RESET"
 printf "  %s[0]%s  Thoát\n\n" "$C_DIM" "$C_RESET"
-printf "  %sGợi ý: Nhập 1 số (vd: 1), nhiều số (vd: 1,3,7), dải (vd: 1-5), hoặc A%s\n" "$C_YELLOW" "$C_RESET"
+printf "  %sGợi ý: Nhập 1 số (vd: 16), nhiều số (vd: 1,11,16), dải (vd: 11-19), hoặc A%s\n" "$C_YELLOW" "$C_RESET"
 
 CHOICE=""
 if [ -n "${HABIT_CHOICE:-}" ]; then
@@ -179,12 +197,12 @@ for tok in $CLEAN; do
       if [[ "$a" =~ ^[0-9]+$ ]] && [[ "$b" =~ ^[0-9]+$ ]]; then
         [ "$a" -gt "$b" ] && { t="$a"; a="$b"; b="$t"; }
         for ((n=a; n<=b; n++)); do
-          [ "$n" -ge 1 ] && [ "$n" -le 10 ] && SEL_IDS+=("$n")
+          [ "$n" -ge 1 ] && [ "$n" -le 19 ] && SEL_IDS+=("$n")
         done
       fi
       ;;
     *)
-      if [[ "$up" =~ ^[0-9]+$ ]] && [ "$up" -ge 1 ] && [ "$up" -le 10 ]; then
+      if [[ "$up" =~ ^[0-9]+$ ]] && [ "$up" -ge 1 ] && [ "$up" -le 19 ]; then
         SEL_IDS+=("$up")
       fi
       ;;
@@ -192,7 +210,7 @@ for tok in $CLEAN; do
 done
 
 if [ "$DO_ALL" -eq 1 ]; then
-  SEL_IDS=(1 2 3 4 5 6 7 8 9 10)
+  SEL_IDS=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19)
 fi
 
 UNIQUE_IDS=()

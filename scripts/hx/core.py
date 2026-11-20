@@ -63,6 +63,11 @@ class Theme:
     weekday_style: str = "short"          # "short" -> Mon, "letter" -> M
     chart_markers: bool = False
     chart_title: str = "DAILY PROGRESS"
+    chart_kind: str = "area"              # "area" | "line" | "column"
+    pct_traffic_light: bool = False       # True -> Emerald/Amber/Coral traffic-light % row
+    check_fill_override: str | None = None  # Optional override fill for checked cells (e.g. Gold Star)
+    hero_header_bg: str | None = None     # Optional accent banner bg on Grown Hero card
+    hero_header_fg: str | None = None     # Optional accent banner fg on Grown Hero card
     warn_fill: str = "#FFF6DD"
     warn_line: str = "#F1D88A"
 
