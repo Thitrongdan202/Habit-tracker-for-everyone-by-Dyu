@@ -120,7 +120,7 @@ New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 
 Write-Host ""
 Write-Host "========================================================================" -ForegroundColor Magenta
-Write-Host "   HABIT TRACKER COLLECTION v2.1 - BY DYU (UNIFIED 4-TAB EDITION)"       -ForegroundColor Yellow
+Write-Host "   HABIT TRACKER COLLECTION v2.3 - BY DYU (4 EDITIONS: DESKTOP + MOBILE)" -ForegroundColor Yellow
 Write-Host "   Hoat anh dong 6 giai doan | Luu data da thang/nam | Thanh Tuu Nam"   -ForegroundColor Cyan
 Write-Host "========================================================================" -ForegroundColor Magenta
 Write-Host "  Thu muc luu file: $OutDir" -ForegroundColor Green
@@ -131,24 +131,27 @@ Write-Host "  [1] Ban PRO INTERACTIVE (.xlsm)  [KHUYEN DUNG CHO EXCEL DESKTOP]" 
 Write-Host "      -> Gon 4 tab, doi Thang/Nam tu luu & tai du lieu sieu muot vao _Database!" -ForegroundColor DarkGray
 Write-Host "  [2] Ban EXCEL OFFLINE KHONG MACRO (.xlsx)" -ForegroundColor Cyan
 Write-Host "      -> Gon 4 tab sieu nhe, chay moi Excel 2016-365 Win/Mac, 0 canh bao bao mat!" -ForegroundColor DarkGray
-Write-Host "  [3] Ban GOOGLE SHEETS (.xlsx + tu dong tai google_sheets_1click_setup.gs)" -ForegroundColor Cyan
+Write-Host "  [3] Ban GOOGLE SHEETS DESKTOP (.xlsx + google_sheets_1click_setup.gs)" -ForegroundColor Cyan
 Write-Host "      -> Gon 4 tab + Script 1-Click bat Checkbox & tu luu 12 thang tren Cloud!" -ForegroundColor DarkGray
+Write-Host "  [4] Ban DIEN THOAI KHO DOC - MOBILE PORTRAIT (.xlsx + .gs)  [MOI!]" -ForegroundColor Magenta
+Write-Host "      -> Toi uu iPhone/Android 0 cuon ngang, 3 tab gon, o tick lon 38pt!" -ForegroundColor DarkGray
 Write-Host "  [0] Thoat" -ForegroundColor DarkGray
 Write-Host ""
 
 if ($env:HABIT_EDITION) {
-    $edChoice = $env:HABIT_EDITION.Trim()
+    $edChoice = $env:HABIT_EDITION.Trim().ToUpperInvariant()
     Write-Host "  > Chon phien ban (auto): $edChoice" -ForegroundColor DarkYellow
 } else {
-    $edChoice = (Read-Host "  > Nhap phien ban (1, 2, 3 - mac dinh [1])").Trim()
+    $edChoice = (Read-Host "  > Nhap phien ban (1, 2, 3, 4/M - mac dinh [1])").Trim().ToUpperInvariant()
     if ($edChoice -eq "") { $edChoice = "1" }
 }
 
-if ($edChoice -eq "0" -or $edChoice -match '^[Qq]') {
+if ($edChoice -eq "0" -or $edChoice -match '^Q') {
     Write-Host "  Tam biet! Chuc ban xay dung thoi quen thanh cong!" -ForegroundColor Cyan
     return
 }
-if ($edChoice -notin @("1", "2", "3")) { $edChoice = "1" }
+if ($edChoice -eq "M" -or $edChoice -eq "MOBILE") { $edChoice = "4" }
+if ($edChoice -notin @("1", "2", "3", "4")) { $edChoice = "1" }
 
 Write-Host ""
 Write-Host "  BUOC 2 - CHON MAU THOI QUEN (10 CHU DE THAM MY):" -ForegroundColor White
@@ -193,7 +196,7 @@ if ($edChoice -eq "1") {
         $queue.Add(@{ Rel = "templates/excel_universal_offline/$fn"; Dest = (Join-Path $subDir $fn); CheckZip = $true })
     }
     $hint = "Nhan dup file .xlsx -> dung ngay 100% Offline, khong Macro, khong canh bao!"
-} else {
+} elseif ($edChoice -eq "3") {
     $subDir = Join-Path $OutDir "google_sheets_edition"
     foreach ($id in $parsed.Ids) {
         $t = $Templates | Where-Object { $_.Id -eq $id }
@@ -203,6 +206,16 @@ if ($edChoice -eq "1") {
     $queue.Add(@{ Rel = "scripts/google_sheets_1click_setup.gs"; Dest = (Join-Path $subDir "google_sheets_1click_setup.gs"); CheckZip = $false })
     $queue.Add(@{ Rel = "docs/GOOGLE_SHEETS_GUIDE.md"; Dest = (Join-Path $subDir "GOOGLE_SHEETS_GUIDE.md"); CheckZip = $false })
     $hint = "Tai file len Google Sheets -> dan google_sheets_1click_setup.gs vao Apps Script -> Run setupHabitTracker()!"
+} else {
+    $subDir = Join-Path $OutDir "mobile_portrait_sheets"
+    foreach ($id in $parsed.Ids) {
+        $t = $Templates | Where-Object { $_.Id -eq $id }
+        $fn = "$($t.Stem)_Mobile.xlsx"
+        $queue.Add(@{ Rel = "templates/mobile_portrait_sheets/$fn"; Dest = (Join-Path $subDir $fn); CheckZip = $true })
+    }
+    $queue.Add(@{ Rel = "scripts/google_sheets_1click_setup.gs"; Dest = (Join-Path $subDir "google_sheets_1click_setup.gs"); CheckZip = $false })
+    $queue.Add(@{ Rel = "docs/GOOGLE_SHEETS_GUIDE.md"; Dest = (Join-Path $subDir "GOOGLE_SHEETS_GUIDE.md"); CheckZip = $false })
+    $hint = "Tai *_Mobile.xlsx len Google Drive -> mo bang App Google Sheets tren dien thoai & dan .gs 1 lan!"
 }
 
 Write-Host ""

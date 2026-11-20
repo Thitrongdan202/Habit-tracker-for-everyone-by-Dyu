@@ -107,7 +107,7 @@ OUT_DIR="$(resolve_out_dir)"
 mkdir -p "$OUT_DIR"
 
 printf "\n%s========================================================================%s\n" "$C_MAGENTA" "$C_RESET"
-printf "%s   HABIT TRACKER COLLECTION v2.1 — BY DYU (UNIFIED 4-TAB EDITION)%s\n" "$C_YELLOW" "$C_RESET"
+printf "%s   HABIT TRACKER COLLECTION v2.3 — BY DYU (4 EDITIONS: DESKTOP + MOBILE)%s\n" "$C_YELLOW" "$C_RESET"
 printf "%s   Hoạt ảnh động 6 giai đoạn • Lưu data đa tháng/năm • Thành Tựu Năm%s\n" "$C_CYAN" "$C_RESET"
 printf "%s========================================================================%s\n" "$C_MAGENTA" "$C_RESET"
 printf "  %sThư mục lưu file:%s %s\n\n" "$C_GREEN" "$C_RESET" "$OUT_DIR"
@@ -118,8 +118,10 @@ printf "  %s[1] Bản PRO INTERACTIVE (.xlsm)  [KHUYÊN DÙNG CHO EXCEL DESKTOP]
 printf "      %s-> Gọn 4 tab, đổi Tháng/Năm tự lưu & tải dữ liệu siêu mượt vào _Database!%s\n" "$C_DIM" "$C_RESET"
 printf "  %s[2] Bản EXCEL OFFLINE KHÔNG MACRO (.xlsx)%s\n" "$C_CYAN" "$C_RESET"
 printf "      %s-> Gọn 4 tab siêu nhẹ, chạy mọi Excel 2016–365 Win/Mac, 0 cảnh báo bảo mật!%s\n" "$C_DIM" "$C_RESET"
-printf "  %s[3] Bản GOOGLE SHEETS (.xlsx + tự tải kèm google_sheets_1click_setup.gs)%s\n" "$C_CYAN" "$C_RESET"
+printf "  %s[3] Bản GOOGLE SHEETS DESKTOP (.xlsx + google_sheets_1click_setup.gs)%s\n" "$C_CYAN" "$C_RESET"
 printf "      %s-> Gọn 4 tab + Script 1-Click bật Checkbox & tự lưu 12 tháng trên Cloud!%s\n" "$C_DIM" "$C_RESET"
+printf "  %s[4] Bản ĐIỆN THOẠI KHỔ DỌC — MOBILE PORTRAIT (.xlsx + .gs)  [MỚI!]%s\n" "$C_MAGENTA" "$C_RESET"
+printf "      %s-> Tối ưu iPhone/Android 0 cuộn ngang, 3 tab gọn, ô tick lớn 38pt!%s\n" "$C_DIM" "$C_RESET"
 printf "  %s[0] Thoát%s\n\n" "$C_DIM" "$C_RESET"
 
 ED_CHOICE=""
@@ -127,16 +129,18 @@ if [ -n "${HABIT_EDITION:-}" ]; then
   ED_CHOICE="$HABIT_EDITION"
   printf "  > Chọn phiên bản (auto): %s\n" "$ED_CHOICE"
 else
-  read_input "  > Nhập phiên bản (1, 2, 3 — mặc định [1]): "
+  read_input "  > Nhập phiên bản (1, 2, 3, 4/M — mặc định [1]): "
   ED_CHOICE="${REPLY:-1}"
 fi
 
+ED_CHOICE="$(printf "%s" "$ED_CHOICE" | tr '[:lower:]' '[:upper:]')"
 case "$ED_CHOICE" in
-  0|q|Q|exit|EXIT)
+  0|Q|EXIT)
     printf "  %sTạm biệt! Chúc bạn xây dựng thói quen thành công!%s\n" "$C_CYAN" "$C_RESET"
     exit 0
     ;;
-  1|2|3) ;;
+  M|MOBILE) ED_CHOICE="4" ;;
+  1|2|3|4) ;;
   *) ED_CHOICE="1" ;;
 esac
 
@@ -230,7 +234,7 @@ elif [ "$ED_CHOICE" = "2" ]; then
     QUEUE_CHK+=("1")
   done
   HINT="Nhấp đúp file .xlsx -> dùng ngay 100% Offline, không Macro, không cảnh báo!"
-else
+elif [ "$ED_CHOICE" = "3" ]; then
   SUB_DIR="${OUT_DIR}/google_sheets_edition"
   for id in "${UNIQUE_IDS[@]}"; do
     fn="${STEMS[$id]}.xlsx"
@@ -242,6 +246,18 @@ else
   QUEUE_DST+=("${SUB_DIR}/google_sheets_1click_setup.gs" "${SUB_DIR}/GOOGLE_SHEETS_GUIDE.md")
   QUEUE_CHK+=("0" "0")
   HINT="Tải file lên Google Sheets -> dán google_sheets_1click_setup.gs vào Apps Script -> Run setupHabitTracker()!"
+else
+  SUB_DIR="${OUT_DIR}/mobile_portrait_sheets"
+  for id in "${UNIQUE_IDS[@]}"; do
+    fn="${STEMS[$id]}_Mobile.xlsx"
+    QUEUE_REL+=("templates/mobile_portrait_sheets/${fn}")
+    QUEUE_DST+=("${SUB_DIR}/${fn}")
+    QUEUE_CHK+=("1")
+  done
+  QUEUE_REL+=("scripts/google_sheets_1click_setup.gs" "docs/GOOGLE_SHEETS_GUIDE.md")
+  QUEUE_DST+=("${SUB_DIR}/google_sheets_1click_setup.gs" "${SUB_DIR}/GOOGLE_SHEETS_GUIDE.md")
+  QUEUE_CHK+=("0" "0")
+  HINT="Tải *_Mobile.xlsx lên Google Drive -> mở bằng App Google Sheets trên điện thoại & dán .gs 1 lần!"
 fi
 
 TOTAL="${#QUEUE_REL[@]}"

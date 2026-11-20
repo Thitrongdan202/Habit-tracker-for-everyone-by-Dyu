@@ -1,18 +1,19 @@
-# 🌸 Habit Tracker Collection for Everyone — by Dyu (v2.1)
+# 🌸 Habit Tracker Collection for Everyone — by Dyu (v2.3)
 
-> **Bộ sưu tập 10 mẫu Excel & Google Sheets Habit Tracker thẩm mỹ chuẩn Digital Planner** — **Thống nhất gọn đúng 4 tab đẹp mắt (`📖 Hướng Dẫn`, `Monthly Tracker`, `🎯 Yearly Goals & Habits`, `🏆 Tổng Kết & Thành Tựu Năm`) trên cả 3 phiên bản!**
-> **Hoạt ảnh động 6 giai đoạn theo % thực tế • Lưu dữ liệu đa Tháng & đa Năm siêu mượt (<100ms) • Hệ thống 8 Huy hiệu Thành Tựu Năm tự mở khóa • 100% Offline trên Excel 2016–365!**
+> **Bộ sưu tập 10 mẫu Habit Tracker thẩm mỹ chuẩn Digital Planner — Đủ 4 phiên bản cho Máy tính & Điện thoại (iOS/Android)!**
+> **Hoạt ảnh động 6 giai đoạn theo % thực tế • Checkbox màu Pastel đặc trưng từng tuần • Lưu dữ liệu đa Tuần / Tháng / Năm siêu mượt • Hệ thống Huy hiệu Thành Tựu Năm • 100% Offline trên Excel Desktop & Khổ dọc 0 cuộn ngang trên Điện thoại!**
 
-![Version 2.1](https://img.shields.io/badge/Version-2.1_Unified_4--Tab-B57A7A?style=for-the-badge)
+![Version 2.3](https://img.shields.io/badge/Version-2.3_Desktop_%2B_Mobile-B57A7A?style=for-the-badge)
 ![Pro Interactive](https://img.shields.io/badge/Pro_Interactive-.XLSM_Auto--Save-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white)
 ![Zero Macro Offline](https://img.shields.io/badge/Offline_No--Macro-.XLSX_Excel_2016--365-4E9F76?style=for-the-badge)
-![Google Sheets](https://img.shields.io/badge/Google_Sheets-4--Tab_+_1--Click_Script-34A853?style=for-the-badge&logo=googlesheets&logoColor=white)
+![Mobile Portrait](https://img.shields.io/badge/Mobile_Portrait-iOS_%26_Android_0_Scroll-9E9AD1?style=for-the-badge)
+![Google Sheets](https://img.shields.io/badge/Google_Sheets-1--Click_Script-34A853?style=for-the-badge&logo=googlesheets&logoColor=white)
 
 ---
 
 ## ⚡ Cài Đặt & Tải Nhanh Bằng 1 Dòng Lệnh (Interactive Installer)
 
-Chạy **1 dòng lệnh duy nhất** — trình cài đặt sẽ cho bạn chọn **Phiên bản** (`[1] Pro .xlsm`, `[2] Excel Offline Không Macro .xlsx`, `[3] Google Sheets + Script 1-Click`) và chọn **Mẫu yêu thích** (`1`, `1,3,7`, `1-5`, hoặc `A` tải toàn bộ 10 mẫu) vào thư mục `template/`:
+Chạy **1 dòng lệnh duy nhất** — trình cài đặt sẽ cho bạn chọn **Phiên bản** (`[1] Pro .xlsm`, `[2] Excel Offline Không Macro .xlsx`, `[3] Google Sheets Desktop`, **`[4] / [M] Điện Thoại Khổ Dọc Mobile Portrait`**) và chọn **Mẫu yêu thích** (`1`, `1,3,7`, `1-5`, hoặc `A` tải toàn bộ 10 mẫu) vào thư mục `template/`:
 
 ### 🪟 Windows (PowerShell)
 ```powershell
@@ -24,17 +25,49 @@ irm https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-everyone-
 curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu/main/install.sh | bash
 ```
 
-> **Người dùng cuối KHÔNG cần cài Python!** Tải xong chỉ cần nhấp đúp mở file bằng Microsoft Excel hoặc tải lên Google Sheets và bắt đầu tick ngay.
+> **Người dùng cuối KHÔNG cần cài Python!** Tải xong chỉ cần nhấp đúp mở file bằng Microsoft Excel hoặc tải lên Google Sheets (máy tính & điện thoại) và bắt đầu tick ngay.
 
 ---
 
-## 🧭 Chọn Đúng Phiên Bản Phù Hợp Với Bạn (3 Thư Mục Gọn Sạch)
+## 🧭 Chọn Đúng Phiên Bản Phù Hợp Với Bạn (4 Thư Mục Gọn Sạch)
 
-| Phiên bản | Thư mục | Số tab hiển thị | Điểm nổi bật | Phù hợp với |
+| Phiên bản | Thư mục | Số tab | Điểm nổi bật | Phù hợp với |
 |---|---|---|---|---|
-| **⚡ Pro Interactive (`.xlsm`)** *(Khuyên dùng)* | [`templates/pro_macro/`](templates/pro_macro/) | **4 tab** | Đổi Tháng (`B3`) & Năm (`B5`) hoặc Năm Mục Tiêu (`I2`) **tự lưu & tải dữ liệu đa tháng/năm (<100ms)** vào sheet ẩn `_Database` (không dính tick!). 100% Offline! | Excel Desktop (Windows & Mac) dùng lâu dài nhiều tháng/năm |
-| **✨ Excel Offline Không Macro (`.xlsx`)** | [`templates/excel_universal_offline/`](templates/excel_universal_offline/) | **4 tab** | **KHÔNG Macro / không cảnh báo bảo mật**, chạy cực nhẹ trên mọi Excel 2016–365 Win/Mac, 100% hoạt ảnh offline & Thành Tựu Năm! Sang tháng mới chỉ cần nhân bản tab/file trong 2 giây. | Máy công ty chặn Macro hoặc thích mở phát chạy luôn không bấm Enable Content |
-| **☁️ Google Sheets Edition (`.xlsx` + `.gs`)** | [`templates/google_sheets_edition/`](templates/google_sheets_edition/) | **4 tab** | Gọn 4 tab + `_Database` + hoạt ảnh `=IMAGE()` động 6 giai đoạn. Dán [`google_sheets_1click_setup.gs`](scripts/google_sheets_1click_setup.gs) chạy 1 lần → **bật Checkbox Pastel & tự lưu/nạp 12 tháng qua `onEdit(e)`**! | Dùng Cloud trên trình duyệt, điện thoại & iPad |
+| **⚡ Pro Interactive (`.xlsm`)** *(Khuyên dùng)* | [`templates/pro_macro/`](templates/pro_macro/) | **4 tab** | Đổi Tháng (`B3`) & Năm (`B5`) hoặc Năm Mục Tiêu (`I2`) **tự lưu & tải dữ liệu đa tháng/năm** vào `_Database` (không dính tick!). 100% Offline + 53 Linked Pictures! | Excel Desktop (Windows & Mac) dùng lâu dài nhiều tháng/năm |
+| **✨ Excel Offline Không Macro (`.xlsx`)** | [`templates/excel_universal_offline/`](templates/excel_universal_offline/) | **4 tab** | **KHÔNG Macro / 0 cảnh báo bảo mật**, chạy cực nhẹ trên mọi Excel, đủ hoạt ảnh offline 6 giai đoạn & Thành Tựu Năm! | Máy công ty chặn Macro hoặc thích mở phát chạy ngay |
+| **☁️ Google Sheets Desktop (`.xlsx` + `.gs`)** | [`templates/google_sheets_edition/`](templates/google_sheets_edition/) | **4 tab** | Gọn 4 tab + `_Database` + hoạt ảnh `=IMAGE()` động. Chạy [`google_sheets_1click_setup.gs`](scripts/google_sheets_1click_setup.gs) 1 lần → **Checkbox Pastel & tự lưu 12 tháng**! | Dùng trình duyệt Web & đồng bộ Cloud trên máy tính |
+| **📱 Điện Thoại Khổ Dọc — Mobile Portrait** *(Mới!)* | [`templates/mobile_portrait_sheets/`](templates/mobile_portrait_sheets/) | **3 tab** | **Thiết kế riêng cho iPhone/Android (khổ dọc 8 cột `B:I`, 0 cuộn ngang!)**, ô tick lớn `38pt` dễ bấm bằng ngón cái, 7-day garden + tự lưu từng Tuần (`YYYY-MM-W#`)! | Check-in thói quen 1 chạm mỗi ngày ngay trên điện thoại |
+
+---
+
+## 📱 Phiên Bản Điện Thoại Khổ Dọc (Mobile Portrait — Không Cần Xoay Màn Hình!)
+
+Được thiết kế như một **App thói quen di động thực thụ** bên trong ứng dụng **Google Trang tính (iOS & Android)**:
+- **Khổ dọc 8 cột gọn khít (`B:I`, 0 cuộn ngang):** Toàn bộ thẻ chọn Tháng/Năm/Tuần, Weekly Hero, Khu vườn 7 ngày (`T2–CN`), Danh sách 15 thói quen (ô cao **`38pt`**), Thanh tiến độ, Biểu đồ tuần & Ghi chú nhanh đều xếp dọc mượt mà!
+- **Mở lên vào thẳng tab `📱 Tuần Này`:** 3 tab gọn nhẹ (`📱 Tuần Này` · `🎯 Mục Tiêu & Thành Tựu` · `📖 Hướng Dẫn`), kèm 1-Click Script tự nhận diện bản Mobile & tự lưu từng tuần (`Tuần 1` → `Tuần 5`) vào `_Database`!
+- **Ghim ra Màn hình chính (Home Screen):** Mở app Google Sheets → `...` → **Thêm vào màn hình chính** (Android) hoặc tạo Phím tắt **Shortcuts → Mở URL** (iPhone) để mở 1 chạm như App thật! *(Xem chi tiết tại [`docs/GOOGLE_SHEETS_GUIDE.md`](docs/GOOGLE_SHEETS_GUIDE.md)).*
+
+<table>
+  <tr>
+    <td align="center"><img src="previews/mobile_01_sunflower.png" width="210" alt="Mobile Sunflower"/><br/><sub><b>🌻 Sunflower Portrait</b></sub></td>
+    <td align="center"><img src="previews/mobile_02_cactus.png" width="210" alt="Mobile Cactus"/><br/><sub><b>🌵 Cactus Pastel Portrait</b></sub></td>
+    <td align="center"><img src="previews/mobile_07_sakura.png" width="210" alt="Mobile Sakura"/><br/><sub><b>🌸 Sakura Zen Portrait</b></sub></td>
+    <td align="center"><img src="previews/mobile_10_aurora.png" width="210" alt="Mobile Aurora"/><br/><sub><b>🌌 Aurora RPG Portrait</b></sub></td>
+  </tr>
+</table>
+
+<details>
+<summary>📸 Xem thêm màn hình Mobile: Tiến độ & Biểu đồ tuần, Mục Tiêu & Thành Tựu, Hướng Dẫn khổ dọc</summary>
+
+<table>
+  <tr>
+    <td align="center"><img src="previews/mobile_01_sunflower_bottom.png" width="260" alt="Mobile Bottom Cards"/><br/><sub><b>📊 Tiến độ & Biểu đồ Tuần</b></sub></td>
+    <td align="center"><img src="previews/mobile_01_goals.png" width="260" alt="Mobile Goals"/><br/><sub><b>🎯 Mục Tiêu & 6 Huy Hiệu</b></sub></td>
+    <td align="center"><img src="previews/mobile_01_guide.png" width="260" alt="Mobile Guide"/><br/><sub><b>📖 Hướng Dẫn Mobile (2×3)</b></sub></td>
+  </tr>
+</table>
+
+</details>
 
 ---
 
@@ -59,20 +92,20 @@ curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-ev
 
 ---
 
-## 📋 Bảng Tải Trực Tiếp 10 Mẫu Template (Đủ 3 Phiên Bản)
+## 📋 Bảng Tải Trực Tiếp 10 Mẫu Template (Đủ 4 Phiên Bản)
 
-| # | Tên Mẫu & Chủ Đề | ⚡ Pro Interactive *(Khuyên dùng)* | ✨ Excel Offline *(Không Macro)* | ☁️ Google Sheets *(4 Tab)* |
-|---|---|---|---|---|
-| **01** | 🌻 **Sunflower Garden Blush** | [Tải `_Pro.xlsm`](templates/pro_macro/01_Sunflower_Garden_Blush_Pro.xlsm) | [Tải `.xlsx`](templates/excel_universal_offline/01_Sunflower_Garden_Blush.xlsx) | [Google Sheets](templates/google_sheets_edition/01_Sunflower_Garden_Blush.xlsx) |
-| **02** | 🌵 **Cactus Bloom Pastel Weeks** | [Tải `_Pro.xlsm`](templates/pro_macro/02_Cactus_Bloom_Pastel_Weeks_Pro.xlsm) | [Tải `.xlsx`](templates/excel_universal_offline/02_Cactus_Bloom_Pastel_Weeks.xlsx) | [Google Sheets](templates/google_sheets_edition/02_Cactus_Bloom_Pastel_Weeks.xlsx) |
-| **03** | 🌈 **Rainbow Executive Donuts** | [Tải `_Pro.xlsm`](templates/pro_macro/03_Rainbow_Executive_Donuts_Pro.xlsm) | [Tải `.xlsx`](templates/excel_universal_offline/03_Rainbow_Executive_Donuts.xlsx) | [Google Sheets](templates/google_sheets_edition/03_Rainbow_Executive_Donuts.xlsx) |
-| **04** | 🌿 **Sage Botanical Habit & Living** | [Tải `_Pro.xlsm`](templates/pro_macro/04_Sage_Botanical_Habit_And_Budget_Pro.xlsm) | [Tải `.xlsx`](templates/excel_universal_offline/04_Sage_Botanical_Habit_And_Budget.xlsx) | [Google Sheets](templates/google_sheets_edition/04_Sage_Botanical_Habit_And_Budget.xlsx) |
-| **05** | 🌙 **Lavender Dream Wellness & Mood** | [Tải `_Pro.xlsm`](templates/pro_macro/05_Lavender_Dream_Wellness_Mood_Pro.xlsm) | [Tải `.xlsx`](templates/excel_universal_offline/05_Lavender_Dream_Wellness_Mood.xlsx) | [Google Sheets](templates/google_sheets_edition/05_Lavender_Dream_Wellness_Mood.xlsx) |
-| **06** | 🚀 **Midnight Navy Blush Focus XP** | [Tải `_Pro.xlsm`](templates/pro_macro/06_Midnight_Navy_Blush_Focus_Pro.xlsm) | [Tải `.xlsx`](templates/excel_universal_offline/06_Midnight_Navy_Blush_Focus.xlsx) | [Google Sheets](templates/google_sheets_edition/06_Midnight_Navy_Blush_Focus.xlsx) |
-| **07** | 🌸 **Sakura Zen Study Planner** | [Tải `_Pro.xlsm`](templates/pro_macro/07_Sakura_Zen_Study_Planner_Pro.xlsm) | [Tải `.xlsx`](templates/excel_universal_offline/07_Sakura_Zen_Study_Planner.xlsx) | [Google Sheets](templates/google_sheets_edition/07_Sakura_Zen_Study_Planner.xlsx) |
-| **08** | 🪸 **Ocean Coral Fitness & Energy** | [Tải `_Pro.xlsm`](templates/pro_macro/08_Ocean_Coral_Fitness_Energy_Pro.xlsm) | [Tải `.xlsx`](templates/excel_universal_offline/08_Ocean_Coral_Fitness_Energy.xlsx) | [Google Sheets](templates/google_sheets_edition/08_Ocean_Coral_Fitness_Energy.xlsx) |
-| **09** | 🍵 **Matcha Cafe Daily Routine** | [Tải `_Pro.xlsm`](templates/pro_macro/09_Matcha_Cafe_Daily_Routine_Pro.xlsm) | [Tải `.xlsx`](templates/excel_universal_offline/09_Matcha_Cafe_Daily_Routine.xlsx) | [Google Sheets](templates/google_sheets_edition/09_Matcha_Cafe_Daily_Routine.xlsx) |
-| **10** | 🌌 **Aurora Glow RPG Quest Tracker** | [Tải `_Pro.xlsm`](templates/pro_macro/10_Aurora_Glow_RPG_Quest_Tracker_Pro.xlsm) | [Tải `.xlsx`](templates/excel_universal_offline/10_Aurora_Glow_RPG_Quest_Tracker.xlsx) | [Google Sheets](templates/google_sheets_edition/10_Aurora_Glow_RPG_Quest_Tracker.xlsx) |
+| # | Tên Mẫu & Chủ Đề | ⚡ Pro Interactive | ✨ Excel Offline | ☁️ GSheets Desktop | 📱 Mobile Portrait |
+|---|---|---|---|---|---|
+| **01** | 🌻 **Sunflower Garden Blush** | [`_Pro.xlsm`](templates/pro_macro/01_Sunflower_Garden_Blush_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/01_Sunflower_Garden_Blush.xlsx) | [Desktop](templates/google_sheets_edition/01_Sunflower_Garden_Blush.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/01_Sunflower_Garden_Blush_Mobile.xlsx) |
+| **02** | 🌵 **Cactus Bloom Pastel Weeks** | [`_Pro.xlsm`](templates/pro_macro/02_Cactus_Bloom_Pastel_Weeks_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/02_Cactus_Bloom_Pastel_Weeks.xlsx) | [Desktop](templates/google_sheets_edition/02_Cactus_Bloom_Pastel_Weeks.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/02_Cactus_Bloom_Pastel_Weeks_Mobile.xlsx) |
+| **03** | 🌈 **Rainbow Executive Donuts** | [`_Pro.xlsm`](templates/pro_macro/03_Rainbow_Executive_Donuts_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/03_Rainbow_Executive_Donuts.xlsx) | [Desktop](templates/google_sheets_edition/03_Rainbow_Executive_Donuts.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/03_Rainbow_Executive_Donuts_Mobile.xlsx) |
+| **04** | 🌿 **Sage Botanical Habit & Living** | [`_Pro.xlsm`](templates/pro_macro/04_Sage_Botanical_Habit_And_Budget_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/04_Sage_Botanical_Habit_And_Budget.xlsx) | [Desktop](templates/google_sheets_edition/04_Sage_Botanical_Habit_And_Budget.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/04_Sage_Botanical_Habit_And_Budget_Mobile.xlsx) |
+| **05** | 🌙 **Lavender Dream Wellness & Mood** | [`_Pro.xlsm`](templates/pro_macro/05_Lavender_Dream_Wellness_Mood_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/05_Lavender_Dream_Wellness_Mood.xlsx) | [Desktop](templates/google_sheets_edition/05_Lavender_Dream_Wellness_Mood.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/05_Lavender_Dream_Wellness_Mood_Mobile.xlsx) |
+| **06** | 🚀 **Midnight Navy Blush Focus XP** | [`_Pro.xlsm`](templates/pro_macro/06_Midnight_Navy_Blush_Focus_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/06_Midnight_Navy_Blush_Focus.xlsx) | [Desktop](templates/google_sheets_edition/06_Midnight_Navy_Blush_Focus.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/06_Midnight_Navy_Blush_Focus_Mobile.xlsx) |
+| **07** | 🌸 **Sakura Zen Study Planner** | [`_Pro.xlsm`](templates/pro_macro/07_Sakura_Zen_Study_Planner_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/07_Sakura_Zen_Study_Planner.xlsx) | [Desktop](templates/google_sheets_edition/07_Sakura_Zen_Study_Planner.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/07_Sakura_Zen_Study_Planner_Mobile.xlsx) |
+| **08** | 🪸 **Ocean Coral Fitness & Energy** | [`_Pro.xlsm`](templates/pro_macro/08_Ocean_Coral_Fitness_Energy_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/08_Ocean_Coral_Fitness_Energy.xlsx) | [Desktop](templates/google_sheets_edition/08_Ocean_Coral_Fitness_Energy.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/08_Ocean_Coral_Fitness_Energy_Mobile.xlsx) |
+| **09** | 🍵 **Matcha Cafe Daily Routine** | [`_Pro.xlsm`](templates/pro_macro/09_Matcha_Cafe_Daily_Routine_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/09_Matcha_Cafe_Daily_Routine.xlsx) | [Desktop](templates/google_sheets_edition/09_Matcha_Cafe_Daily_Routine.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/09_Matcha_Cafe_Daily_Routine_Mobile.xlsx) |
+| **10** | 🌌 **Aurora Glow RPG Quest Tracker** | [`_Pro.xlsm`](templates/pro_macro/10_Aurora_Glow_RPG_Quest_Tracker_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/10_Aurora_Glow_RPG_Quest_Tracker.xlsx) | [Desktop](templates/google_sheets_edition/10_Aurora_Glow_RPG_Quest_Tracker.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/10_Aurora_Glow_RPG_Quest_Tracker_Mobile.xlsx) |
 
 ---
 
