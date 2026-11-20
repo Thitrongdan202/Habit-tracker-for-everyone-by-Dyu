@@ -161,7 +161,7 @@ def add_rainbow_bottom_blocks(wb, cv: Canvas, tr: TrackerRefs):
         for i, (task, done) in enumerate(weekly_tasks[w]):
             rr = r1 + 1 + i
             cv.checkbox(rr, c1, done, align="center", font_color=t.week_check[w], bg_color=t.card)
-            cv.merge(rr, c1 + 1, rr, c2, task, font_size=8.5, align="left", bg_color=t.card,
+            cv.merge(rr, c1 + 1, rr, c2, task, font_size=9, align="left", indent=1, bg_color=t.card,
                      font_color=t.ink)
             cv.hline(rr, c1, c2, t.line)
         cv.vline(c2, r1, r1 + 6, t.line, where="right")

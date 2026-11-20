@@ -73,27 +73,27 @@ def build_yearly_goals_v21(wb, styles: Styles, ws_calc, year: int = 2026,
     # Cols: 0 gutter | 1 chk | 2 MY GOALS | 3 MONTHLY | 4 WEEKLY | 5 DAILY | 6 gap | 7..8 sidebar | 9 gutter
     cv.col(0, 2.4)
     cv.col(1, 5.2)
-    cv.col(2, 25)
-    cv.col(3, 30)
-    cv.col(4, 30)
-    cv.col(5, 30)
+    cv.col(2, 31)
+    cv.col(3, 31)
+    cv.col(4, 31)
+    cv.col(5, 31)
     cv.col(6, 2.2)
-    cv.col(7, 18)
-    cv.col(8, 18)
+    cv.col(7, 19)
+    cv.col(8, 19)
     cv.col(9, 2.4)
 
     cv.row(0, 10)
-    cv.row(1, 34)   # Title banner + Year selector pill (I2)
+    cv.row(1, 36)   # Title banner + Year selector pill (I2)
     cv.row(2, 10)
-    cv.row(3, 24)
-    cv.row(4, 22)
+    cv.row(3, 26)
+    cv.row(4, 24)
 
     cv.merge(1, 1, 1, 5, f"{t.emoji}  YEARLY GOALS & HABITS PLANNER", font_name=t.font_title,
              font_size=15, bold=True, align="center", bg_color=t.primary, font_color=t.on_primary)
     cv.box(1, 1, 1, 5, t.line)
 
     # Unmerged Year dropdown pill in H2:I2 (I2 = row 1, col 8 = Excel $I$2!)
-    cv.put(1, 7, "📅  NĂM (YEAR):", bold=True, font_size=10, align="right", indent=1,
+    cv.put(1, 7, "📅  NĂM (YEAR):", bold=True, font_size=10, align="center",
            bg_color=t.primary, font_color=t.on_primary)
     cv.put(1, 8, year, font_name=t.font_title, font_size=14, bold=True, align="center",
            num_format="0", bg_color=t.soft, font_color=t.ink,
@@ -111,9 +111,9 @@ def build_yearly_goals_v21(wb, styles: Styles, ws_calc, year: int = 2026,
              bg_color=t.primary, font_color=t.on_primary)
     cv.merge(3, 3, 3, 5, "MY HABITS • KẾ HOẠCH HÀNH ĐỘNG", bold=True, font_size=10, align="center",
              bg_color=t.primary, font_color=t.on_primary)
-    cv.put(4, 3, "MONTHLY HABITS (Hàng tháng)", bold=True, font_size=9, align="center", bg_color=t.soft, font_color=t.ink)
-    cv.put(4, 4, "WEEKLY HABITS (Hàng tuần)", bold=True, font_size=9, align="center", bg_color=t.soft, font_color=t.ink)
-    cv.put(4, 5, "DAILY HABITS (Hàng ngày)", bold=True, font_size=9, align="center", bg_color=t.soft, font_color=t.ink)
+    cv.put(4, 3, "MONTHLY HABITS (Hàng tháng)", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
+    cv.put(4, 4, "WEEKLY HABITS (Hàng tuần)", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
+    cv.put(4, 5, "DAILY HABITS (Hàng ngày)", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
 
     r0 = 5
     total_rows = 20
@@ -121,17 +121,20 @@ def build_yearly_goals_v21(wb, styles: Styles, ws_calc, year: int = 2026,
         rr = r0 + i
         if i < len(DEFAULT_YEARLY_GOALS):
             chk, g, m, w, d = DEFAULT_YEARLY_GOALS[i]
-            max_l = max(text_lines(g, 24), text_lines(m, 29), text_lines(w, 29), text_lines(d, 29))
-            cv.row(rr, max(24, max_l * 14 + 8))
+            max_l = max(text_lines(g, 28, factor=0.88), text_lines(m, 28, factor=0.88),
+                        text_lines(w, 28, factor=0.88), text_lines(d, 28, factor=0.88))
+            cv.row(rr, max(38, max_l * 15 + 14))
         else:
             chk, g, m, w, d = False, "", "", "", ""
-            cv.row(rr, 23)
+            cv.row(rr, 26)
         bg = t.card if i % 2 == 0 else t.page
         cv.checkbox(rr, 1, chk, align="center", font_size=12, font_color=t.primary_dark, bg_color=bg)
-        cv.put(rr, 2, g, bold=bool(g), font_size=9.5, align="left", text_wrap=True, bg_color=bg, font_color=t.ink)
-        cv.put(rr, 3, m, font_size=9, align="left", text_wrap=True, bg_color=bg, font_color=t.ink)
-        cv.put(rr, 4, w, font_size=9, align="left", text_wrap=True, bg_color=bg, font_color=t.ink)
-        cv.put(rr, 5, d, font_size=9, align="left", text_wrap=True, bg_color=bg, font_color=t.ink)
+        # Col C (MY GOALS): ALWAYS BOLD 10pt + indent=1 (including blank user-input expansion rows!)
+        cv.put(rr, 2, g, bold=True, font_size=10, align="left", indent=1, text_wrap=True, bg_color=bg, font_color=t.ink)
+        # Cols D, E, F (Habits): ALWAYS REGULAR 9.5pt + indent=1 (including blank rows!)
+        cv.put(rr, 3, m, bold=False, font_size=9.5, align="left", indent=1, text_wrap=True, bg_color=bg, font_color=t.ink)
+        cv.put(rr, 4, w, bold=False, font_size=9.5, align="left", indent=1, text_wrap=True, bg_color=bg, font_color=t.ink)
+        cv.put(rr, 5, d, bold=False, font_size=9.5, align="left", indent=1, text_wrap=True, bg_color=bg, font_color=t.ink)
 
     cv.grid(3, 1, r0 + total_rows - 1, 5, t.line)
     cv.box(3, 1, r0 + total_rows - 1, 5, t.line)
@@ -170,7 +173,7 @@ def build_yearly_goals_v21(wb, styles: Styles, ws_calc, year: int = 2026,
         inst.append("💡  Google Sheets: Chọn B6:B25 → Chèn (Insert) → Hộp kiểm (Checkbox) hoặc chạy setupHabitTracker().")
     r_cur = 4
     for txt in inst:
-        cv.merge(r_cur, 7, r_cur + 1, 8, txt, font_size=9, align="left", text_wrap=True,
+        cv.merge(r_cur, 7, r_cur + 1, 8, txt, bold=False, font_size=9.5, align="left", text_wrap=True,
                  bg_color=t.card, font_color=t.ink, indent=1)
         cv.hline(r_cur + 1, 7, 8, t.line)
         r_cur += 2
@@ -536,10 +539,10 @@ def build_annual_achievements_sheet(
 
     # ================================================================== ROW 33..42: 8 DYNAMIC ACHIEVEMENTS WALL + LIVE COUNTER!
     r_b0 = 32  # Excel row 33
-    cv.row(r_b0, 24)
-    cv.row(r_b0 + 1, 22)
+    cv.row(r_b0, 26)
+    cv.row(r_b0 + 1, 24)
     for rr in range(r_b0 + 2, r_b0 + 10):
-        cv.row(rr, 29)
+        cv.row(rr, 34)
     cv.row(r_b0 + 10, 12)
 
     cv.merge(r_b0, 1, r_b0, 10, "🏅  THÀNH TỰU & HUY HIỆU NĂM — GAMIFIED ACHIEVEMENTS WALL",
@@ -577,14 +580,14 @@ def build_annual_achievements_sheet(
     for idx, (b_name, b_req, b_prog_f) in enumerate(badges):
         rr = r_b_first + idx
         bg = t.card if idx % 2 == 0 else t.page
-        cv.merge(rr, 1, rr, 3, b_name, bold=True, font_size=9.2, align="left", indent=1,
+        cv.merge(rr, 1, rr, 3, b_name, bold=True, font_size=10, align="left", indent=1,
                  bg_color=bg, font_color=t.ink)
-        cv.merge(rr, 4, rr, 6, b_req, font_size=8.8, align="left", indent=1, text_wrap=True,
+        cv.merge(rr, 4, rr, 6, b_req, bold=False, font_size=9.5, align="left", indent=1, text_wrap=True,
                  bg_color=bg, font_color=t.muted)
-        cv.merge(rr, 7, rr, 8, b_prog_f, bold=True, font_size=9, align="center",
+        cv.merge(rr, 7, rr, 8, b_prog_f, bold=True, font_size=9.5, align="center",
                  num_format="0%", bg_color=bg, font_color=t.ink)
         cv.merge(rr, 9, rr, 10, f'=IF($H{rr + 1}>=1,"🏆 ĐÃ MỞ KHÓA","🔒 Chưa mở")',
-                 bold=True, font_size=8.8, align="center", bg_color="#F3F4F6", font_color="#8A929A")
+                 bold=True, font_size=9, align="center", bg_color="#F3F4F6", font_color="#8A929A")
     cv.grid(r_b0 + 1, 1, r_b_last, 10, t.line)
     cv.box(r_b0, 1, r_b_last, 10, t.line)
 

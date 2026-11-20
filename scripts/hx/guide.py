@@ -1,10 +1,12 @@
 """
-hx.guide — Version 2.1 `📖 Hướng Dẫn` welcome screen & live animation config tab.
+hx.guide — Version 2.3 `📖 Hướng Dẫn` welcome screen & live animation config tab.
 
-Unified 4-visible-tab architecture across ALL 3 editions:
-  - `pro_xlsm`: Pro Interactive (`.xlsm`) — 4 tabs + VBA `_Database` multi-month/year persistence
-  - `offline`:  Universal Offline No-Macro (`.xlsx`) — 4 tabs, zero macros, zero security popups
-  - `gsheets`:  Google Sheets Edition (`.xlsx`) — 4 tabs + `_Database` + 1-click Apps Script
+Strict UI/UX polish:
+  - Unified `Segoe UI` font across 100% of cells (zero mixed fonts, zero markdown backticks)
+  - Consistent Bold (headers & key column) vs. Regular (descriptions & instructions) hierarchy
+  - `indent=1` horizontal padding on all left-aligned text cells & `valign="vcenter"` everywhere
+  - Centered threshold bar (Row 23), generous dynamic row heights (zero clipping on Row 14/27/Footer)
+  - Airy 94pt sprite preview row (Row 25) with centered Stage 0..5 icons
 """
 from __future__ import annotations
 
@@ -25,42 +27,42 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
 
     cv.col(0, 3.0)
     for c in range(1, 7):
-        cv.col(c, 21.5)
+        cv.col(c, 22.0)
     cv.col(7, 3.0)
     cv.row(0, 12)
 
-    # ------------------------------------------------------------------ HERO BANNER
-    cv.row(1, 34)
-    cv.row(2, 22)
-    cv.row(3, 22)
-    cv.merge(1, 1, 1, 6, f"{t.emoji}  {t.name}  —  HƯỚNG DẪN SỬ DỤNG (v2.1)",
-             font_name=t.font_title, font_size=18, bold=True, align="center",
+    # ------------------------------------------------------------------ HERO BANNER (Rows 2..4)
+    cv.row(1, 38)
+    cv.row(2, 24)
+    cv.row(3, 24)
+    cv.merge(1, 1, 1, 6, f"{t.emoji}  {t.name}  —  HƯỚNG DẪN SỬ DỤNG (v2.3)",
+             font_name=t.font_title, font_size=15.5, bold=True, align="center",
              bg_color=t.primary, font_color=t.on_primary)
-    cv.merge(2, 1, 2, 6, t.tagline_vi, font_size=10.5, italic=True, align="center",
+    cv.merge(2, 1, 2, 6, t.tagline_vi, font_size=10, italic=True, align="center",
              bg_color=t.soft, font_color=t.ink)
 
     if edition == "pro_xlsm":
-        mode_txt = "⚡ BẢN PRO INTERACTIVE (.XLSM)  •  Gọn 4 tab  •  Tự lưu & chuyển Tháng / Năm siêu mượt (<100ms)  •  100% Offline"
+        mode_txt = "⚡ BẢN PRO INTERACTIVE (.XLSM)  •  Gọn 4 tab  •  Tự lưu & chuyển Tháng / Năm siêu mượt  •  100% Offline"
     elif edition == "offline":
-        mode_txt = "✨ BẢN EXCEL OFFLINE KHÔNG MACRO (.XLSX)  •  Gọn nhẹ 4 tab  •  Chạy mọi Excel 2016–365 Win/Mac  •  Không cảnh báo bảo mật"
+        mode_txt = "✨ BẢN EXCEL OFFLINE KHÔNG MACRO (.XLSX)  •  Gọn nhẹ 4 tab  •  Chạy mọi Excel 2016–365 Win/Mac  •  0 cảnh báo bảo mật"
     else:
-        mode_txt = "☁️ BẢN GOOGLE SHEETS EDITION  •  Gọn 4 tab + _Database  •  Hoạt ảnh =IMAGE() động  •  Kèm Script 1-Click Checkbox & Lưu 12 Tháng!"
+        mode_txt = "☁️ BẢN GOOGLE SHEETS EDITION  •  Gọn 4 tab + _Database  •  Hoạt ảnh =IMAGE() động  •  Kèm Script 1-Click Checkbox!"
 
-    cv.merge(3, 1, 3, 6, mode_txt, font_size=8.8, bold=True, align="center",
+    cv.merge(3, 1, 3, 6, mode_txt, font_size=9, bold=True, align="center",
              bg_color=t.card, font_color=t.primary_dark)
     cv.box(1, 1, 3, 6, t.line)
     r = 4
 
     # Google Sheets crisp 1-line 3-second tip banner right under hero!
     if gsheets:
-        cv.row(r, 8)
+        cv.row(r, 10)
         r += 1
-        cv.row(r, 38)
+        cv.row(r, 46)
         cv.merge(
             r, 1, r, 6,
             "💡 Mẹo mở trên Google Sheets (3 giây): Chọn vùng ô TRUE/FALSE → Chèn (Insert) → Hộp kiểm (Checkbox) "
             "— HOẶC vào Tiện ích mở rộng (Extensions) → Apps Script → dán file google_sheets_1click_setup.gs và chạy setupHabitTracker() để bật Checkbox & tự động lưu 12 tháng vào _Database!",
-            font_size=9.2, bold=True, align="center", text_wrap=True,
+            font_size=9.5, bold=False, align="left", indent=1, text_wrap=True,
             bg_color=t.warn_fill, font_color=t.ink,
         )
         cv.box(r, 1, r, 6, t.warn_line)
@@ -69,9 +71,9 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     cv.row(r, 12)
     r += 1
 
-    # ------------------------------------------------------------------ TAB MAP (4 CLEAN TABS)
-    cv.row(r, 24)
-    cv.merge(r, 1, r, 6, "🗂️  CẤU TRÚC 4 SHEET GỌN ĐẸP TRONG FILE (v2.1)", bold=True, font_size=10,
+    # ------------------------------------------------------------------ TAB MAP (4 CLEAN TABS, Rows 6..10)
+    cv.row(r, 26)
+    cv.merge(r, 1, r, 6, "🗂️  CẤU TRÚC 4 SHEET GỌN ĐẸP TRONG FILE (v2.3)", bold=True, font_size=10.5,
              align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
 
     if edition == "pro_xlsm":
@@ -88,11 +90,12 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
 
     for idx, (tname, desc) in enumerate(tab_rows):
         rr = r + 1 + idx
-        cv.row(rr, 28)
+        d_lines = text_lines(desc, 78, factor=0.80)
+        cv.row(rr, max(32, d_lines * 16 + 14))
         bg = t.card if idx % 2 == 0 else t.page
-        cv.merge(rr, 1, rr, 2, f"  {tname}", bold=True, font_size=9.5, align="left",
+        cv.merge(rr, 1, rr, 2, tname, bold=True, font_size=10, align="left", indent=1,
                  bg_color=bg, font_color=t.primary_dark)
-        cv.merge(rr, 3, rr, 6, desc, font_size=9.5, align="left", text_wrap=True,
+        cv.merge(rr, 3, rr, 6, desc, bold=False, font_size=10, align="left", indent=1, text_wrap=True,
                  bg_color=bg, font_color=t.ink)
         cv.hline(rr, 1, 6, t.line)
     cv.box(r, 1, r + len(tab_rows), 6, t.line)
@@ -100,23 +103,23 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     cv.row(r - 1, 12)
 
     def info_card(start_r: int, c1: int, c2: int, title: str, bullets: list[str]) -> int:
-        cv.row(start_r, 24)
-        cv.merge(start_r, c1, start_r, c2, title, bold=True, font_size=9.8, align="left", indent=1,
+        cv.row(start_r, 26)
+        cv.merge(start_r, c1, start_r, c2, title, bold=True, font_size=10, align="left", indent=1,
                  bg_color=t.primary, font_color=t.on_primary)
-        span_w = sum(cv.widths.get(c, 21.5) for c in range(c1, c2 + 1)) - 2
+        span_w = sum(cv.widths.get(c, 22.0) for c in range(c1, c2 + 1)) - 4
         cur = start_r + 1
         for b in bullets:
-            lines = text_lines(b, span_w, factor=0.92)
-            h = max(26, lines * 15 + 10)
+            lines = text_lines(b, span_w, factor=0.76)
+            h = max(48, lines * 16 + 18)
             cv.row(cur, max(cv.heights.get(cur, 0), h))
-            cv.merge(cur, c1, cur, c2, b, font_size=9.5, align="left", text_wrap=True,
+            cv.merge(cur, c1, cur, c2, b, bold=False, font_size=9.8, align="left", text_wrap=True,
                      bg_color=t.card, font_color=t.ink, indent=1)
             cv.hline(cur, c1, c2, t.line)
             cur += 1
         cv.box(start_r, c1, cur - 1, c2, t.line)
         return cur
 
-    # ------------------------------------------------------------------ 2-COL CARDS (SEC 1 & SEC 2)
+    # ------------------------------------------------------------------ 2-COL CARDS (SEC 1 & SEC 2, Rows 12..15)
     if edition == "pro_xlsm":
         sec1 = [
             "1️⃣  Mở file lần đầu: bấm Enable Content (Bật Macro) màu vàng 1 lần để kích hoạt bộ máy tự lưu dữ liệu Tháng/Năm siêu mượt.",
@@ -156,7 +159,7 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     r = max(end1, end2) + 1
     cv.row(r - 1, 12)
 
-    # ------------------------------------------------------------------ 2-COL CARDS (SEC 3 & SEC 4)
+    # ------------------------------------------------------------------ 2-COL CARDS (SEC 3 & SEC 4, Rows 17..20)
     sec3 = [
         "✏️  Sửa tên thói quen: Gõ đè trực tiếp lên cột tên thói quen (B17:B36) — mọi biểu đồ, hoạt ảnh & chuỗi streak tự cập nhật!",
         "➕  Thêm thói quen: Toàn bộ 20 dòng (B17:B36) đã gắn sẵn ô Checkbox màu pastel đặc trưng của chủ đề + công thức Streak & biểu đồ tự động!",
@@ -176,7 +179,7 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
         ]
     else:
         sec4 = [
-            "⚡  Khi đã chạy 1-click Script (`google_sheets_1click_setup.gs`), mỗi khi đổi dropdown Tháng (B3) trên Google Sheets, hàm onEdit(e) TỰ ĐỘNG lưu tháng cũ & nạp tháng mới từ _Database!",
+            "⚡  Khi đã chạy 1-click Script (google_sheets_1click_setup.gs), mỗi khi đổi dropdown Tháng (B3) trên Google Sheets, hàm onEdit(e) TỰ ĐỘNG lưu tháng cũ & nạp tháng mới từ _Database!",
             "🏆  Tổng Kết & Thành Tựu Năm: Tự tổng hợp 12 tháng trong năm đang chọn + đồng bộ Yearly Goals + mở khóa 8 Huy hiệu kỷ luật!",
             "🗓️  Chọn năm chưa có dữ liệu (vd: 2028) ở ô B3 tab Tổng Kết → toàn bộ biểu đồ, 12 ô tháng & huy hiệu hiển thị 0% / Stage 0 sạch sẽ!",
         ]
@@ -186,33 +189,34 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     r = max(end3, end4) + 1
     cv.row(r - 1, 12)
 
-    # ------------------------------------------------------------------ SEC 5: CUSTOM ANIMATION & THRESHOLDS
+    # ------------------------------------------------------------------ SEC 5: CUSTOM ANIMATION & THRESHOLDS (Rows 22..27)
     r_cfg = r
-    cv.row(r_cfg, 24)
+    cv.row(r_cfg, 26)
     cv.merge(r_cfg, 1, r_cfg, 6,
              "🎨  5. HOẠT ẢNH 6 GIAI ĐOẠN (LIVE GROWTH ANIMATION) & TÙY CHỈNH NGƯỠNG",
-             bold=True, font_size=10, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
+             bold=True, font_size=10.5, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
 
     cur_r = r_cfg + 1
     if gsheets:
-        cv.row(cur_r, 26)
-        cv.merge(cur_r, 1, cur_r, 2, "  🔗  Đường dẫn ảnh (CFG_IMG_BASE):", bold=True, font_size=9.5,
-                 align="left", bg_color=t.soft, font_color=t.ink)
-        cv.merge(cur_r, 3, cur_r, 6, t.img_base, font_size=8.5, align="left",
+        cv.row(cur_r, 28)
+        cv.merge(cur_r, 1, cur_r, 2, "🔗  Đường dẫn ảnh (CFG_IMG_BASE):", bold=True, font_size=9.5,
+                 align="left", indent=1, bg_color=t.soft, font_color=t.ink)
+        cv.merge(cur_r, 3, cur_r, 6, t.img_base, bold=False, font_size=8.8, align="left",
                  bg_color=t.warn_fill, font_color=t.ink, indent=1)
         wb.define_name("CFG_IMG_BASE", f"={q}!{acell(cur_r, 3)}")
         cv.hline(cur_r, 1, 6, t.line)
         cur_r += 1
 
+    # Row 23 Threshold bar — SYMMETRICALLY CENTERED!
     r_thr = cur_r
-    cv.row(r_thr, 25)
-    cv.put(r_thr, 1, "Ngưỡng Stage 2:", bold=True, font_size=9, align="right", bg_color=t.soft)
+    cv.row(r_thr, 28)
+    cv.put(r_thr, 1, "Ngưỡng Stage 2:", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
     cv.put(r_thr, 2, 0.25, bold=True, font_size=10, align="center", num_format="0%",
            bg_color=t.warn_fill, font_color=t.primary_dark)
-    cv.put(r_thr, 3, "Ngưỡng Stage 3:", bold=True, font_size=9, align="right", bg_color=t.soft)
+    cv.put(r_thr, 3, "Ngưỡng Stage 3:", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
     cv.put(r_thr, 4, 0.50, bold=True, font_size=10, align="center", num_format="0%",
            bg_color=t.warn_fill, font_color=t.primary_dark)
-    cv.put(r_thr, 5, "Ngưỡng Đạt (Grown):", bold=True, font_size=9, align="right", bg_color=t.soft)
+    cv.put(r_thr, 5, "Ngưỡng Đạt (Grown):", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
     cv.put(r_thr, 6, 0.75, bold=True, font_size=10, align="center", num_format="0%",
            bg_color=t.warn_fill, font_color=t.primary_dark)
     wb.define_name("CFG_THR_1", f"={q}!{acell(r_thr, 2)}")
@@ -220,12 +224,13 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     wb.define_name("CFG_THR_3", f"={q}!{acell(r_thr, 6)}")
     cv.hline(r_thr, 1, 6, t.line)
 
+    # Rows 24..26: Stage 0..5 headers, airy 94pt sprite row, descriptions
     r_shead = r_thr + 1
     r_simg = r_thr + 2
     r_sdesc = r_thr + 3
-    cv.row(r_shead, 20)
-    cv.row(r_simg, 76)
-    cv.row(r_sdesc, 22)
+    cv.row(r_shead, 24)
+    cv.row(r_simg, 94)
+    cv.row(r_sdesc, 24)
     stage_meta = [
         ("Stage 0", "0% (Chưa bắt đầu)"),
         ("Stage 1", "1% – 24% (Khởi động)"),
@@ -237,7 +242,7 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     guide_sprite_slots = []
     for idx, (st_title, st_sub) in enumerate(stage_meta):
         c = 1 + idx
-        cv.put(r_shead, c, st_title, bold=True, font_size=9, align="center",
+        cv.put(r_shead, c, st_title, bold=True, font_size=9.5, align="center",
                bg_color=t.soft, font_color=t.ink)
         if universal:
             cv.put(r_simg, c, "", align="center", bg_color=t.card)
@@ -245,16 +250,17 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
                                        "r2": r_simg, "c2": c, "formula": f"=_Assets!$B${2 + idx}"})
         else:
             cv.put(r_simg, c, f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_{idx}.png")', align="center", bg_color=t.card)
-        cv.put(r_sdesc, c, st_sub, font_size=8.5, align="center", bg_color=t.card, font_color=t.muted)
+        cv.put(r_sdesc, c, st_sub, bold=False, font_size=8.8, align="center", bg_color=t.card, font_color=t.muted)
     cv.grid(r_shead, 1, r_sdesc, 6, t.line)
 
+    # Row 27 Yellow Tip Box — ZERO markdown backticks, generous height + indent=1!
     r_tip = r_sdesc + 1
     if universal:
         tip_txt = (
             "✨  CÁCH TỰ ĐỔI BỘ ẢNH HOẠT ẢNH RIÊNG (KHÔNG CẦN LINK / KHÔNG CẦN MẠNG):  "
-            "1) Chuột phải tên tab bất kỳ → chọn Unhide → chọn `_Assets` → OK.  "
+            "1) Chuột phải tên tab bất kỳ → chọn Unhide → chọn _Assets → OK.  "
             "2) Thay 6 ảnh trong ô B2:B7 (Stage 0 → Stage 5) bằng ảnh PNG/sticker của bạn.  "
-            "3) Ẩn lại `_Assets` → toàn bộ 31 ngày, Monthly Hero, Yearly Goals & 12 tháng Tổng Kết Năm tự động đổi theo ảnh của bạn!"
+            "3) Ẩn lại _Assets → toàn bộ 31 ngày, Monthly Hero, Yearly Goals & 12 tháng Tổng Kết Năm tự động đổi theo ảnh của bạn!"
         )
     else:
         tip_txt = (
@@ -262,17 +268,20 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
             "tải lên GitHub public rồi dán URL thư mục gốc vào ô vàng CFG_IMG_BASE ở trên. "
             "Hoặc sửa 3 ô ngưỡng vàng (25% / 50% / 75%) để điều chỉnh tốc độ tăng trưởng!"
         )
-    cv.row(r_tip, max(46, text_lines(tip_txt, 124) * 15 + 12))
-    cv.merge(r_tip, 1, r_tip, 6, tip_txt, font_size=9.2, align="left", text_wrap=True,
+    tip_lines = text_lines(tip_txt, 118, factor=0.76)
+    cv.row(r_tip, max(64, tip_lines * 16 + 20))
+    cv.merge(r_tip, 1, r_tip, 6, tip_txt, bold=False, font_size=9.5, align="left", text_wrap=True,
              bg_color=t.warn_fill, font_color=t.ink, indent=1)
     cv.box(r_cfg, 1, r_tip, 6, t.line)
 
+    # Footer row — generous 28pt height, centered, NEVER clipped!
     r_foot = r_tip + 2
     cv.row(r_foot - 1, 10)
-    cv.row(r_foot, 22)
+    cv.row(r_foot, 28)
+    cv.row(r_foot + 1, 12)
     cv.merge(r_foot, 1, r_foot, 6,
-             f"💛  Habit Tracker Collection v2.1 by Dyu  •  Unified 4-Tab Edition  •  {REPO_URL}",
-             font_size=8.5, italic=True, align="center", bg_color=t.page, font_color=t.muted)
+             f"💛  Habit Tracker Collection v2.3 by Dyu  •  Unified 4-Tab Edition  •  {REPO_URL}",
+             bold=False, font_size=9, italic=True, align="center", bg_color=t.page, font_color=t.muted)
 
     ws.hide_gridlines(2)
     ws.set_zoom(90)
@@ -283,4 +292,5 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     ws.set_margins(0.35, 0.35, 0.4, 0.4)
     cv.flush()
 
-    return {"linked_pictures": guide_sprite_slots, "guide_last_row": r_foot + 1}
+    # Return 1-based last row including bottom gutter so PNG capture NEVER clips the footer!
+    return {"linked_pictures": guide_sprite_slots, "guide_last_row": r_foot + 2}

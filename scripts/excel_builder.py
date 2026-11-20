@@ -643,8 +643,8 @@ def build_template(tdef: TemplateDef, out_path: Path, edition: str = "pro_xlsm")
         {"sheet": YEARLY_GOALS_SHEET, "range": "A1:J26", "out": f"{tdef.short_key}_yearly_goals.png"},
         {"sheet": ANNUAL_SHEET, "range": ann_info["capture_range"], "out": f"{tdef.short_key}_annual_achievements.png"},
     ]
-    if tdef.short_key == "01_sunflower":
-        captures.insert(0, {"sheet": GUIDE_SHEET, "range": f"A1:H{g_info['guide_last_row']}", "out": "01_sunflower_guide.png"})
+    if tdef.short_key in ("01_sunflower", "02_cactus", "06_navy", "07_sakura", "10_aurora"):
+        captures.insert(0, {"sheet": GUIDE_SHEET, "range": f"A1:H{g_info['guide_last_row']}", "out": f"{tdef.short_key}_guide.png"})
 
     return {
         "edition": edition,
