@@ -53,6 +53,7 @@ function setupHabitTracker() {
 
 function setupMobilePortrait_(ss) {
   var wsWk = findSheetContaining_(ss, "Tuần Này");
+  var wsDt = findSheetContaining_(ss, "Việc Hôm Nay");
   var wsGo = findSheetContaining_(ss, "Mục Tiêu");
   var converted = 0;
 
@@ -66,6 +67,19 @@ function setupMobilePortrait_(ss) {
     grid.setFontSize(14);
     grid.setHorizontalAlignment("center");
     grid.setVerticalAlignment("middle");
+    converted++;
+  }
+
+  if (wsDt) {
+    var dtAccent = wsDt.getRange("B2").getBackground() || "#B57A7A";
+    var dtRange = wsDt.getRange("B16:B30");
+    var dtVals = dtRange.getValues();
+    dtRange.insertCheckboxes();
+    dtRange.setValues(dtVals);
+    dtRange.setFontColor(dtAccent);
+    dtRange.setFontSize(14);
+    dtRange.setHorizontalAlignment("center");
+    dtRange.setVerticalAlignment("middle");
     converted++;
   }
 
@@ -86,14 +100,15 @@ function setupMobilePortrait_(ss) {
   hideIfExists_(ss, HT_DB_SHEET);
   SpreadsheetApp.flush();
   ss.toast(
-    "Bản Điện Thoại (Mobile Portrait): Đã bật Checkbox Pastel cho " + converted + " bảng & kích hoạt tự lưu Tuần/Tháng vào _Database!",
-    "Habit Tracker Mobile v2.3 — Sẵn sàng 📱✨",
+    "Bản Điện Thoại (Mobile Portrait v3.0): Đã bật Checkbox Pastel cho " + converted + " bảng & kích hoạt tự lưu Tuần/Ngày/Năm vào _Database!",
+    "Habit Tracker Mobile v3.0 — Sẵn sàng 📱✨",
     8
   );
 }
 
 function setupDesktopEdition_(ss) {
   var tracker = findDesktopTrackerSheet_(ss);
+  var dt = findSheetContaining_(ss, "Nhiệm Vụ Ngày");
   var yg = findSheetContaining_(ss, "Yearly Goals");
   var converted = 0;
 
@@ -114,6 +129,24 @@ function setupDesktopEdition_(ss) {
         convertBooleanCellsInRange_(tracker, "C48:AG54", accent);
       }
     }
+    if (tracker.getMaxRows() >= 46) {
+      var probePlum = String(tracker.getRange("B39").getValue() || "");
+      if (probePlum.toUpperCase().indexOf("WEEKLY") !== -1) {
+        convertBooleanCellsInRange_(tracker, "G41:AC46", accent);
+      }
+    }
+  }
+
+  if (dt) {
+    var dtAccent = dt.getRange("B2").getBackground() || "#B57A7A";
+    var dtRange = dt.getRange("B9:B28");
+    var dtVals = dtRange.getValues();
+    dtRange.insertCheckboxes();
+    dtRange.setValues(dtVals);
+    dtRange.setFontColor(dtAccent);
+    dtRange.setHorizontalAlignment("center");
+    dtRange.setVerticalAlignment("middle");
+    converted++;
   }
 
   if (yg) {
@@ -132,8 +165,8 @@ function setupDesktopEdition_(ss) {
   hideIfExists_(ss, HT_DB_SHEET);
   SpreadsheetApp.flush();
   ss.toast(
-    "Bản Desktop: Đã bật Checkbox Pastel cho " + converted + " bảng & kích hoạt tự lưu 12 tháng vào _Database!",
-    "Habit Tracker v2.3 — Sẵn sàng ✨",
+    "Bản Desktop v3.0: Đã bật Checkbox Pastel cho " + converted + " bảng & kích hoạt tự lưu Tháng/Ngày/Năm vào _Database!",
+    "Habit Tracker v3.0 — Sẵn sàng ✨",
     8
   );
 }
@@ -155,6 +188,10 @@ function onEdit(e) {
       if (a1 === "B5" || a1 === "C5" || a1 === "C5:E5" || a1 === "F5" || a1 === "F5:I5") {
         handleMobileWeekSwitch_(ss, sh);
       }
+    } else if (name.indexOf("Việc Hôm Nay") !== -1) {
+      if (a1 === "B5" || a1 === "C5" || a1 === "C5:F5" || a1 === "G5" || a1 === "G5:I5") {
+        handleMobileDailyTasksSwitch_(ss, sh);
+      }
     } else if (name.indexOf("Mục Tiêu") !== -1) {
       if (a1 === "E3" || a1 === "E3:I3") {
         handleMobileGoalsSwitch_(ss, sh);
@@ -163,8 +200,14 @@ function onEdit(e) {
     return;
   }
 
-  // Desktop 4-tab edition
+  // Desktop 5-tab edition (v3.0)
   if (name.indexOf("Tổng Kết") !== -1) return;
+  if (name.indexOf("Nhiệm Vụ Ngày") !== -1) {
+    if (a1 === "D5" || a1 === "E5" || a1 === "F5") {
+      handleDesktopDailyTasksSwitch_(ss, sh);
+    }
+    return;
+  }
   if (name.indexOf("Yearly Goals") !== -1) {
     if (a1 === "I2") handleDesktopYearlyGoalsSwitch_(ss, sh);
     return;
@@ -612,9 +655,125 @@ function convertBooleanCellsInRange_(sheet, a1Range, accent) {
   }
 }
 
+// ============================================================================
+//  DAILY ONE-OFF TASKS PERSISTENCE ENGINE (YYYY-MM-DD — Desktop & Mobile v3.0)
+// ============================================================================
+function handleDesktopDailyTasksSwitch_(ss, ws) {
+  var wsCalc = ss.getSheetByName(HT_CALC_SHEET);
+  var wsDb = ss.getSheetByName(HT_DB_SHEET);
+  if (!wsCalc || !wsDb) return;
+
+  var oldKey = String(wsCalc.getRange("AN12").getValue() || "").trim();
+  var newDay = parseInt(ws.getRange("D5").getValue(), 10) || 0;
+  var newMo = HT_MONTHS[String(ws.getRange("E5").getValue() || "").trim().toLowerCase()] || 0;
+  var newYr = parseInt(ws.getRange("F5").getValue(), 10) || 0;
+  if (newDay < 1 || newMo < 1 || newMo > 12 || newYr < 2000 || newYr > 2100) return;
+
+  var maxDay = new Date(newYr, newMo, 0).getDate();
+  if (newDay > maxDay) {
+    newDay = maxDay;
+    ws.getRange("D5").setValue(newDay);
+  }
+  var newKey = pad4_(newYr) + "-" + pad2_(newMo) + "-" + pad2_(newDay);
+  if (oldKey === newKey) return;
+
+  if (oldKey.length === 10) {
+    var curTasks = ws.getRange("B9:F28").getValues();
+    var curNote = ws.getRange("B31").getValue();
+    var block = [];
+    for (var r = 0; r < 20; r++) {
+      block.push([
+        oldKey, r + 1, isChecked_(curTasks[r][0]), curTasks[r][1], curTasks[r][2],
+        curTasks[r][3], curTasks[r][4], (r === 0 ? curNote : "")
+      ]);
+    }
+    var dstR = findBlockRow_(wsDb, 59, oldKey, 20);
+    if (dstR === 0) dstR = getLastRowInCol_(wsDb, 59) + 1;
+    wsDb.getRange(dstR, 59, 20, 8).setValues(block);
+  }
+
+  var srcR = findBlockRow_(wsDb, 59, newKey, 20);
+  var loadTasks = [];
+  var loadNote = "";
+  if (srcR > 0) {
+    var srcArr = wsDb.getRange(srcR, 59, 20, 8).getValues();
+    for (var i = 0; i < 20; i++) {
+      loadTasks.push([isChecked_(srcArr[i][2]), srcArr[i][3], srcArr[i][4], srcArr[i][5], srcArr[i][6]]);
+    }
+    loadNote = srcArr[0][7];
+  } else {
+    for (var j = 0; j < 20; j++) {
+      loadTasks.push([false, "", "", "", ""]);
+    }
+  }
+  ws.getRange("B9:F28").setValues(loadTasks);
+  ws.getRange("B31").setValue(loadNote);
+  wsCalc.getRange("AN12").setValue(newKey);
+  SpreadsheetApp.flush();
+}
+
+function handleMobileDailyTasksSwitch_(ss, ws) {
+  var wsCalc = ss.getSheetByName(HT_CALC_SHEET);
+  var wsDb = ss.getSheetByName(HT_DB_SHEET);
+  if (!wsCalc || !wsDb) return;
+
+  var oldKey = String(wsCalc.getRange("E29").getValue() || "").trim();
+  var newDay = parseInt(ws.getRange("B5").getValue(), 10) || 0;
+  var newMo = HT_MONTHS[String(ws.getRange("C5").getValue() || "").trim().toLowerCase()] || 0;
+  var newYr = parseInt(ws.getRange("G5").getValue(), 10) || 0;
+  if (newDay < 1 || newMo < 1 || newMo > 12 || newYr < 2000 || newYr > 2100) return;
+
+  var maxDay = new Date(newYr, newMo, 0).getDate();
+  if (newDay > maxDay) {
+    newDay = maxDay;
+    ws.getRange("B5").setValue(newDay);
+  }
+  var newKey = pad4_(newYr) + "-" + pad2_(newMo) + "-" + pad2_(newDay);
+  if (oldKey === newKey) return;
+
+  if (oldKey.length === 10) {
+    var curChk = ws.getRange("B16:B30").getValues();
+    var curNm = ws.getRange("C16:C30").getValues();
+    var curPr = ws.getRange("G16:G30").getValues();
+    var curNote = ws.getRange("B33").getValue();
+    var block = [];
+    for (var r = 0; r < 15; r++) {
+      block.push([oldKey, r + 1, isChecked_(curChk[r][0]), curNm[r][0], curPr[r][0], (r === 0 ? curNote : "")]);
+    }
+    var dstR = findBlockRow_(wsDb, 32, oldKey, 15);
+    if (dstR === 0) dstR = getLastRowInCol_(wsDb, 32) + 1;
+    wsDb.getRange(dstR, 32, 15, 6).setValues(block);
+  }
+
+  var srcR = findBlockRow_(wsDb, 32, newKey, 15);
+  var loadChk = [], loadNm = [], loadPr = [];
+  var loadNote = "";
+  if (srcR > 0) {
+    var srcArr = wsDb.getRange(srcR, 32, 15, 6).getValues();
+    for (var i = 0; i < 15; i++) {
+      loadChk.push([isChecked_(srcArr[i][2])]);
+      loadNm.push([srcArr[i][3]]);
+      loadPr.push([srcArr[i][4]]);
+    }
+    loadNote = srcArr[0][5];
+  } else {
+    for (var j = 0; j < 15; j++) {
+      loadChk.push([false]);
+      loadNm.push([""]);
+      loadPr.push([""]);
+    }
+  }
+  ws.getRange("B16:B30").setValues(loadChk);
+  ws.getRange("C16:C30").setValues(loadNm);
+  ws.getRange("G16:G30").setValues(loadPr);
+  ws.getRange("B33").setValue(loadNote);
+  wsCalc.getRange("E29").setValue(newKey);
+  SpreadsheetApp.flush();
+}
+
 function onOpen() {
   SpreadsheetApp.getUi()
-    .createMenu("✨ Habit Tracker v2.3")
+    .createMenu("✨ Habit Tracker v3.0")
     .addItem("☑️ Bật Checkbox & Tự Lưu _Database (1-Click)", "setupHabitTracker")
     .addToUi();
 }

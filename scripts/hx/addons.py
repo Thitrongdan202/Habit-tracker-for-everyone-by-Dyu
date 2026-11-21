@@ -966,3 +966,257 @@ def add_plum_oak_master_panels(wb, cv: Canvas, tr: TrackerRefs):
                  bg_color=t.card, font_color=t.ink)
         cv.hline(rr, c_n0, C_RE, t.line)
     cv.box(r0 + 1, c_n0, r0 + 7, C_RE, t.line)
+
+
+# --------------------------------------------------------------------------- #
+#  Templates 20, 21, 22 (Alpaca Bundle): Cozy Budget / Self-Care / Savings Goals
+# --------------------------------------------------------------------------- #
+def add_alpaca_mini_panel(wb, cv: Canvas, tr: TrackerRefs, kind: str = "budget"):
+    """Compact Alpaca Bundle addon below tracker (Budget #4, Self-Care #5, Savings Goals #6)."""
+    t = cv.t
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23)
+    cv.row(r0 + 1, 20)
+    for i in range(4):
+        cv.row(r0 + 2 + i, 22)
+
+    if kind == "budget":
+        hdr = "🦙  COZY MINI-BUDGET & SAVINGS  •  NGÂN SÁCH & TIẾT KIỆM THÁNG"
+        rows = [
+            ("Thu nhập (Income)",       25000000, 26500000),
+            ("Chi tiêu thiết yếu",      11000000, 10200000),
+            ("Chi tiêu cá nhân / Ăn uống", 5500000, 4800000),
+            ("Tiết kiệm & Đầu tư",       8500000, 11500000),
+        ]
+    elif kind == "selfcare":
+        hdr = "🌸  SELF-CARE & SPENDING MOOD  •  CHĂM SÓC BẢN THÂN & CHI TIÊU NHẸ NHÀNG"
+        rows = [
+            ("Quỹ chăm sóc da & sức khỏe", 2000000, 1650000),
+            ("Sách, khóa học & phát triển", 1500000, 1200000),
+            ("Cafe, thư giãn & gặp bạn bè", 1800000, 1450000),
+            ("Quỹ tự thưởng cuối tháng",    2500000, 2500000),
+        ]
+    else:
+        hdr = "🍵  MONTHLY SAVINGS GOALS  •  MỤC TIÊU QUỸ TIẾT KIỆM THÁNG"
+        rows = [
+            ("Quỹ dự phòng khẩn cấp",      5000000, 5000000),
+            ("Quỹ du lịch / nghỉ dưỡng",   3000000, 2400000),
+            ("Quỹ học tập & nâng cấp kỹ năng", 2000000, 1800000),
+            ("Quỹ đầu tư dài hạn",         4000000, 3600000),
+        ]
+
+    cv.merge(r0, C_NAME, r0, C_D31, hdr, bold=True, font_size=9.5, align="left", indent=1,
+             bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_R0, r0, C_RE, f"{t.emoji}  TỔNG KẾT TÀI CHÍNH", bold=True, font_size=9,
+             align="center", bg_color=t.primary, font_color=t.on_primary)
+
+    cv.merge(r0 + 1, C_NAME, r0 + 1, 10, "HẠNG MỤC (CATEGORY)", bold=True, font_size=8.5,
+             align="left", indent=1, bg_color=t.soft, font_color=t.ink)
+    cv.merge(r0 + 1, 11, r0 + 1, 17, "MỤC TIÊU (PLANNED)", bold=True, font_size=8.5,
+             align="center", bg_color=t.soft, font_color=t.ink)
+    cv.merge(r0 + 1, 18, r0 + 1, 24, "THỰC TẾ (ACTUAL)", bold=True, font_size=8.5,
+             align="center", bg_color=t.soft, font_color=t.ink)
+    cv.merge(r0 + 1, 25, r0 + 1, C_D31, "TIẾN ĐỘ (%)", bold=True, font_size=8.5,
+             align="center", bg_color=t.soft, font_color=t.ink)
+
+    for i, (cat, plan, act) in enumerate(rows):
+        rr = r0 + 2 + i
+        bg = t.card if i % 2 == 0 else t.page
+        cv.merge(rr, C_NAME, rr, 10, cat, bold=True, font_size=9.5, align="left", indent=1,
+                 bg_color=bg, font_color=t.ink)
+        cv.merge(rr, 11, rr, 17, plan, font_size=9.5, align="center", num_format="#,##0",
+                 bg_color=bg, font_color=t.muted)
+        cv.merge(rr, 18, rr, 24, act, bold=True, font_size=9.5, align="center", num_format="#,##0",
+                 bg_color=bg, font_color=t.ink)
+        cv.merge(rr, 25, rr, C_D31, f"=IFERROR(MIN(1.5,S{rr + 1}/L{rr + 1}),0)", bold=True,
+                 font_size=9, align="center", num_format="0%", bg_color=bg, font_color=t.primary_dark)
+
+    cv.ws.conditional_format(rng(r0 + 2, 25, r0 + 5, C_D31), {
+        "type": "data_bar", "bar_color": t.bar, "bar_solid": True,
+        "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1,
+    })
+    cv.grid(r0 + 1, C_NAME, r0 + 5, C_D31, t.line)
+    cv.box(r0, C_NAME, r0 + 5, C_D31, t.line)
+
+    # Right summary card
+    cv.merge(r0 + 1, C_R0, r0 + 1, C_RE, "TỔNG THỰC TẾ", bold=True, font_size=8, align="center",
+             bg_color=t.soft, font_color=t.muted)
+    cv.merge(r0 + 2, C_R0, r0 + 3, C_RE, f"=SUM(S{r0 + 3}:S{r0 + 6})", bold=True, font_size=14,
+             align="center", num_format='#,##0" đ"', bg_color=t.card, font_color=t.primary_dark,
+             font_name=t.font_title)
+    cv.merge(r0 + 4, C_R0, r0 + 5, C_RE,
+             f'="Đạt "&TEXT(IFERROR(SUM(S{r0 + 3}:S{r0 + 6})/SUM(L{r0 + 3}:L{r0 + 6}),0),"0%")&" kế hoạch"&CHAR(10)&'
+             f'"{t.emoji} Kỷ luật tháng: "&TEXT({tr.s["overall"]},"0%")',
+             bold=True, font_size=8.8, align="center", text_wrap=True, bg_color=t.soft, font_color=t.ink)
+    cv.box(r0, C_R0, r0 + 5, C_RE, t.line)
+
+
+# --------------------------------------------------------------------------- #
+#  Template 24 (Royal Cat Saving Cash): Cat Kingdom Counters + Cash Flow Panel
+# --------------------------------------------------------------------------- #
+def add_royal_cat_cash_panel(wb, cv: Canvas, tr: TrackerRefs):
+    """Playful Cat Kingdom Counters (Box / Mature / Royal Cats) + Expected vs Actual Cash Flow."""
+    t = cv.t
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23)
+    cv.row(r0 + 1, 20)
+    for i in range(4):
+        cv.row(r0 + 2 + i, 22)
+
+    pct_rng = f"{rng(R_PCT, C_D0, R_PCT, C_D31)}"
+    # Left Card: Cat Kingdom Counters (Col B..N = 1..13)
+    cv.merge(r0, C_NAME, r0, 13, "👑  CAT KINGDOM STATUS  •  VƯƠNG QUỐC MÈO THÁNG NÀY",
+             bold=True, font_size=9.5, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
+    cat_tiers = [
+        ("👑  Mèo Hoàng Gia (100% hoàn hảo)",     f'=COUNTIF({pct_rng},">=0.999")&" chú mèo 👑"', "#FEF3C7", "#92400E"),
+        ("🐱  Mèo Trưởng Thành (50% – 99%)",      f'=COUNTIFS({pct_rng},">=0.5",{pct_rng},"<0.999")&" chú mèo 🐱"', "#ECFDF5", "#065F46"),
+        ("📦  Mèo Hộp Giấy (< 50% / chưa tick)",  f'=COUNTIFS({pct_rng},">0",{pct_rng},"<0.5")&" chú mèo 📦"', "#F3EFE9", "#5C4033"),
+        ("✨  Tỉ lệ lên ngôi Hoàng Gia",           f'=TEXT(IFERROR(COUNTIF({pct_rng},">=0.999")/COUNTIF({pct_rng},">0"),0),"0%")', t.soft, t.primary_dark),
+    ]
+    cv.merge(r0 + 1, C_NAME, r0 + 1, 8, "CẤP BẬC MÈO", bold=True, font_size=8.5, align="left", indent=1, bg_color=t.soft, font_color=t.ink)
+    cv.merge(r0 + 1, 9, r0 + 1, 13, "SỐ LƯỢNG", bold=True, font_size=8.5, align="center", bg_color=t.soft, font_color=t.ink)
+    for i, (lbl, fml, bg, fg) in enumerate(cat_tiers):
+        rr = r0 + 2 + i
+        cv.merge(rr, C_NAME, rr, 8, lbl, bold=True, font_size=9.2, align="left", indent=1, bg_color=t.card, font_color=t.ink)
+        cv.merge(rr, 9, rr, 13, fml, bold=True, font_size=9.5, align="center", bg_color=bg, font_color=fg)
+    cv.grid(r0 + 1, C_NAME, r0 + 5, 13, t.line)
+    cv.box(r0, C_NAME, r0 + 5, 13, t.line)
+
+    # Right Card: Expected vs Actual Cash Flow Summary (Col P..C_RE = 15..C_RE)
+    cv.merge(r0, 15, r0, C_RE, "💰  SAVING CASH SUMMARY  •  DỰ KIẾN VS THỰC TẾ",
+             bold=True, font_size=9.5, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0 + 1, 15, r0 + 1, 22, "DANH MỤC DÒNG TIỀN", bold=True, font_size=8.5, align="left", indent=1, bg_color=t.soft, font_color=t.ink)
+    cv.merge(r0 + 1, 23, r0 + 1, 28, "DỰ KIẾN", bold=True, font_size=8.5, align="center", bg_color=t.soft, font_color=t.ink)
+    cv.merge(r0 + 1, 29, r0 + 1, C_R0 + 1, "THỰC TẾ", bold=True, font_size=8.5, align="center", bg_color=t.soft, font_color=t.ink)
+    cv.merge(r0 + 1, C_R0 + 2, r0 + 1, C_RE, "CHÊNH LỆCH", bold=True, font_size=8.5, align="center", bg_color=t.soft, font_color=t.ink)
+    cash_rows = [
+        ("💵 Thu nhập (Income)",   28000000, 29500000),
+        ("🛍️ Chi tiêu (Expenses)", 10000000,  8900000),
+        ("🧾 Hóa đơn (Bills)",      5500000,  5300000),
+        ("🏦 Tiết kiệm (Savings)", 12500000, 15300000),
+    ]
+    for i, (lbl, exp_v, act_v) in enumerate(cash_rows):
+        rr = r0 + 2 + i
+        bg = t.card if i % 2 == 0 else t.page
+        cv.merge(rr, 15, rr, 22, lbl, bold=True, font_size=9.2, align="left", indent=1, bg_color=bg, font_color=t.ink)
+        cv.merge(rr, 23, rr, 28, exp_v, font_size=9.2, align="center", num_format="#,##0", bg_color=bg, font_color=t.muted)
+        cv.merge(rr, 29, rr, C_R0 + 1, act_v, bold=True, font_size=9.2, align="center", num_format="#,##0", bg_color=bg, font_color=t.ink)
+        cv.merge(rr, C_R0 + 2, rr, C_RE, f"={cell(rr, 29)}-{cell(rr, 23)}", bold=True, font_size=9.2, align="center",
+                 num_format="+#,##0;-#,##0;0", bg_color=bg, font_color=t.primary_dark)
+    cv.grid(r0 + 1, 15, r0 + 5, C_RE, t.line)
+    cv.box(r0, 15, r0 + 5, C_RE, t.line)
+
+
+# --------------------------------------------------------------------------- #
+#  Templates 25 (Ginger Kitten) & 28 (Candy Jar): Top Habits Rank & Highlights
+# --------------------------------------------------------------------------- #
+def add_top_habits_rank_panel(wb, cv: Canvas, tr: TrackerRefs, kind: str = "ginger"):
+    """Compact Top-5 Habit Rank Leaderboard + Motivational Card below the main tracker."""
+    t = cv.t
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23)
+    cv.row(r0 + 1, 20)
+    for i in range(4):
+        cv.row(r0 + 2 + i, 22)
+
+    title_l = ("🐱  TOP HABITS LEADERBOARD  •  XẾP HẠNG THÓI QUEN XUẤT SẮC"
+               if kind == "ginger" else
+               "🍬  HABITS RANK  •  BẢNG XẾP HẠNG THÓI QUEN NGỌT NGÀO")
+    cv.merge(r0, C_NAME, r0, C_D31, title_l, bold=True, font_size=9.5, align="left", indent=1,
+             bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_R0, r0, C_RE,
+             ("🐾  ROUTINE SUMMARY" if kind == "ginger" else "🍭  CANDY JAR BONUS"),
+             bold=True, font_size=9, align="center", bg_color=t.primary, font_color=t.on_primary)
+
+    # Top 4 habits dynamically pulled via LARGE on Progress column (col 36 = AK? No, rc["progress"]!)
+    prog_col = colname(tr.right_cols["progress"])
+    done_col = colname(tr.right_cols["done"])
+    cv.merge(r0 + 1, C_NAME, r0 + 1, 14, "HẠNG & THÓI QUEN DẪN ĐẦU", bold=True, font_size=8.5,
+             align="left", indent=1, bg_color=t.soft, font_color=t.ink)
+    cv.merge(r0 + 1, 15, r0 + 1, 23, "TỈ LỆ HOÀN THÀNH", bold=True, font_size=8.5,
+             align="center", bg_color=t.soft, font_color=t.ink)
+    cv.merge(r0 + 1, 24, r0 + 1, C_D31, "SỐ NGÀY ĐẠT", bold=True, font_size=8.5,
+             align="center", bg_color=t.soft, font_color=t.ink)
+
+    medals = ["🥇 #1", "🥈 #2", "🥉 #3", "⭐ #4"]
+    p_rng = f"${prog_col}$17:${prog_col}$36"
+    for i, med in enumerate(medals):
+        rr = r0 + 2 + i
+        k_rank = i + 1
+        bg = t.card if i % 2 == 0 else t.page
+        cv.merge(rr, C_NAME, rr, 14,
+                 f'=IFERROR("{med}  "&INDEX($B$17:$B$36,MATCH(LARGE({p_rng},{k_rank}),{p_rng},0)),"{med}  —")',
+                 bold=True, font_size=9.5, align="left", indent=1, bg_color=bg, font_color=t.ink)
+        cv.merge(rr, 15, rr, 23, f"=IFERROR(LARGE({p_rng},{k_rank}),0)", bold=True, font_size=9.5,
+                 align="center", num_format="0%", bg_color=bg, font_color=t.primary_dark)
+        cv.merge(rr, 24, rr, C_D31,
+                 f'=IFERROR(INDEX(${done_col}$17:${done_col}$36,MATCH(LARGE({p_rng},{k_rank}),{p_rng},0)),"—")',
+                 font_size=9.2, align="center", bg_color=bg, font_color=t.ink)
+    cv.grid(r0 + 1, C_NAME, r0 + 5, C_D31, t.line)
+    cv.box(r0, C_NAME, r0 + 5, C_D31, t.line)
+
+    # Right Celebration Card
+    big_txt = (f'="YAY! "&{tr.s["grown"]}&" CANDY JARS!"' if kind != "ginger"
+               else f'="🐾 "&{tr.s["grown"]}&" NGÀY MÈO VUI!"')
+    cv.merge(r0 + 1, C_R0, r0 + 3, C_RE, big_txt, bold=True, font_size=13, align="center",
+             bg_color=t.card, font_color=t.primary_dark, font_name=t.font_title)
+    cv.merge(r0 + 4, C_R0, r0 + 5, C_RE,
+             f'="Hiệu suất: "&TEXT({tr.s["overall"]},"0%")&"  •  Hoàn hảo: "&{tr.s["perfect"]}&"d"',
+             bold=True, font_size=8.8, align="center", bg_color=t.soft, font_color=t.ink)
+    cv.box(r0, C_R0, r0 + 5, C_RE, t.line)
+
+
+# --------------------------------------------------------------------------- #
+#  Templates 30 (Shiba Inu) & 31 (Akita Inu): Good Boy Points & Loyalty Focus
+# --------------------------------------------------------------------------- #
+def add_dog_companion_panel(wb, cv: Canvas, tr: TrackerRefs, kind: str = "shiba"):
+    """Bespoke gamified Shiba Inu 'Good Boy Points' or Akita Inu 'Loyalty & Zen Focus' card."""
+    t = cv.t
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 24)
+    cv.row(r0 + 1, 22)
+    cv.row(r0 + 2, 24)
+    cv.row(r0 + 3, 22)
+
+    pts_expr = f'({tr.s["tdone"]}*10+{tr.s["perfect"]}*50+{tr.s["best"]}*15)'
+    if kind == "shiba":
+        hdr = "🐕  SHIBA INU GOOD BOY POINTS  •  ĐIỂM CÚN NGOAN & PHẦN THƯỞNG"
+        rank_f = (f'=IF({pts_expr}>=2500,"👑 SHIBA HOÀNG ĐẾ",'
+                  f'IF({pts_expr}>=1500,"🧣 CHIẾN BINH KHĂN ĐỎ",'
+                  f'IF({pts_expr}>=600,"🐕 CÚN NGOAN VẪY ĐUÔI","🐾 SHIBA TẬP SỰ")))')
+        note_lbl = "🦴  PHẦN THƯỞNG TỰ THƯỞNG KHI ĐẠT MỤC TIÊU THÁNG"
+        note_val = "• Đạt 1.500 điểm Cún Ngoan: Thưởng 1 buổi xem phim / ăn món ngon yêu thích! 🍜"
+    else:
+        hdr = "❄️  AKITA INU LOYALTY & ZEN FOCUS  •  CHỈ SỐ TRUNG THÀNH & TĨNH TÂM"
+        rank_f = (f'=IF({pts_expr}>=2500,"⛩️ ĐẠI SƯ AKITA",'
+                  f'IF({pts_expr}>=1500,"🔔 CHUÔNG VÀNG TRUNG THÀNH",'
+                  f'IF({pts_expr}>=600,"❄️ CÚN TUYẾT KIÊN ĐỊNH","🐾 ĐỆM TATAMI KHỞI ĐẦU")))')
+        note_lbl = "🌸  GHI CHÚ TĨNH TÂM & BIẾT ƠN TRONG THÁNG"
+        note_val = "• Giữ nhịp sống điềm tĩnh, trung thành với lời hứa nhỏ với chính mình mỗi ngày. ❄️"
+
+    cv.merge(r0, C_NAME, r0, C_RE, hdr, bold=True, font_size=9.5, align="left", indent=1,
+             bg_color=t.primary, font_color=t.on_primary)
+
+    # KPI 1: Points (Cols B..H = 1..7)
+    cv.merge(r0 + 1, C_NAME, r0 + 1, 7, ("🦴 ĐIỂM CÚN NGOAN" if kind == "shiba" else "🔔 ĐIỂM TRUNG THÀNH"),
+             bold=True, font_size=8.5, align="center", bg_color=t.soft, font_color=t.muted)
+    cv.merge(r0 + 2, C_NAME, r0 + 3, 7, f'={pts_expr}', bold=True, font_size=18, align="center",
+             num_format='#,##0" pts"', bg_color=t.card, font_color=t.primary_dark, font_name=t.font_title)
+
+    # KPI 2: Rank (Cols I..Q = 8..16)
+    cv.merge(r0 + 1, 8, r0 + 1, 16, "DANH HIỆU HIỆN TẠI", bold=True, font_size=8.5, align="center",
+             bg_color=t.soft, font_color=t.muted)
+    cv.merge(r0 + 2, 8, r0 + 3, 16, rank_f, bold=True, font_size=12, align="center",
+             bg_color=t.card, font_color=t.ink, font_name=t.font_title)
+
+    # KPI 3: Reflection / Reward Note (Cols R..C_RE = 17..C_RE)
+    cv.merge(r0 + 1, 17, r0 + 1, C_RE, note_lbl, bold=True, font_size=8.5, align="left", indent=1,
+             bg_color=t.soft, font_color=t.ink)
+    cv.merge(r0 + 2, 17, r0 + 3, C_RE, note_val, font_size=9.5, align="left", indent=1, text_wrap=True,
+             bg_color=t.card, font_color=t.ink)
+    cv.grid(r0 + 1, C_NAME, r0 + 3, C_RE, t.line)
+    cv.box(r0, C_NAME, r0 + 3, C_RE, t.line)

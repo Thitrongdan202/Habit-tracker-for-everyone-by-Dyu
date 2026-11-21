@@ -15,6 +15,8 @@ from .core import (Canvas, Styles, acell, cell, colname, qs, rng, donut,
 from .tracker import (CALC_SHEET, CALC_STATE_VAL_COL, CALC_ANN_COL0, CALC_ANN_YG_LBL_COL,
                       CALC_ANN_YG_VAL_COL, N_HABITS, Habit, TrackerRefs,
                       stage6_formula, year_lookup_ref, compute_month_summary_py)
+from .annual_lore import get_annual_lore
+from .daily_tasks import DEFAULT_DAILY_TASKS, DEFAULT_DAILY_HIGHLIGHT, DEFAULT_TASK_KEY
 
 YEARLY_GOALS_SHEET = "🎯 Yearly Goals & Habits"
 ANNUAL_SHEET = "🏆 Tổng Kết & Thành Tựu Năm"
@@ -357,12 +359,15 @@ def build_annual_achievements_sheet(
         "input_message": "Chọn năm muốn xem tổng kết 12 tháng & huy hiệu. Năm chưa có dữ liệu sẽ hiển thị 0% sạch sẽ!",
     })
 
+    # Bespoke per-theme Annual Achievements lore (31 unique handcrafted themes!)
+    lore = get_annual_lore(t.slug)
+
     # Right Title Banner (D2:N4)
-    cv.merge(1, 3, 2, 13, f"{t.emoji}  TỔNG KẾT & THÀNH TỰU NĂM — ANNUAL ACHIEVEMENTS",
-             font_name=t.font_title, font_size=16, bold=True, align="center",
+    cv.merge(1, 3, 2, 13, lore["banner"],
+             font_name=t.font_title, font_size=15.5, bold=True, align="center",
              bg_color=t.primary, font_color=t.on_primary)
     cv.merge(3, 3, 3, 13,
-             f'="Báo cáo tự động năm "&{sel_y_local}&"  •  {t.name}  •  Khu vườn 12 tháng & 8 Huy hiệu kỷ luật"',
+             f'="Năm "&{sel_y_local}&"  •  {lore["subtitle"]}"',
              font_size=9.5, italic=True, align="center", bg_color=t.soft, font_color=t.ink)
     cv.box(1, 3, 3, 13, t.line)
 
@@ -373,13 +378,13 @@ def build_annual_achievements_sheet(
     cv.row(10, 20)
     cv.row(11, 10)
 
-    # Card 1 (B6:D11): Total Habits Completed
-    cv.merge(5, 1, 5, 3, "✅  TỔNG LẦN HOÀN THÀNH", bold=True, font_size=8.8, align="center",
+    # Card 1 (B6:D11): Bespoke Theme Total Completed Counter
+    cv.merge(5, 1, 5, 3, lore["kpi1"], bold=True, font_size=8.8, align="center",
              bg_color=t.soft, font_color=t.ink)
     cv.merge(6, 1, 9, 3, f"=SUM({ann_done_q})", bold=True, font_size=26, align="center",
              num_format="#,##0", bg_color=t.card, font_color=t.primary_dark, font_name=t.font_title)
     cv.merge(10, 1, 10, 3,
-             f'="🌸 "&SUM({ann_grn_q})&" ngày đạt ≥"&TEXT(CFG_THR_3,"0%")&" trong năm"',
+             f'="{t.emoji} "&SUM({ann_grn_q})&" {lore["kpi1_unit"]}"&TEXT(CFG_THR_3,"0%")',
              font_size=8.5, bold=True, align="center", bg_color=t.card, font_color=t.muted)
     cv.box(5, 1, 10, 3, t.line)
 
@@ -441,7 +446,7 @@ def build_annual_achievements_sheet(
         cv.row(rr, 20)
     cv.row(r_g + 8, 10)    # Row 21: gutter
 
-    cv.merge(r_g, 1, r_g, 13, f"{t.emoji}  KHU VƯỜN 12 THÁNG & BẢNG HIỆU SUẤT THEO THÁNG (T1 – T12)",
+    cv.merge(r_g, 1, r_g, 13, lore["garden"],
              bold=True, font_size=10, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
     cv.put(r_g + 1, 1, "THÁNG (MONTH)", bold=True, font_size=8.8, align="center", bg_color=t.soft, font_color=t.ink)
     cv.put(r_g + 2, 1, f"{t.emoji}  TĂNG TRƯỞNG", bold=True, font_size=9.5, align="center",
@@ -507,26 +512,60 @@ def build_annual_achievements_sheet(
     cv.row(r_ch0 + 10, 12)  # Row 32: gutter
 
     cv.box(r_ch0, 1, r_ch0 + 9, 13, t.line, fill=t.card)
-    ch_yr = wb.add_chart({"type": "column"})
-    ch_yr.add_series({
-        "name": "% Hoàn thành tháng",
-        "categories": f"={q}!{rng(r_g + 1, 2, r_g + 1, 13)}",
-        "values": f"={q}!{pct_row_ann}",
-        "fill": {"color": t.chart_fill},
-        "border": {"color": t.chart_line, "width": 1.0},
-        "data_labels": {"value": True, "num_format": "0%", "font": {"name": t.font, "size": 8, "color": t.ink}},
-    })
-    ch_ln = wb.add_chart({"type": "line"})
-    ch_ln.add_series({
-        "name": "Xu hướng",
-        "categories": f"={q}!{rng(r_g + 1, 2, r_g + 1, 13)}",
-        "values": f"={q}!{pct_row_ann}",
-        "line": {"color": t.chart_line, "width": 2.0},
-        "marker": {"type": "circle", "size": 6, "fill": {"color": t.primary_dark},
-                   "border": {"color": "#FFFFFF", "width": 1.0}},
-    })
-    ch_yr.combine(ch_ln)
-    ch_yr.set_title({"name": "📈  XU HƯỚNG TIẾN ĐỘ 12 THÁNG TRONG NĂM (T01 – T12)",
+    c_style = lore["chart_style"]
+    if c_style == "area":
+        ch_yr = wb.add_chart({"type": "area"})
+        ch_yr.add_series({
+            "name": "% Hoàn thành tháng",
+            "categories": f"={q}!{rng(r_g + 1, 2, r_g + 1, 13)}",
+            "values": f"={q}!{pct_row_ann}",
+            "fill": {"color": t.chart_fill, "transparency": 35},
+            "border": {"none": True},
+        })
+        ch_ln = wb.add_chart({"type": "line"})
+        ch_ln.add_series({
+            "name": "Xu hướng",
+            "categories": f"={q}!{rng(r_g + 1, 2, r_g + 1, 13)}",
+            "values": f"={q}!{pct_row_ann}",
+            "line": {"color": t.chart_line, "width": 2.2},
+            "marker": {"type": "circle", "size": 6, "fill": {"color": t.primary_dark},
+                       "border": {"color": "#FFFFFF", "width": 1.0}},
+            "data_labels": {"value": True, "num_format": "0%", "position": "above",
+                            "font": {"name": t.font, "size": 8, "color": t.ink}},
+        })
+        ch_yr.combine(ch_ln)
+    elif c_style == "column":
+        ch_yr = wb.add_chart({"type": "column"})
+        ch_yr.add_series({
+            "name": "% Hoàn thành tháng",
+            "categories": f"={q}!{rng(r_g + 1, 2, r_g + 1, 13)}",
+            "values": f"={q}!{pct_row_ann}",
+            "fill": {"color": t.primary},
+            "border": {"none": True},
+            "gap": 55,
+            "data_labels": {"value": True, "num_format": "0%", "font": {"name": t.font, "size": 8, "color": t.ink}},
+        })
+    else:
+        ch_yr = wb.add_chart({"type": "column"})
+        ch_yr.add_series({
+            "name": "% Hoàn thành tháng",
+            "categories": f"={q}!{rng(r_g + 1, 2, r_g + 1, 13)}",
+            "values": f"={q}!{pct_row_ann}",
+            "fill": {"color": t.chart_fill},
+            "border": {"color": t.chart_line, "width": 1.0},
+            "data_labels": {"value": True, "num_format": "0%", "font": {"name": t.font, "size": 8, "color": t.ink}},
+        })
+        ch_ln = wb.add_chart({"type": "line"})
+        ch_ln.add_series({
+            "name": "Xu hướng",
+            "categories": f"={q}!{rng(r_g + 1, 2, r_g + 1, 13)}",
+            "values": f"={q}!{pct_row_ann}",
+            "line": {"color": t.chart_line, "width": 2.0},
+            "marker": {"type": "circle", "size": 6, "fill": {"color": t.primary_dark},
+                       "border": {"color": "#FFFFFF", "width": 1.0}},
+        })
+        ch_yr.combine(ch_ln)
+    ch_yr.set_title({"name": lore["chart_title"],
                      "name_font": {"name": t.font, "size": 10, "bold": True, "color": t.ink}})
     ch_yr.set_y_axis({"min": 0, "max": 1, "major_unit": 0.25, "num_format": "0%",
                       "num_font": axis_font(t), "line": {"none": True},
@@ -545,7 +584,7 @@ def build_annual_achievements_sheet(
         cv.row(rr, 34)
     cv.row(r_b0 + 10, 12)
 
-    cv.merge(r_b0, 1, r_b0, 10, "🏅  THÀNH TỰU & HUY HIỆU NĂM — GAMIFIED ACHIEVEMENTS WALL",
+    cv.merge(r_b0, 1, r_b0, 10, lore["wall"],
              bold=True, font_size=10, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
     cv.merge(r_b0 + 1, 1, r_b0 + 1, 3, "HUY HIỆU (BADGE)", bold=True, font_size=8.8, align="center",
              bg_color=t.soft, font_color=t.ink)
@@ -556,24 +595,17 @@ def build_annual_achievements_sheet(
     cv.merge(r_b0 + 1, 9, r_b0 + 1, 10, "TRẠNG THÁI (STATUS)", bold=True, font_size=8.8, align="center",
              bg_color=t.soft, font_color=t.ink)
 
-    badges = [
-        ("🌱  Khởi Hành (First Bloom)",         "Hoàn thành ít nhất 1 ngày đạt ≥ 75% trong năm",
-         f"=MIN(1,SUM({ann_grn_q})/1)"),
-        ("🔥  Tuần Lễ Vàng (7-Day Streak)",     "Đạt chuỗi 7 ngày kỷ luật liên tiếp",
-         f"=MIN(1,MAX(0,{ann_str_q})/7)"),
-        ("⚡  Chiến Binh Kỷ Luật (21-Day)",     "Đạt chuỗi 21 ngày liên tiếp tạo thói quen vàng",
-         f"=MIN(1,MAX(0,{ann_str_q})/21)"),
-        ("👑  Huyền Thoại Tháng (30-Day)",      "Đạt chuỗi 30 ngày liên tiếp không đứt quãng",
-         f"=MIN(1,MAX(0,{ann_str_q})/30)"),
-        ("🌟  Tháng Rực Rỡ (Golden Month)",     "Có ít nhất 1 tháng đạt trung bình ≥ 80%",
-         f"=MIN(1,MAX(0,{ann_pct_q})/0.8)"),
-        ("💐  Vườn Hoa Trăm Ngày (100 Days)",   "Tổng cộng ≥ 100 ngày đạt ≥ 75% trong năm",
-         f"=MIN(1,SUM({ann_grn_q})/100)"),
-        ("🎯  Chinh Phục Mục Tiêu (≥ 50%)",     "Hoàn thành ≥ 50% mục tiêu năm trên Yearly Goals",
-         f"=MIN(1,{ann_yg_pct_q}/0.5)"),
-        ("🏆  Bậc Thầy Cả Năm (Master)",        "Đạt ≥ 80% kế hoạch cả năm hoặc ≥ 250 ngày ≥ 75%",
-         f"=MIN(1,MAX({ann_overall_q}/0.8,SUM({ann_grn_q})/250))"),
+    badge_formulas = [
+        f"=MIN(1,SUM({ann_grn_q})/1)",
+        f"=MIN(1,MAX(0,{ann_str_q})/7)",
+        f"=MIN(1,MAX(0,{ann_str_q})/21)",
+        f"=MIN(1,MAX(0,{ann_str_q})/30)",
+        f"=MIN(1,MAX(0,{ann_pct_q})/0.8)",
+        f"=MIN(1,SUM({ann_grn_q})/100)",
+        f"=MIN(1,{ann_yg_pct_q}/0.5)",
+        f"=MIN(1,MAX({ann_overall_q}/0.8,SUM({ann_grn_q})/250))",
     ]
+    badges = [(bn, br, bf) for (bn, br), bf in zip(lore["badges"], badge_formulas)]
 
     r_b_first = r_b0 + 2   # 0-based 34 -> Excel row 35 (matches _Calc!$AN$9 formula $H$35:$H$42!)
     r_b_last = r_b_first + len(badges) - 1  # Excel row 42
@@ -603,7 +635,7 @@ def build_annual_achievements_sheet(
     })
 
     # Right Achievements Counter Card (L33:N42 -> cols 11..13, rows 32..41)
-    cv.merge(r_b0, 11, r_b0, 13, "🏆  HUY HIỆU ĐÃ MỞ", bold=True, font_size=9.5, align="center",
+    cv.merge(r_b0, 11, r_b0, 13, lore["counter"], bold=True, font_size=9.5, align="center",
              bg_color=t.primary, font_color=t.on_primary)
     unlocked_expr = f'COUNTIF($H${r_b_first + 1}:$H${r_b_last + 1},">=1")'
     cv.merge(r_b0 + 1, 11, r_b0 + 3, 13, f'={unlocked_expr}&" / 8"', bold=True, font_size=26,
@@ -623,10 +655,11 @@ def build_annual_achievements_sheet(
                  f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN(6,MAX(1,{ach_stg_q}))-1)&".png")',
                  align="center", bg_color=t.card)
 
+    r0_msg, r1_msg, r2_msg, r3_msg = lore["ranks"]
     cv.merge(r_b0 + 8, 11, r_b0 + 9, 13,
-             f'=IF({unlocked_expr}=0,"🌱 Hãy bắt đầu hành trình!",'
-             f'IF({unlocked_expr}<=3,"✨ Khởi đầu đầy cảm hứng!",'
-             f'IF({unlocked_expr}<=6,"🔥 Kỷ luật vững vàng!","👑 Huyền thoại của năm!")))',
+             f'=IF({unlocked_expr}=0,"{r0_msg}",'
+             f'IF({unlocked_expr}<=3,"{r1_msg}",'
+             f'IF({unlocked_expr}<=6,"{r2_msg}","{r3_msg}")))',
              bold=True, font_size=9.2, align="center", text_wrap=True,
              bg_color=t.soft, font_color=t.ink)
     cv.box(r_b0, 11, r_b0 + 9, 13, t.line)
@@ -678,6 +711,11 @@ def build_database_sheet(wb, styles: Styles, habits: list[Habit],
     yg_sum_hdrs = ["YearKey", "GoalsDone", "GoalsTotal"]
     for off, h in enumerate(yg_sum_hdrs):
         ws.write(0, 54 + off, h, hdr)
+
+    # Table 5 headers: BG1:BN1 (cols 58..65) — Daily One-Off Tasks by YYYY-MM-DD (v3.0!)
+    dt_hdrs = ["DateKey", "RowIdx", "Done", "TaskName", "Category", "Priority", "Notes", "DailyHighlight"]
+    for off, h in enumerate(dt_hdrs):
+        ws.write(0, 58 + off, h, hdr)
 
     # Pre-seed MonthlyRaw & MonthlySummary
     raw_r = 1
@@ -736,6 +774,26 @@ def build_database_sheet(wb, styles: Styles, habits: list[Habit],
     ws.write_number(1, 54, seed_goal_year)
     ws.write_number(1, 55, goals_done)
     ws.write_number(1, 56, goals_tot)
+
+    # Pre-seed Table 5 (DailyTasksRaw, BG2:BN21) ONLY for default demo date 2026-10-21!
+    for i in range(20):
+        rr = 1 + i
+        ws.write(rr, 58, DEFAULT_TASK_KEY)
+        ws.write_number(rr, 59, i + 1)
+        if i < len(DEFAULT_DAILY_TASKS):
+            done, t_nm, cat, prio, note = DEFAULT_DAILY_TASKS[i]
+            ws.write_boolean(rr, 60, done)
+            ws.write(rr, 61, t_nm)
+            ws.write(rr, 62, cat)
+            ws.write(rr, 63, prio)
+            ws.write(rr, 64, note)
+        else:
+            ws.write_boolean(rr, 60, False)
+            ws.write(rr, 61, "")
+            ws.write(rr, 62, "")
+            ws.write(rr, 63, "")
+            ws.write(rr, 64, "")
+        ws.write(rr, 65, DEFAULT_DAILY_HIGHLIGHT if i == 0 else "")
 
     ws.hide()
     return ws
