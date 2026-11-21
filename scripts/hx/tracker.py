@@ -115,6 +115,13 @@ def init_calc_sheet(wb, active_year: int = 2026, last_loaded_key: str = "2026-10
     # Daily Mood lookup list (for Template 17 Wildflower Mood dropdown) -> _Calc!$AL$3:$AL$5
     for idx_m, emo in enumerate(("😊", "😐", "😢")):
         ws_calc.write(2 + idx_m, CALC_CHK_COL, emo)
+    # Daily Tasks lookup lists (v3.0): Days 1..31 (AL6:AL36), Categories (AL38:AL41), Priorities (AL43:AL45)
+    for d_num in range(1, 32):
+        ws_calc.write_number(4 + d_num, CALC_CHK_COL, d_num)
+    for idx_c, cat in enumerate(("Công việc", "Học tập", "Cá nhân", "Sức khỏe")):
+        ws_calc.write(37 + idx_c, CALC_CHK_COL, cat)
+    for idx_p, prio in enumerate(("🔴 Cao", "🟡 Trung bình", "🟢 Thấp")):
+        ws_calc.write(42 + idx_p, CALC_CHK_COL, prio)
 
     state_init = [
         ("ActiveTrackingYear", active_year),
@@ -128,6 +135,13 @@ def init_calc_sheet(wb, active_year: int = 2026, last_loaded_key: str = "2026-10
         ("AchBadgesStageIdx", 1),
         ("AnnualDonutDone", 0),
         ("AnnualDonutRest", 1),
+        ("LastTaskDateKey", "2026-10-21"),
+        ("DailyTasksDone", 0),
+        ("DailyTasksActive", 0),
+        ("DailyTasksPct", 0),
+        ("DailyTaskStageIdx", 1),
+        ("DailyDonutDone", 0),
+        ("DailyDonutRest", 1),
     ]
     for r_idx, (lbl, val) in enumerate(state_init):
         ws_calc.write(r_idx, CALC_STATE_LBL_COL, lbl)

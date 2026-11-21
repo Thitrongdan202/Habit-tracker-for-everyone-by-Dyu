@@ -35,18 +35,18 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     cv.row(1, 38)
     cv.row(2, 24)
     cv.row(3, 24)
-    cv.merge(1, 1, 1, 6, f"{t.emoji}  {t.name}  —  HƯỚNG DẪN SỬ DỤNG (v2.3)",
+    cv.merge(1, 1, 1, 6, f"{t.emoji}  {t.name}  —  HƯỚNG DẪN SỬ DỤNG (v3.0)",
              font_name=t.font_title, font_size=15.5, bold=True, align="center",
              bg_color=t.primary, font_color=t.on_primary)
     cv.merge(2, 1, 2, 6, t.tagline_vi, font_size=10, italic=True, align="center",
              bg_color=t.soft, font_color=t.ink)
 
     if edition == "pro_xlsm":
-        mode_txt = "⚡ BẢN PRO INTERACTIVE (.XLSM)  •  Gọn 4 tab  •  Tự lưu & chuyển Tháng / Năm siêu mượt  •  100% Offline"
+        mode_txt = "⚡ BẢN PRO INTERACTIVE (.XLSM)  •  Gọn 5 tab  •  Tự lưu Tháng / Năm / Nhiệm Vụ Ngày siêu mượt  •  100% Offline"
     elif edition == "offline":
-        mode_txt = "✨ BẢN EXCEL OFFLINE KHÔNG MACRO (.XLSX)  •  Gọn nhẹ 4 tab  •  Chạy mọi Excel 2016–365 Win/Mac  •  0 cảnh báo bảo mật"
+        mode_txt = "✨ BẢN EXCEL OFFLINE KHÔNG MACRO (.XLSX)  •  Gọn nhẹ 5 tab  •  Chạy mọi Excel 2016–365 Win/Mac  •  0 cảnh báo bảo mật"
     else:
-        mode_txt = "☁️ BẢN GOOGLE SHEETS EDITION  •  Gọn 4 tab + _Database  •  Hoạt ảnh =IMAGE() động  •  Kèm Script 1-Click Checkbox!"
+        mode_txt = "☁️ BẢN GOOGLE SHEETS EDITION  •  Gọn 5 tab + _Database  •  Hoạt ảnh =IMAGE() động  •  Kèm Script 1-Click Checkbox!"
 
     cv.merge(3, 1, 3, 6, mode_txt, font_size=9, bold=True, align="center",
              bg_color=t.card, font_color=t.primary_dark)
@@ -71,9 +71,9 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     cv.row(r, 12)
     r += 1
 
-    # ------------------------------------------------------------------ TAB MAP (4 CLEAN TABS, Rows 6..10)
+    # ------------------------------------------------------------------ TAB MAP (5 CLEAN TABS)
     cv.row(r, 26)
-    cv.merge(r, 1, r, 6, "🗂️  CẤU TRÚC 4 SHEET GỌN ĐẸP TRONG FILE (v2.3)", bold=True, font_size=10.5,
+    cv.merge(r, 1, r, 6, "🗂️  CẤU TRÚC 5 SHEET GỌN ĐẸP TRONG FILE (v3.0)", bold=True, font_size=10.5,
              align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
 
     if edition == "pro_xlsm":
@@ -149,9 +149,9 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
             "3️⃣  Hoặc làm nhanh không cần Script (3 giây): chọn C17:AG36 → Chèn (Insert) → Hộp kiểm (Checkbox).",
         ]
         sec2 = [
-            "⚡  Gọn đúng 4 tab đẹp mắt (không còn 15 tab rối mắt!) nhờ sheet ẩn _Database lưu riêng dữ liệu 12 tháng trong năm.",
+            "⚡  Gọn đúng 5 tab đẹp mắt (kèm tab 📝 Nhiệm Vụ Ngày cho việc phát sinh!) nhờ sheet ẩn _Database lưu riêng dữ liệu 12 tháng & từng ngày.",
             "🧹  Reset nhanh trên Google Sheets: chọn vùng Checkbox C17:AG36 → nhấn Space (hoặc Delete) để bỏ tick sạch sẽ.",
-            "✨  Hoạt ảnh =IMAGE() động 6 giai đoạn tự cập nhật cho cả 31 ngày, Monthly Hero, Yearly Goals & Thành Tựu Năm!",
+            "✨  Hoạt ảnh =IMAGE() động 6 giai đoạn tự cập nhật cho cả 31 ngày, Monthly Hero, Nhiệm Vụ Ngày, Yearly Goals & Thành Tựu Năm!",
         ]
 
     end1 = info_card(r, 1, 3, "📌  1. CÁCH SỬ DỤNG & TICK HẰNG NGÀY", sec1)
@@ -280,7 +280,7 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     cv.row(r_foot, 28)
     cv.row(r_foot + 1, 12)
     cv.merge(r_foot, 1, r_foot, 6,
-             f"💛  Habit Tracker Collection v2.3 by Dyu  •  Unified 4-Tab Edition  •  {REPO_URL}",
+             f"💛  Habit Tracker Collection v3.0 by Dyu  •  Unified 5-Tab Edition  •  {REPO_URL}",
              bold=False, font_size=9, italic=True, align="center", bg_color=t.page, font_color=t.muted)
 
     ws.hide_gridlines(2)

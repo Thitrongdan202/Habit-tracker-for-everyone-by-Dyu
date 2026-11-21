@@ -58,6 +58,16 @@ Private Function GetGrownThreshold() As Double
     On Error GoTo 0
 End Function
 
+Private Function KeyToString(ByVal v As Variant) As String
+    If IsEmpty(v) Or IsError(v) Then
+        KeyToString = ""
+    ElseIf VarType(v) = vbDate Then
+        KeyToString = Format$(CDate(v), "yyyy-mm-dd")
+    Else
+        KeyToString = Trim$(CStr(v))
+    End If
+End Function
+
 Private Function FindBlockRow(ByVal wsDb As Worksheet, ByVal keyCol As Long, ByVal targetKey As String) As Long
     Dim lastRow As Long
     lastRow = wsDb.Cells(wsDb.Rows.Count, keyCol).End(xlUp).Row
@@ -69,11 +79,11 @@ Private Function FindBlockRow(ByVal wsDb As Worksheet, ByVal keyCol As Long, ByV
     arr = wsDb.Cells(2, keyCol).Resize(lastRow - 1, 1).Value
     Dim i As Long
     If lastRow = 2 Then
-        If CStr(arr) = targetKey Then FindBlockRow = 2
+        If KeyToString(arr) = targetKey Then FindBlockRow = 2
         Exit Function
     End If
     For i = 1 To UBound(arr, 1) Step N_HABITS
-        If CStr(arr(i, 1)) = targetKey Then
+        If KeyToString(arr(i, 1)) = targetKey Then
             FindBlockRow = i + 1
             Exit Function
         End If
@@ -390,6 +400,112 @@ Public Sub HandleYearlyGoalsSwitch(ByVal ws As Worksheet)
     End If
     ws.Range("B6:F25").Value = loadYG
     wsCalc.Range("AN3").Value = newYr
+
+Cleanup:
+    Application.Calculation = xlCalculationAutomatic
+    Application.EnableEvents = True
+    Application.ScreenUpdating = True
+End Sub
+
+' =============================================================================
+'  PUBLIC: Triggered on Daily Tasks Worksheet_Change when D5:F5 (Date) changes
+'  Pure ASCII: stores/loads 20 rows (B9:F28) + Highlight (B31) by YYYY-MM-DD
+'  in _Database Table 5 (Cols 59..66 = BG:BN), tracking LastTaskDateKey in AN12
+' =============================================================================
+Public Sub HandleDailyTasksSwitch(ByVal ws As Worksheet)
+    On Error GoTo Cleanup
+    Application.ScreenUpdating = False
+    Application.EnableEvents = False
+    Application.Calculation = xlCalculationManual
+    ws.DisplayPageBreaks = False
+
+    Dim wsCalc As Worksheet, wsDb As Worksheet
+    Set wsCalc = ThisWorkbook.Worksheets(CALC_SHEET)
+    Set wsDb = ThisWorkbook.Worksheets(DB_SHEET)
+
+    Dim newDay As Long, newMonth As Long, newYear As Long
+    newDay = CLng(Val(ws.Range("D5").Value))
+    newMonth = MonthNameToNum(CStr(ws.Range("E5").Value))
+    newYear = CLng(Val(ws.Range("F5").Value))
+    If newDay < 1 Or newMonth = 0 Or newYear < 2000 Or newYear > 2100 Then GoTo Cleanup
+
+    Dim maxDay As Long
+    maxDay = Day(DateSerial(newYear, newMonth + 1, 0))
+    If newDay > maxDay Then
+        newDay = maxDay
+        ws.Range("D5").Value = newDay
+    End If
+
+    Dim newKey As String, lastKey As String
+    newKey = Format$(newYear, "0000") & "-" & Format$(newMonth, "00") & "-" & Format$(newDay, "00")
+    lastKey = KeyToString(wsCalc.Range("AN12").Value)
+    If lastKey = newKey Then GoTo Cleanup
+
+    ' 1. Save previous date's 20 task rows (B9:F28) + Highlight (B31) into _Database cols 59..66
+    If Len(lastKey) = 10 Then
+        Dim curTasks As Variant
+        curTasks = ws.Range("B9:F28").Value
+        Dim curNote As Variant
+        curNote = ws.Range("B31").Value
+
+        Dim dtBlock(1 To 20, 1 To 8) As Variant
+        Dim r As Long
+        For r = 1 To 20
+            dtBlock(r, 1) = lastKey
+            dtBlock(r, 2) = r
+            dtBlock(r, 3) = IsCellChecked(curTasks(r, 1))
+            dtBlock(r, 4) = curTasks(r, 2)
+            dtBlock(r, 5) = curTasks(r, 3)
+            dtBlock(r, 6) = curTasks(r, 4)
+            dtBlock(r, 7) = curTasks(r, 5)
+            If r = 1 Then
+                dtBlock(r, 8) = curNote
+            Else
+                dtBlock(r, 8) = ""
+            End If
+        Next r
+
+        Dim dstRow As Long
+        dstRow = FindBlockRow(wsDb, 59, lastKey)
+        If dstRow = 0 Then
+            dstRow = wsDb.Cells(wsDb.Rows.Count, 59).End(xlUp).Row + 1
+        End If
+        wsDb.Cells(dstRow, 59).Resize(20, 1).NumberFormat = "@"
+        wsDb.Cells(dstRow, 59).Resize(20, 8).Value = dtBlock
+    End If
+
+    ' 2. Load new date's 20 task rows + Highlight (or clean blank slate if untouched date!)
+    Dim srcRow As Long
+    srcRow = FindBlockRow(wsDb, 59, newKey)
+    Dim loadTasks(1 To 20, 1 To 5) As Variant
+    Dim loadNote As Variant
+    Dim i As Long
+    If srcRow > 0 Then
+        Dim srcArr As Variant
+        srcArr = wsDb.Cells(srcRow, 59).Resize(20, 8).Value
+        For i = 1 To 20
+            loadTasks(i, 1) = IsCellChecked(srcArr(i, 3))
+            loadTasks(i, 2) = srcArr(i, 4)
+            loadTasks(i, 3) = srcArr(i, 5)
+            loadTasks(i, 4) = srcArr(i, 6)
+            loadTasks(i, 5) = srcArr(i, 7)
+        Next i
+        loadNote = srcArr(1, 8)
+    Else
+        For i = 1 To 20
+            loadTasks(i, 1) = False
+            loadTasks(i, 2) = ""
+            loadTasks(i, 3) = ""
+            loadTasks(i, 4) = ""
+            loadTasks(i, 5) = ""
+        Next i
+        loadNote = ""
+    End If
+
+    ws.Range("B9:F28").Value = loadTasks
+    ws.Range("B31").Value = loadNote
+    wsCalc.Range("AN12").NumberFormat = "@"
+    wsCalc.Range("AN12").Value = newKey
 
 Cleanup:
     Application.Calculation = xlCalculationAutomatic

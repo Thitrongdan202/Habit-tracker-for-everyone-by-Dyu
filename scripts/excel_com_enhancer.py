@@ -33,6 +33,7 @@ from excel_builder import (build_base_pro, build_base_offline, build_all_gsheets
 from hx.tracker import CALC_SHEET
 from hx.guide import GUIDE_SHEET
 from hx.annual import ASSETS_SHEET, DATABASE_SHEET, HISTORY_SHEET, YEARLY_GOALS_SHEET
+from hx.daily_tasks import DAILY_TASKS_SHEET
 
 ASSETS_DIR = ROOT / "assets"
 PRO_OUT_DIR = ROOT / "templates" / "pro_macro"
@@ -53,6 +54,14 @@ YEARLY_GOALS_EVENT_VBA = (
     "Private Sub Worksheet_Change(ByVal Target As Range)\r\n"
     "    If Intersect(Target, Me.Range(\"I2\")) Is Nothing Then Exit Sub\r\n"
     "    modHabitState.HandleYearlyGoalsSwitch Me\r\n"
+    "End Sub\r\n"
+)
+
+DAILY_TASKS_EVENT_VBA = (
+    "Option Explicit\r\n"
+    "Private Sub Worksheet_Change(ByVal Target As Range)\r\n"
+    "    If Intersect(Target, Me.Range(\"D5:F5\")) Is Nothing Then Exit Sub\r\n"
+    "    modHabitState.HandleDailyTasksSwitch Me\r\n"
     "End Sub\r\n"
 )
 
@@ -269,6 +278,12 @@ def enhance_one(xl, meta: dict, capture_previews: bool = True):
                 cm_yg.DeleteLines(1, cm_yg.CountOfLines)
             cm_yg.AddFromString(YEARLY_GOALS_EVENT_VBA)
 
+            ws_dt = wb.Worksheets(DAILY_TASKS_SHEET)
+            cm_dt = vbp.VBComponents(ws_dt.CodeName).CodeModule
+            if cm_dt.CountOfLines > 0:
+                cm_dt.DeleteLines(1, cm_dt.CountOfLines)
+            cm_dt.AddFromString(DAILY_TASKS_EVENT_VBA)
+
         # 6. Restore calculation & force full rebuild
         xl.Calculation = -4105  # xlCalculationAutomatic
         xl.ScreenUpdating = True
@@ -329,48 +344,64 @@ def derive_offline_from_pro(xl, only: list[str] | None = None):
             off_path.unlink()
         wb = xl.Workbooks.Open(str(pro_path.resolve()))
         try:
-            # Update `📖 Hướng Dẫn` edition copy cleanly to Offline No-Macro version
+            # Update `📖 Hướng Dẫn` edition copy cleanly to Offline No-Macro version (v3.0: 5-tab layout!)
             ws_g = wb.Worksheets(GUIDE_SHEET)
             ws_g.Range("B4").Value = (
-                "✨ BẢN EXCEL OFFLINE KHÔNG MACRO (.XLSX)  •  Gọn nhẹ 4 tab  •  "
+                "✨ BẢN EXCEL OFFLINE KHÔNG MACRO (.XLSX)  •  Gọn nhẹ 5 tab  •  "
                 "Chạy mọi Excel 2016–365 Win/Mac  •  Không cảnh báo bảo mật"
             )
             ws_g.Range("D8").Value = (
                 "Bảng theo dõi 31 ngày không Macro siêu nhẹ: lịch động, hoạt ảnh 6 giai đoạn offline & Streak Heatmap!"
             )
-            ws_g.Range("B13").Value = (
+            # Dynamically locate Section 1 & Section 3 header rows (handles bonus tabs cleanly!)
+            r_s1, r_s3 = 13, 18
+            for rr_scan in range(8, 28):
+                val_scan = str(ws_g.Cells(rr_scan, 2).Value or "")
+                if "1. CÁCH SỬ DỤNG" in val_scan:
+                    r_s1 = rr_scan
+                elif "3. TÙY BIẾN" in val_scan:
+                    r_s3 = rr_scan
+            ws_g.Cells(r_s1 + 1, 2).Value = (
                 "1️⃣  Mở tab Tracker chính và click thẳng vào ô Checkbox (☑ / ☐) — KHÔNG Macro, "
                 "KHÔNG cảnh báo bảo mật, KHÔNG cần Internet, mở cực nhanh trên mọi Excel 2016–365!"
             )
-            ws_g.Range("E13").Value = (
+            ws_g.Cells(r_s1 + 1, 5).Value = (
                 "⚡  File điền sẵn ~22 ngày mẫu sinh động. Muốn reset về 0%: chọn vùng C17:AG36 → nhấn Delete "
                 "(Mac: fn + Backspace) → toàn bộ ô tick về trống & cây về Stage 0!"
             )
-            ws_g.Range("E14").Value = (
+            ws_g.Cells(r_s1 + 2, 5).Value = (
                 "📑  Sang tháng mới trong 2 giây (bản Không Macro): chuột phải tab Tracker → Move or Copy → "
                 "tick ☑ Create a copy (hoặc nhân bản file cho tháng mới), chọn tháng ở B3 & xóa vùng tick."
             )
-            ws_g.Range("E15").Value = (
+            ws_g.Cells(r_s1 + 3, 5).Value = (
                 "💡  Mẹo: Nếu muốn lưu tự động nhiều Tháng & nhiều Năm ngay trên 1 trang duy nhất, "
                 "hãy dùng bản Pro (.xlsm) trong thư mục pro_macro/!"
             )
-            ws_g.Range("E18").Value = (
+            ws_g.Cells(r_s3 + 1, 5).Value = (
                 "📅  Đổi Tháng (B3) & Năm (B5) tự nhảy lịch (28/29/30/31 ngày + thứ Mon–Sun), ẩn gọn ngày thừa cuối tháng!"
             )
-            ws_g.Range("E19").Value = (
+            ws_g.Cells(r_s3 + 2, 5).Value = (
                 "🏆  Tổng Kết & Thành Tựu Năm: Đồng bộ live tiến độ tháng hiện tại & Yearly Goals, tự mở khóa 8 Huy hiệu kỷ luật "
                 "& hiển thị 0% / Stage 0 khi chọn năm trống (vd: 2028)!"
             )
-            ws_g.Range("E20").Value = (
+            ws_g.Cells(r_s3 + 3, 5).Value = (
                 "⚡  Cần lưu lịch sử tự động 12 tháng × nhiều năm trên 1 tab? Chuyển sang dùng bản Pro (.xlsm) đã đi kèm sẵn!"
             )
             # Ensure generous vertical padding on Offline instruction rows (zero clipping!)
-            for r_inst in (13, 14, 15, 18, 19, 20):
+            for r_inst in (r_s1 + 1, r_s1 + 2, r_s1 + 3, r_s3 + 1, r_s3 + 2, r_s3 + 3):
                 if ws_g.Rows(r_inst).RowHeight < 66:
                     ws_g.Rows(r_inst).RowHeight = 66
-            # Update tracker cue line B7
+            # Update tracker cue line B7 & Daily Tasks cue line B6
             ws_tr = wb.Worksheets(tdef.tracker_name)
             ws_tr.Range("B7").Value = "📌 Bản Không Macro • Dùng bản Pro (.xlsm) để tự lưu nhiều tháng/năm"
+            try:
+                ws_dt = wb.Worksheets(DAILY_TASKS_SHEET)
+                ws_dt.Range("B6").Value = (
+                    "📌  Bản Không Macro (Excel 2016–365) • Tick xong việc để xem hoạt ảnh lớn dần "
+                    "— Dùng bản Pro (.xlsm) để tự lưu nhiều ngày!"
+                )
+            except Exception:
+                pass
 
             ws_g.Activate()
             ws_g.Range("A1").Select()
@@ -382,15 +413,42 @@ def derive_offline_from_pro(xl, only: list[str] | None = None):
 
 
 def main():
+    import gc
     args = sys.argv[1:]
     mode = args[0] if args else "all"
-    only = args[1:] or None
+    rest = args[1:]
+    start_idx = None
+    end_idx = None
+    only = []
+    i = 0
+    while i < len(rest):
+        if rest[i] == "--start" and i + 1 < len(rest):
+            start_idx = int(rest[i + 1]); i += 2
+        elif rest[i] == "--end" and i + 1 < len(rest):
+            end_idx = int(rest[i + 1]); i += 2
+        else:
+            only.append(rest[i]); i += 1
+
+    if start_idx is not None or end_idx is not None:
+        from excel_builder import TEMPLATES
+        lo = (start_idx or 1) - 1
+        hi = end_idx or len(TEMPLATES)
+        only = [t.short_key for t in TEMPLATES[lo:hi]]
+    only = only or None
+
+    def _new_excel():
+        xl_app = win32.DispatchEx("Excel.Application")
+        xl_app.Visible = False
+        xl_app.DisplayAlerts = False
+        try:
+            xl_app.EnableAnimations = False
+        except Exception:
+            pass
+        return xl_app
 
     if mode == "derive-offline":
-        print("\nDeriving 10 pure macro-free Offline .xlsx files from Pro .xlsm...", flush=True)
-        xl = win32.DispatchEx("Excel.Application")
-        xl.Visible = False
-        xl.DisplayAlerts = False
+        print(f"\nDeriving pure macro-free Offline .xlsx files from Pro .xlsm (only={only})...", flush=True)
+        xl = _new_excel()
         try:
             derive_offline_from_pro(xl, only)
         finally:
@@ -402,24 +460,23 @@ def main():
     if mode in ("all", "gsheets"):
         build_all_gsheets(only)
 
-    if not pro_manifests and not off_manifests:
+    all_jobs = [(m, True) for m in pro_manifests] + [(m, False) for m in off_manifests]
+    if not all_jobs:
         return
 
-    print("\nStarting Excel COM compilation...", flush=True)
-    xl = win32.DispatchEx("Excel.Application")
-    xl.Visible = False
-    xl.DisplayAlerts = False
-    try:
+    # Anti-hang batch protocol: recycle EXCEL.EXE COM cleanly every 5 templates!
+    print(f"\nStarting Excel COM compilation ({len(all_jobs)} workbook(s), recycling COM every 5)...", flush=True)
+    for chunk_i in range(0, len(all_jobs), 5):
+        chunk = all_jobs[chunk_i:chunk_i + 5]
+        xl = _new_excel()
         try:
-            xl.EnableAnimations = False
-        except Exception:
-            pass
-        for meta in pro_manifests:
-            enhance_one(xl, meta, capture_previews=True)
-        for meta in off_manifests:
-            enhance_one(xl, meta, capture_previews=False)
-    finally:
-        xl.Quit()
+            for meta, cap_prev in chunk:
+                enhance_one(xl, meta, capture_previews=cap_prev)
+        finally:
+            xl.Quit()
+            del xl
+            gc.collect()
+            time.sleep(0.5)
 
 
 if __name__ == "__main__":

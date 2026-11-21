@@ -38,7 +38,10 @@ from hx.addons import (add_cactus_weekly_strip, add_rainbow_bottom_blocks,
                        add_sakura_study_block, add_ocean_fitness_block,
                        add_matcha_routine_block, add_aurora_rpg_top_card,
                        add_dream_house_notes_block, add_wildflower_mood_row,
-                       add_plum_oak_master_panels)
+                       add_plum_oak_master_panels, add_alpaca_mini_panel,
+                       add_royal_cat_cash_panel, add_top_habits_rank_panel,
+                       add_dog_companion_panel)
+from hx.daily_tasks import build_daily_tasks_sheet, DAILY_TASKS_SHEET
 from hx.extras import (build_reflection_notes_sheet, build_rainbow_analytics_sheet,
                        build_monthly_budget_sheet, build_life_overview_sheet,
                        build_gratitude_sheet, build_milestones_sheet,
@@ -126,6 +129,38 @@ def _addon_wildflower(wb, cv, tr, seed):
 
 def _addon_plum_oak(wb, cv, tr, seed):
     add_plum_oak_master_panels(wb, cv, tr)
+    return None
+
+def _addon_alpaca_budget(wb, cv, tr, seed):
+    add_alpaca_mini_panel(wb, cv, tr, kind="budget")
+    return None
+
+def _addon_alpaca_selfcare(wb, cv, tr, seed):
+    add_alpaca_mini_panel(wb, cv, tr, kind="selfcare")
+    return None
+
+def _addon_alpaca_savings(wb, cv, tr, seed):
+    add_alpaca_mini_panel(wb, cv, tr, kind="savings")
+    return None
+
+def _addon_royal_cat_cash(wb, cv, tr, seed):
+    add_royal_cat_cash_panel(wb, cv, tr)
+    return None
+
+def _addon_ginger_rank(wb, cv, tr, seed):
+    add_top_habits_rank_panel(wb, cv, tr, kind="ginger")
+    return None
+
+def _addon_candy_rank(wb, cv, tr, seed):
+    add_top_habits_rank_panel(wb, cv, tr, kind="candy")
+    return None
+
+def _addon_shiba(wb, cv, tr, seed):
+    add_dog_companion_panel(wb, cv, tr, kind="shiba")
+    return None
+
+def _addon_akita(wb, cv, tr, seed):
+    add_dog_companion_panel(wb, cv, tr, kind="akita")
     return None
 
 def _extra_cactus(wb, styles, tr, addon_ref, universal, gsheets):
@@ -833,6 +868,382 @@ TEMPLATES: list[TemplateDef] = [
         seed=199, label_tag="MEADOW SUNFLOWER", garden_label="MEADOW SUNFLOWER",
         grown_label="🌻  SUNFLOWERS\nBLOOMED:", tracker_capture_range="A1:AN38",
     ),
+    # ----------------------------------------------------------------------- #
+    #  BATCH 3 — TEMPLATES 20..31 (v3.0 MEGA EXPANSION!)
+    # ----------------------------------------------------------------------- #
+    TemplateDef(
+        stem="20_Cream_Alpaca_Cozy_Budget", short_key="20_alpaca_cream",
+        theme=Theme(
+            slug="alpaca_cream", name="CREAM ALPACA COZY BUDGET", emoji="🦙",
+            tagline_vi="Chú Alpaca kem bông mềm ấm áp kết hợp bảng Ngân Sách & Tiết Kiệm tháng gọn gàng — rèn thói quen & quản lý ví tiền!",
+            page="#FAF6F0", card="#FFFFFF", ink="#3E2C23", muted="#8C7362", line="#E6D8C8",
+            primary="#A67C52", primary_dark="#7A5635", on_primary="#FFFFFF", soft="#F3E9DC",
+            chart_fill="#DFC7AE", chart_line="#A67C52",
+            week_head=["#C8A98E", "#B89578", "#A67C52", "#C4A484", "#D8C1A8"],
+            week_tint=["#FAF4EC", "#F8F0E6", "#F7EDE1", "#FAF3EA", "#FCF8F2"],
+            week_check=["#8B5E34", "#7A5635", "#6B4423", "#8B5E34", "#9A6B42"],
+            week_on=["#3E2C23", "#FFFFFF", "#FFFFFF", "#3E2C23", "#3E2C23"],
+            streak_lo="#FAF6F0", streak_mid="#DFC7AE", streak_hi="#A67C52",
+            bar="#C8A98E", donut_rest="#EFE4D7",
+            chart_title="COZY ALPACA PROGRESS • TIẾN ĐỘ THÓI QUEN MỖI NGÀY",
+        ),
+        tracker_name="🦙 Cream Alpaca",
+        habits=[
+            Habit("Thức dậy sớm & uống ly nước ấm", goal=28, p=0.90),
+            Habit("Ghi chép thu chi hằng ngày", goal=30, p=0.93),
+            Habit("Không mua sắm bốc đồng online", goal=26, p=0.84),
+            Habit("Tự nấu ăn / mang cơm trưa", goal=24, p=0.82),
+            Habit("Tập vận động / đi bộ 30 phút", goal=26, p=0.86),
+            Habit("Đọc sách tài chính / kỹ năng 20p", goal=26, p=0.85),
+            Habit("Dọn gọn bàn làm việc cuối ngày", goal=28, p=0.88),
+            Habit("Ngủ đủ 8 tiếng trước 23h00", goal=28, p=0.87),
+        ],
+        seed=201, label_tag="COZY ALPACA & BUDGET", garden_label="ALPACA MEADOW",
+        grown_label="🦙  FLUFFY ALPACAS\nGROWN:", tracker_capture_range="A1:AN45",
+        addon_fn=_addon_alpaca_budget,
+    ),
+    TemplateDef(
+        stem="21_Blush_Alpaca_Flower_Crown", short_key="21_alpaca_blush",
+        theme=Theme(
+            slug="alpaca_blush", name="BLUSH ALPACA FLOWER CROWN", emoji="🦙",
+            tagline_vi="Chú Alpaca kẹo bông hồng tím đội Vương Miện Hoa kết hợp góc Self-Care & Chi tiêu nhẹ nhàng đầy mộng mơ!",
+            page="#FDF2F8", card="#FFFFFF", ink="#4C1D42", muted="#956B8B", line="#F2D4E6",
+            primary="#DB6DA3", primary_dark="#A63F74", on_primary="#FFFFFF", soft="#FCE7F3",
+            chart_fill="#F9A8D4", chart_line="#C084FC",
+            week_head=["#F9A8D4", "#DDD6FE", "#FBCFE8", "#C4B5FD", "#F5D0FE"],
+            week_tint=["#FFF4F9", "#F7F4FF", "#FFF6FA", "#F5F2FF", "#FDF4FF"],
+            week_check=["#C03A7C", "#7C3AED", "#DB2777", "#6D28D9", "#A21CAF"],
+            week_on=["#4C1D42", "#3B1D5E", "#4C1D42", "#3B1D5E", "#4C1D42"],
+            streak_lo="#FDF2F8", streak_mid="#F9A8D4", streak_hi="#C084FC",
+            bar="#F472B6", donut_rest="#F5E1EE",
+            chart_title="BLUSH ALPACA PROGRESS • TIẾN ĐỘ MỖI NGÀY",
+        ),
+        tracker_name="🦙 Blush Alpaca",
+        habits=[
+            Habit("Chăm sóc da sáng & kem chống nắng", goal=30, p=0.94),
+            Habit("Uống đủ 2L nước & trà hoa", goal=30, p=0.91),
+            Habit("Pilates / Yoga giãn cơ 25 phút", goal=24, p=0.84),
+            Habit("Viết nhật ký cảm xúc & biết ơn", goal=28, p=0.88),
+            Habit("Đọc sách nhẹ nhàng 20 phút tối", goal=26, p=0.85),
+            Habit("Ăn rau xanh & trái cây tươi", goal=28, p=0.87),
+            Habit("Hạn chế màn hình trước khi ngủ", goal=26, p=0.81),
+            Habit("Ngủ sớm làm đẹp trước 23h00", goal=28, p=0.86),
+        ],
+        seed=211, label_tag="FLOWER CROWN ALPACA", garden_label="FLOWER CROWN",
+        grown_label="🌸  FLOWER ALPACAS\nGROWN:", tracker_capture_range="A1:AN45",
+        addon_fn=_addon_alpaca_selfcare,
+    ),
+    TemplateDef(
+        stem="22_Matcha_Alpaca_Meadow", short_key="22_alpaca_matcha",
+        theme=Theme(
+            slug="alpaca_matcha", name="MATCHA ALPACA MEADOW", emoji="🦙",
+            tagline_vi="Chú Alpaca xanh Matcha đeo yên thêu rực rỡ cùng thẻ Mục Tiêu Quỹ Tiết Kiệm Tháng tươi mát & bình yên!",
+            page="#F3FAF4", card="#FFFFFF", ink="#234E2A", muted="#638768", line="#D4ECD7",
+            primary="#6BBF74", primary_dark="#3E8E49", on_primary="#FFFFFF", soft="#E4F5E6",
+            chart_fill="#A7D7A9", chart_line="#4E9F58",
+            week_head=["#A7D7A9", "#8FD498", "#B5E2B7", "#99D99F", "#C5EBC7"],
+            week_tint=["#F1FAF2", "#EDF8EE", "#F3FBF4", "#EFF9F0", "#F6FCF6"],
+            week_check=["#2E7D32", "#1B5E20", "#388E3C", "#2E7D32", "#43A047"],
+            week_on=["#1B4332", "#1B4332", "#1B4332", "#1B4332", "#1B4332"],
+            streak_lo="#F0FDF4", streak_mid="#A7D7A9", streak_hi="#2E7D32",
+            bar="#6BBF74", donut_rest="#E2F2E4",
+            chart_title="MATCHA MEADOW PROGRESS • TIẾN ĐỘ XANH MỖI NGÀY",
+        ),
+        tracker_name="🦙 Matcha Alpaca",
+        habits=[
+            Habit("Dậy sớm đón khí trời & pha trà", goal=28, p=0.90),
+            Habit("Đi bộ / chạy bộ ngoài trời 30p", goal=25, p=0.86),
+            Habit("Uống đủ 2.5L nước lọc mỗi ngày", goal=30, p=0.92),
+            Habit("Tự chuẩn bị bữa ăn healthy", goal=26, p=0.84),
+            Habit("Tập trung Deep Work 2 giờ", goal=26, p=0.88),
+            Habit("Đọc sách / nghe podcast học tập", goal=26, p=0.85),
+            Habit("Ghi chi tiêu & trích quỹ tiết kiệm", goal=28, p=0.89),
+            Habit("Thiền 10 phút & ngủ đủ 8 tiếng", goal=28, p=0.87),
+        ],
+        seed=222, label_tag="MATCHA ALPACA MEADOW", garden_label="MATCHA MEADOW",
+        grown_label="🍵  MATCHA ALPACAS\nGROWN:", tracker_capture_range="A1:AN45",
+        addon_fn=_addon_alpaca_savings,
+    ),
+    TemplateDef(
+        stem="23_Bamboo_Panda_Zen_Garden", short_key="23_bamboo_panda",
+        theme=Theme(
+            slug="bamboo_panda", name="BAMBOO PANDA ZEN GARDEN", emoji="🐼",
+            tagline_vi="Gấu Trúc dễ thương ôm trúc xanh cùng thanh tiến độ tre trúc tối giản, sạch sẽ & đầy cảm hứng Zen!",
+            page="#F9FBF7", card="#FFFFFF", ink="#222222", muted="#6E7A6B", line="#D9E8CD",
+            primary="#6AB824", primary_dark="#468212", on_primary="#FFFFFF", soft="#EAF8DC",
+            chart_fill="#B8E986", chart_line="#6AB824", chart_kind="column",
+            week_head=["#B8E986", "#9EE067", "#C6EF9C", "#A8E475", "#D4F4B4"],
+            week_tint=["#F4FCEB", "#F1FBE7", "#F6FDEF", "#F2FBE9", "#F8FEF3"],
+            week_check=["#222222", "#222222", "#222222", "#222222", "#222222"],
+            week_on=["#1F3A09", "#1F3A09", "#1F3A09", "#1F3A09", "#1F3A09"],
+            streak_lo="#F4FCEB", streak_mid="#B8E986", streak_hi="#468212",
+            bar="#7ED321", donut_rest="#E8F5DA",
+            chart_title="BAMBOO ZEN PROGRESS • TIẾN ĐỘ RỪNG TRÚC",
+        ),
+        tracker_name="🐼 Bamboo Panda",
+        habits=[
+            Habit("Thức dậy trước 6h30 & dọn giường", goal=28, p=0.90),
+            Habit("Uống đủ 2L nước lọc mỗi ngày", goal=30, p=0.93),
+            Habit("Thiền tĩnh tâm 15 phút (Zen)", goal=26, p=0.86),
+            Habit("Ăn uống cân bằng, nhiều rau xanh", goal=28, p=0.87),
+            Habit("Đọc sách tối thiểu 15–20 phút", goal=26, p=0.85),
+            Habit("Tập vận động nhẹ 30 phút", goal=25, p=0.84),
+            Habit("Lập kế hoạch ngày mai trước ngủ", goal=28, p=0.88),
+            Habit("Ngủ đủ giấc 7.5–8 tiếng", goal=28, p=0.89),
+        ],
+        seed=233, label_tag="BAMBOO PANDA ZEN", garden_label="PANDA BAMBOO",
+        grown_label="🐼  HAPPY PANDAS\nGROWN:", tracker_capture_range="A1:AN38",
+    ),
+    TemplateDef(
+        stem="24_Royal_Cat_Saving_Cash", short_key="24_royal_cat_cash",
+        theme=Theme(
+            slug="royal_cat_cash", name="ROYAL CAT SAVING CASH", emoji="👑",
+            tagline_vi="Nuôi Mèo Hộp Giấy lên ngôi Mèo Hoàng Gia đội vương miện — kết hợp bảng Dòng Tiền Dự Kiến vs Thực Tế & Bộ đếm Vương Quốc Mèo!",
+            page="#F6F3EC", card="#FFFFFF", ink="#4A3B32", muted="#8C7B70", line="#E3D9CD",
+            primary="#8D7360", primary_dark="#5E4B3E", on_primary="#FFFFFF", soft="#EFE8DF",
+            chart_fill="#D8C3B0", chart_line="#8D7360",
+            week_head=["#D8C3B0", "#D9DFD3", "#CBB39E", "#CBD5C4", "#DFCEBF"],
+            week_tint=["#FAF6F1", "#F5F7F3", "#F8F3ED", "#F3F6F1", "#FBF8F4"],
+            week_check=["#5E4B3E", "#4A6150", "#5E4B3E", "#4A6150", "#70594A"],
+            week_on=["#3D2F27", "#2F3E32", "#3D2F27", "#2F3E32", "#3D2F27"],
+            streak_lo="#F6F3EC", streak_mid="#D8C3B0", streak_hi="#6E5747",
+            bar="#BFA38A", donut_rest="#EAE2D8",
+            chart_title="CAT KINGDOM & CASH DISCIPLINE • KỶ LUẬT MỖI NGÀY",
+        ),
+        tracker_name="👑 Royal Cat & Cash",
+        habits=[
+            Habit("Ghi lại 100% khoản chi trong ngày", goal=30, p=0.94),
+            Habit("Ngày không chi tiêu lãng phí", goal=24, p=0.82),
+            Habit("Tự pha cà phê / nấu ăn tại nhà", goal=26, p=0.85),
+            Habit("Trích quỹ tiết kiệm / đầu tư nhỏ", goal=28, p=0.88),
+            Habit("Tập thể dục rèn sức khỏe 30p", goal=25, p=0.84),
+            Habit("Đọc sách tài chính cá nhân 20p", goal=26, p=0.86),
+            Habit("Hoàn thành 3 việc tạo thu nhập", goal=26, p=0.89),
+            Habit("Ngủ sớm & kiểm tra mục tiêu ngày", goal=28, p=0.87),
+        ],
+        seed=244, label_tag="RAISING CATS & CASH", garden_label="ROYAL CAT KINGDOM",
+        grown_label="👑  ROYAL CATS\nRAISED:", tracker_capture_range="A1:AN45",
+        addon_fn=_addon_royal_cat_cash,
+    ),
+    TemplateDef(
+        stem="25_Ginger_Kitten_Basket_Routine", short_key="25_ginger_kitten",
+        theme=Theme(
+            slug="ginger_kitten", name="GINGER KITTEN BASKET ROUTINE", emoji="🐱",
+            tagline_vi="Chú Mèo Cam siêu đáng yêu chia nhịp Sáng · Chiều · Tối trên nền Mint Sage & Đào Kem + Bảng Xếp Hạng Top Thói Quen!",
+            page="#F6FBF8", card="#FFFFFF", ink="#4A3525", muted="#8C7564", line="#D8E9DF",
+            primary="#E59866", primary_dark="#C06C3A", on_primary="#FFFFFF", soft="#FFF3E4",
+            chart_fill="#C9E4D6", chart_line="#E59866",
+            week_head=["#C9E4D6", "#F7C6B9", "#C9E4D6", "#F7C6B9", "#FFE6B3"],
+            week_tint=["#F1FAF5", "#FFF5F2", "#F1FAF5", "#FFF5F2", "#FFFBF0"],
+            week_check=["#3D8B68", "#D46B50", "#3D8B68", "#D46B50", "#C07A28"],
+            week_on=["#1B4332", "#6B271D", "#1B4332", "#6B271D", "#5C3A09"],
+            streak_lo="#FFF8DC", streak_mid="#F7C6B9", streak_hi="#E59866",
+            bar="#E59866", donut_rest="#E8F3EC",
+            chart_title="GINGER KITTEN ROUTINE • LỊCH TRÌNH SÁNG-CHIỀU-TỐI",
+        ),
+        tracker_name="🐱 Ginger Kitten",
+        habits=[
+            Habit("☀️ [Sáng] Dậy sớm & dọn gọn giường", goal=28, p=0.91),
+            Habit("☀️ [Sáng] Uống nước ấm & vận động 20p", goal=26, p=0.87),
+            Habit("☀️ [Sáng] Ăn sáng đầy đủ dinh dưỡng", goal=28, p=0.89),
+            Habit("🌤️ [Chiều] Tập trung Deep Work 2 giờ", goal=26, p=0.88),
+            Habit("🌤️ [Chiều] Uống đủ 2L nước & giãn cơ", goal=30, p=0.92),
+            Habit("🌤️ [Chiều] Đi bộ nhẹ / nghỉ mắt 15p", goal=26, p=0.83),
+            Habit("🌙 [Tối] Đọc sách giấy 20 phút", goal=26, p=0.85),
+            Habit("🌙 [Tối] Skincare & viết nhật ký tối", goal=28, p=0.88),
+            Habit("🌙 [Tối] Tắt điện thoại & ngủ 23h", goal=28, p=0.84),
+        ],
+        seed=255, label_tag="SOPHIA GINGER CAT", garden_label="GINGER CAT BASKET",
+        grown_label="🐱  HAPPY KITTENS\nGROWN:", tracker_capture_range="A1:AN45",
+        addon_fn=_addon_ginger_rank,
+    ),
+    TemplateDef(
+        stem="26_Pastel_Purple_Royal_Cat", short_key="26_purple_cat",
+        theme=Theme(
+            slug="purple_cat", name="PASTEL PURPLE ROYAL CAT", emoji="🐱",
+            tagline_vi="Phong cách Tím Lavender & Hồng Phấn siêu thẩm mỹ cùng Mèo Xám Hoàng Gia & tab Nhiệm Vụ Ngày nổi bật!",
+            page="#F4F0F9", card="#FFFFFF", ink="#3B324A", muted="#827894", line="#E3D9EE",
+            primary="#9D84C7", primary_dark="#6E529E", on_primary="#FFFFFF", soft="#EDE6F7",
+            chart_fill="#D2C1E8", chart_line="#9D84C7",
+            week_head=["#D2C1E8", "#F2D2DC", "#D2C1E8", "#F2D2DC", "#DFD3F0"],
+            week_tint=["#F7F3FC", "#FDF4F7", "#F7F3FC", "#FDF4F7", "#F8F5FD"],
+            week_check=["#6E529E", "#B85C7E", "#6E529E", "#B85C7E", "#6B6E7B"],
+            week_on=["#3B285C", "#5E253B", "#3B285C", "#5E253B", "#3B285C"],
+            streak_lo="#F4F0F9", streak_mid="#D2C1E8", streak_hi="#6E529E",
+            bar="#B298DC", donut_rest="#EAE2F3",
+            chart_title="AESTHETIC PURPLE CAT • BIỂU ĐỒ KỶ LUẬT MỖI NGÀY",
+        ),
+        tracker_name="🐱 Purple Royal Cat",
+        habits=[
+            Habit("Thức dậy nhẹ nhàng & uống nước", goal=30, p=0.92),
+            Habit("Viết 3 mục tiêu quan trọng nhất", goal=28, p=0.90),
+            Habit("Tập thể dục / đi bộ 30 phút", goal=25, p=0.85),
+            Habit("Ăn rau xanh & ít đồ ngọt", goal=26, p=0.84),
+            Habit("Đọc sách / học kỹ năng 25 phút", goal=26, p=0.86),
+            Habit("Dọn gọn phòng 10 phút mỗi ngày", goal=28, p=0.88),
+            Habit("Chăm sóc da & thư giãn buổi tối", goal=28, p=0.90),
+            Habit("Ngủ đủ 8 tiếng trước 23h00", goal=28, p=0.85),
+        ],
+        seed=266, label_tag="PASTEL PURPLE CAT", garden_label="ROYAL GREY CATS",
+        grown_label="👑  ROYAL GREY CATS\nRAISED:", tracker_capture_range="A1:AN38",
+    ),
+    TemplateDef(
+        stem="27_Hatching_Chick_Icon_Studio", short_key="27_hatching_chick",
+        theme=Theme(
+            slug="hatching_chick", name="HATCHING CHICK ICON STUDIO", emoji="🐣",
+            tagline_vi="Ấp nở chú Gà Con Vàng siêu cưng qua 6 cấp độ từ trứng tròn đến gà bông tung cánh — phối Tím Periwinkle & Cam Đào rực rỡ!",
+            page="#FCF8F2", card="#FFFFFF", ink="#3B2E4A", muted="#857894", line="#EAE0D5",
+            primary="#7C5CD6", primary_dark="#5B3DB5", on_primary="#FFFFFF", soft="#EFEAFF",
+            chart_fill="#FAD6B8", chart_line="#EA7B30", chart_kind="column",
+            week_head=["#D4C5F9", "#FAD6B8", "#D4C5F9", "#FAD6B8", "#FEF08A"],
+            week_tint=["#F6F2FF", "#FFF7F0", "#F6F2FF", "#FFF7F0", "#FFFDF0"],
+            week_check=["#6D48D4", "#D96B27", "#6D48D4", "#D96B27", "#CA8A04"],
+            week_on=["#3B1E78", "#7C2D12", "#3B1E78", "#7C2D12", "#713F12"],
+            streak_lo="#FFFBEB", streak_mid="#FDE047", streak_hi="#7C5CD6",
+            bar="#F59E0B", donut_rest="#EFE8FA",
+            hero_header_bg="#FACC15", hero_header_fg="#3B2E4A",
+            chart_title="HATCHING CHICK STUDIO • TIẾN ĐỘ ẤP TRỨNG MỖI NGÀY",
+        ),
+        tracker_name="🐣 Hatching Chick",
+        habits=[
+            Habit("Uống đủ 8 ly nước lọc mỗi ngày", goal=30, p=0.93),
+            Habit("Giãn cơ / vận động buổi sáng 15p", goal=28, p=0.89),
+            Habit("Đọc sách ít nhất 15–20 phút", goal=26, p=0.86),
+            Habit("Không điện thoại sau 21h30", goal=26, p=0.81),
+            Habit("Uống vitamin & ăn sáng đủ chất", goal=30, p=0.91),
+            Habit("Viết nhật ký & 3 điều biết ơn", goal=28, p=0.87),
+            Habit("Tập thể dục / đi bộ 30 phút", goal=24, p=0.84),
+            Habit("Thiền / hít thở thư giãn 10 phút", goal=26, p=0.85),
+            Habit("Dọn bếp & chọn đồ cho ngày mai", goal=28, p=0.88),
+        ],
+        seed=277, label_tag="CHOOSE YOUR STAGE: CHICK", garden_label="HATCHING STUDIO",
+        grown_label="🐣  FLUFFY CHICKS\nHATCHED:", tracker_capture_range="A1:AN38",
+    ),
+    TemplateDef(
+        stem="28_Cotton_Candy_Jar_Sweet", short_key="28_candy_jar",
+        theme=Theme(
+            slug="candy_jar", name="COTTON CANDY JAR SWEET", emoji="🍬",
+            tagline_vi="Lấp đầy hũ thủy tinh bằng kẹo ngọt & kẹo mút xoắn sắc Hồng Kẹo Bông + Xanh Bầu Trời — kèm Bảng Xếp Hạng Thói Quen!",
+            page="#FFFDFE", card="#FFFFFF", ink="#3B3054", muted="#877C9E", line="#F2D9E9",
+            primary="#EC4899", primary_dark="#BE185D", on_primary="#FFFFFF", soft="#FCE7F3",
+            chart_fill="#BAE6FD", chart_line="#3B82F6",
+            week_head=["#FBCFE8", "#BAE6FD", "#FBCFE8", "#BAE6FD", "#DDD6FE"],
+            week_tint=["#FFF5FA", "#F2FAFF", "#FFF5FA", "#F2FAFF", "#F7F4FF"],
+            week_check=["#EC4899", "#2563EB", "#EC4899", "#2563EB", "#7C3AED"],
+            week_on=["#831843", "#1E3A8A", "#831843", "#1E3A8A", "#4C1D95"],
+            streak_lo="#F0F9FF", streak_mid="#BAE6FD", streak_hi="#EC4899",
+            bar="#60A5FA", donut_rest="#FCE7F3",
+            hero_header_bg="#FBCFE8", hero_header_fg="#831843",
+            chart_title="SWEET CANDY JAR WAVE • SÓNG KẸO NGỌT MỖI NGÀY",
+        ),
+        tracker_name="🍬 Cotton Candy Jar",
+        habits=[
+            Habit("Uống đủ 8 ly nước lọc tươi mát", goal=30, p=0.92),
+            Habit("Tập thể dục 30 phút tràn năng lượng", goal=25, p=0.86),
+            Habit("Đọc sách 20 phút mở mang kiến thức", goal=26, p=0.87),
+            Habit("Thức dậy sớm trước 6h30", goal=28, p=0.85),
+            Habit("Luyện ngoại ngữ / kỹ năng mới 20p", goal=26, p=0.84),
+            Habit("Hạn chế lướt mạng xã hội vô bổ", goal=26, p=0.82),
+            Habit("Lên thực đơn lành mạnh trong ngày", goal=28, p=0.88),
+            Habit("Viết nhật ký & gấp gọn chăn gối", goal=30, p=0.91),
+        ],
+        seed=288, label_tag="FILL YOUR CANDY JAR", garden_label="CANDY JAR SHELF",
+        grown_label="🍬  YAY! CANDY JARS\nFILLED:", tracker_capture_range="A1:AN45",
+        addon_fn=_addon_candy_rank,
+    ),
+    TemplateDef(
+        stem="29_Watercolor_Rose_Bouquet", short_key="29_rose_bouquet",
+        theme=Theme(
+            slug="rose_bouquet", name="WATERCOLOR ROSE BOUQUET", emoji="💐",
+            tagline_vi="Bó hoa hồng phấn màu nước lãng mạn trên nền trắng ngà tinh khôi — theo dõi kích thước Bó Hoa Tháng Này nở rộ từng ngày!",
+            page="#FFFDFD", card="#FFFFFF", ink="#592B3B", muted="#9C7683", line="#F2DCE4",
+            primary="#D47E9B", primary_dark="#A64D6B", on_primary="#FFFFFF", soft="#FBEBF0",
+            chart_fill="#F8D7E3", chart_line="#D47E9B",
+            week_head=["#E29BB3", "#E9AEC2", "#DF92AD", "#EBB6C8", "#F1C8D6"],
+            week_tint=["#FDF5F8", "#FEF7F9", "#FDF4F7", "#FEF8FA", "#FFF9FB"],
+            week_check=["#A64D6B", "#B55B7A", "#9E4362", "#B55B7A", "#6E8F64"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#592B3B", "#592B3B"],
+            streak_lo="#FDF5F8", streak_mid="#F2C0D2", streak_hi="#A64D6B",
+            bar="#E29BB3", donut_rest="#F6E5EB",
+            chart_title="MONTHLY BOUQUET WAVE • LÀN SÓNG HOA HỒNG",
+        ),
+        tracker_name="💐 Rose Bouquet",
+        habits=[
+            Habit("Rửa mặt sạch & skincare sáng tối", goal=30, p=0.94),
+            Habit("Ngủ đủ 8 tiếng dưỡng nhan", goal=28, p=0.88),
+            Habit("Dọn gọn giường ngủ mỗi sáng", goal=30, p=0.92),
+            Habit("Đọc sách văn học / kỹ năng 20p", goal=26, p=0.86),
+            Habit("Dành 15 phút chăm sóc tinh thần", goal=28, p=0.87),
+            Habit("Uống vitamin & 2L nước mỗi ngày", goal=30, p=0.91),
+            Habit("Đi bộ thư giãn hít thở khí trời", goal=25, p=0.84),
+            Habit("Viết 3 điều dịu dàng đáng nhớ", goal=28, p=0.88),
+        ],
+        seed=299, label_tag="MONTHLY BOUQUET SIZE", garden_label="ROSE BOUQUET",
+        grown_label="💐  MONTHLY BOUQUET\nSIZE (FLOWERS):", tracker_capture_range="A1:AN38",
+    ),
+    TemplateDef(
+        stem="30_Shiba_Inu_Happy_Bork", short_key="30_shiba_inu",
+        theme=Theme(
+            slug="shiba_inu", name="SHIBA INU HAPPY BORK", emoji="🐕",
+            tagline_vi="Chú cún Shiba Inu đeo khăn đỏ Nhật Bản siêu dễ thương — tích điểm Cún Ngoan (Good Boy Points) & mở khóa Shiba Vương Miện!",
+            page="#FFF9F0", card="#FFFFFF", ink="#3B281E", muted="#8E7260", line="#F0DFCA",
+            primary="#E89B54", primary_dark="#C06E26", on_primary="#FFFFFF", soft="#FEF0DF",
+            chart_fill="#F7C99B", chart_line="#D94F4F",
+            week_head=["#E89B54", "#EEAD6E", "#D94F4F", "#E89B54", "#F4BE82"],
+            week_tint=["#FFF6EB", "#FFF8EF", "#FFF3F3", "#FFF6EB", "#FFF9F0"],
+            week_check=["#D94F4F", "#C06E26", "#D94F4F", "#C06E26", "#B45309"],
+            week_on=["#FFFFFF", "#3B281E", "#FFFFFF", "#FFFFFF", "#3B281E"],
+            streak_lo="#FFF9F0", streak_mid="#F9D5D3", streak_hi="#D94F4F",
+            bar="#E89B54", donut_rest="#F5E5D5",
+            hero_header_bg="#D94F4F", hero_header_fg="#FFFFFF",
+            chart_title="GOOD BOY VELOCITY • NĂNG LƯỢNG CÚN SHIBA MỖI NGÀY",
+        ),
+        tracker_name="🐕 Shiba Inu Tracker",
+        habits=[
+            Habit("Dậy sớm tràn năng lượng trước 6h30", goal=28, p=0.90),
+            Habit("Đi dạo / Chạy bộ ngoài trời 30p", goal=26, p=0.87),
+            Habit("Uống đủ 2.5L nước lọc mỗi ngày", goal=30, p=0.93),
+            Habit("Ăn đủ chất & hạn chế đồ chiên rán", goal=28, p=0.86),
+            Habit("Tập trung Deep Work 2 giờ không lười", goal=26, p=0.89),
+            Habit("Đọc sách / học kỹ năng mới 20p", goal=26, p=0.85),
+            Habit("Ghi chi tiêu & giữ vững ngân sách", goal=28, p=0.88),
+            Habit("Tắt điện thoại sớm & ngủ 23h00", goal=28, p=0.86),
+        ],
+        seed=301, label_tag="SHIBA INU GOOD BOY", garden_label="SHIBA INU PARK",
+        grown_label="🦴  GOOD BOY DAYS\nTHIS MONTH:", tracker_capture_range="A1:AN43",
+        addon_fn=_addon_shiba,
+    ),
+    TemplateDef(
+        stem="31_Akita_Inu_Snow_Loyal", short_key="31_akita_inu",
+        theme=Theme(
+            slug="akita_inu", name="AKITA INU SNOW LOYAL", emoji="❄️",
+            tagline_vi="Chú Akita Inu bông tuyết trung thành phong cách Nhật Bản mùa đông (Xanh Chàm Indigo & Kem Mơ) — tĩnh tâm, kiên định & bền bỉ!",
+            page="#F7FAFC", card="#FFFFFF", ink="#1E293B", muted="#64748B", line="#D8E5F2",
+            primary="#3B5998", primary_dark="#263C6B", on_primary="#FFFFFF", soft="#EBF3FB",
+            chart_fill="#CFE3F5", chart_line="#3B5998",
+            week_head=["#3B5998", "#4F72B3", "#4F8A6E", "#3B5998", "#C89564"],
+            week_tint=["#F1F6FC", "#F3F8FD", "#F1FAF5", "#F1F6FC", "#FDF8F2"],
+            week_check=["#3B5998", "#2B4C8C", "#3D7A5E", "#3B5998", "#B4743B"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#F0F7FF", streak_mid="#93C5FD", streak_hi="#3B5998",
+            bar="#4F8A6E", donut_rest="#E2ECF6",
+            chart_title="AKITA WINTER LOYALTY • NHỊP KỶ LUẬT TRUNG THÀNH",
+        ),
+        tracker_name="❄️ Akita Inu Zen",
+        habits=[
+            Habit("Thiền sáng / hít thở tĩnh tâm 10p", goal=28, p=0.89),
+            Habit("Tập thể dục bền bỉ 35 phút", goal=25, p=0.86),
+            Habit("Uống đủ 2.5L nước & trà ấm", goal=30, p=0.92),
+            Habit("Deep Work tập trung hoàn toàn 2h", goal=26, p=0.90),
+            Habit("Đọc sách / nghiên cứu chuyên sâu 25p", goal=26, p=0.87),
+            Habit("Ăn lành mạnh & nấu ăn tại nhà", goal=26, p=0.84),
+            Habit("Dọn tối giản không gian sống 10p", goal=28, p=0.88),
+            Habit("Viết nhật ký biết ơn & ngủ đủ 8h", goal=28, p=0.88),
+        ],
+        seed=311, label_tag="AKITA SNOW LOYALTY", garden_label="AKITA SNOW VILLAGE",
+        grown_label="❄️  LOYAL AKITA DAYS\nTHIS MONTH:", tracker_capture_range="A1:AN43",
+        addon_fn=_addon_akita,
+    ),
 ]
 
 
@@ -882,8 +1293,9 @@ def build_template(tdef: TemplateDef, out_path: Path, edition: str = "pro_xlsm")
     styles = Styles(wb, tdef.theme)
 
     extra_tab_docs = [
+        (DAILY_TASKS_SHEET, "Quản lý nhiệm vụ đột xuất theo từng ngày (Ngày/Tháng/Năm), nhóm ưu tiên & hoạt ảnh lớn dần 0% → 100%!"),
         (YEARLY_GOALS_SHEET, "Lập mục tiêu năm (2024–2040), chia nhỏ Tháng/Tuần/Ngày & bộ đếm hoạt ảnh động 6 giai đoạn."),
-        (ANNUAL_SHEET, "Tổng kết 12 tháng, 4 thẻ KPI, khu vườn 12 biểu tượng động & 8 Huy hiệu kỷ luật tự mở khóa!"),
+        (ANNUAL_SHEET, "Tổng kết 12 tháng thiết kế riêng theo chủ đề, 4 thẻ KPI, khu vườn 12 biểu tượng & 8 Huy hiệu kỷ luật!"),
     ]
     g_info = build_guide(wb, styles, tdef.tracker_name, extra_tab_docs, edition=edition)
 
@@ -910,21 +1322,29 @@ def build_template(tdef: TemplateDef, out_path: Path, edition: str = "pro_xlsm")
         checkboxes[tdef.tracker_name] = cv.form_checkboxes
         dyn_anims.extend(_month_dyn_anims(tdef.tracker_name, tr, prefix=None))
 
-    # Tab 3: Yearly Goals & Habits (themed + Year dropdown + Dynamic Anim_YearlyGoals!)
+    # Tab 3 (v3.0 NEW!): Daily One-Off Tasks (`📝 Nhiệm Vụ Ngày`) right next to Monthly Tracker!
+    dt_info = build_daily_tasks_sheet(
+        wb, styles, ws_calc, universal=universal, gsheets=gsheets, pro_mode=pro_mode
+    )
+    if universal:
+        checkboxes.update(dt_info["checkboxes"])
+        dyn_anims.extend(dt_info["dyn_anims"])
+
+    # Tab 4: Yearly Goals & Habits (themed + Year dropdown + Dynamic Anim_YearlyGoals!)
     yg_info = build_yearly_goals_v21(wb, styles, ws_calc, year=2026, universal=universal,
                                      gsheets=gsheets, pro_mode=pro_mode)
     if universal:
         checkboxes.update(yg_info["checkboxes"])
         dyn_anims.extend(yg_info["dyn_anims"])
 
-    # Tab 4: Annual Summary & Achievements (reads live active month + _Database!)
+    # Tab 5: Bespoke Theme-Specific Annual Summary & Achievements (reads live active month + _Database!)
     ann_info = build_annual_achievements_sheet(
         wb, styles, ws_calc, mode=edition, pro_tr=tr, year=2026, universal=universal, gsheets=gsheets
     )
     if universal:
         dyn_anims.extend(ann_info["dyn_anims"])
 
-    # Hidden `_Database` pre-seeded with current active month `2026-10` + `2026` Yearly Goals
+    # Hidden `_Database` pre-seeded with `2026-10` + `2026` Yearly Goals + `2026-10-21` Daily Tasks
     build_database_sheet(wb, styles, tdef.habits,
                          seed_months=[(2026, 10, tr.ticks_2d)],
                          seed_goal_year=2026)
@@ -936,11 +1356,12 @@ def build_template(tdef: TemplateDef, out_path: Path, edition: str = "pro_xlsm")
 
     captures = [
         {"sheet": tdef.tracker_name, "range": tdef.tracker_capture_range, "out": f"{tdef.short_key}_tracker.png"},
-        {"sheet": YEARLY_GOALS_SHEET, "range": "A1:J26", "out": f"{tdef.short_key}_yearly_goals.png"},
         {"sheet": ANNUAL_SHEET, "range": ann_info["capture_range"], "out": f"{tdef.short_key}_annual_achievements.png"},
     ]
-    if tdef.short_key in ("01_sunflower", "02_cactus", "06_navy", "07_sakura", "10_aurora"):
-        captures.insert(0, {"sheet": GUIDE_SHEET, "range": f"A1:H{g_info['guide_last_row']}", "out": f"{tdef.short_key}_guide.png"})
+    if tdef.short_key in ("01_sunflower", "20_alpaca_cream", "24_royal_cat_cash", "26_purple_cat", "30_shiba_inu", "31_akita_inu"):
+        captures.append({"sheet": DAILY_TASKS_SHEET, "range": dt_info["capture_range"], "out": f"{tdef.short_key}_daily_tasks.png"})
+    if tdef.short_key in ("01_sunflower", "20_alpaca_cream", "30_shiba_inu"):
+        captures.append({"sheet": YEARLY_GOALS_SHEET, "range": "A1:J26", "out": f"{tdef.short_key}_yearly_goals.png"})
 
     return {
         "edition": edition,
@@ -948,6 +1369,7 @@ def build_template(tdef: TemplateDef, out_path: Path, edition: str = "pro_xlsm")
         "short_key": tdef.short_key,
         "slug": tdef.theme.slug,
         "tracker_sheet": tdef.tracker_name,
+        "daily_tasks_sheet": DAILY_TASKS_SHEET,
         "yearly_goals_sheet": YEARLY_GOALS_SHEET,
         "annual_sheet": ANNUAL_SHEET,
         "dyn_anims": dyn_anims,

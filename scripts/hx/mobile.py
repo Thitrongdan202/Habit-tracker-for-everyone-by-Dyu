@@ -27,8 +27,11 @@ import xlsxwriter
 from .core import (Canvas, Styles, Theme, MONTHS_EN, CHECK_ALT, acell, cell, colname,
                    qs, rng, place_chart, axis_font, text_lines, checked_pastel_bg, REPO_URL)
 from .tracker import Habit
+from .daily_tasks import (DEFAULT_DAILY_TASKS, DEFAULT_DAILY_HIGHLIGHT, DEFAULT_TASK_DAY,
+                          DEFAULT_TASK_MONTH, DEFAULT_TASK_YEAR, DEFAULT_TASK_KEY, TASK_PRIORITIES)
 
 MOBILE_WEEK_SHEET = "📱 Tuần Này"
+MOBILE_TASKS_SHEET = "📝 Việc Hôm Nay"
 MOBILE_GOALS_SHEET = "🎯 Mục Tiêu & Thành Tựu"
 MOBILE_GUIDE_SHEET = "📖 Hướng Dẫn"
 MOBILE_CALC_SHEET = "_Calc"
@@ -153,14 +156,16 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
     wb = xlsxwriter.Workbook(str(out_path))
     styles = Styles(wb, t)
 
-    # Create tabs in MOBILE-FIRST ORDER: 1. Tracker -> 2. Goals & Achievements -> 3. Guide -> hidden helpers
+    # Create tabs in MOBILE-FIRST ORDER: 1. Week -> 2. Daily Tasks -> 3. Goals & Achievements -> 4. Guide -> hidden helpers
     ws_wk = wb.add_worksheet(MOBILE_WEEK_SHEET)
+    ws_dt = wb.add_worksheet(MOBILE_TASKS_SHEET)
     ws_go = wb.add_worksheet(MOBILE_GOALS_SHEET)
     ws_gd = wb.add_worksheet(MOBILE_GUIDE_SHEET)
     ws_calc = wb.add_worksheet(MOBILE_CALC_SHEET)
     ws_db = wb.add_worksheet(MOBILE_DB_SHEET)
 
     wq = qs(MOBILE_WEEK_SHEET)
+    tq = qs(MOBILE_TASKS_SHEET)
     gq = qs(MOBILE_GOALS_SHEET)
     dq = qs(MOBILE_GUIDE_SHEET)
     cq = qs(MOBILE_CALC_SHEET)
@@ -212,10 +217,18 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
         ws_calc.write(idx, 1, yr)
     for idx, wk in enumerate(WEEKS_VI):
         ws_calc.write(idx, 2, wk)
+    # Mobile Daily Tasks lookups: Days 1..31 in Col R (17), Priorities in Col S (18)
+    # (Cols P & Q are reserved for YearStreakHelper & YearWeekPctHelper!)
+    for d_num in range(1, 32):
+        ws_calc.write_number(d_num - 1, 17, d_num)
+    for idx_p, p_lbl in enumerate(TASK_PRIORITIES):
+        ws_calc.write(idx_p, 18, p_lbl)
 
     month_src = f"={cq}!$A$1:$A$12"
     year_src = f"={cq}!$B$1:$B$17"
     week_src = f"={cq}!$C$1:$C$5"
+    day_src = f"={cq}!$R$1:$R$31"
+    prio_src = f"={cq}!$S$1:$S$3"
 
     # Helper refs on _Calc Col E (col idx 4)
     E = lambda r1: f"{cq}!$E${r1}"
@@ -226,6 +239,7 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
         "LastGoalYear", "GoalsDone", "GoalsTotal", "GoalsPct", "GoalsHeroStageIdx",
         "AnnTotalDone", "AnnTotalTarget", "AnnOverallPct", "AnnBestStreak",
         "AnnPerfectDays", "AnnGrownDays", "AnnMaxWeekPct", "AnnBadgesStageIdx", "MonW1Date",
+        "LastTaskDateKey", "MobTasksDone", "MobTasksTotal", "MobTasksPct", "MobTasksStageIdx",
     ]
     for i, lab in enumerate(calc_labels):
         ws_calc.write(i, 3, lab)
@@ -594,6 +608,137 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
     _finish_mobile_sheet(ws_wk, cv1, t.primary, zoom=100)
 
     # =========================================================================
+    #  TAB 2 (v3.0 NEW!): `📝 Việc Hôm Nay` — Mobile Portrait Daily One-Off Tasks (B:I!)
+    # =========================================================================
+    N_MOB_TASKS = 15
+    ws_calc.write(28, 4, DEFAULT_TASK_KEY)  # E29: LastTaskDateKey
+    ws_calc.write_formula(29, 4, f'=COUNTIFS({tq}!$C$16:$C$30,"?*",{tq}!$B$16:$B$30,TRUE)')  # E30: Done
+    ws_calc.write_formula(30, 4, f'=COUNTIF({tq}!$C$16:$C$30,"?*")')                        # E31: Total
+    ws_calc.write_formula(31, 4, f"=IFERROR({E(30)}/{E(31)},0)")                            # E32: Pct
+    ws_calc.write_formula(32, 4, _stage6(E(32)))                                            # E33: StageIdx (1..6)
+
+    cvt = Canvas(wb, ws_dt, styles, MOBILE_TASKS_SHEET, universal=False, gsheets=False)
+    cvt.col(0, 1.5)
+    cvt.col(1, 6.2)     # Col B: Checkbox + Day picker
+    cvt.col(2, 10.0)    # Col C..F: Task Name (merged 4 cols = ~34 width!)
+    cvt.col(3, 8.2)
+    cvt.col(4, 8.2)
+    cvt.col(5, 8.2)
+    cvt.col(6, 6.2)     # Col G..I: Priority pill (merged 3 cols = ~18.6 width!)
+    cvt.col(7, 6.2)
+    cvt.col(8, 6.2)
+    cvt.col(9, 1.5)
+
+    cvt.row(0, 8)
+    cvt.row(1, 34)
+    cvt.row(2, 20)
+    cvt.row(3, 20)
+    cvt.row(4, 34)
+    cvt.row(5, 22)
+    cvt.row(6, 10)
+
+    cvt.merge(1, 1, 1, 8, f"{t.emoji}  VIỆC HÔM NAY  •  DAILY TASKS", font_name=t.font_title,
+              font_size=14, bold=True, align="center", bg_color=t.primary, font_color=t.on_primary)
+    cvt.merge(2, 1, 2, 8, "📝  Nhiệm vụ đột xuất theo ngày  •  0 cuộn ngang", italic=True,
+              font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
+    cvt.put(3, 1, "NGÀY", bold=True, font_size=8.5, align="center", bg_color=t.card, font_color=t.muted)
+    cvt.merge(3, 2, 3, 5, "THÁNG (MONTH)", bold=True, font_size=8.5, align="center", bg_color=t.card, font_color=t.muted)
+    cvt.merge(3, 6, 3, 8, "NĂM (YEAR)", bold=True, font_size=8.5, align="center", bg_color=t.card, font_color=t.muted)
+
+    cvt.put(4, 1, DEFAULT_TASK_DAY, font_name=t.font_title, font_size=13, bold=True, align="center",
+            num_format="0", bg_color=t.card, font_color=t.primary_dark)
+    cvt.merge(4, 2, 4, 5, DEFAULT_TASK_MONTH, font_name=t.font_title, font_size=13, bold=True,
+              align="center", bg_color=t.card, font_color=t.primary_dark)
+    cvt.merge(4, 6, 4, 8, DEFAULT_TASK_YEAR, font_name=t.font_title, font_size=13, bold=True,
+              align="center", num_format="0", bg_color=t.card, font_color=t.primary_dark)
+
+    m_mob = f"IFERROR(MATCH($C$5,{cq}!$A$1:$A$12,0),1)"
+    d_mob = f"MIN(IFERROR(--$B$5,1),DAY(EOMONTH(DATE($G$5,{m_mob},1),0)))"
+    dt_mob = f"DATE($G$5,{m_mob},{d_mob})"
+    cvt.merge(5, 1, 5, 8,
+              f'=CHOOSE(WEEKDAY({dt_mob},2),"Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy","Chủ Nhật")'
+              f'&", "&TEXT({dt_mob},"dd/mm/yyyy")',
+              bold=True, font_size=9.5, align="center", bg_color=t.card, font_color=t.muted)
+    cvt.grid(3, 1, 4, 8, t.line)
+    cvt.box(1, 1, 5, 8, t.line)
+
+    ws_dt.data_validation("B5", {"validate": "list", "source": day_src})
+    ws_dt.data_validation("C5", {"validate": "list", "source": month_src})
+    ws_dt.data_validation("G5", {"validate": "list", "source": year_src})
+
+    # Card 2: Daily Hero Card (Rows 8..13 -> 0-based 7..12)
+    cvt.row(7, 25)
+    for rr in range(8, 12):
+        cvt.row(rr, 28)
+    cvt.row(12, 10)
+    cvt.merge(7, 1, 7, 8, f"{t.emoji}  TIẾN ĐỘ NHIỆM VỤ HÔM NAY", bold=True, font_size=10.5,
+              align="center", bg_color=t.primary, font_color=t.on_primary)
+    cvt.merge(8, 1, 9, 4, f"={E(32)}", font_name=t.font_title, font_size=26, bold=True,
+              align="center", num_format="0%", bg_color=t.card, font_color=t.primary_dark)
+    cvt.merge(10, 1, 10, 4, f'="✓ "&{E(30)}&" / "&{E(31)}&" việc xong"', bold=True, font_size=10,
+              align="center", bg_color=t.card, font_color=t.ink)
+    cvt.merge(11, 1, 11, 4, f'="⏳ Còn "&({E(31)}-{E(30)})&" việc"', font_size=9.2, bold=True,
+              align="center", bg_color=t.soft, font_color=t.ink)
+    cvt.merge(8, 5, 11, 8, _img_formula(E(33)), align="center", bg_color=t.card)
+    cvt.vline(4, 8, 11, t.line, where="right")
+    cvt.box(7, 1, 11, 8, t.line)
+
+    # Card 3: 15 Thumb-Friendly 38pt Task Rows (Header row 14 -> 0-based 13, Rows 16..30 -> 0-based 15..29)
+    cvt.row(13, 26)
+    cvt.row(14, 18)
+    cvt.put(13, 1, "✓", bold=True, font_size=10, align="center", bg_color=t.primary, font_color=t.on_primary)
+    cvt.merge(13, 2, 13, 5, "TÊN NHIỆM VỤ HÔM NAY", bold=True, font_size=10, align="left", indent=1,
+              bg_color=t.primary, font_color=t.on_primary)
+    cvt.merge(13, 6, 13, 8, "ƯU TIÊN", bold=True, font_size=9.5, align="center",
+              bg_color=t.primary, font_color=t.on_primary)
+    cvt.merge(14, 1, 14, 8, "Chạm ô vuông bên trái để tick hoàn thành • Chọn mức ưu tiên bên phải",
+              italic=True, font_size=8.2, align="center", bg_color=t.soft, font_color=t.muted)
+
+    for i in range(N_MOB_TASKS):
+        rr = 15 + i  # Excel rows 16..30
+        cvt.row(rr, 38)
+        bg = t.card if i % 2 == 0 else t.page
+        if i < len(DEFAULT_DAILY_TASKS):
+            done, t_nm, _cat, prio, _note = DEFAULT_DAILY_TASKS[i]
+        else:
+            done, t_nm, prio = False, "", ""
+        cvt.checkbox(rr, 1, done, align="center", font_size=14, font_color=t.primary_dark, bg_color=bg)
+        cvt.merge(rr, 2, rr, 5, t_nm, bold=True, font_size=10, align="left", indent=1, text_wrap=True,
+                  bg_color=bg, font_color=t.ink)
+        cvt.merge(rr, 6, rr, 8, prio, bold=True, font_size=9, align="center", bg_color=bg, font_color=t.ink)
+
+    cvt.grid(15, 1, 15 + N_MOB_TASKS - 1, 8, t.line)
+    cvt.box(13, 1, 15 + N_MOB_TASKS - 1, 8, t.line)
+    ws_dt.data_validation("G16:G30", {"validate": "list", "source": prio_src})
+    ws_dt.conditional_format("B16:B30", {
+        "type": "formula", "criteria": "=B16=TRUE",
+        "format": wb.add_format({"bg_color": checked_pastel_bg(t.primary, t.soft), "font_color": t.primary_dark}),
+    })
+    ws_dt.conditional_format("C16:F30", {
+        "type": "formula", "criteria": "=$B16=TRUE",
+        "format": wb.add_format({"font_strikeout": True, "font_color": t.muted, "bg_color": t.soft}),
+    })
+    ws_dt.conditional_format("G16:I30", {"type": "formula", "criteria": '=$G16="🔴 Cao"',
+                                         "format": wb.add_format({"bg_color": "#FEE2E2", "font_color": "#991B1B", "bold": True})})
+    ws_dt.conditional_format("G16:I30", {"type": "formula", "criteria": '=$G16="🟡 Trung bình"',
+                                         "format": wb.add_format({"bg_color": "#FEF3C7", "font_color": "#92400E", "bold": True})})
+    ws_dt.conditional_format("G16:I30", {"type": "formula", "criteria": '=$G16="🟢 Thấp"',
+                                         "format": wb.add_format({"bg_color": "#DCFCE7", "font_color": "#166534", "bold": True})})
+
+    # Card 4: Quick Daily Highlight Note (Rows 32..35 -> 0-based 31..34)
+    cvt.row(30, 10)
+    cvt.row(31, 25)
+    for rr in range(32, 35):
+        cvt.row(rr, 24)
+    cvt.row(35, 10)
+    cvt.merge(31, 1, 31, 8, "✨  ĐIỂM SÁNG & GHI CHÚ HÔM NAY", bold=True, font_size=10, align="left",
+              indent=1, bg_color=t.primary, font_color=t.on_primary)
+    cvt.merge(32, 1, 34, 8, DEFAULT_DAILY_HIGHLIGHT, bold=False, font_size=9.5, align="left", indent=1,
+              text_wrap=True, bg_color=t.card, font_color=t.ink)
+    cvt.box(31, 1, 34, 8, t.line)
+    _finish_mobile_sheet(ws_dt, cvt, t.primary, zoom=100)
+
+    # =========================================================================
     #  TAB 2: `🎯 Mục Tiêu & Thành Tựu` (Vertical Portrait inside B:I!)
     # =========================================================================
     cv2 = Canvas(wb, ws_go, styles, MOBILE_GOALS_SHEET, universal=False, gsheets=False)
@@ -928,6 +1073,24 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
     ws_db.write_number(1, 28, g_done)
     ws_db.write_number(1, 29, g_tot)
 
+    # Table 5: DailyTasksRaw AF:AK (cols 31..36) — seeded ONLY for 2026-10-21!
+    for off, h in enumerate(["DateKey", "RowIdx", "Done", "TaskName", "Priority", "DailyHighlight"]):
+        ws_db.write(0, 31 + off, h, hdr_f)
+    for ti in range(15):
+        rr = 1 + ti
+        ws_db.write(rr, 31, DEFAULT_TASK_KEY)
+        ws_db.write_number(rr, 32, ti + 1)
+        if ti < len(DEFAULT_DAILY_TASKS):
+            done, t_nm, _cat, prio, _note = DEFAULT_DAILY_TASKS[ti]
+            ws_db.write_boolean(rr, 33, done)
+            ws_db.write(rr, 34, t_nm)
+            ws_db.write(rr, 35, prio)
+        else:
+            ws_db.write_boolean(rr, 33, False)
+            ws_db.write(rr, 34, "")
+            ws_db.write(rr, 35, "")
+        ws_db.write(rr, 36, DEFAULT_DAILY_HIGHLIGHT if ti == 0 else "")
+
     ws_calc.hide()
     ws_db.hide()
     ws_wk.activate()
@@ -939,10 +1102,12 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
         "slug": t.slug,
         "out_path": str(out_path),
         "week_sheet": MOBILE_WEEK_SHEET,
+        "tasks_sheet": MOBILE_TASKS_SHEET,
         "goals_sheet": MOBILE_GOALS_SHEET,
         "guide_sheet": MOBILE_GUIDE_SHEET,
         "week_capture_top": "A1:J37",
         "week_capture_bottom": f"A38:J{r_nt0 + 5}",
+        "tasks_capture": "A1:J36",
         "goals_capture": f"A1:J{r_bc + 3}",
         "guide_capture": f"A1:H{r_cur + 3}",
     }
