@@ -1,7 +1,7 @@
-# Habit Tracker Collection v2.1 Installer (PowerShell 5.1+ / 7+)
+# Habit Tracker Collection v3.0 Installer (PowerShell 5.1+ / 7+)
 <#
 .SYNOPSIS
-    Habit Tracker Collection v2.1 - Interactive Zero-Install Downloader (Windows PowerShell)
+    Habit Tracker Collection v3.0 - Interactive Zero-Install Downloader (Windows PowerShell)
 .DESCRIPTION
     Run in 1 line:
         irm https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu/main/install.ps1 | iex
@@ -21,25 +21,37 @@ try {
 $REPO_RAW = "https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu/main"
 
 $Templates = @(
-    @{ Id = 1;  Stem = "01_Sunflower_Garden_Blush";           Title = "Vuon Huong Duong Pastel (Sunflower Garden)" }
-    @{ Id = 2;  Stem = "02_Cactus_Bloom_Pastel_Weeks";        Title = "Xuong Rong No Hoa - 5 Tuan Pastel" }
-    @{ Id = 3;  Stem = "03_Rainbow_Executive_Donuts";         Title = "Cau Vong Dashboard & 5 Bieu Do Tron" }
-    @{ Id = 4;  Stem = "04_Sage_Botanical_Habit_And_Budget";  Title = "La Xanh Thoi Quen & Song Xanh" }
-    @{ Id = 5;  Stem = "05_Lavender_Dream_Wellness_Mood";     Title = "Oai Huong Cham Soc Giac Ngu & Tam Trang" }
-    @{ Id = 6;  Stem = "06_Midnight_Navy_Blush_Focus";        Title = "Navy Tap Trung Deep Work & Diem XP" }
-    @{ Id = 7;  Stem = "07_Sakura_Zen_Study_Planner";         Title = "Hoa Anh Dao Hoc Tap & Gio Focus" }
-    @{ Id = 8;  Stem = "08_Ocean_Coral_Fitness_Energy";       Title = "San Ho Dai Duong Tap Luyen & Nang Luong" }
-    @{ Id = 9;  Stem = "09_Matcha_Cafe_Daily_Routine";        Title = "Matcha Cafe Lich Trinh Sang / Toi" }
-    @{ Id = 10; Stem = "10_Aurora_Glow_RPG_Quest_Tracker";    Title = "Cuc Quang RPG Thang Cap Thoi Quen" }
-    @{ Id = 11; Stem = "11_Velvet_Rose_Garden";               Title = "Vuon Hong Nhung Tim Lavender (Velvet Rose)" }
-    @{ Id = 12; Stem = "12_Blue_Tulip_Mint_Breeze";           Title = "Tulip Xanh Lam - Dai Mau Mint Chanh" }
-    @{ Id = 13; Stem = "13_Buttercream_Blossom_Bars";         Title = "Kem Bo Bieu Do Cot Caramel & Hoa No" }
-    @{ Id = 14; Stem = "14_Emerald_Forest_Gold_Stars";        Title = "Rung Ngoc Bich & Sao Vang (Gold Stars)" }
-    @{ Id = 15; Stem = "15_Mocha_Rose_Terracotta_Sunflower";  Title = "Huong Duong Mocha & Hong Dat Terracotta" }
-    @{ Id = 16; Stem = "16_Dream_Home_Architect_Builder";     Title = "Xay Ngoi Nha Mo Uoc (6 Cap Do Kien Truc)" }
-    @{ Id = 17; Stem = "17_Wildflower_Bloom_Daily_Mood";      Title = "Hoa Dai 5 Canh & Tam Trang Moi Ngay" }
-    @{ Id = 18; Stem = "18_Plum_Oak_Master_Suite";            Title = "Cay Soi Tim Man & Bang Tuan/Thang Toan Dien" }
-    @{ Id = 19; Stem = "19_Meadow_Emerald_Sunflower";         Title = "Huong Duong Dong Co Xanh Ngoc Luc Bao" }
+    @{ Id = 1;  Group = "A"; Stem = "01_Sunflower_Garden_Blush";           Title = "Vuon Huong Duong Pastel (Sunflower Garden)" }
+    @{ Id = 2;  Group = "A"; Stem = "02_Cactus_Bloom_Pastel_Weeks";        Title = "Xuong Rong No Hoa - 5 Tuan Pastel" }
+    @{ Id = 3;  Group = "A"; Stem = "03_Rainbow_Executive_Donuts";         Title = "Cau Vong Dashboard & 5 Bieu Do Tron" }
+    @{ Id = 4;  Group = "A"; Stem = "04_Sage_Botanical_Habit_And_Budget";  Title = "La Xanh Thoi Quen & Song Xanh" }
+    @{ Id = 5;  Group = "A"; Stem = "05_Lavender_Dream_Wellness_Mood";     Title = "Oai Huong Cham Soc Giac Ngu & Tam Trang" }
+    @{ Id = 6;  Group = "A"; Stem = "06_Midnight_Navy_Blush_Focus";        Title = "Navy Tap Trung Deep Work & Diem XP" }
+    @{ Id = 7;  Group = "A"; Stem = "07_Sakura_Zen_Study_Planner";         Title = "Hoa Anh Dao Hoc Tap & Gio Focus" }
+    @{ Id = 8;  Group = "A"; Stem = "08_Ocean_Coral_Fitness_Energy";       Title = "San Ho Dai Duong Tap Luyen & Nang Luong" }
+    @{ Id = 9;  Group = "A"; Stem = "09_Matcha_Cafe_Daily_Routine";        Title = "Matcha Cafe Lich Trinh Sang / Toi" }
+    @{ Id = 10; Group = "A"; Stem = "10_Aurora_Glow_RPG_Quest_Tracker";    Title = "Cuc Quang RPG Thang Cap Thoi Quen" }
+    @{ Id = 11; Group = "B"; Stem = "11_Velvet_Rose_Garden";               Title = "Vuon Hong Nhung Tim Lavender (Velvet Rose)" }
+    @{ Id = 12; Group = "B"; Stem = "12_Blue_Tulip_Mint_Breeze";           Title = "Tulip Xanh Lam - Dai Mau Mint Chanh" }
+    @{ Id = 13; Group = "B"; Stem = "13_Buttercream_Blossom_Bars";         Title = "Kem Bo Bieu Do Cot Caramel & Hoa No" }
+    @{ Id = 14; Group = "B"; Stem = "14_Emerald_Forest_Gold_Stars";        Title = "Rung Ngoc Bich & Sao Vang (Gold Stars)" }
+    @{ Id = 15; Group = "B"; Stem = "15_Mocha_Rose_Terracotta_Sunflower";  Title = "Huong Duong Mocha & Hong Dat Terracotta" }
+    @{ Id = 16; Group = "B"; Stem = "16_Dream_Home_Architect_Builder";     Title = "Xay Ngoi Nha Mo Uoc (6 Cap Do Kien Truc)" }
+    @{ Id = 17; Group = "B"; Stem = "17_Wildflower_Bloom_Daily_Mood";      Title = "Hoa Dai 5 Canh & Tam Trang Moi Ngay" }
+    @{ Id = 18; Group = "B"; Stem = "18_Plum_Oak_Master_Suite";            Title = "Cay Soi Tim Man & Bang Tuan/Thang Toan Dien" }
+    @{ Id = 19; Group = "B"; Stem = "19_Meadow_Emerald_Sunflower";         Title = "Huong Duong Dong Co Xanh Ngoc Luc Bao" }
+    @{ Id = 20; Group = "C"; Stem = "20_Cream_Alpaca_Cozy_Budget";         Title = "Alpaca Kem Am Ap & Ngan Sach Mini" }
+    @{ Id = 21; Group = "C"; Stem = "21_Blush_Alpaca_Flower_Crown";        Title = "Alpaca Hong Phan Doi Vong Hoa & Tai Chinh" }
+    @{ Id = 22; Group = "C"; Stem = "22_Matcha_Alpaca_Meadow";             Title = "Alpaca Matcha Dong Co & Quy Tiet Kiem" }
+    @{ Id = 23; Group = "C"; Stem = "23_Bamboo_Panda_Zen_Garden";          Title = "Gau Truc Rung Tre Zen (Bamboo Panda)" }
+    @{ Id = 24; Group = "C"; Stem = "24_Royal_Cat_Saving_Cash";            Title = "Meo Hoang Gia Tiet Kiem & Vuong Quoc Meo" }
+    @{ Id = 25; Group = "C"; Stem = "25_Ginger_Kitten_Basket_Routine";     Title = "Meo Cam Gio May & Bang Xep Hang Thoi Quen" }
+    @{ Id = 26; Group = "C"; Stem = "26_Pastel_Purple_Royal_Cat";          Title = "Meo Tim Pastel Nhe Nhang (Royal Cat)" }
+    @{ Id = 27; Group = "C"; Stem = "27_Hatching_Chick_Icon_Studio";       Title = "Ga Con No Trung 6 Giai Doan (Studio)" }
+    @{ Id = 28; Group = "C"; Stem = "28_Cotton_Candy_Jar_Sweet";           Title = "Hu Keo Bong Gon Pastel Hong-Xanh" }
+    @{ Id = 29; Group = "C"; Stem = "29_Watercolor_Rose_Bouquet";          Title = "Bo Hoa Hong Mau Nuoc & Chanh Niem" }
+    @{ Id = 30; Group = "C"; Stem = "30_Shiba_Inu_Happy_Bork";             Title = "Cun Shiba Inu Khan Do & Diem Good Boy" }
+    @{ Id = 31; Group = "C"; Stem = "31_Akita_Inu_Snow_Loyal";             Title = "Cun Akita Tuyet Trang & Tinh Tam Zen" }
 )
 
 function Resolve-TargetFolder {
@@ -110,16 +122,16 @@ function Parse-TemplateIds([string]$Raw) {
             $a = [int]$Matches[1]; $b = [int]$Matches[2]
             if ($a -gt $b) { $tmp = $a; $a = $b; $b = $tmp }
             for ($n = $a; $n -le $b; $n++) {
-                if ($n -ge 1 -and $n -le 19 -and -not $selectedIds.Contains($n)) { $selectedIds.Add($n) }
+                if ($n -ge 1 -and $n -le 31 -and -not $selectedIds.Contains($n)) { $selectedIds.Add($n) }
             }
         } elseif ($u -match '^\d+$') {
             $n = [int]$u
-            if ($n -ge 1 -and $n -le 19 -and -not $selectedIds.Contains($n)) { $selectedIds.Add($n) }
+            if ($n -ge 1 -and $n -le 31 -and -not $selectedIds.Contains($n)) { $selectedIds.Add($n) }
         }
     }
     if ($all) {
         $selectedIds.Clear()
-        1..19 | ForEach-Object { $selectedIds.Add($_) }
+        1..31 | ForEach-Object { $selectedIds.Add($_) }
     }
     return @{ Ids = @($selectedIds); Quit = $quit }
 }
@@ -129,21 +141,21 @@ New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 
 Write-Host ""
 Write-Host "========================================================================" -ForegroundColor Magenta
-Write-Host "   HABIT TRACKER COLLECTION v2.4 - BY DYU (19 THEMES x 4 EDITIONS)" -ForegroundColor Yellow
-Write-Host "   Hoat anh dong 6 giai doan | Luu data da thang/nam | Thanh Tuu Nam"   -ForegroundColor Cyan
+Write-Host "   HABIT TRACKER COLLECTION v3.0 - BY DYU (31 THEMES x 4 EDITIONS)" -ForegroundColor Yellow
+Write-Host "   Hoat anh 6 giai doan | Nhiem Vu Ngay | Luu da ngay/thang/nam"    -ForegroundColor Cyan
 Write-Host "========================================================================" -ForegroundColor Magenta
 Write-Host "  Thu muc luu file: $OutDir" -ForegroundColor Green
 Write-Host ""
 Write-Host "  BUOC 1 - CHON PHIEN BAN PHU HOP:" -ForegroundColor White
 Write-Host "  ----------------------------------------------------------------------" -ForegroundColor DarkGray
 Write-Host "  [1] Ban PRO INTERACTIVE (.xlsm)  [KHUYEN DUNG CHO EXCEL DESKTOP]" -ForegroundColor Green
-Write-Host "      -> Gon 4 tab, doi Thang/Nam tu luu & tai du lieu sieu muot vao _Database!" -ForegroundColor DarkGray
+Write-Host "      -> Gon 5 tab (co Nhiem Vu Ngay), tu luu Ngay/Thang/Nam vao _Database!" -ForegroundColor DarkGray
 Write-Host "  [2] Ban EXCEL OFFLINE KHONG MACRO (.xlsx)" -ForegroundColor Cyan
-Write-Host "      -> Gon 4 tab sieu nhe, chay moi Excel 2016-365 Win/Mac, 0 canh bao bao mat!" -ForegroundColor DarkGray
+Write-Host "      -> Gon 5 tab, Form Checkbox chuan moi Excel 2016-365 Win/Mac, 0 canh bao!" -ForegroundColor DarkGray
 Write-Host "  [3] Ban GOOGLE SHEETS DESKTOP (.xlsx + google_sheets_1click_setup.gs)" -ForegroundColor Cyan
-Write-Host "      -> Gon 4 tab + Script 1-Click bat Checkbox & tu luu 12 thang tren Cloud!" -ForegroundColor DarkGray
-Write-Host "  [4] Ban DIEN THOAI KHO DOC - MOBILE PORTRAIT (.xlsx + .gs)  [MOI!]" -ForegroundColor Magenta
-Write-Host "      -> Toi uu iPhone/Android 0 cuon ngang, 3 tab gon, o tick lon 38pt!" -ForegroundColor DarkGray
+Write-Host "      -> Gon 5 tab + Script 1-Click bat Checkbox & tu luu 12 thang + tung ngay!" -ForegroundColor DarkGray
+Write-Host "  [4] Ban DIEN THOAI KHO DOC - MOBILE PORTRAIT (.xlsx + .gs)" -ForegroundColor Magenta
+Write-Host "      -> Toi uu iPhone/Android 0 cuon ngang, 4 tab gon (co Viec Hom Nay), 38pt!" -ForegroundColor DarkGray
 Write-Host "  [0] Thoat" -ForegroundColor DarkGray
 Write-Host ""
 
@@ -163,17 +175,28 @@ if ($edChoice -eq "M" -or $edChoice -eq "MOBILE") { $edChoice = "4" }
 if ($edChoice -notin @("1", "2", "3", "4")) { $edChoice = "1" }
 
 Write-Host ""
-Write-Host "  BUOC 2 - CHON MAU THOI QUEN (19 CHU DE THAM MY):" -ForegroundColor White
+Write-Host "  BUOC 2 - CHON MAU THOI QUEN (31 CHU DE THAM MY & LINH VAT):" -ForegroundColor White
 Write-Host "  ----------------------------------------------------------------------" -ForegroundColor DarkGray
-foreach ($t in $Templates) {
+Write-Host "  --- BO SUU TAP CO DIEN & THIEN NHIEN (1 - 10) ---" -ForegroundColor Cyan
+foreach ($t in ($Templates | Where-Object { $_.Group -eq "A" })) {
+    $num = ("[{0}]" -f $t.Id).PadRight(5)
+    Write-Host ("  {0} {1,-38} - {2}" -f $num, $t.Stem, $t.Title) -ForegroundColor White
+}
+Write-Host "  --- BO SUU TAP VUON HOA & KIEN TRUC (11 - 19) ---" -ForegroundColor Cyan
+foreach ($t in ($Templates | Where-Object { $_.Group -eq "B" })) {
+    $num = ("[{0}]" -f $t.Id).PadRight(5)
+    Write-Host ("  {0} {1,-38} - {2}" -f $num, $t.Stem, $t.Title) -ForegroundColor White
+}
+Write-Host "  --- MOI v3.0: ALPACA, MEO HOANG GIA, GAU TRUC, KEO, SHIBA & AKITA (20 - 31) ---" -ForegroundColor Yellow
+foreach ($t in ($Templates | Where-Object { $_.Group -eq "C" })) {
     $num = ("[{0}]" -f $t.Id).PadRight(5)
     Write-Host ("  {0} {1,-38} - {2}" -f $num, $t.Stem, $t.Title) -ForegroundColor White
 }
 Write-Host "  ----------------------------------------------------------------------" -ForegroundColor DarkGray
-Write-Host "  [A]   Tai TOAN BO 19 mau (Download All)" -ForegroundColor Green
+Write-Host "  [A]   Tai TOAN BO 31 mau (Download All)" -ForegroundColor Green
 Write-Host "  [0]   Thoat" -ForegroundColor DarkGray
 Write-Host ""
-Write-Host "  Goi y: Nhap 1 so (vd: 16), nhieu so (vd: 1,11,16), dai (vd: 11-19), hoac A" -ForegroundColor Yellow
+Write-Host "  Goi y: Nhap 1 so (vd: 30), nhieu so (vd: 20,24,30,31), dai (vd: 20-31), hoac A" -ForegroundColor Yellow
 
 if ($env:HABIT_CHOICE) {
     $choice = $env:HABIT_CHOICE
@@ -196,7 +219,7 @@ if ($edChoice -eq "1") {
         $fn = "$($t.Stem)_Pro.xlsm"
         $queue.Add(@{ Rel = "templates/pro_macro/$fn"; Dest = (Join-Path $subDir $fn); CheckZip = $true })
     }
-    $hint = "Mo file .xlsm -> bam 'Enable Content' 1 lan -> doi Thang/Nam sieu muot!"
+    $hint = "Mo file .xlsm -> bam 'Enable Content' 1 lan -> doi Ngay/Thang/Nam sieu muot!"
 } elseif ($edChoice -eq "2") {
     $subDir = Join-Path $OutDir "excel_universal_offline"
     foreach ($id in $parsed.Ids) {
