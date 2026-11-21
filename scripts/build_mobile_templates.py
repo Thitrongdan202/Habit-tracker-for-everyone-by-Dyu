@@ -38,7 +38,8 @@ PREVIEWS_DIR = ROOT / "previews"
 
 PREVIEW_KEYS = {"01_sunflower", "02_cactus", "07_sakura", "10_aurora",
                 "11_velvet_rose", "16_dream_house", "18_plum_oak",
-                "20_alpaca_cream", "24_royal_cat_cash", "30_shiba_inu", "31_akita_inu"}
+                "20_alpaca_cream", "24_royal_cat_cash", "30_shiba_inu", "31_akita_inu",
+                "32_sakura_min", "33_mochi_cat", "34_fluffy_bunny", "35_milk_mocha"}
 
 
 def _com_retry(fn, retries: int = 12, delay: float = 0.25):

@@ -81,6 +81,11 @@ CALC_ANN_COL0 = 40             # AO..AW (40..48), rows 1..12 -> 12-Month Annual 
 #   AW(48): MonthlyStageIdx (1..6 -> Anim_AnnualM01..M12)
 CALC_ANN_YG_LBL_COL = 49       # AX1:AX3 -> Annual selected-year YearlyGoals labels
 CALC_ANN_YG_VAL_COL = 50       # AY1:AY3 -> Annual selected-year GoalsDone, GoalsTotal, GoalsPct
+CALC_FX_LBL_COL = 51           # AZ1:AZ22 -> v3.5 FX Engine config & Vietnamese Toast table labels
+CALC_FX_VAL_COL = 52           # BA1:BA22 -> v3.5 FX Engine config & Vietnamese Toast table values
+
+MOOD6_OPTIONS = ("❤️", "😊", "🙂", "😕", "😢", "😠")
+MOOD6_LABELS  = ("❤️ Yêu đời", "😊 Vui vẻ", "🙂 Ổn áp", "😕 Chưa ổn", "😢 Buồn", "😠 Bực bội")
 
 WEEKDAYS_SHORT = '"Mon","Tue","Wed","Thu","Fri","Sat","Sun"'
 WEEKDAYS_LETTER = '"M","T","W","T","F","S","S"'
@@ -103,10 +108,11 @@ def stage6_formula(pct_ref: str) -> str:
 
 
 def init_calc_sheet(wb, active_year: int = 2026, last_loaded_key: str = "2026-10",
-                    last_goal_year: int = 2026):
-    """Create the shared hidden `_Calc` sheet with non-overlapping lookups & state cells."""
+                    last_goal_year: int = 2026, theme: Theme | None = None):
+    """Create the shared hidden `_Calc` sheet with non-overlapping lookups, state & v3.5 FX table."""
     ws_calc = wb.add_worksheet(CALC_SHEET)
     ws_calc.hide_gridlines(2)
+    cq = qs(CALC_SHEET)
     for idx, m in enumerate(MONTHS_EN):
         ws_calc.write(idx, CALC_MONTH_COL, m)
     for idx, yr in enumerate(range(2024, 2041)):
@@ -122,6 +128,9 @@ def init_calc_sheet(wb, active_year: int = 2026, last_loaded_key: str = "2026-10
         ws_calc.write(37 + idx_c, CALC_CHK_COL, cat)
     for idx_p, prio in enumerate(("🔴 Cao", "🟡 Trung bình", "🟢 Thấp")):
         ws_calc.write(42 + idx_p, CALC_CHK_COL, prio)
+    # 6-Mood lookup list (v3.5, for Template 33 Peach Mochi Cat Mood Suite) -> _Calc!$AL$47:$AL$52
+    for idx_m6, m6 in enumerate(MOOD6_OPTIONS):
+        ws_calc.write(46 + idx_m6, CALC_CHK_COL, m6)
 
     state_init = [
         ("ActiveTrackingYear", active_year),
@@ -146,6 +155,49 @@ def init_calc_sheet(wb, active_year: int = 2026, last_loaded_key: str = "2026-10
     for r_idx, (lbl, val) in enumerate(state_init):
         ws_calc.write(r_idx, CALC_STATE_LBL_COL, lbl)
         ws_calc.write(r_idx, CALC_STATE_VAL_COL, val)
+
+    # ---- v3.5 FX Engine Config & Pure-Vietnamese Toast Table (_Calc!AZ1:BA22) ----
+    # VBA stays 100% Pure ASCII and reads all Vietnamese messages from BA8:BA22!
+    acc = theme.primary if theme else "#B57A7A"
+    acc_dk = theme.primary_dark if theme else "#8B5454"
+    soft = theme.soft if theme else "#F7EAE6"
+    bar = theme.bar if theme else "#C98B8B"
+    fx_rows = [
+        ("CFG_FX_ENABLED", True),                                                          # BA1
+        ("CFG_THEME_ACCENT", acc),                                                         # BA2
+        ("CFG_THEME_ACCENT_DARK", acc_dk),                                                 # BA3
+        ("CFG_THEME_SOFT", soft),                                                          # BA4
+        ("CFG_THEME_BAR", bar),                                                            # BA5
+        ("LastCelebratedStreak", 0),                                                       # BA6
+        ("---", "---"),                                                                    # BA7
+        ("FX_MSG_PERFECT_DAY", "✨ Hoàn hảo 100%! Khu vườn hôm nay đã nở rộ rực rỡ!"),      # BA8
+        ("FX_MSG_STREAK_7",    "🔥 Tuyệt vời! Bạn vừa đạt chuỗi 7 ngày liên tiếp!"),       # BA9
+        ("FX_MSG_STREAK_14",   "🏆 Đỉnh cao! Chuỗi kỷ luật 14 ngày không nghỉ!"),          # BA10
+        ("FX_MSG_STREAK_21",   "💎 Huyền thoại 21 ngày! Thói quen đã vào nhịp!"),          # BA11
+        ("FX_MSG_STREAK_30",   "👑 Bất bại 30 ngày! Bậc thầy kỷ luật thực thụ!"),          # BA12
+        ("FX_MSG_MONTH_SWITCH","📅 Đã lưu tháng cũ & mở dữ liệu tháng mới!"),              # BA13
+        ("FX_MSG_DAILY_100",   "🎉 Xuất sắc 100%! Toàn bộ nhiệm vụ ngày đã xong!"),        # BA14
+        ("FX_MSG_GOAL_DONE",   "🎯 Chúc mừng! Bạn vừa chinh phục thêm Mục Tiêu Năm!"),     # BA15
+        ("FX_MSG_DEMO",        "🎉 Hiệu ứng Pro v3.5 đang BẬT — Siêu mượt & sống động!"),  # BA16
+        ("FX_LBL_ON",          "✨ FX: BẬT"),                                               # BA17
+        ("FX_LBL_OFF",         "💤 FX: TẮT"),                                               # BA18
+        ("FX_MSG_FX_ON",       "✨ Đã BẬT hiệu ứng Pro (Nảy, Pháo hoa & Toast)!"),         # BA19
+        ("FX_MSG_FX_OFF",      "💤 Đã TẮT hiệu ứng — Giữ tốc độ siêu mượt tối đa!"),       # BA20
+        ("FX_MSG_DATE_SWITCH", "📝 Đã lưu ngày cũ & nạp dữ liệu ngày mới!"),               # BA21
+        ("FX_MSG_ANNUAL_HALL", "🏆 Đại Sảnh Thành Tựu Năm đã được cập nhật!"),             # BA22
+    ]
+    for r_idx, (lbl, val) in enumerate(fx_rows):
+        ws_calc.write(r_idx, CALC_FX_LBL_COL, lbl)
+        if isinstance(val, bool):
+            ws_calc.write_boolean(r_idx, CALC_FX_VAL_COL, val)
+        else:
+            ws_calc.write(r_idx, CALC_FX_VAL_COL, val)
+
+    wb.define_name("CFG_FX_ENABLED", f"={cq}!{acell(0, CALC_FX_VAL_COL)}")
+    wb.define_name("CFG_THEME_ACCENT", f"={cq}!{acell(1, CALC_FX_VAL_COL)}")
+    wb.define_name("CFG_THEME_ACCENT_DARK", f"={cq}!{acell(2, CALC_FX_VAL_COL)}")
+    wb.define_name("CFG_THEME_SOFT", f"={cq}!{acell(3, CALC_FX_VAL_COL)}")
+    wb.define_name("CFG_THEME_BAR", f"={cq}!{acell(4, CALC_FX_VAL_COL)}")
     return ws_calc
 
 
@@ -163,6 +215,10 @@ def chk_lookup_ref() -> str:
 
 def mood_lookup_ref() -> str:
     return f"{qs(CALC_SHEET)}!{rng(2, CALC_CHK_COL, 4, CALC_CHK_COL)}"
+
+
+def mood6_lookup_ref() -> str:
+    return f"{qs(CALC_SHEET)}!{rng(46, CALC_CHK_COL, 51, CALC_CHK_COL)}"
 
 
 @dataclass
@@ -235,7 +291,10 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
     if ws_calc is None:
         ws_calc = init_calc_sheet(wb, active_year=spec.year,
                                   last_loaded_key=f"{spec.year}-{MONTHS_EN.index(spec.month) + 1:02d}",
-                                  last_goal_year=spec.year)
+                                  last_goal_year=spec.year, theme=t)
+
+    # Pure-ASCII Named Anchor for Monthly Tracker (so VBA never hardcodes Vietnamese/emoji tab names!)
+    wb.define_name("ANCHOR_TRACKER", f"={q}!$B$3")
 
     n_right = len(spec.right_labels) + len(spec.extra_cols)
     C_RE = C_R0 + n_right - 1
@@ -259,8 +318,8 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
     cv.row(R_BAND0 + 1, 30)        # Dedicated UNMERGED Month cell (B3)
     cv.row(R_BAND0 + 2, 15)        # Helper cue label (B4)
     cv.row(R_BAND0 + 3, 24)        # Dedicated UNMERGED Year cell (B5)
-    cv.row(R_BAND0 + 4, 18)        # Dynamic Tháng/Năm/Ngày summary (B6)
-    cv.row(R_BAND0 + 5, 16)        # Auto-calendar / tip cue (B7)
+    cv.row(R_BAND0 + 4, 21 if spec.pro_mode else 18)  # Dynamic Live Motivation Pill (B6)
+    cv.row(R_BAND0 + 5, 25 if spec.pro_mode else 16)  # Quick-Action Pastel Pill Button Bar (B7) on Pro!
     cv.row(7, 9)
     cv.row(R_IMG, spec.img_row_height)
     for r in (R_DONE, R_NOT, R_PCT):
@@ -304,7 +363,7 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
         ws_calc.write_number(rb + 0, CALC_KPI_COL, spec.fixed_month)
     else:
         set_kpi("m", f"=IFERROR(MATCH({q}!{month_cell},{month_lookup_rng},0),1)")
-    set_kpi("y", f"=IFERROR(--{q}!{year_cell},YEAR(TODAY()))")
+    set_kpi("y", f"=IFERROR(--{q}!{year_cell},2026)")
     set_kpi("dim", f"=DAY(EOMONTH(DATE({S['y']},{S['m']},1),0))")
     set_kpi("ref", f"=IFERROR(LOOKUP(2,1/({q_done_row}>0),{q_day_row}),0)")
     set_kpi("hc", f'=COUNTIF({q_names},"?*")')
@@ -382,16 +441,43 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
                align="center", bg_color=t.soft, font_color=t.ink, num_format="0",
                top=1, top_color=t.primary, bottom=1, bottom_color=t.primary,
                left=1, left_color=t.primary, right=1, right_color=t.primary)
-        cv.put(R_BAND0 + 4, C_NAME, f'="Tháng "&{S["m"]}&"/"&{S["y"]}&"  •  "&{S["dim"]}&" ngày"',
-               font_size=8.8, bold=True, align="center", bg_color=t.card, font_color=t.primary_dark)
-        cue_txt = (
-            "⚡ Tự lưu & tải dữ liệu theo từng Tháng/Năm" if spec.pro_mode else (
+        # Effect 5: Dynamic Live Motivation Pill (B6) with formula-driven text & pastel CF!
+        ov = S["overall"]
+        cv.put(R_BAND0 + 4, C_NAME,
+               f'=IF({ov}>=0.999,"🌟 100% Đỉnh cao kỷ luật!",'
+               f'IF({ov}>=0.75,"🔥 Phong độ rực rỡ ("&TEXT({ov},"0%")&")",'
+               f'IF({ov}>=0.5,"🌿 Đã vượt nửa chặng ("&TEXT({ov},"0%")&")",'
+               f'IF({ov}>0,"🌱 Khởi động tốt ("&TEXT({ov},"0%")&")","✨ Bắt đầu tick hôm nay nhé!"))))',
+               font_size=8.4, bold=True, align="center", bg_color=t.soft, font_color=t.primary_dark)
+        ws.conditional_format("B6", {
+            "type": "formula", "criteria": f"={ov}>=0.999",
+            "format": wb.add_format({"bg_color": "#DCFCE7", "font_color": "#166534", "bold": True}),
+            "stop_if_true": True,
+        })
+        ws.conditional_format("B6", {
+            "type": "formula", "criteria": f"={ov}>=0.75",
+            "format": wb.add_format({"bg_color": "#FEF3C7", "font_color": "#92400E", "bold": True}),
+            "stop_if_true": True,
+        })
+        ws.conditional_format("B6", {
+            "type": "formula", "criteria": f"={ov}>=0.5",
+            "format": wb.add_format({"bg_color": t.soft, "font_color": t.primary_dark, "bold": True}),
+            "stop_if_true": True,
+        })
+        ws.conditional_format("B6", {
+            "type": "formula", "criteria": f"={ov}=0",
+            "format": wb.add_format({"bg_color": t.card, "font_color": t.muted, "bold": False}),
+        })
+        if spec.pro_mode:
+            # Clean button tray for 3 sleek Pro Quick-Action Pastel Pill Buttons (◀ Tháng | Tháng ▶ | ✨ FX: BẬT)!
+            cv.put(R_BAND0 + 5, C_NAME, "", align="center", bg_color=t.card)
+        else:
+            cue_txt = (
                 "💡 GSheets: Chạy Script 1-Click bật Checkbox & lưu 12 tháng" if spec.gsheets
                 else "✓ Đổi Tháng/Năm động • Bản Offline không Macro"
             )
-        )
-        cv.put(R_BAND0 + 5, C_NAME, cue_txt, italic=True, font_size=7.4,
-               align="center", bg_color=t.card, font_color=t.muted)
+            cv.put(R_BAND0 + 5, C_NAME, cue_txt, italic=True, font_size=7.4,
+                   align="center", bg_color=t.card, font_color=t.muted)
         ws.data_validation(month_cell, {"validate": "list", "source": f"={month_lookup_rng}",
                                         "input_title": "Chọn Tháng (Month)",
                                         "input_message": "Chọn tháng (January–December) → tự lưu tháng cũ & tải tháng mới!"})
