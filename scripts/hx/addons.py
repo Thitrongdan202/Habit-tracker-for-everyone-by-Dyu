@@ -6,8 +6,9 @@ from __future__ import annotations
 import random
 
 from .core import Canvas, acell, cell, colname, rng, donut, place_chart, axis_font
-from .tracker import (C_NAME, C_D0, C_D31, C_R0, CALC_WK_COL0, R_BAND0, R_BAND1, R_DONE, R_NOT,
-                      R_PCT, R_DAY, R_EXTRA, TrackerRefs, day_col, week_days, mood_lookup_ref)
+from .tracker import (C_NAME, C_D0, C_D31, C_R0, CALC_WK_COL0, CALC_DONUT_COL, R_BAND0, R_BAND1, R_DONE, R_NOT,
+                      R_PCT, R_DAY, R_EXTRA, TrackerRefs, day_col, week_days, mood_lookup_ref,
+                      mood6_lookup_ref, MOOD6_OPTIONS, MOOD6_LABELS)
 
 
 # --------------------------------------------------------------------------- #
@@ -1220,3 +1221,259 @@ def add_dog_companion_panel(wb, cv: Canvas, tr: TrackerRefs, kind: str = "shiba"
              bg_color=t.card, font_color=t.ink)
     cv.grid(r0 + 1, C_NAME, r0 + 3, C_RE, t.line)
     cv.box(r0, C_NAME, r0 + 3, C_RE, t.line)
+
+
+# --------------------------------------------------------------------------- #
+#  Template 32 (Sakura Blossom Minimalist): Start Date & Blossom Summary Bar
+# --------------------------------------------------------------------------- #
+def add_sakura_minimalist_bar(wb, cv: Canvas, tr: TrackerRefs):
+    """Ultra-clean minimalist Sakura Start Date & Blossom Reflection Strip."""
+    t = cv.t
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 22)
+    cv.row(r0 + 1, 28)
+
+    cv.merge(r0, C_NAME, r0, 7, "🌸  NGÀY BẮT ĐẦU (START DATE)", bold=True, font_size=8.5,
+             align="center", bg_color=t.soft, font_color=t.primary_dark)
+    cv.merge(r0 + 1, C_NAME, r0 + 1, 7,
+             f'=TEXT(DATE({tr.s["y"]},{tr.s["m"]},1),"dd/mm/yyyy")',
+             bold=True, font_size=12, align="center", bg_color=t.card, font_color=t.ink, font_name=t.font_title)
+
+    cv.merge(r0, 8, r0, 16, "🌳  CÂY ANH ĐÀO ĐÃ NỞ (≥ 75%)", bold=True, font_size=8.5,
+             align="center", bg_color=t.soft, font_color=t.primary_dark)
+    cv.merge(r0 + 1, 8, r0 + 1, 16,
+             f'={tr.s["grown"]}&" cây anh đào  •  "&{tr.s["perfect"]}&" ngày 100% ✨"',
+             bold=True, font_size=10.5, align="center", bg_color=t.card, font_color=t.primary_dark)
+
+    cv.merge(r0, 17, r0, C_RE, "🕊️  GHI CHÚ TỐI GIẢN & CHÁNH NIỆM THÁNG NÀY", bold=True, font_size=8.5,
+             align="left", indent=1, bg_color=t.soft, font_color=t.primary_dark)
+    cv.merge(r0 + 1, 17, r0 + 1, C_RE,
+             "• Ít nhưng tinh — tập trung hoàn thành trọn vẹn từng thói quen cốt lõi để mỗi ngày đều nở hoa anh đào.",
+             font_size=9.2, align="left", indent=1, text_wrap=True, bg_color=t.card, font_color=t.ink)
+    cv.grid(r0, C_NAME, r0 + 1, C_RE, t.line)
+    cv.box(r0, C_NAME, r0 + 1, C_RE, t.line)
+
+
+# --------------------------------------------------------------------------- #
+#  Template 33 (Peach Mochi Cat Mood Suite): 6-Mood Tracker + Daily To-Do + Reflection
+# --------------------------------------------------------------------------- #
+def add_mochi_cat_mood_suite(wb, cv: Canvas, tr: TrackerRefs, seed: int = 330):
+    """Honors Peach Mochi Cat ref: 31-day 6-Mood Tracker + 6 Mood Counters + Quick To-Do + Reflection!"""
+    t = cv.t
+    ws = cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 24)        # Banner
+    cv.row(r0 + 1, 24)    # 31-day 6-mood dropdown strip
+    cv.row(r0 + 2, 22)    # 6-Mood Counter labels
+    cv.row(r0 + 3, 24)    # 6-Mood Counter values
+    cv.row(r0 + 4, 10)    # Spacer
+    cv.row(r0 + 5, 24)    # Bottom 3-Card Headers (Quick To-Do | What Went Well | What Didn't Go Well)
+    for rr in range(r0 + 6, r0 + 10):
+        cv.row(rr, 22)
+
+    # Row 1: MOOD TRACKER Banner + 31-day Mood Selector Strip
+    cv.merge(r0, C_NAME, r0, C_RE, "🐱  MOOD TRACKER  •  NHẬT KÝ 6 CẢM XÚC HẰNG NGÀY (CHỌN TỪ DROPDOWN)",
+             bold=True, font_size=9.5, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
+    cv.put(r0 + 1, C_NAME, "💛  Tâm trạng hôm nay", bold=True, font_size=9.2, align="left", indent=1,
+           bg_color=t.soft, font_color=t.ink)
+
+    rnd = random.Random(seed)
+    pool = [MOOD6_OPTIONS[0], MOOD6_OPTIONS[1], MOOD6_OPTIONS[1], MOOD6_OPTIONS[2],
+            MOOD6_OPTIONS[0], MOOD6_OPTIONS[1], MOOD6_OPTIONS[3], MOOD6_OPTIONS[2], MOOD6_OPTIONS[4]]
+    for k in range(1, 32):
+        c = day_col(k)
+        val = rnd.choice(pool) if k <= 22 else ""
+        cv.put(r0 + 1, c, val, align="center", font_size=11, bg_color=t.card, font_color=t.ink)
+
+    mood_strip_rng = rng(r0 + 1, C_D0, r0 + 1, C_D31)
+    ws.data_validation(mood_strip_rng, {
+        "validate": "list", "source": f"={mood6_lookup_ref()}",
+        "input_title": "Chọn Tâm Trạng (6 Mức)",
+        "input_message": "❤️ Yêu đời / 😊 Vui vẻ / 🙂 Ổn áp / 😕 Chưa ổn / 😢 Buồn / 😠 Bực bội",
+    })
+    cv.merge(r0 + 1, C_R0, r0 + 1, C_RE,
+             f'=COUNTIF({mood_strip_rng},"?*")&" / "&{tr.s["dim"]}&" ngày ghi tâm trạng"',
+             bold=True, font_size=8.8, align="center", bg_color=t.soft, font_color=t.primary_dark)
+
+    # Row 2 & 3: 6 Pastel Mood Counters neatly distributed across Cols B..C_RE
+    cv.merge(r0 + 2, C_NAME, r0 + 3, C_NAME, "📊  TỔNG KẾT 6 CẢM XÚC", bold=True, font_size=9,
+             align="center", bg_color=t.soft, font_color=t.ink)
+    mood_spans = [
+        (2, 6,   MOOD6_OPTIONS[0], MOOD6_LABELS[0], "#FFE4E6", "#BE123C"),
+        (7, 11,  MOOD6_OPTIONS[1], MOOD6_LABELS[1], "#FEF3C7", "#92400E"),
+        (12, 16, MOOD6_OPTIONS[2], MOOD6_LABELS[2], "#DCFCE7", "#166534"),
+        (17, 22, MOOD6_OPTIONS[3], MOOD6_LABELS[3], "#E0F2FE", "#075985"),
+        (23, 28, MOOD6_OPTIONS[4], MOOD6_LABELS[4], "#EDE9FE", "#5B21B6"),
+        (29, C_RE, MOOD6_OPTIONS[5], MOOD6_LABELS[5], "#FEE2E2", "#991B1B"),
+    ]
+    for c1, c2, opt, lbl_m, m_bg, m_fg in mood_spans:
+        cv.merge(r0 + 2, c1, r0 + 2, c2, lbl_m, bold=True, font_size=8.8, align="center",
+                 bg_color=m_bg, font_color=m_fg)
+        cv.merge(r0 + 3, c1, r0 + 3, c2, f'=COUNTIF({mood_strip_rng},"{opt}")&" ngày"',
+                 bold=True, font_size=10, align="center", bg_color=t.card, font_color=m_fg)
+    cv.grid(r0 + 1, C_NAME, r0 + 3, C_RE, t.line)
+    cv.box(r0, C_NAME, r0 + 3, C_RE, t.line)
+
+    # Row 5..9: Side-by-side Quick Daily To-Do | What Went Well | What Didn't Go Well
+    r_b = r0 + 5
+    cv.merge(r_b, C_NAME, r_b, 10, "📝  QUICK DAILY TO-DO (VIỆC CẦN LÀM NHANH)", bold=True, font_size=9,
+             align="left", indent=1, bg_color="#CBE8C8", font_color="#2D4A2B")
+    todos = [
+        "☑  Quay video chia sẻ góc học tập mới",
+        "☑  Viết bài tổng kết mục tiêu tuần này",
+        "☐  Thăm gia đình & ăn tối cuối tuần",
+        "☐  Dọn bàn làm việc & tưới cây nhỏ",
+    ]
+    for idx_td, td in enumerate(todos):
+        cv.merge(r_b + 1 + idx_td, C_NAME, r_b + 1 + idx_td, 10, td, font_size=9.2, align="left", indent=1,
+                 bg_color=t.card if idx_td % 2 == 0 else t.page, font_color=t.ink)
+    cv.grid(r_b + 1, C_NAME, r_b + 4, 10, t.line)
+    cv.box(r_b, C_NAME, r_b + 4, 10, t.line)
+
+    cv.merge(r_b, 12, r_b, 24, "✨  ĐIỀU LÀM TỐT (WHAT WENT WELL)", bold=True, font_size=9,
+             align="left", indent=1, bg_color="#FCD5B5", font_color=t.ink)
+    cv.merge(r_b + 1, 12, r_b + 4, 24,
+             "• Giữ được nhịp dậy sớm & uống đủ nước đều đặn.\n"
+             "• Tâm trạng luôn tích cực nhờ viết nhật ký cảm xúc mỗi tối.\n"
+             "• Hoàn thành sớm toàn bộ việc ưu tiên trong tuần!",
+             font_size=9.2, align="left", indent=1, text_wrap=True, bg_color=t.card, font_color=t.ink)
+    cv.box(r_b, 12, r_b + 4, 24, t.line)
+
+    cv.merge(r_b, 26, r_b, C_RE, "💡  ĐIỀU CẦN CẢI THIỆN (WHAT DIDN'T GO WELL)", bold=True, font_size=9,
+             align="left", indent=1, bg_color="#F4A261", font_color="#FFFFFF")
+    cv.merge(r_b + 1, 26, r_b + 4, C_RE,
+             "• Vẫn còn lướt điện thoại khuya 2 tối cuối tuần.\n"
+             "• Tuần tới cần đặt báo thức ngủ lúc 22h45 & chuẩn bị đồ từ tối hôm trước!",
+             font_size=9.2, align="left", indent=1, text_wrap=True, bg_color=t.card, font_color=t.ink)
+    cv.box(r_b, 26, r_b + 4, C_RE, t.line)
+
+
+# --------------------------------------------------------------------------- #
+#  Template 34 (Fluffy Bunny Sticker Pop): 5-Color Pastel Bars + Progress Ring
+# --------------------------------------------------------------------------- #
+def add_bunny_sticker_pop_panel(wb, cv: Canvas, tr: TrackerRefs):
+    """Notedii-inspired 5-Color Pastel Progress Bars (Coral/Pink/Lavender/Sky/Mint) + Bunny Ring!"""
+    t = cv.t
+    ws = cv.ws
+    C_RE = tr.c_right_end
+    rb = tr.calc_row_base
+    r0 = R_EXTRA
+    cv.row(r0, 24)
+    for i in range(5):
+        cv.row(r0 + 1 + i, 24)
+
+    cv.merge(r0, C_NAME, r0, C_D31, "🐰  BUNNY PASTEL PROGRESS BARS  •  5 DẢI TIẾN ĐỘ TUẦN (CORAL • PINK • LAVENDER • SKY • MINT)",
+             bold=True, font_size=9.5, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_R0, r0, C_RE, "🎀  BUNNY PROGRESS RING", bold=True, font_size=9,
+             align="center", bg_color=t.primary, font_color=t.on_primary)
+
+    bar_colors = [
+        ("WEEK 1  •  Coral Peach",   "#F4A4A4", "#FFF1F1"),
+        ("WEEK 2  •  Pastel Pink",   "#F9C6D0", "#FFF5F7"),
+        ("WEEK 3  •  Soft Lavender", "#C4B5FD", "#F5F3FF"),
+        ("WEEK 4  •  Baby Sky",      "#7DD3FC", "#F0F9FF"),
+        ("WEEK 5  •  Fresh Mint",    "#6EE7B7", "#ECFDF5"),
+    ]
+    for w, (lbl, b_col, tint_col) in enumerate(bar_colors):
+        rr = r0 + 1 + w
+        hc = CALC_WK_COL0 + w
+        pct_ref = f"{tr.calc_q}!{acell(rb + 2, hc)}"
+        done_ref = f"{tr.calc_q}!{acell(rb + 0, hc)}"
+        tot_ref = f"{tr.calc_q}!{acell(rb + 1, hc)}"
+        cv.merge(rr, C_NAME, rr, 6, f"🐇  {lbl}", bold=True, font_size=9.2, align="left", indent=1,
+                 bg_color=tint_col, font_color=t.ink)
+        cv.merge(rr, 7, rr, 27, f"={pct_ref}", bold=True, font_size=9.5, align="center",
+                 num_format="0%", bg_color=t.card, font_color=t.ink)
+        ws.conditional_format(rng(rr, 7, rr, 27), {
+            "type": "data_bar", "bar_color": b_col, "bar_solid": True,
+            "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1,
+        })
+        cv.merge(rr, 28, rr, C_D31, f'={done_ref}&" / "&{tot_ref}&" ✓"', bold=True, font_size=8.8,
+                 align="center", bg_color=tint_col, font_color=t.ink)
+    cv.grid(r0 + 1, C_NAME, r0 + 5, C_D31, t.line)
+    cv.box(r0, C_NAME, r0 + 5, C_D31, t.line)
+
+    # Right Bunny Progress Ring Donut Card
+    cv.merge(r0 + 1, C_R0, r0 + 4, C_RE, f"={tr.s['overall']}", bold=True, font_size=16,
+             align="center", num_format="0%", bg_color=t.card, font_color="#C25D6A", font_name=t.font_title)
+    d_b = donut(wb, f"={tr.calc_q}!{rng(rb + 0, CALC_DONUT_COL, rb + 1, CALC_DONUT_COL)}",
+                ["#F4A4A4", "#FCE7EB"], hole=68, name="BunnyProgressRing")
+    place_chart(cv, d_b, r0 + 1, C_R0, r0 + 4, C_RE, pad_x=10, pad_y=2)
+    cv.merge(r0 + 5, C_R0, r0 + 5, C_RE,
+             f'="🍒 "&{tr.s["grown"]}&" ngày Thỏ Nơ Cherry!"',
+             bold=True, font_size=8.8, align="center", bg_color=t.soft, font_color=t.ink)
+    cv.box(r0, C_R0, r0 + 5, C_RE, t.line)
+
+
+# --------------------------------------------------------------------------- #
+#  Template 35 (Milk & Mocha Bear Sweet Love): 5 Weekly Donuts + 1 Monthly Donut!
+# --------------------------------------------------------------------------- #
+def add_milk_mocha_donuts_panel(wb, cv: Canvas, tr: TrackerRefs):
+    """Honors Milk & Mocha Bear ref: Weekly Done/Incomplete rows + 5 Weekly Donuts + 1 Monthly Donut!"""
+    t = cv.t
+    C_RE = tr.c_right_end
+    rb = tr.calc_row_base
+    r0 = R_EXTRA
+    cv.row(r0, 24)        # Banner
+    cv.row(r0 + 1, 20)    # Weekly Completed
+    cv.row(r0 + 2, 20)    # Weekly Incomplete
+    for rr in range(r0 + 3, r0 + 10):
+        cv.row(rr, 22)    # 7 tall rows for crisp 5 Weekly + 1 Monthly Donuts!
+    cv.row(r0 + 10, 22)   # Percentage % per Week footer row
+
+    cv.merge(r0, C_NAME, r0, C_D31, "🐻  PROGRESS PER WEEK  •  5 BIỂU ĐỒ TRÒN TIẾN ĐỘ TUẦN (MILK & MOCHA)",
+             bold=True, font_size=9.5, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_R0, r0, C_RE, "💖  TOTAL MONTHLY PROGRESS", bold=True, font_size=9,
+             align="center", bg_color="#6D1D3A", font_color="#FFFFFF")
+
+    cv.put(r0 + 1, C_NAME, "Weekly Habits Completed ✓", bold=True, font_size=8.8, align="left", indent=1,
+           bg_color=t.soft, font_color=t.ink)
+    cv.put(r0 + 2, C_NAME, "Weekly Habits Incomplete", font_size=8.6, align="left", indent=1,
+           bg_color=t.card, font_color=t.muted)
+    cv.merge(r0 + 3, C_NAME, r0 + 9, C_NAME,
+             f'="🐻 Milk & Mocha"&CHAR(10)&"Tổng tháng: "&{tr.s["tdone"]}&" / "&{tr.s["tgoal"]}&CHAR(10)&'
+             f'"💖 Ngày 100%: "&{tr.s["perfect"]}&"d"&CHAR(10)&"🔥 Best Streak: "&{tr.s["best"]}&"d"',
+             bold=True, font_size=9.2, align="center", text_wrap=True, bg_color=t.card, font_color=t.primary_dark)
+    cv.put(r0 + 10, C_NAME, "Percentage % per Week", bold=True, font_size=8.8, align="left", indent=1,
+           bg_color=t.soft, font_color=t.primary_dark)
+
+    wk_donut_cols = ["#E86A92", "#A78BFA", "#F47272", "#6DBE7A", "#EC4899"]
+    wk_rest_cols  = ["#FCE7F3", "#EDE9FE", "#FEE2E2", "#DCFCE7", "#FCE7F3"]
+    for w in range(5):
+        days = week_days(w)
+        c1, c2 = day_col(days[0]), day_col(days[-1])
+        hc = CALC_WK_COL0 + w
+        done_ref = f"{tr.calc_q}!{acell(rb + 0, hc)}"
+        rem_ref  = f"{tr.calc_q}!{acell(rb + 4, hc)}"
+        pct_ref  = f"{tr.calc_q}!{acell(rb + 2, hc)}"
+
+        cv.merge(r0 + 1, c1, r0 + 1, c2, f"={done_ref}", bold=True, font_size=9.5, align="center",
+                 bg_color=t.week_tint[w], font_color=t.ink)
+        cv.merge(r0 + 2, c1, r0 + 2, c2, f"={rem_ref}", font_size=9, align="center",
+                 bg_color=t.card, font_color=t.muted)
+        cv.merge(r0 + 3, c1, r0 + 9, c2, "", align="center", bg_color=t.card)
+        d_w = donut(wb, f"={tr.calc_q}!{rng(rb + 2, hc, rb + 3, hc)}",
+                    [wk_donut_cols[w], wk_rest_cols[w]], hole=62, name=f"Week{w + 1}Donut")
+        place_chart(cv, d_w, r0 + 3, c1, r0 + 9, c2, pad_x=4, pad_y=4)
+        cv.merge(r0 + 10, c1, r0 + 10, c2, f"={pct_ref}", bold=True, font_size=10, align="center",
+                 num_format="0.0%", bg_color=t.week_tint[w], font_color=t.ink)
+
+    cv.grid(r0 + 1, C_NAME, r0 + 10, C_D31, t.line)
+    cv.box(r0, C_NAME, r0 + 10, C_D31, t.line)
+
+    # Right Total Monthly Progress Donut Card (matching Milk & Mocha ref #4!)
+    cv.merge(r0 + 1, C_R0, r0 + 1, C_RE, f'="Completed: "&{tr.s["tdone"]}', bold=True, font_size=8.8,
+             align="center", bg_color=t.soft, font_color=t.ink)
+    cv.merge(r0 + 2, C_R0, r0 + 2, C_RE, f'="Remaining: "&({tr.s["tgoal"]}-{tr.s["tdone"]})', font_size=8.5,
+             align="center", bg_color=t.card, font_color=t.muted)
+    cv.merge(r0 + 3, C_R0, r0 + 9, C_RE, "", align="center", bg_color=t.card)
+    d_m = donut(wb, f"={tr.calc_q}!{rng(rb + 0, CALC_DONUT_COL, rb + 1, CALC_DONUT_COL)}",
+                ["#E86A92", "#FCE7F3"], hole=60, name="TotalMonthlyDonut")
+    place_chart(cv, d_m, r0 + 3, C_R0, r0 + 9, C_RE, pad_x=10, pad_y=4)
+    cv.merge(r0 + 10, C_R0, r0 + 10, C_RE, f"={tr.s['overall']}", bold=True, font_size=11, align="center",
+             num_format="0.0%", bg_color=t.soft, font_color="#6D1D3A", font_name=t.font_title)
+    cv.grid(r0 + 1, C_R0, r0 + 10, C_RE, t.line)
+    cv.box(r0, C_R0, r0 + 10, C_RE, t.line)
+

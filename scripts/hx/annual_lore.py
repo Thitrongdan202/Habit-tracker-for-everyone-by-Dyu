@@ -660,11 +660,91 @@ ANNUAL_LORE: dict[str, dict] = {
         ],
         ("🐾 Bắt đầu trên đệm Tatami!", "❄️ Chú Akita thật kiên định!", "🔔 Tiếng chuông vang xa!", "👑 Đại Sư Trung Thành Akita!"),
     ),
+    # 32 - Sakura Blossom Minimalist
+    "sakura_tree": _lore(
+        "🌸  RỪNG ANH ĐÀO TỐI GIẢN — ĐẠI SẢNH NỞ HOA NĂM",
+        "Mỗi ngày kỷ luật tinh gọn gieo một hạt mầm — cuối năm nở trọn rừng hoa anh đào rực rỡ!",
+        "🌸  TỔNG LẦN GIEO HOA", "ngày anh đào nở ≥",
+        "🌳  RỪNG ANH ĐÀO 12 THÁNG (T1 – T12)",
+        "🌸  BIỂU ĐỒ HOA ANH ĐÀO 12 THÁNG", "area",
+        "🏅  HUY HIỆU NGHỆ NHÂN ANH ĐÀO", "🌸  CÁNH HOA ĐÀO",
+        [
+            ("🌰  Hạt Mầm Anh Đào Đầu Tiên", "Hoàn thành ngày kỷ luật đầu tiên ≥ 75%"),
+            ("🌱  Chồi Non Tinh Khôi (7d)", "Duy trì chuỗi 7 ngày tối giản liên tiếp"),
+            ("🌿  Cành Cây Vươn Nắng (21d)", "Đạt chuỗi 21 ngày kỷ luật bền bỉ"),
+            ("🌸  Đỉnh Mùa Hoa Nở (30d)", "Giữ vững chuỗi 30 ngày tinh hoa liên tiếp"),
+            ("✨  Tháng Mưa Cánh Hoa (≥ 80%)", "Có ít nhất 1 tháng đạt trung bình ≥ 80%"),
+            ("🌳  100 Cây Anh Đào (100d)", "Gieo ≥ 100 ngày anh đào nở ≥ 75% trong năm"),
+            ("🎯  Trọn Vẹn Mục Tiêu Năm", "Hoàn thành ≥ 50% mục tiêu trên Yearly Goals"),
+            ("👑  Bậc Thầy Rừng Anh Đào", "Đạt ≥ 80% cả năm hoặc ≥ 250 ngày ≥ 75%"),
+        ],
+        ("🌰 Gieo hạt mầm đầu tiên!", "🌱 Chồi xanh đang lớn nhanh!", "🌸 Mùa hoa anh đào rực rỡ!", "👑 Bậc Thầy Rừng Anh Đào!"),
+    ),
+    # 33 - Peach Mochi Cat Mood Suite
+    "mochi_cat": _lore(
+        "🐱  HỘP MÈO MOCHI HẠNH PHÚC — THÀNH TỰU NĂM",
+        "Chăm sóc cảm xúc, hoàn thành việc nhỏ & nuôi bé mèo Mochi trắng bước ra khỏi hộp cam!",
+        "📦  TỔNG LƯỢT NUÔI MÈO MOCHI", "ngày mèo vui ≥",
+        "🐱  GIA ĐÌNH MÈO MOCHI 12 THÁNG (T1 – T12)",
+        "🧡  BIỂU ĐỒ KỶ LUẬT & CẢM XÚC 12 THÁNG", "column",
+        "🏅  HUY HIỆU NGƯỜI BẠN MÈO MOCHI", "🔔  CHUÔNG MÈO",
+        [
+            ("📦  Mở Nắp Hộp Cam", "Ghi nhận ngày đầu tiên đạt ≥ 75% thói quen"),
+            ("🐾  Tai Mèo Ló Dạng (7d)", "Duy trì chuỗi 7 ngày êm dịu & đều đặn"),
+            ("🐱  Mochi Mỉm Cười (21d)", "Đạt chuỗi 21 ngày sống lành mạnh"),
+            ("🔔  Chuông Vàng Hạnh Phúc (30d)", "Giữ vững chuỗi 30 ngày tràn đầy năng lượng"),
+            ("🍑  Tháng Đào Ngọt Ngào (≥ 80%)", "Có ít nhất 1 tháng đạt trung bình ≥ 80%"),
+            ("💛  100 Ngày Yêu Đời (100d)", "Đạt ≥ 100 ngày ≥ 75% trong năm"),
+            ("🎯  Chinh Phục Mục Tiêu Năm", "Hoàn thành ≥ 50% mục tiêu trên Yearly Goals"),
+            ("👑  Huyền Thoại Mèo Mochi", "Đạt ≥ 80% cả năm hoặc ≥ 250 ngày ≥ 75%"),
+        ],
+        ("📦 Bé Mochi đang ngó ra!", "🐾 Đôi tai trắng đáng yêu!", "🐱 Mèo Mochi cười rạng rỡ!", "👑 Huyền Thoại Mèo Mochi!"),
+    ),
+    # 34 - Fluffy Bunny Sticker Pop
+    "fluffy_bunny": _lore(
+        "🐰  THỎ BÔNG STICKER POP — ĐẠI SẢNH KỶ LUẬT NĂM",
+        "Tô đầy 5 dải cầu vồng pastel & giúp bé Thỏ Bông đeo chiếc nơ cherry rạng ngời nhất năm!",
+        "🍒  TỔNG STICKER THỎ BÔNG", "ngày thỏ vui ≥",
+        "🐰  BỘ SƯU TẬP THỎ BÔNG 12 THÁNG (T1 – T12)",
+        "🌈  BIỂU ĐỒ PASTEL BUNNY 12 THÁNG", "combo",
+        "🏅  HUY HIỆU STICKER THỎ BÔNG", "🍒  CHERRY POP",
+        [
+            ("🐇  Chú Thỏ Thức Giấc", "Hoàn thành ngày kỷ luật đầu tiên ≥ 75%"),
+            ("🎀  Nhảy Nhót 7 Ngày (7d)", "Duy trì chuỗi 7 ngày tích cực liên tiếp"),
+            ("🌈  Đủ 5 Màu Pastel (21d)", "Đạt chuỗi 21 ngày kỷ luật đầy sắc màu"),
+            ("🍒  Chiếc Nơ Cherry (30d)", "Giữ vững chuỗi 30 ngày không gián đoạn"),
+            ("✨  Tháng Sticker Hoàn Hảo (≥ 80%)", "Có ít nhất 1 tháng đạt trung bình ≥ 80%"),
+            ("🐰  100 Sticker Thỏ Bông (100d)", "Thu thập ≥ 100 ngày ≥ 75% trong năm"),
+            ("🎯  Vòng Tròn Mục Tiêu Năm", "Hoàn thành ≥ 50% mục tiêu trên Yearly Goals"),
+            ("👑  Siêu Sao Thỏ Bông Pastel", "Đạt ≥ 80% cả năm hoặc ≥ 250 ngày ≥ 75%"),
+        ],
+        ("🐇 Thỏ bông đang cuộn ngủ!", "🐰 Đôi tai dựng thật xinh!", "🍒 Chiếc nơ cherry tỏa sáng!", "👑 Siêu Sao Thỏ Bông!"),
+    ),
+    # 35 - Milk & Mocha Bear Sweet Love
+    "milk_mocha_bear": _lore(
+        "🐻  GẤU MILK & MOCHA — ĐẠI SẢNH YÊU THƯƠNG NĂM",
+        "Cùng hai chú gấu Milk & Mocha tưới cây kỷ luật, tích trái tim hồng & chạm đỉnh cả năm!",
+        "💖  TỔNG TRÁI TIM MILK & MOCHA", "ngày ngọt ngào ≥",
+        "🐻  KHU VƯỜN MILK & MOCHA 12 THÁNG (T1 – T12)",
+        "💖  BIỂU ĐỒ NGỌT NGÀO 12 THÁNG", "combo",
+        "🏅  HUY HIỆU TRÁI TIM MILK & MOCHA", "💖  TRÁI TIM",
+        [
+            ("🌷  Bình Tưới Trái Tim", "Hoàn thành ngày kỷ luật đầu tiên ≥ 75%"),
+            ("🐻  Cái Ôm 7 Ngày (7d)", "Duy trì chuỗi 7 ngày ấm áp liên tiếp"),
+            ("💕  Song Hành 21 Ngày (21d)", "Đạt chuỗi 21 ngày gắn kết kỷ luật"),
+            ("👑  Cặp Đôi Hoàn Hảo (30d)", "Giữ vững chuỗi 30 ngày siêu ngọt ngào"),
+            ("🍓  Tháng Dâu Tây Rực Rỡ (≥ 80%)", "Có ít nhất 1 tháng đạt trung bình ≥ 80%"),
+            ("💖  100 Ngày Yêu Thương (100d)", "Đạt ≥ 100 ngày ≥ 75% trong năm"),
+            ("🎯  Giấc Mơ Năm Chung Đôi", "Hoàn thành ≥ 50% mục tiêu trên Yearly Goals"),
+            ("🏆  Huyền Thoại Milk & Mocha", "Đạt ≥ 80% cả năm hoặc ≥ 250 ngày ≥ 75%"),
+        ],
+        ("🌷 Tưới giọt nước đầu tiên!", "🐻 Milk & Mocha đang cười!", "💕 Trái tim hồng rực rỡ!", "🏆 Huyền Thoại Milk & Mocha!"),
+    ),
 }
 
 
 def get_annual_lore(slug: str) -> dict:
-    """Return bespoke Annual Achievements lore pack for `slug` (31 themes supported)."""
+    """Return bespoke Annual Achievements lore pack for `slug` (35 themes supported)."""
     if slug in ANNUAL_LORE:
         return ANNUAL_LORE[slug]
     raise KeyError(f"Missing bespoke Annual Achievements lore for slug={slug!r}")

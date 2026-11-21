@@ -237,6 +237,9 @@ def build_annual_achievements_sheet(
     q = qs(name)
     cq = qs(CALC_SHEET)
     yg_q = qs(YEARLY_GOALS_SHEET)
+    # Pure-ASCII Named Anchors for VBA (zero Vietnamese/emoji sheet names in VBA!)
+    wb.define_name("ANCHOR_GOALS", f"={yg_q}!$I$2")
+    wb.define_name("ANCHOR_ANNUAL", f"={q}!$B$3")
 
     # 15 columns (0..14): A gutter | B label (21) | C..N = 12 months T1..T12 (9.5 each) | O gutter
     cv.col(0, 2.2)

@@ -41,34 +41,161 @@ OFFLINE_OUT_DIR = ROOT / "templates" / "excel_universal_offline"
 PREVIEWS_DIR = ROOT / "previews"
 VBA_MOD_PATH = ROOT / "vba_scripts" / "modHabitState.bas"
 
+THISWORKBOOK_EVENT_VBA = (
+    "Option Explicit\r\n"
+    "Private Sub Workbook_Open()\r\n"
+    "    modHabitState.InitWorkbookFastMode\r\n"
+    "End Sub\r\n"
+    "Private Sub Workbook_BeforeClose(Cancel As Boolean)\r\n"
+    "    modHabitState.CleanupAllFX\r\n"
+    "End Sub\r\n"
+    "Private Sub Workbook_SheetActivate(ByVal Sh As Object)\r\n"
+    "    modHabitState.HandleSheetActivate Sh\r\n"
+    "End Sub\r\n"
+)
+
 TRACKER_EVENT_VBA = (
     "Option Explicit\r\n"
     "Private Sub Worksheet_Change(ByVal Target As Range)\r\n"
-    "    If Intersect(Target, Me.Range(\"B3,B5\")) Is Nothing Then Exit Sub\r\n"
-    "    modHabitState.HandleMonthlySwitch Me\r\n"
+    "    If Not Intersect(Target, Me.Range(\"B3,B5\")) Is Nothing Then\r\n"
+    "        modHabitState.HandleMonthlySwitch Me\r\n"
+    "    ElseIf Not Intersect(Target, Me.Range(\"C17:AG36\")) Is Nothing Then\r\n"
+    "        modHabitState.HandleTrackerTick Me, Target\r\n"
+    "    End If\r\n"
     "End Sub\r\n"
 )
 
 YEARLY_GOALS_EVENT_VBA = (
     "Option Explicit\r\n"
     "Private Sub Worksheet_Change(ByVal Target As Range)\r\n"
-    "    If Intersect(Target, Me.Range(\"I2\")) Is Nothing Then Exit Sub\r\n"
-    "    modHabitState.HandleYearlyGoalsSwitch Me\r\n"
+    "    If Not Intersect(Target, Me.Range(\"I2\")) Is Nothing Then\r\n"
+    "        modHabitState.HandleYearlyGoalsSwitch Me\r\n"
+    "    ElseIf Not Intersect(Target, Me.Range(\"B6:B25\")) Is Nothing Then\r\n"
+    "        modHabitState.HandleYearlyGoalTick Me, Target\r\n"
+    "    End If\r\n"
     "End Sub\r\n"
 )
 
 DAILY_TASKS_EVENT_VBA = (
     "Option Explicit\r\n"
     "Private Sub Worksheet_Change(ByVal Target As Range)\r\n"
-    "    If Intersect(Target, Me.Range(\"D5:F5\")) Is Nothing Then Exit Sub\r\n"
-    "    modHabitState.HandleDailyTasksSwitch Me\r\n"
+    "    If Not Intersect(Target, Me.Range(\"D5:F5\")) Is Nothing Then\r\n"
+    "        modHabitState.HandleDailyTasksSwitch Me\r\n"
+    "    ElseIf Not Intersect(Target, Me.Range(\"B9:B28\")) Is Nothing Then\r\n"
+    "        modHabitState.HandleDailyTaskTick Me, Target\r\n"
+    "    End If\r\n"
     "End Sub\r\n"
 )
 
 
+def _hex_to_bgr(hex_str: str, fallback: int = 0x7A7AB5) -> int:
+    """Convert '#RRGGBB' to Excel COM little-endian BGR integer (R + G*256 + B*65536)."""
+    try:
+        s = hex_str.strip().lstrip("#")
+        if len(s) != 6:
+            return fallback
+        r, g, b = int(s[0:2], 16), int(s[2:4], 16), int(s[4:6], 16)
+        return r + (g << 8) + (b << 16)
+    except Exception:
+        return fallback
+
+
+def _add_pill_button(ws, name: str, text: str, left: float, top: float, width: float, height: float,
+                     fill_bgr: int, border_bgr: int, font_bgr: int, on_action: str, font_size: float = 8.0):
+    """Create a sleek rounded-rectangle Quick-Action Pastel Pill Button bound to a Pure-ASCII VBA macro."""
+    shp = ws.Shapes.AddShape(5, left, top, width, height)  # msoShapeRoundedRectangle = 5
+    shp.Name = name
+    try:
+        shp.Adjustments[1] = 0.42
+    except Exception:
+        pass
+    shp.Fill.Solid()
+    shp.Fill.ForeColor.RGB = fill_bgr
+    shp.Line.Visible = -1  # msoTrue
+    shp.Line.ForeColor.RGB = border_bgr
+    shp.Line.Weight = 0.85
+    tf2 = shp.TextFrame2
+    tf2.WordWrap = 0
+    tf2.VerticalAnchor = 3  # msoAnchorMiddle
+    tf2.MarginLeft = 2
+    tf2.MarginRight = 2
+    tf2.MarginTop = 1
+    tf2.MarginBottom = 1
+    tr = tf2.TextRange
+    tr.Text = text
+    tr.ParagraphFormat.Alignment = 2  # msoAlignCenter
+    tr.Font.Name = "Segoe UI"
+    tr.Font.Size = font_size
+    tr.Font.Bold = -1
+    tr.Font.Fill.ForeColor.RGB = font_bgr
+    shp.OnAction = on_action
+    shp.Placement = 1  # xlMoveAndSize
+    return shp
+
+
+def add_pro_pill_buttons(wb, meta: dict):
+    """Effect 4: Add sleek Quick-Action Pastel Pill Buttons cleanly on Pro `.xlsm` (ZERO overlaps!)."""
+    bgr_pri = _hex_to_bgr(meta.get("theme_primary", "#B57A7A"))
+    bgr_dk  = _hex_to_bgr(meta.get("theme_primary_dark", "#8B5454"))
+    bgr_sft = _hex_to_bgr(meta.get("theme_soft", "#F7EAE6"))
+    bgr_ink = _hex_to_bgr(meta.get("theme_ink", "#3B2F2F"))
+    bgr_onp = _hex_to_bgr(meta.get("theme_on_primary", "#FFFFFF"))
+    bgr_wht = _hex_to_bgr("#FFFFFF")
+
+    # 1. Monthly Tracker (`B7` cell tray): [◀ Tháng] [Tháng ▶] [✨ FX: BẬT]
+    ws_tr = wb.Worksheets(meta["tracker_sheet"])
+    b7 = ws_tr.Range("B7")
+    pad_x = 3.0
+    gap = 3.0
+    bh = min(19.0, max(15.0, b7.Height - 5.0))
+    bt = b7.Top + (b7.Height - bh) / 2.0
+    avail_w = b7.Width - 2 * pad_x - 2 * gap
+    w_nav = avail_w * 0.305
+    w_fx  = avail_w - 2 * w_nav
+    x0 = b7.Left + pad_x
+    _add_pill_button(ws_tr, "BTN_PREV_MONTH", "◀ Tháng", x0, bt, w_nav, bh,
+                     bgr_sft, bgr_pri, bgr_ink, "BtnPrevMonth", font_size=7.6)
+    _add_pill_button(ws_tr, "BTN_NEXT_MONTH", "Tháng ▶", x0 + w_nav + gap, bt, w_nav, bh,
+                     bgr_sft, bgr_pri, bgr_ink, "BtnNextMonth", font_size=7.6)
+    _add_pill_button(ws_tr, "BTN_FX_TOGGLE", "✨ FX: BẬT", x0 + 2 * (w_nav + gap), bt, w_fx, bh,
+                     bgr_pri, bgr_dk, bgr_onp, "BtnToggleFX", font_size=7.6)
+
+    # 2. Daily One-Off Tasks (`D6:F6` cell tray): [◀ Hôm qua] [📅 Hôm nay] [Ngày mai ▶]
+    ws_dt = wb.Worksheets(DAILY_TASKS_SHEET)
+    tray = ws_dt.Range("D6:F6")
+    d_pad = 6.0
+    d_gap = 6.0
+    dh = min(21.0, max(16.0, tray.Height - 6.0))
+    dt_top = tray.Top + (tray.Height - dh) / 2.0
+    dw = (tray.Width - 2 * d_pad - 2 * d_gap) / 3.0
+    dx0 = tray.Left + d_pad
+    _add_pill_button(ws_dt, "BTN_PREV_DAY", "◀ Hôm qua", dx0, dt_top, dw, dh,
+                     bgr_sft, bgr_pri, bgr_ink, "BtnPrevDay", font_size=8.2)
+    _add_pill_button(ws_dt, "BTN_TODAY", "📅 Hôm nay", dx0 + dw + d_gap, dt_top, dw, dh,
+                     bgr_pri, bgr_dk, bgr_onp, "BtnToday", font_size=8.2)
+    _add_pill_button(ws_dt, "BTN_NEXT_DAY", "Ngày mai ▶", dx0 + 2 * (dw + d_gap), dt_top, dw, dh,
+                     bgr_sft, bgr_pri, bgr_ink, "BtnNextDay", font_size=8.2)
+
+    # 3. Guide (Section 5 left-aligned header bar, right CTA pill directly above Guide_Stage5 — ZERO overlap!)
+    ws_g = wb.Worksheets(GUIDE_SHEET)
+    r_sec5 = 23
+    for rr_g in range(18, 34):
+        if "5. HOẠT ẢNH" in str(ws_g.Cells(rr_g, 2).Value or ""):
+            r_sec5 = rr_g
+            break
+    sec5_bar = ws_g.Range(ws_g.Cells(r_sec5, 2), ws_g.Cells(r_sec5, 7))
+    gw = 148.0
+    gh = min(21.0, max(17.0, sec5_bar.Height - 4.0))
+    gl = sec5_bar.Left + sec5_bar.Width - gw - 6.0
+    gt = sec5_bar.Top + (sec5_bar.Height - gh) / 2.0
+    _add_pill_button(ws_g, "BTN_DEMO_FX", "🎉 Thử Hiệu Ứng Pro", gl, gt, gw, gh,
+                     bgr_wht, bgr_sft, bgr_dk, "BtnDemoFX", font_size=8.2)
+
+
 def paste_linked_picture_fast(xl, src_cell, dst_ws, left: float, top: float, width: float, height: float,
-                              formula: str, align_bottom: bool = False, need_copy: bool = True):
-    """Paste Linked Picture onto `dst_ws`, bind `formula`, and position using pre-computed box."""
+                              formula: str, align_bottom: bool = False, need_copy: bool = True,
+                              shape_name: str | None = None):
+    """Paste Linked Picture onto `dst_ws`, bind `formula`, name deterministically & position cleanly."""
     for attempt in range(6):
         try:
             if need_copy or attempt > 0:
@@ -76,6 +203,8 @@ def paste_linked_picture_fast(xl, src_cell, dst_ws, left: float, top: float, wid
                 time.sleep(0.025)
             pic = dst_ws.Pictures().Paste(Link=True)
             pic.Formula = formula
+            if shape_name:
+                pic.Name = shape_name
             pic.ShapeRange.Line.Visible = False
             pic.ShapeRange.LockAspectRatio = -1  # msoTrue
             pad_x = 1.5 if align_bottom else 4.5
@@ -228,16 +357,18 @@ def enhance_one(xl, meta: dict, capture_previews: bool = True):
         for item in meta["dyn_anims"]:
             wb.Names.Add(Name=item["name"], RefersTo=item["refers_to"])
 
-        # 4. Paste ALL Linked Pictures grouped by sheet (minimal activations + clipboard reuse!)
+        # 4. Paste ALL Linked Pictures grouped by sheet (minimal activations + deterministic Hero names!)
         pic_groups = defaultdict(list)
         for item in meta["dyn_anims"]:
             pic_groups[item["sheet"]].append({
+                "name": item.get("name"),
                 "r1": item["r1"], "c1": item["c1"], "r2": item["r2"], "c2": item["c2"],
                 "formula": f"={item['name']}",
                 "align_bottom": item.get("align_bottom", False),
             })
         for sp in meta["static_pics"]:
             pic_groups[sp["sheet"]].append({
+                "name": sp.get("name"),
                 "r1": sp["r1"], "c1": sp["c1"], "r2": sp["r2"], "c2": sp["c2"],
                 "formula": sp["formula"],
                 "align_bottom": False,
@@ -258,14 +389,22 @@ def enhance_one(xl, meta: dict, capture_previews: bool = True):
                     dst.Left, dst.Top, dst.Width, dst.Height,
                     it["formula"], align_bottom=it["align_bottom"],
                     need_copy=(idx_p == 0),
+                    shape_name=it.get("name"),
                 )
                 pic_count += 1
             xl.CutCopyMode = False
 
-        # 5. Inject VBA Persistence Engine into Pro `.xlsm`
+        # 5. Inject v3.5 Ultra-Smooth FX VBA Engine & Quick-Action Pastel Pill Buttons into Pro `.xlsm`
         if edition == "pro_xlsm":
             vbp = wb.VBProject
             vbp.VBComponents.Import(str(VBA_MOD_PATH.resolve()))
+
+            # Inject ThisWorkbook lifecycle events (Workbook_Open, BeforeClose, SheetActivate)
+            cm_wb = vbp.VBComponents(wb.CodeName).CodeModule
+            if cm_wb.CountOfLines > 0:
+                cm_wb.DeleteLines(1, cm_wb.CountOfLines)
+            cm_wb.AddFromString(THISWORKBOOK_EVENT_VBA)
+
             ws_tr = wb.Worksheets(meta["tracker_sheet"])
             cm_tr = vbp.VBComponents(ws_tr.CodeName).CodeModule
             if cm_tr.CountOfLines > 0:
@@ -283,6 +422,16 @@ def enhance_one(xl, meta: dict, capture_previews: bool = True):
             if cm_dt.CountOfLines > 0:
                 cm_dt.DeleteLines(1, cm_dt.CountOfLines)
             cm_dt.AddFromString(DAILY_TASKS_EVENT_VBA)
+
+            # Mount Effect 4: Sleek Quick-Action Pastel Pill Buttons (Tracker, Daily Tasks, Guide)
+            add_pro_pill_buttons(wb, meta)
+
+        # Disable Page Breaks on every worksheet for zero-lag scrolling & ticking!
+        for ws in wb.Worksheets:
+            try:
+                ws.DisplayPageBreaks = False
+            except Exception:
+                pass
 
         # 6. Restore calculation & force full rebuild
         xl.Calculation = -4105  # xlCalculationAutomatic
@@ -391,11 +540,23 @@ def derive_offline_from_pro(xl, only: list[str] | None = None):
             for r_inst in (r_s1 + 1, r_s1 + 2, r_s1 + 3, r_s3 + 1, r_s3 + 2, r_s3 + 3):
                 if ws_g.Rows(r_inst).RowHeight < 66:
                     ws_g.Rows(r_inst).RowHeight = 66
-            # Update tracker cue line B7 & Daily Tasks cue line B6
+            # Strip all Pro macro Quick-Action Pill Buttons (`BTN_*`) & any FX shapes cleanly!
+            for ws_clean in wb.Worksheets:
+                try:
+                    for idx_sh in range(ws_clean.Shapes.Count, 0, -1):
+                        snm = str(ws_clean.Shapes(idx_sh).Name or "")
+                        if snm.startswith("BTN_") or snm.startswith("FX_"):
+                            ws_clean.Shapes(idx_sh).Delete()
+                except Exception:
+                    pass
+            # Update tracker cue line B7 & Daily Tasks cue line B6:F6
             ws_tr = wb.Worksheets(tdef.tracker_name)
             ws_tr.Range("B7").Value = "📌 Bản Không Macro • Dùng bản Pro (.xlsm) để tự lưu nhiều tháng/năm"
             try:
                 ws_dt = wb.Worksheets(DAILY_TASKS_SHEET)
+                ws_dt.Range("B6:F6").UnMerge()
+                ws_dt.Range("B6:F6").Merge()
+                ws_dt.Range("B6").HorizontalAlignment = -4108  # xlCenter
                 ws_dt.Range("B6").Value = (
                     "📌  Bản Không Macro (Excel 2016–365) • Tick xong việc để xem hoạt ảnh lớn dần "
                     "— Dùng bản Pro (.xlsm) để tự lưu nhiều ngày!"

@@ -35,14 +35,14 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     cv.row(1, 38)
     cv.row(2, 24)
     cv.row(3, 24)
-    cv.merge(1, 1, 1, 6, f"{t.emoji}  {t.name}  —  HƯỚNG DẪN SỬ DỤNG (v3.0)",
+    cv.merge(1, 1, 1, 6, f"{t.emoji}  {t.name}  —  HƯỚNG DẪN SỬ DỤNG (v3.5)",
              font_name=t.font_title, font_size=15.5, bold=True, align="center",
              bg_color=t.primary, font_color=t.on_primary)
     cv.merge(2, 1, 2, 6, t.tagline_vi, font_size=10, italic=True, align="center",
              bg_color=t.soft, font_color=t.ink)
 
     if edition == "pro_xlsm":
-        mode_txt = "⚡ BẢN PRO INTERACTIVE (.XLSM)  •  Gọn 5 tab  •  Tự lưu Tháng / Năm / Nhiệm Vụ Ngày siêu mượt  •  100% Offline"
+        mode_txt = "⚡ BẢN PRO INTERACTIVE v3.5 (.XLSM)  •  Siêu mượt + Hiệu ứng Nảy/Pháo hoa/Toast  •  Tự lưu Đa Ngày/Tháng/Năm  •  100% Offline"
     elif edition == "offline":
         mode_txt = "✨ BẢN EXCEL OFFLINE KHÔNG MACRO (.XLSX)  •  Gọn nhẹ 5 tab  •  Chạy mọi Excel 2016–365 Win/Mac  •  0 cảnh báo bảo mật"
     else:
@@ -73,7 +73,7 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
 
     # ------------------------------------------------------------------ TAB MAP (5 CLEAN TABS)
     cv.row(r, 26)
-    cv.merge(r, 1, r, 6, "🗂️  CẤU TRÚC 5 SHEET GỌN ĐẸP TRONG FILE (v3.0)", bold=True, font_size=10.5,
+    cv.merge(r, 1, r, 6, "🗂️  CẤU TRÚC 5 SHEET GỌN ĐẸP TRONG FILE (v3.5)", bold=True, font_size=10.5,
              align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
 
     if edition == "pro_xlsm":
@@ -246,8 +246,9 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
                bg_color=t.soft, font_color=t.ink)
         if universal:
             cv.put(r_simg, c, "", align="center", bg_color=t.card)
-            guide_sprite_slots.append({"sheet": GUIDE_SHEET, "r1": r_simg, "c1": c,
-                                       "r2": r_simg, "c2": c, "formula": f"=_Assets!$B${2 + idx}"})
+            guide_sprite_slots.append({"name": f"Guide_Stage{idx}", "sheet": GUIDE_SHEET,
+                                       "r1": r_simg, "c1": c, "r2": r_simg, "c2": c,
+                                       "formula": f"=_Assets!$B${2 + idx}"})
         else:
             cv.put(r_simg, c, f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_{idx}.png")', align="center", bg_color=t.card)
         cv.put(r_sdesc, c, st_sub, bold=False, font_size=8.8, align="center", bg_color=t.card, font_color=t.muted)
@@ -280,8 +281,10 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     cv.row(r_foot, 28)
     cv.row(r_foot + 1, 12)
     cv.merge(r_foot, 1, r_foot, 6,
-             f"💛  Habit Tracker Collection v3.0 by Dyu  •  Unified 5-Tab Edition  •  {REPO_URL}",
+             f"💛  Habit Tracker Collection v3.5 by Dyu  •  Ultra-Smooth Pro FX & Unified 5-Tab Edition  •  {REPO_URL}",
              bold=False, font_size=9, italic=True, align="center", bg_color=t.page, font_color=t.muted)
+
+    wb.define_name("ANCHOR_GUIDE", f"={q}!$B$2")
 
     ws.hide_gridlines(2)
     ws.set_zoom(90)

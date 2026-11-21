@@ -40,7 +40,9 @@ from hx.addons import (add_cactus_weekly_strip, add_rainbow_bottom_blocks,
                        add_dream_house_notes_block, add_wildflower_mood_row,
                        add_plum_oak_master_panels, add_alpaca_mini_panel,
                        add_royal_cat_cash_panel, add_top_habits_rank_panel,
-                       add_dog_companion_panel)
+                       add_dog_companion_panel, add_sakura_minimalist_bar,
+                       add_mochi_cat_mood_suite, add_bunny_sticker_pop_panel,
+                       add_milk_mocha_donuts_panel)
 from hx.daily_tasks import build_daily_tasks_sheet, DAILY_TASKS_SHEET
 from hx.extras import (build_reflection_notes_sheet, build_rainbow_analytics_sheet,
                        build_monthly_budget_sheet, build_life_overview_sheet,
@@ -229,6 +231,18 @@ def _extra_aurora(wb, styles, tr, addon_ref, universal, gsheets):
     build_aurora_character_sheet(wb, styles, tr, addon_ref["total_xp_ref"],
                                  addon_ref["skill_col"], addon_ref["xp_col"])
     return {}
+
+def _addon_sakura_min(wb, cv, tr, seed):
+    add_sakura_minimalist_bar(wb, cv, tr)
+
+def _addon_mochi_cat(wb, cv, tr, seed):
+    add_mochi_cat_mood_suite(wb, cv, tr, seed=seed)
+
+def _addon_bunny_pop(wb, cv, tr, seed):
+    add_bunny_sticker_pop_panel(wb, cv, tr)
+
+def _addon_milk_mocha(wb, cv, tr, seed):
+    add_milk_mocha_donuts_panel(wb, cv, tr)
 
 
 # =========================================================================== #
@@ -1244,6 +1258,134 @@ TEMPLATES: list[TemplateDef] = [
         grown_label="❄️  LOYAL AKITA DAYS\nTHIS MONTH:", tracker_capture_range="A1:AN43",
         addon_fn=_addon_akita,
     ),
+    # =========================================================================
+    #  BATCH 4 (v3.5): 4 BRAND-NEW SIGNATURE TEMPLATES (#32 .. #35)
+    # =========================================================================
+    TemplateDef(
+        stem="32_Sakura_Blossom_Minimalist", short_key="32_sakura_min",
+        theme=Theme(
+            slug="sakura_tree", name="SAKURA BLOSSOM MINIMALIST", emoji="🌸",
+            tagline_vi="Phong cách tối giản tinh khôi trắng tuyết – hồng phấn anh đào: mỗi ngày kỷ luật trồng trọn một cây hoa anh đào!",
+            page="#FFFDFD", card="#FFFFFF", ink="#3B2832", muted="#9A7D8B", line="#F5DCE6",
+            primary="#F4A5C2", primary_dark="#BE5985", on_primary="#FFFFFF", soft="#FCE7F3",
+            chart_fill="#FCE7F3", chart_line="#E27CA3",
+            week_head=["#F4A5C2", "#F7B6CE", "#ECA0BE", "#F5B2CA", "#E794B5"],
+            week_tint=["#FFF5F9", "#FFF8FB", "#FEF2F7", "#FFF6FA", "#FDEFF5"],
+            week_check=["#BE5985", "#C96A93", "#B54D7A", "#CC6B95", "#A84570"],
+            week_on=["#FFFFFF", "#3B2832", "#FFFFFF", "#3B2832", "#FFFFFF"],
+            streak_lo="#FFF5F9", streak_mid="#F4A5C2", streak_hi="#BE5985",
+            bar="#F4A5C2", donut_rest="#FCE7F3", chart_title="SAKURA BLOSSOM PACE • NHỊP NỞ HOA ANH ĐÀO",
+        ),
+        tracker_name="🌸 Sakura Tracker",
+        habits=[
+            Habit("Thức dậy sớm 6h00 tinh khôi", goal=28, p=0.88),
+            Habit("Tạo 1 sản phẩm / mục tiêu cốt lõi", goal=26, p=0.84),
+            Habit("Uống đủ 2L nước lọc trong lành", goal=30, p=0.92),
+            Habit("Học ngoại ngữ / đọc sách 25 phút", goal=26, p=0.85),
+            Habit("Đi bộ / giãn cơ 20 phút mỗi ngày", goal=25, p=0.82),
+            Habit("Dọn tối giản bàn làm việc 10 phút", goal=28, p=0.87),
+            Habit("Tắt mạng xã hội trước giờ ngủ", goal=24, p=0.78),
+            Habit("Viết 3 dòng biết ơn cuối ngày", goal=28, p=0.86),
+        ],
+        seed=320, label_tag="SAKURA MINIMALIST", garden_label="GROW SAKURA TREES",
+        grown_label="CHERRY BLOSSOMS\nGROWN:",
+        tracker_capture_range="A1:AN41",
+        addon_fn=_addon_sakura_min,
+    ),
+    TemplateDef(
+        stem="33_Peach_Mochi_Cat_Mood_Suite", short_key="33_mochi_cat",
+        theme=Theme(
+            slug="mochi_cat", name="PEACH MOCHI CAT & MOOD SUITE", emoji="🐱",
+            tagline_vi="Bé mèo Mochi trắng bước ra khỏi hộp cam — tích hợp Nhật ký 6 Cảm Xúc, Quick To-Do & Góc Tự Phản Tư mỗi tháng!",
+            page="#FFFDF5", card="#FFFFFF", ink="#4A3728", muted="#9A8472", line="#F2DFC6",
+            primary="#F4A261", primary_dark="#C9732B", on_primary="#FFFFFF", soft="#FDEBD6",
+            chart_fill="#FCD5B5", chart_line="#E68A45",
+            week_head=["#F4A261", "#CBE8C8", "#FCD5B5", "#BCE0B8", "#F6B47B"],
+            week_tint=["#FFF8F0", "#F4FBF3", "#FFF6EC", "#F1FAF0", "#FFF7EE"],
+            week_check=["#C9732B", "#4B8B48", "#D97E34", "#3F7D3C", "#C46B24"],
+            week_on=["#FFFFFF", "#2D4A2B", "#4A3728", "#2D4A2B", "#FFFFFF"],
+            streak_lo="#FFF8F0", streak_mid="#F4A261", streak_hi="#C9732B",
+            bar="#F4A261", donut_rest="#FDEBD6", chart_title="MOCHI CAT DAILY RHYTHM • NHỊP SỐNG ẤM ÁP",
+            chart_kind="column",
+        ),
+        tracker_name="🐱 Mochi Cat Tracker",
+        habits=[
+            Habit("Thức dậy trước 6h30 thật nhẹ nhàng", goal=28, p=0.88),
+            Habit("Chạy bộ / vận động 30 phút", goal=24, p=0.83),
+            Habit("Đọc 1 chương sách truyền cảm hứng", goal=26, p=0.86),
+            Habit("Uống vitamin & đủ 2L nước mỗi ngày", goal=30, p=0.92),
+            Habit("Viết nhanh 3 đầu việc ưu tiên sáng", goal=28, p=0.87),
+            Habit("Ghi lại tâm trạng 6 mức mỗi tối", goal=28, p=0.89),
+            Habit("Ăn đủ rau xanh & ít đồ ngọt", goal=25, p=0.81),
+            Habit("Ngủ đủ 8 tiếng trước 23h00", goal=27, p=0.84),
+        ],
+        seed=330, label_tag="MOCHI CAT & MOOD", garden_label="MOCHI CAT BOX",
+        grown_label="MOCHI CATS\nRAISED:",
+        tracker_capture_range="A1:AN50",
+        addon_fn=_addon_mochi_cat,
+    ),
+    TemplateDef(
+        stem="34_Fluffy_Bunny_Sticker_Pop", short_key="34_fluffy_bunny",
+        theme=Theme(
+            slug="fluffy_bunny", name="FLUFFY BUNNY STICKER POP", emoji="🐰",
+            tagline_vi="Phong cách Sticker Thỏ Bông Pastel 5 màu (Coral · Pink · Lavender · Sky · Mint) — gọn mắt, kawaii & bùng nổ cảm hứng!",
+            page="#FFFDF7", card="#FFFFFF", ink="#2B2626", muted="#857B7B", line="#EFE5E5",
+            primary="#F4A4A4", primary_dark="#C25D6A", on_primary="#FFFFFF", soft="#FDEEEF",
+            chart_fill="#F9C6D0", chart_line="#E57B89",
+            week_head=["#F4A4A4", "#F9C6D0", "#DDD6FE", "#BAE6FD", "#C7F5D9"],
+            week_tint=["#FFF5F5", "#FFF6F8", "#F7F5FF", "#F0F9FF", "#F0FDF5"],
+            week_check=["#C85A5A", "#D46A84", "#7C3AED", "#0284C7", "#059669"],
+            week_on=["#FFFFFF", "#4A2530", "#3B2860", "#0C4A6E", "#065F46"],
+            streak_lo="#FFF5F5", streak_mid="#F4A4A4", streak_hi="#C25D6A",
+            bar="#F4A4A4", donut_rest="#FDEEEF", chart_title="BUNNY STICKER FLOW • SÓNG PASTEL MỖI NGÀY",
+        ),
+        tracker_name="🐰 Bunny Sticker Tracker",
+        habits=[
+            Habit("Uống 8 ly nước lọc & dưỡng ẩm", goal=30, p=0.92),
+            Habit("Tập thể dục / Pilates 25 phút", goal=25, p=0.84),
+            Habit("Đọc sách / ghi chú sáng tạo 20p", goal=26, p=0.86),
+            Habit("Học kỹ năng mới / ngoại ngữ 30p", goal=26, p=0.85),
+            Habit("Không điện thoại 30p sau khi dậy", goal=25, p=0.80),
+            Habit("Nấu bữa ăn healthy nhiều sắc màu", goal=24, p=0.83),
+            Habit("Viết nhật ký sticker & biết ơn", goal=28, p=0.88),
+            Habit("Ngủ sớm dưỡng nhan trước 23h00", goal=27, p=0.82),
+        ],
+        seed=340, label_tag="BUNNY STICKER POP", garden_label="FLUFFY BUNNY DEN",
+        grown_label="CHERRY BUNNIES\nCOLLECTED:",
+        tracker_capture_range="A1:AN46",
+        addon_fn=_addon_bunny_pop,
+    ),
+    TemplateDef(
+        stem="35_Milk_Mocha_Bear_Sweet_Love", short_key="35_milk_mocha",
+        theme=Theme(
+            slug="milk_mocha_bear", name="MILK & MOCHA BEAR SWEET LOVE", emoji="🐻",
+            tagline_vi="Gấu Milk & Mocha siêu ngọt ngào tông Berry Pink với đủ 5 Biểu đồ tròn Tuần (Donut) + 1 Biểu đồ Tổng Tháng!",
+            page="#FFF5F7", card="#FFFFFF", ink="#4A1D2D", muted="#9C6B7C", line="#F6D4E0",
+            primary="#E86A92", primary_dark="#6D1D3A", on_primary="#FFFFFF", soft="#FCE7EF",
+            chart_fill="#F9A8C9", chart_line="#E86A92",
+            week_head=["#F9A8C9", "#C8B6E2", "#F48C8C", "#A3D9A5", "#F2B5D4"],
+            week_tint=["#FFF2F7", "#F6F2FB", "#FFF3F3", "#F2FAF2", "#FDF2F8"],
+            week_check=["#D63D73", "#7E57C2", "#D94848", "#3B9446", "#C2185B"],
+            week_on=["#6D1D3A", "#3B2860", "#FFFFFF", "#1B4D22", "#6D1D3A"],
+            streak_lo="#FFF2F7", streak_mid="#E86A92", streak_hi="#6D1D3A",
+            bar="#E86A92", donut_rest="#FCE7EF", chart_title="MILK & MOCHA LOVE WAVE • NHỊP NGỌT NGÀO",
+        ),
+        tracker_name="🐻 Milk & Mocha Tracker",
+        habits=[
+            Habit("Thức dậy sớm & nở nụ cười mỗi sáng", goal=28, p=0.88),
+            Habit("Uống đủ 8 ly nước lọc tươi mát", goal=30, p=0.92),
+            Habit("Đọc sách 20 phút nuôi dưỡng tâm hồn", goal=26, p=0.85),
+            Habit("Nghỉ trưa nhẹ 15–20 phút nạp pin", goal=25, p=0.83),
+            Habit("Hạn chế đồ ăn nhanh & trà sữa", goal=24, p=0.80),
+            Habit("Tập vận động / đi bộ cùng nhau 30p", goal=25, p=0.84),
+            Habit("Hoàn thành 3 việc quan trọng nhất", goal=28, p=0.87),
+            Habit("Gửi lời yêu thương & ngủ sớm 23h", goal=28, p=0.86),
+        ],
+        seed=350, label_tag="MILK & MOCHA LOVE", garden_label="MILK & MOCHA GARDEN",
+        grown_label="SWEET HEARTS\nGROWN:",
+        tracker_capture_range="A1:AN51",
+        addon_fn=_addon_milk_mocha,
+    ),
 ]
 
 
@@ -1299,7 +1441,8 @@ def build_template(tdef: TemplateDef, out_path: Path, edition: str = "pro_xlsm")
     ]
     g_info = build_guide(wb, styles, tdef.tracker_name, extra_tab_docs, edition=edition)
 
-    ws_calc = init_calc_sheet(wb, active_year=2026, last_loaded_key="2026-10", last_goal_year=2026)
+    ws_calc = init_calc_sheet(wb, active_year=2026, last_loaded_key="2026-10",
+                              last_goal_year=2026, theme=tdef.theme)
 
     dyn_anims: list[dict] = []
     static_pics: list[dict] = list(g_info["linked_pictures"])
@@ -1358,9 +1501,12 @@ def build_template(tdef: TemplateDef, out_path: Path, edition: str = "pro_xlsm")
         {"sheet": tdef.tracker_name, "range": tdef.tracker_capture_range, "out": f"{tdef.short_key}_tracker.png"},
         {"sheet": ANNUAL_SHEET, "range": ann_info["capture_range"], "out": f"{tdef.short_key}_annual_achievements.png"},
     ]
-    if tdef.short_key in ("01_sunflower", "20_alpaca_cream", "24_royal_cat_cash", "26_purple_cat", "30_shiba_inu", "31_akita_inu"):
+    if tdef.short_key == "01_sunflower":
+        captures.append({"sheet": GUIDE_SHEET, "range": f"A1:H{g_info['guide_last_row']}", "out": "01_sunflower_guide.png"})
+    if tdef.short_key in ("01_sunflower", "20_alpaca_cream", "24_royal_cat_cash", "26_purple_cat",
+                          "30_shiba_inu", "31_akita_inu", "33_mochi_cat", "35_milk_mocha"):
         captures.append({"sheet": DAILY_TASKS_SHEET, "range": dt_info["capture_range"], "out": f"{tdef.short_key}_daily_tasks.png"})
-    if tdef.short_key in ("01_sunflower", "20_alpaca_cream", "30_shiba_inu"):
+    if tdef.short_key in ("01_sunflower", "20_alpaca_cream", "30_shiba_inu", "35_milk_mocha"):
         captures.append({"sheet": YEARLY_GOALS_SHEET, "range": "A1:J26", "out": f"{tdef.short_key}_yearly_goals.png"})
 
     return {
@@ -1368,6 +1514,11 @@ def build_template(tdef: TemplateDef, out_path: Path, edition: str = "pro_xlsm")
         "stem": tdef.stem,
         "short_key": tdef.short_key,
         "slug": tdef.theme.slug,
+        "theme_primary": tdef.theme.primary,
+        "theme_primary_dark": tdef.theme.primary_dark,
+        "theme_soft": tdef.theme.soft,
+        "theme_ink": tdef.theme.ink,
+        "theme_on_primary": tdef.theme.on_primary,
         "tracker_sheet": tdef.tracker_name,
         "daily_tasks_sheet": DAILY_TASKS_SHEET,
         "yearly_goals_sheet": YEARLY_GOALS_SHEET,

@@ -142,15 +142,18 @@ def build_daily_tasks_sheet(
            top=1, top_color=t.primary, bottom=1, bottom_color=t.primary,
            left=1, left_color=t.primary, right=1, right_color=t.primary)
 
-    cue_txt = (
-        "⚡  Đổi Ngày / Tháng / Năm (D5–F5) → Tự động lưu & nạp riêng từng ngày (YYYY-MM-DD) vào _Database!"
-        if pro_mode else (
+    if pro_mode:
+        cv.row(5, 28)
+        cv.merge(5, 1, 5, 2, "⚡  Chuyển ngày nhanh & tự lưu vào _Database:", italic=True,
+                 font_size=8.6, align="right", bg_color=t.card, font_color=t.muted)
+        cv.merge(5, 3, 5, 5, "", align="center", bg_color=t.card)
+    else:
+        cue_txt = (
             "💡  Google Sheets: Chạy setupHabitTracker() 1 lần để bật Checkbox & tự lưu nhiệm vụ theo từng ngày!"
             if gsheets else
             "📌  Bản Không Macro (Excel 2016–365) • Tick xong việc để xem hoạt ảnh lớn dần — Dùng bản Pro (.xlsm) để tự lưu nhiều ngày!"
         )
-    )
-    cv.merge(5, 1, 5, 5, cue_txt, italic=True, font_size=8.5, align="center", bg_color=t.card, font_color=t.muted)
+        cv.merge(5, 1, 5, 5, cue_txt, italic=True, font_size=8.5, align="center", bg_color=t.card, font_color=t.muted)
     cv.grid(3, 1, 4, 5, t.line)
     cv.box(3, 1, 5, 5, t.line)
 
@@ -293,6 +296,20 @@ def build_daily_tasks_sheet(
              f'IF({dt_pct_ref}>=0.75,"✨ Tuyệt vời! Sắp chạm đích 100% rồi!",'
              f'IF({dt_pct_ref}>=0.5,"🔥 Đã đi quá nửa chặng đường!","💪 Cố lên, hoàn thành từng việc một!"))))',
              bold=True, font_size=9.2, align="center", text_wrap=True, bg_color=t.soft, font_color=t.ink)
+    ws.conditional_format("H18:H19", {
+        "type": "formula", "criteria": f"=AND({dt_tot_ref}>0,{dt_pct_ref}>=0.999)",
+        "format": wb.add_format({"bg_color": "#DCFCE7", "font_color": "#166534", "bold": True}),
+        "stop_if_true": True,
+    })
+    ws.conditional_format("H18:H19", {
+        "type": "formula", "criteria": f"=AND({dt_tot_ref}>0,{dt_pct_ref}>=0.75)",
+        "format": wb.add_format({"bg_color": "#FEF3C7", "font_color": "#92400E", "bold": True}),
+        "stop_if_true": True,
+    })
+    ws.conditional_format("H18:H19", {
+        "type": "formula", "criteria": f"={dt_tot_ref}=0",
+        "format": wb.add_format({"bg_color": t.card, "font_color": t.muted, "bold": False}),
+    })
     cv.box(1, 7, 18, 7, t.line)
 
     # Card 2 (Rows 21..26, Col H): PRIORITY BREAKDOWN LIVE KPI

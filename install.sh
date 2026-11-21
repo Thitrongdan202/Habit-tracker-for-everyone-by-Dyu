@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================================
-#  Habit Tracker Collection v3.0 — Interactive Zero-Install Downloader (macOS/Linux)
+#  Habit Tracker Collection v3.5 — Interactive Zero-Install Downloader (macOS/Linux)
 #  Run in 1 line:
 #    curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu/main/install.sh | bash
 # ============================================================================
@@ -48,6 +48,10 @@ STEMS=(
   "29_Watercolor_Rose_Bouquet"
   "30_Shiba_Inu_Happy_Bork"
   "31_Akita_Inu_Snow_Loyal"
+  "32_Sakura_Blossom_Minimalist"
+  "33_Peach_Mochi_Cat_Mood_Suite"
+  "34_Fluffy_Bunny_Sticker_Pop"
+  "35_Milk_Mocha_Bear_Sweet_Love"
 )
 
 TITLES=(
@@ -55,7 +59,7 @@ TITLES=(
   "Vườn Hướng Dương Pastel (Sunflower Garden)"
   "Xương Rồng Nở Hoa — 5 Tuần Pastel"
   "Cầu Vồng Dashboard & 5 Biểu Đồ Tròn"
-  "Lá Xanh Thói Quen & Sống Xanh"
+  "Lá Xanh Thói Quen & Ngân Sách Cá Nhân"
   "Oải Hương Chăm Sóc Giấc Ngủ & Tâm Trạng"
   "Navy Tập Trung Deep Work & Điểm XP"
   "Hoa Anh Đào Học Tập & Giờ Focus"
@@ -83,6 +87,10 @@ TITLES=(
   "Bó Hoa Hồng Màu Nước & Chánh Niệm"
   "Cún Shiba Inu Khăn Đỏ & Điểm Good Boy"
   "Cún Akita Tuyết Trắng & Tĩnh Tâm Zen"
+  "[MỚI] Cây Hoa Anh Đào Tối Giản (Minimalist)"
+  "[MỚI] Mèo Mochi Hộp Cam + 6 Cảm Xúc & To-Do"
+  "[MỚI] Thỏ Bông Sticker Pop 5 Màu Pastel"
+  "[MỚI] Gấu Milk & Mocha + 5+1 Biểu Đồ Donut"
 )
 
 resolve_out_dir() {
@@ -149,21 +157,22 @@ OUT_DIR="$(resolve_out_dir)"
 mkdir -p "$OUT_DIR"
 
 printf "\n%s========================================================================%s\n" "$C_MAGENTA" "$C_RESET"
-printf "%s   HABIT TRACKER COLLECTION v3.0 — BY DYU (31 THEMES × 4 EDITIONS)%s\n" "$C_YELLOW" "$C_RESET"
-printf "%s   Hoạt ảnh 6 giai đoạn • Nhiệm Vụ Ngày • Lưu đa ngày/tháng/năm%s\n" "$C_CYAN" "$C_RESET"
+printf "%s   HABIT TRACKER COLLECTION v3.5 — BY DYU (35 THEMES × 4 EDITIONS)%s\n" "$C_YELLOW" "$C_RESET"
+printf "%s   Ultra-Smooth Pro FX Engine • Nhiệm Vụ Ngày • Lưu Đa Ngày/Tháng/Năm%s\n" "$C_CYAN" "$C_RESET"
 printf "%s========================================================================%s\n" "$C_MAGENTA" "$C_RESET"
 printf "  %sThư mục lưu file:%s %s\n\n" "$C_GREEN" "$C_RESET" "$OUT_DIR"
 
-printf "  %sBƯỚC 1 — CHỌN PHIÊN BẢN PHÙ HỢP:%s\n" "$C_BOLD" "$C_RESET"
+printf "  %sBƯỚC 1 — CHỌN PHIÊN BẢN PHÙ HỢP (THEO THỨ TỰ ƯU TIÊN):%s\n" "$C_BOLD" "$C_RESET"
 printf "  %s----------------------------------------------------------------------%s\n" "$C_DIM" "$C_RESET"
-printf "  %s[1] Bản PRO INTERACTIVE (.xlsm)  [KHUYÊN DÙNG CHO EXCEL DESKTOP]%s\n" "$C_GREEN" "$C_RESET"
-printf "      %s-> Gọn 5 tab (có Nhiệm Vụ Ngày), tự lưu Ngày/Tháng/Năm vào _Database!%s\n" "$C_DIM" "$C_RESET"
-printf "  %s[2] Bản EXCEL OFFLINE KHÔNG MACRO (.xlsx)%s\n" "$C_CYAN" "$C_RESET"
-printf "      %s-> Gọn 5 tab, Form Checkbox chuẩn mọi Excel 2016–365 Win/Mac, 0 cảnh báo!%s\n" "$C_DIM" "$C_RESET"
-printf "  %s[3] Bản GOOGLE SHEETS DESKTOP (.xlsx + google_sheets_1click_setup.gs)%s\n" "$C_CYAN" "$C_RESET"
-printf "      %s-> Gọn 5 tab + Script 1-Click bật Checkbox & tự lưu 12 tháng + từng ngày!%s\n" "$C_DIM" "$C_RESET"
-printf "  %s[4] Bản ĐIỆN THOẠI KHỔ DỌC — MOBILE PORTRAIT (.xlsx + .gs)%s\n" "$C_MAGENTA" "$C_RESET"
-printf "      %s-> Tối ưu iPhone/Android 0 cuộn ngang, 4 tab gọn (có Việc Hôm Nay), 38pt!%s\n" "$C_DIM" "$C_RESET"
+printf "  %s[1] Pro Interactive (.xlsm)  [⭐ KHUYÊN DÙNG SỐ 1 — EXCEL DESKTOP]%s\n" "$C_GREEN" "$C_RESET"
+printf "      %s-> Siêu mượt + Full hiệu ứng Nảy/Pháo hoa/Toast + Nút chuyển tháng 1 chạm%s\n" "$C_DIM" "$C_RESET"
+printf "         %s+ Tự lưu Đa Tháng / Đa Năm / Nhiệm Vụ Ngày vào _Database (100%% Offline)!%s\n" "$C_DIM" "$C_RESET"
+printf "  %s[2] Excel Universal Offline (.xlsx)%s\n" "$C_CYAN" "$C_RESET"
+printf "      %s-> Không Macro, Form Checkbox chuẩn mọi đời Excel 2016–365 Win/Mac!%s\n" "$C_DIM" "$C_RESET"
+printf "  %s[3] Google Sheets Desktop (.xlsx + 1-Click Script)%s\n" "$C_CYAN" "$C_RESET"
+printf "      %s-> Dùng online trên trình duyệt + tự lưu 12 tháng & từng ngày trên Cloud!%s\n" "$C_DIM" "$C_RESET"
+printf "  %s[4] Mobile Portrait (.xlsx + .gs)%s\n" "$C_MAGENTA" "$C_RESET"
+printf "      %s-> Khổ dọc 8 cột riêng cho điện thoại (Google Sheets App, 0 cuộn ngang)!%s\n" "$C_DIM" "$C_RESET"
 printf "  %s[0] Thoát%s\n\n" "$C_DIM" "$C_RESET"
 
 ED_CHOICE=""
@@ -171,7 +180,7 @@ if [ -n "${HABIT_EDITION:-}" ]; then
   ED_CHOICE="$HABIT_EDITION"
   printf "  > Chọn phiên bản (auto): %s\n" "$ED_CHOICE"
 else
-  read_input "  > Nhập phiên bản (1, 2, 3, 4/M — mặc định [1]): "
+  read_input "  > Nhập phiên bản (1, 2, 3, 4/M — mặc định [1] Pro #1): "
   ED_CHOICE="${REPLY:-1}"
 fi
 
@@ -186,24 +195,28 @@ case "$ED_CHOICE" in
   *) ED_CHOICE="1" ;;
 esac
 
-printf "\n  %sBƯỚC 2 — CHỌN MẪU THÓI QUEN (31 CHỦ ĐỀ THẨM MỸ & LINH VẬT):%s\n" "$C_BOLD" "$C_RESET"
+printf "\n  %sBƯỚC 2 — CHỌN MẪU THÓI QUEN (35 CHỦ ĐỀ THẨM MỸ & LINH VẬT):%s\n" "$C_BOLD" "$C_RESET"
 printf "  %s----------------------------------------------------------------------%s\n" "$C_DIM" "$C_RESET"
-printf "  %s--- BỘ SƯU TẬP CỔ ĐIỂN & THIÊN NHIÊN (1 – 10) ---%s\n" "$C_CYAN" "$C_RESET"
-for i in 1 2 3 4 5 6 7 8 9 10; do
+printf "  %s--- THÚ CƯNG SIÊU CUTE (Mochi Cat, Bunny, Milk & Mocha, Shiba, Akita, Alpaca...) ---%s\n" "$C_YELLOW" "$C_RESET"
+for i in 21 22 23 25 26 27 30 31 33 34 35; do
   printf "  [%-2d] %-38s — %s\n" "$i" "${STEMS[$i]}" "${TITLES[$i]}"
 done
-printf "  %s--- BỘ SƯU TẬP VƯỜN HOA & KIẾN TRÚC (11 – 19) ---%s\n" "$C_CYAN" "$C_RESET"
-for i in 11 12 13 14 15 16 17 18 19; do
+printf "  %s--- HOA & THIÊN NHIÊN (Sakura Minimalist, Hướng Dương, Xương Rồng, Hồng Nhung...) ---%s\n" "$C_GREEN" "$C_RESET"
+for i in 1 2 11 12 13 14 15 17 18 19 29 32; do
   printf "  [%-2d] %-38s — %s\n" "$i" "${STEMS[$i]}" "${TITLES[$i]}"
 done
-printf "  %s--- MỚI v3.0: ALPACA, MÈO HOÀNG GIA, GẤU TRÚC, KẸO, SHIBA & AKITA (20 – 31) ---%s\n" "$C_YELLOW" "$C_RESET"
-for i in 20 21 22 23 24 25 26 27 28 29 30 31; do
+printf "  %s--- PHONG CÁCH & MỤC TIÊU (Dream Home, Candy Jar, Rainbow, Aurora RPG, Matcha...) ---%s\n" "$C_CYAN" "$C_RESET"
+for i in 3 5 8 9 10 16 28; do
+  printf "  [%-2d] %-38s — %s\n" "$i" "${STEMS[$i]}" "${TITLES[$i]}"
+done
+printf "  %s--- TÀI CHÍNH & TẬP TRUNG (Royal Cat Cash, Alpaca Budget, Sage Budget, Deep Work...) ---%s\n" "$C_MAGENTA" "$C_RESET"
+for i in 4 6 7 20 24; do
   printf "  [%-2d] %-38s — %s\n" "$i" "${STEMS[$i]}" "${TITLES[$i]}"
 done
 printf "  %s----------------------------------------------------------------------%s\n" "$C_DIM" "$C_RESET"
-printf "  %s[A]%s  Tải TOÀN BỘ 31 mẫu (Download All)\n" "$C_GREEN" "$C_RESET"
+printf "  %s[A]%s  Tải TOÀN BỘ 35 mẫu (Download All 35)\n" "$C_GREEN" "$C_RESET"
 printf "  %s[0]%s  Thoát\n\n" "$C_DIM" "$C_RESET"
-printf "  %sGợi ý: Nhập 1 số (vd: 30), nhiều số (vd: 20,24,30,31), dải (vd: 20-31), hoặc A%s\n" "$C_YELLOW" "$C_RESET"
+printf "  %sGợi ý: Nhập 1 số (vd: 35), nhiều số (vd: 32,33,34,35), dải (vd: 30-35), hoặc A%s\n" "$C_YELLOW" "$C_RESET"
 
 CHOICE=""
 if [ -n "${HABIT_CHOICE:-}" ]; then
@@ -230,12 +243,12 @@ for tok in $CLEAN; do
       if [[ "$a" =~ ^[0-9]+$ ]] && [[ "$b" =~ ^[0-9]+$ ]]; then
         [ "$a" -gt "$b" ] && { t="$a"; a="$b"; b="$t"; }
         for ((n=a; n<=b; n++)); do
-          [ "$n" -ge 1 ] && [ "$n" -le 31 ] && SEL_IDS+=("$n")
+          [ "$n" -ge 1 ] && [ "$n" -le 35 ] && SEL_IDS+=("$n")
         done
       fi
       ;;
     *)
-      if [[ "$up" =~ ^[0-9]+$ ]] && [ "$up" -ge 1 ] && [ "$up" -le 31 ]; then
+      if [[ "$up" =~ ^[0-9]+$ ]] && [ "$up" -ge 1 ] && [ "$up" -le 35 ]; then
         SEL_IDS+=("$up")
       fi
       ;;
@@ -243,7 +256,7 @@ for tok in $CLEAN; do
 done
 
 if [ "$DO_ALL" -eq 1 ]; then
-  SEL_IDS=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31)
+  SEL_IDS=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35)
 fi
 
 UNIQUE_IDS=()
@@ -275,7 +288,7 @@ if [ "$ED_CHOICE" = "1" ]; then
     QUEUE_DST+=("${SUB_DIR}/${fn}")
     QUEUE_CHK+=("1")
   done
-  HINT="Mở file .xlsm -> bấm 'Enable Content' 1 lần -> đổi Ngày/Tháng/Năm siêu mượt!"
+  HINT="Mở file .xlsm -> bấm 'Enable Content' 1 lần -> bấm 'Thử Hiệu Ứng Pro' trên tab Hướng Dẫn!"
 elif [ "$ED_CHOICE" = "2" ]; then
   SUB_DIR="${OUT_DIR}/excel_universal_offline"
   for id in "${UNIQUE_IDS[@]}"; do
@@ -284,7 +297,7 @@ elif [ "$ED_CHOICE" = "2" ]; then
     QUEUE_DST+=("${SUB_DIR}/${fn}")
     QUEUE_CHK+=("1")
   done
-  HINT="Nhấp đúp file .xlsx -> dùng ngay 100% Offline, không Macro, không cảnh báo!"
+  HINT="Nhấp đúp file .xlsx -> dùng ngay 100% Offline, không Macro, chạy mọi Excel 2016–365!"
 elif [ "$ED_CHOICE" = "3" ]; then
   SUB_DIR="${OUT_DIR}/google_sheets_edition"
   for id in "${UNIQUE_IDS[@]}"; do
