@@ -40,10 +40,10 @@ $Templates = @(
     @{ Id = 17; Cat = "NATURE"; Stem = "17_Wildflower_Bloom_Daily_Mood";      Title = "Hoa Dai 5 Canh & Tam Trang Moi Ngay" }
     @{ Id = 18; Cat = "NATURE"; Stem = "18_Plum_Oak_Master_Suite";            Title = "Cay Soi Tim Man & Bang Tuan/Thang Toan Dien" }
     @{ Id = 19; Cat = "NATURE"; Stem = "19_Meadow_Emerald_Sunflower";         Title = "Huong Duong Dong Co Xanh Ngoc Luc Bao" }
-    @{ Id = 20; Cat = "FOCUS";  Stem = "20_Cream_Alpaca_Cozy_Budget";         Title = "Alpaca Kem Am Ap & Ngan Sach Mini" }
-    @{ Id = 21; Cat = "PETS";   Stem = "21_Blush_Alpaca_Flower_Crown";        Title = "Alpaca Hong Phan Doi Vong Hoa & Tai Chinh" }
-    @{ Id = 22; Cat = "PETS";   Stem = "22_Matcha_Alpaca_Meadow";             Title = "Alpaca Matcha Dong Co & Quy Tiet Kiem" }
-    @{ Id = 23; Cat = "PETS";   Stem = "23_Bamboo_Panda_Zen_Garden";          Title = "Gau Truc Rung Tre Zen (Bamboo Panda)" }
+    @{ Id = 20; Cat = "FOCUS";  Stem = "20_Cream_Alpaca_Cozy_Budget";         Title = "Alpaca Kem Cozy Cafe (Khan Len, Mu Noi & Latte)" }
+    @{ Id = 21; Cat = "PETS";   Stem = "21_Blush_Alpaca_Flower_Crown";        Title = "Alpaca Hong Vuon Co Tich (Gio Hoa & Vong Hoa)" }
+    @{ Id = 22; Cat = "PETS";   Stem = "22_Matcha_Alpaca_Meadow";             Title = "Alpaca Matcha Picnic (Yen Theu & Mu Coi)" }
+    @{ Id = 23; Cat = "PETS";   Stem = "23_Bamboo_Panda_Zen_Garden";          Title = "Gau Truc Mochi Tron Xoe (Onigiri & Khan Do)" }
     @{ Id = 24; Cat = "FOCUS";  Stem = "24_Royal_Cat_Saving_Cash";            Title = "Meo Hoang Gia Tiet Kiem & Vuong Quoc Meo" }
     @{ Id = 25; Cat = "PETS";   Stem = "25_Ginger_Kitten_Basket_Routine";     Title = "Meo Cam Gio May & Bang Xep Hang Thoi Quen" }
     @{ Id = 26; Cat = "PETS";   Stem = "26_Pastel_Purple_Royal_Cat";          Title = "Meo Anh Sao Lavender (Trang Khuyet & Mu Noi Sao)" }

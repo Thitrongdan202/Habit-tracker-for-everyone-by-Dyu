@@ -164,10 +164,10 @@ curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-ev
 | **17** | 🌺 **Wildflower Bloom & Daily Mood** | [`_Pro.xlsm`](templates/pro_macro/17_Wildflower_Bloom_Daily_Mood_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/17_Wildflower_Bloom_Daily_Mood.xlsx) | [Desktop](templates/google_sheets_edition/17_Wildflower_Bloom_Daily_Mood.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/17_Wildflower_Bloom_Daily_Mood_Mobile.xlsx) |
 | **18** | 🌳 **Plum Oak Master Suite** | [`_Pro.xlsm`](templates/pro_macro/18_Plum_Oak_Master_Suite_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/18_Plum_Oak_Master_Suite.xlsx) | [Desktop](templates/google_sheets_edition/18_Plum_Oak_Master_Suite.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/18_Plum_Oak_Master_Suite_Mobile.xlsx) |
 | **19** | 🌻 **Meadow Emerald Sunflower** | [`_Pro.xlsm`](templates/pro_macro/19_Meadow_Emerald_Sunflower_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/19_Meadow_Emerald_Sunflower.xlsx) | [Desktop](templates/google_sheets_edition/19_Meadow_Emerald_Sunflower.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/19_Meadow_Emerald_Sunflower_Mobile.xlsx) |
-| **20** | 🦙 **Cream Alpaca Cozy Budget** | [`_Pro.xlsm`](templates/pro_macro/20_Cream_Alpaca_Cozy_Budget_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/20_Cream_Alpaca_Cozy_Budget.xlsx) | [Desktop](templates/google_sheets_edition/20_Cream_Alpaca_Cozy_Budget.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/20_Cream_Alpaca_Cozy_Budget_Mobile.xlsx) |
-| **21** | 🌸 **Blush Alpaca Flower Crown** | [`_Pro.xlsm`](templates/pro_macro/21_Blush_Alpaca_Flower_Crown_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/21_Blush_Alpaca_Flower_Crown.xlsx) | [Desktop](templates/google_sheets_edition/21_Blush_Alpaca_Flower_Crown.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/21_Blush_Alpaca_Flower_Crown_Mobile.xlsx) |
-| **22** | 🍵 **Matcha Alpaca Meadow** | [`_Pro.xlsm`](templates/pro_macro/22_Matcha_Alpaca_Meadow_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/22_Matcha_Alpaca_Meadow.xlsx) | [Desktop](templates/google_sheets_edition/22_Matcha_Alpaca_Meadow.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/22_Matcha_Alpaca_Meadow_Mobile.xlsx) |
-| **23** | 🐼 **Bamboo Panda Zen Garden** | [`_Pro.xlsm`](templates/pro_macro/23_Bamboo_Panda_Zen_Garden_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/23_Bamboo_Panda_Zen_Garden.xlsx) | [Desktop](templates/google_sheets_edition/23_Bamboo_Panda_Zen_Garden.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/23_Bamboo_Panda_Zen_Garden_Mobile.xlsx) |
+| **20** | 🦙 **Cream Alpaca Cozy Budget** *(Cozy Cafe: Khăn Len, Mũ Nồi & Latte)* | [`_Pro.xlsm`](templates/pro_macro/20_Cream_Alpaca_Cozy_Budget_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/20_Cream_Alpaca_Cozy_Budget.xlsx) | [Desktop](templates/google_sheets_edition/20_Cream_Alpaca_Cozy_Budget.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/20_Cream_Alpaca_Cozy_Budget_Mobile.xlsx) |
+| **21** | 🌸 **Blush Alpaca Flower Crown** *(Vườn Cổ Tích: Giỏ Hoa & Vòng Hoa Hồng)* | [`_Pro.xlsm`](templates/pro_macro/21_Blush_Alpaca_Flower_Crown_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/21_Blush_Alpaca_Flower_Crown.xlsx) | [Desktop](templates/google_sheets_edition/21_Blush_Alpaca_Flower_Crown.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/21_Blush_Alpaca_Flower_Crown_Mobile.xlsx) |
+| **22** | 🍵 **Matcha Alpaca Meadow** *(Picnic Thám Hiểm: Khăn Caro, Yên Thêu & Mũ Cói)* | [`_Pro.xlsm`](templates/pro_macro/22_Matcha_Alpaca_Meadow_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/22_Matcha_Alpaca_Meadow.xlsx) | [Desktop](templates/google_sheets_edition/22_Matcha_Alpaca_Meadow.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/22_Matcha_Alpaca_Meadow_Mobile.xlsx) |
+| **23** | 🐼 **Bamboo Panda Zen Garden** *(Gấu Trúc Mochi Tròn Xoe: Onigiri & Khăn Đỏ)* | [`_Pro.xlsm`](templates/pro_macro/23_Bamboo_Panda_Zen_Garden_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/23_Bamboo_Panda_Zen_Garden.xlsx) | [Desktop](templates/google_sheets_edition/23_Bamboo_Panda_Zen_Garden.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/23_Bamboo_Panda_Zen_Garden_Mobile.xlsx) |
 | **24** | 👑 **Royal Cat Saving Cash** | [`_Pro.xlsm`](templates/pro_macro/24_Royal_Cat_Saving_Cash_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/24_Royal_Cat_Saving_Cash.xlsx) | [Desktop](templates/google_sheets_edition/24_Royal_Cat_Saving_Cash.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/24_Royal_Cat_Saving_Cash_Mobile.xlsx) |
 | **25** | 🐱 **Ginger Kitten Basket Routine** | [`_Pro.xlsm`](templates/pro_macro/25_Ginger_Kitten_Basket_Routine_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/25_Ginger_Kitten_Basket_Routine.xlsx) | [Desktop](templates/google_sheets_edition/25_Ginger_Kitten_Basket_Routine.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/25_Ginger_Kitten_Basket_Routine_Mobile.xlsx) |
 | **26** | 🌙 **Pastel Purple Starlight Cat** *(Trăng Khuyết & Mũ Nồi Sao)* | [`_Pro.xlsm`](templates/pro_macro/26_Pastel_Purple_Royal_Cat_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/26_Pastel_Purple_Royal_Cat.xlsx) | [Desktop](templates/google_sheets_edition/26_Pastel_Purple_Royal_Cat.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/26_Pastel_Purple_Royal_Cat_Mobile.xlsx) |
@@ -211,10 +211,10 @@ curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-ev
 | **17. 🌺 Wildflower Bloom & Mood** | ![Wildflower](previews/17_wildflower_mood_tracker.png) |
 | **18. 🌳 Plum Oak Master Suite** | ![Plum Oak](previews/18_plum_oak_tracker.png) |
 | **19. 🌻 Meadow Emerald Sunflower** | ![Meadow Sunflower](previews/19_meadow_sunflower_tracker.png) |
-| **20. 🦙 Cream Alpaca Cozy Budget** | ![Cream Alpaca](previews/20_alpaca_cream_tracker.png) |
-| **21. 🌸 Blush Alpaca Flower Crown** | ![Blush Alpaca](previews/21_alpaca_blush_tracker.png) |
-| **22. 🍵 Matcha Alpaca Meadow** | ![Matcha Alpaca](previews/22_alpaca_matcha_tracker.png) |
-| **23. 🐼 Bamboo Panda Zen Garden** | ![Bamboo Panda](previews/23_bamboo_panda_tracker.png) |
+| **20. 🦙 Cream Alpaca Cozy Cafe & Budget** | ![Cream Alpaca](previews/20_alpaca_cream_tracker.png) |
+| **21. 🌸 Blush Alpaca Fairy Flower Crown** | ![Blush Alpaca](previews/21_alpaca_blush_tracker.png) |
+| **22. 🍵 Matcha Alpaca Picnic Explorer** | ![Matcha Alpaca](previews/22_alpaca_matcha_tracker.png) |
+| **23. 🐼 Bamboo Panda Round Zen Garden** | ![Bamboo Panda](previews/23_bamboo_panda_tracker.png) |
 | **24. 👑 Royal Cat Saving Cash** | ![Royal Cat](previews/24_royal_cat_cash_tracker.png) |
 | **25. 🐱 Ginger Kitten Basket** | ![Ginger Kitten](previews/25_ginger_kitten_tracker.png) |
 | **26. 🌙 Pastel Purple Starlight Cat** | ![Starlight Lavender Cat](previews/26_purple_cat_tracker.png) |
@@ -230,7 +230,10 @@ curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-ev
 
 ## 🎭 Bộ 210 Ảnh Hoạt Ảnh 6 Giai Đoạn (`assets/` — 35 Chủ Đề, v3.6 Vector Kawaii)
 
-### Bộ 6 Thú Cưng Vẽ Lại Chuẩn Kawaii Vector Bézier (`#24`, `#25`, `#26`, `#30`, `#31`, `#33`)
+### Bộ 4 Alpaca & Gấu Trúc Mochi Vẽ Lại Độc Bản (`#20`, `#21`, `#22`, `#23` — 24 Sprites)
+![24 Overhauled Alpaca & Panda Sprites](previews/assets_contact_sheet_alpaca_panda_fix.png)
+
+### Bộ 6 Thú Cưng Vẽ Lại Chuẩn Kawaii Vector Bézier (`#24`, `#25`, `#26`, `#30`, `#31`, `#33` — 36 Sprites)
 ![36 Overhauled Pet Sprites Contact Sheet](previews/assets_contact_sheet_pets_overhaul.png)
 
 ### Batch 4 (Chủ đề `#32`–`#35` — 24 Sprites Signature)

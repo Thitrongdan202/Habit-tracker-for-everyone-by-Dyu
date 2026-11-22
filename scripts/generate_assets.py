@@ -1315,6 +1315,14 @@ THEMES = {
     "aurora_rpg": aurora_rpg,
 }
 
+# Dedicated overhauled vector-Bezier generators for Templates #20-#23 (`alpaca_*` & `bamboo_panda`)
+from generate_assets_alpaca_panda import (  # noqa: E402
+    draw_alpaca_blush as alpaca_blush,
+    draw_alpaca_cream as alpaca_cream,
+    draw_alpaca_matcha as alpaca_matcha,
+    draw_bamboo_panda as bamboo_panda,
+)
+
 
 def _font(size, bold=False):
     for name in (("segoeuib.ttf" if bold else "segoeui.ttf"), "arial.ttf", "DejaVuSans.ttf"):
