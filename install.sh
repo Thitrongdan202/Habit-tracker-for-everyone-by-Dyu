@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================================
-#  Habit Tracker Collection v3.5 — Interactive Zero-Install Downloader (macOS/Linux)
+#  Habit Tracker Collection v3.6 — Interactive Zero-Install Downloader (macOS/Linux)
 #  Run in 1 line:
 #    curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu/main/install.sh | bash
 # ============================================================================
@@ -81,16 +81,16 @@ TITLES=(
   "Gấu Trúc Rừng Tre Zen (Bamboo Panda)"
   "Mèo Hoàng Gia Tiết Kiệm & Vương Quốc Mèo"
   "Mèo Cam Giỏ Mây & Bảng Xếp Hạng Thói Quen"
-  "Mèo Tím Pastel Nhẹ Nhàng (Royal Cat)"
+  "Mèo Ánh Sao Lavender (Trăng Khuyết & Mũ Nồi Sao)"
   "Gà Con Nở Trứng 6 Giai Đoạn (Studio)"
   "Hũ Kẹo Bông Gòn Pastel Hồng-Xanh"
   "Bó Hoa Hồng Màu Nước & Chánh Niệm"
-  "Cún Shiba Inu Khăn Đỏ & Điểm Good Boy"
-  "Cún Akita Tuyết Trắng & Tĩnh Tâm Zen"
-  "[MỚI] Cây Hoa Anh Đào Tối Giản (Minimalist)"
-  "[MỚI] Mèo Mochi Hộp Cam + 6 Cảm Xúc & To-Do"
-  "[MỚI] Thỏ Bông Sticker Pop 5 Màu Pastel"
-  "[MỚI] Gấu Milk & Mocha + 5+1 Biểu Đồ Donut"
+  "Cún Shiba Inu Khăn Đỏ Karakusa & Xương Vàng"
+  "Cún Akita Tuyết Trắng & Chuông Shimenawa"
+  "Cây Hoa Anh Đào Tối Giản (Minimalist)"
+  "Mèo Mochi Quýt Mikan + 6 Cảm Xúc & To-Do"
+  "Thỏ Bông Sticker Pop 5 Màu Pastel"
+  "Gấu Milk & Mocha + 5+1 Biểu Đồ Donut"
 )
 
 resolve_out_dir() {
@@ -157,16 +157,16 @@ OUT_DIR="$(resolve_out_dir)"
 mkdir -p "$OUT_DIR"
 
 printf "\n%s========================================================================%s\n" "$C_MAGENTA" "$C_RESET"
-printf "%s   HABIT TRACKER COLLECTION v3.5 — BY DYU (35 THEMES × 4 EDITIONS)%s\n" "$C_YELLOW" "$C_RESET"
-printf "%s   Ultra-Smooth Pro FX Engine • Nhiệm Vụ Ngày • Lưu Đa Ngày/Tháng/Năm%s\n" "$C_CYAN" "$C_RESET"
+printf "%s   HABIT TRACKER COLLECTION v3.6 — BY DYU (35 THEMES × 4 EDITIONS)%s\n" "$C_YELLOW" "$C_RESET"
+printf "%s   Turbo Native Sprite Engine • FX Suite • Ctrl+Z Undo • Formula Protect%s\n" "$C_CYAN" "$C_RESET"
 printf "%s========================================================================%s\n" "$C_MAGENTA" "$C_RESET"
 printf "  %sThư mục lưu file:%s %s\n\n" "$C_GREEN" "$C_RESET" "$OUT_DIR"
 
 printf "  %sBƯỚC 1 — CHỌN PHIÊN BẢN PHÙ HỢP (THEO THỨ TỰ ƯU TIÊN):%s\n" "$C_BOLD" "$C_RESET"
 printf "  %s----------------------------------------------------------------------%s\n" "$C_DIM" "$C_RESET"
-printf "  %s[1] Pro Interactive (.xlsm)  [⭐ KHUYÊN DÙNG SỐ 1 — EXCEL DESKTOP]%s\n" "$C_GREEN" "$C_RESET"
-printf "      %s-> Siêu mượt + Full hiệu ứng Nảy/Pháo hoa/Toast + Nút chuyển tháng 1 chạm%s\n" "$C_DIM" "$C_RESET"
-printf "         %s+ Tự lưu Đa Tháng / Đa Năm / Nhiệm Vụ Ngày vào _Database (100%% Offline)!%s\n" "$C_DIM" "$C_RESET"
+printf "  %s[1] Pro Interactive (.xlsm)  [⭐ KHUYÊN DÙNG SỐ 1 — TURBO v3.6]%s\n" "$C_GREEN" "$C_RESET"
+printf "      %s-> Siêu tốc ~51ms + Full FX Nảy/Pháo hoa/Toast + Ctrl+Z / Nút Undo%s\n" "$C_DIM" "$C_RESET"
+printf "         %s+ Khóa bảo vệ công thức + Tự lưu Đa Ngày/Tháng/Năm (100%% Offline)!%s\n" "$C_DIM" "$C_RESET"
 printf "  %s[2] Excel Universal Offline (.xlsx)%s\n" "$C_CYAN" "$C_RESET"
 printf "      %s-> Không Macro, Form Checkbox chuẩn mọi đời Excel 2016–365 Win/Mac!%s\n" "$C_DIM" "$C_RESET"
 printf "  %s[3] Google Sheets Desktop (.xlsx + 1-Click Script)%s\n" "$C_CYAN" "$C_RESET"
