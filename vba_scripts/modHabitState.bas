@@ -83,6 +83,36 @@ Private gWsDb As Worksheet
 Private gFXCached As Boolean
 Private gFXVal As Boolean
 
+' ---- Real Ctrl+Z Undo Engine (In-Memory Shadow Snapshots + Application.OnUndo) ----
+Private gSnapTrReady As Boolean
+Private gSnapTrKey As String
+Private gSnapTrGrid As Variant
+Private gSnapTrNames As Variant
+Private gSnapTrGoals As Variant
+
+Private gSnapDtReady As Boolean
+Private gSnapDtKey As String
+Private gSnapDtBlock As Variant
+Private gSnapDtNote As Variant
+
+Private gSnapYgReady As Boolean
+Private gSnapYgYear As Long
+Private gSnapYgBlock As Variant
+
+' gUndoKind: 1=TrackerGrid, 2=TrackerMeta, 3=DailyTasks, 4=YearlyGoals
+Private gUndoReady As Boolean
+Private gUndoKind As Long
+Private gUndoKey As String
+Private gUndoSingleCell As Boolean
+Private gUndoRow As Long
+Private gUndoCol As Long
+Private gUndoOldVal As Variant
+Private gUndoGrid As Variant
+Private gUndoNames As Variant
+Private gUndoGoals As Variant
+Private gUndoBlock As Variant
+Private gUndoNote As Variant
+
 ' =============================================================================
 '  INTERNAL HELPERS (100% PURE ASCII)
 ' =============================================================================
@@ -778,10 +808,12 @@ End Sub
 Public Sub HandleTrackerMetaEdit(ByVal ws As Worksheet)
     On Error GoTo SafeExit
     gDirtyMonthly = True
+    RecordTrackerMetaUndo ws
     Application.ScreenUpdating = False
-    SyncAllMonthlySprites ws, ThisWorkbook.Worksheets(CALC_SHEET)
+    SyncAllMonthlySprites ws, GetCalcSheet()
 SafeExit:
     Application.ScreenUpdating = True
+    ArmCtrlZUndo
 End Sub
 
 Public Sub MarkDailyDirty()
@@ -791,10 +823,12 @@ End Sub
 Public Sub HandleDailyMetaEdit(ByVal ws As Worksheet)
     On Error GoTo SafeExit
     gDirtyDaily = True
+    RecordDailyUndo ws
     Application.ScreenUpdating = False
-    SyncDailyTaskSprite ws, ThisWorkbook.Worksheets(CALC_SHEET)
+    SyncDailyTaskSprite ws, GetCalcSheet()
 SafeExit:
     Application.ScreenUpdating = True
+    ArmCtrlZUndo
 End Sub
 
 Public Sub MarkGoalsDirty()
@@ -804,10 +838,12 @@ End Sub
 Public Sub HandleGoalsMetaEdit(ByVal ws As Worksheet)
     On Error GoTo SafeExit
     gDirtyGoals = True
+    RecordGoalsUndo ws
     Application.ScreenUpdating = False
-    SyncGoalsSprite ws, ThisWorkbook.Worksheets(CALC_SHEET)
+    SyncGoalsSprite ws, GetCalcSheet()
 SafeExit:
     Application.ScreenUpdating = True
+    ArmCtrlZUndo
 End Sub
 
 Public Sub FlushAllDirty()
@@ -880,6 +916,284 @@ SafeExit:
 End Sub
 
 ' =============================================================================
+'  PUBLIC: SHEET PROTECTION (UserInterfaceOnly:=True) & REAL CTRL+Z UNDO ENGINE
+' =============================================================================
+Public Sub ProtectVisibleSheets()
+    On Error Resume Next
+    Dim anchors As Variant, idx As Long, ws As Worksheet
+    anchors = Array("ANCHOR_GUIDE", "ANCHOR_TRACKER", "ANCHOR_DAILYTASKS", "ANCHOR_GOALS", "ANCHOR_ANNUAL")
+    For idx = LBound(anchors) To UBound(anchors)
+        Set ws = GetAnchorSheet(CStr(anchors(idx)))
+        If Not ws Is Nothing Then
+            ws.Protect Password:="", DrawingObjects:=False, Contents:=True, _
+                       Scenarios:=False, UserInterfaceOnly:=True, AllowFormattingCells:=False
+        End If
+    Next idx
+    On Error GoTo 0
+End Sub
+
+Private Sub CaptureTrackerSnapshot(ByVal ws As Worksheet)
+    On Error Resume Next
+    If ws Is Nothing Then Exit Sub
+    gSnapTrKey = KeyToString(GetCalcSheet().Range("AN2").Value2)
+    gSnapTrGrid = ws.Range("C17:AG36").Value2
+    gSnapTrNames = ws.Range("B17:B36").Value2
+    gSnapTrGoals = ws.Range("AI17:AI36").Value2
+    gSnapTrReady = True
+    On Error GoTo 0
+End Sub
+
+Private Sub CaptureDailySnapshot(ByVal ws As Worksheet)
+    On Error Resume Next
+    If ws Is Nothing Then Exit Sub
+    gSnapDtKey = KeyToString(GetCalcSheet().Range("AN12").Value2)
+    gSnapDtBlock = ws.Range("B9:F28").Value2
+    gSnapDtNote = ws.Range("B31").Value2
+    gSnapDtReady = True
+    On Error GoTo 0
+End Sub
+
+Private Sub CaptureGoalsSnapshot(ByVal ws As Worksheet)
+    On Error Resume Next
+    If ws Is Nothing Then Exit Sub
+    gSnapYgYear = CLng(Val(GetCalcSheet().Range("AN3").Value2))
+    gSnapYgBlock = ws.Range("B6:F25").Value2
+    gSnapYgReady = True
+    On Error GoTo 0
+End Sub
+
+Private Sub CaptureAllSnapshots()
+    CaptureTrackerSnapshot GetAnchorSheet("ANCHOR_TRACKER")
+    CaptureDailySnapshot GetAnchorSheet("ANCHOR_DAILYTASKS")
+    CaptureGoalsSnapshot GetAnchorSheet("ANCHOR_GOALS")
+    gUndoReady = False
+End Sub
+
+Private Sub RecordTrackerTickUndo(ByVal ws As Worksheet, ByVal Target As Range)
+    On Error Resume Next
+    Dim curKey As String
+    curKey = KeyToString(GetCalcSheet().Range("AN2").Value2)
+    If Not gSnapTrReady Or gSnapTrKey <> curKey Then
+        CaptureTrackerSnapshot ws
+        Exit Sub
+    End If
+
+    If Target.Cells.CountLarge = 1 Then
+        Dim rIdx As Long, cIdx As Long
+        rIdx = Target.Row - 16
+        cIdx = Target.Column - 2
+        If rIdx >= 1 And rIdx <= N_HABITS And cIdx >= 1 And cIdx <= 31 Then
+            gUndoKind = 1
+            gUndoKey = curKey
+            gUndoSingleCell = True
+            gUndoRow = Target.Row
+            gUndoCol = Target.Column
+            gUndoOldVal = gSnapTrGrid(rIdx, cIdx)
+            gSnapTrGrid(rIdx, cIdx) = Target.Value2
+            gUndoReady = True
+        End If
+    Else
+        gUndoKind = 1
+        gUndoKey = curKey
+        gUndoSingleCell = False
+        gUndoGrid = gSnapTrGrid
+        gSnapTrGrid = ws.Range("C17:AG36").Value2
+        gUndoReady = True
+    End If
+    On Error GoTo 0
+End Sub
+
+Private Sub RecordTrackerMetaUndo(ByVal ws As Worksheet)
+    On Error Resume Next
+    Dim curKey As String
+    curKey = KeyToString(GetCalcSheet().Range("AN2").Value2)
+    If Not gSnapTrReady Or gSnapTrKey <> curKey Then
+        CaptureTrackerSnapshot ws
+        Exit Sub
+    End If
+    gUndoKind = 2
+    gUndoKey = curKey
+    gUndoNames = gSnapTrNames
+    gUndoGoals = gSnapTrGoals
+    gSnapTrNames = ws.Range("B17:B36").Value2
+    gSnapTrGoals = ws.Range("AI17:AI36").Value2
+    gUndoReady = True
+    On Error GoTo 0
+End Sub
+
+Private Sub RecordDailyUndo(ByVal ws As Worksheet)
+    On Error Resume Next
+    Dim curKey As String
+    curKey = KeyToString(GetCalcSheet().Range("AN12").Value2)
+    If Not gSnapDtReady Or gSnapDtKey <> curKey Then
+        CaptureDailySnapshot ws
+        Exit Sub
+    End If
+    gUndoKind = 3
+    gUndoKey = curKey
+    gUndoBlock = gSnapDtBlock
+    gUndoNote = gSnapDtNote
+    gSnapDtBlock = ws.Range("B9:F28").Value2
+    gSnapDtNote = ws.Range("B31").Value2
+    gUndoReady = True
+    On Error GoTo 0
+End Sub
+
+Private Sub RecordGoalsUndo(ByVal ws As Worksheet)
+    On Error Resume Next
+    Dim curYr As Long
+    curYr = CLng(Val(GetCalcSheet().Range("AN3").Value2))
+    If Not gSnapYgReady Or gSnapYgYear <> curYr Then
+        CaptureGoalsSnapshot ws
+        Exit Sub
+    End If
+    gUndoKind = 4
+    gUndoKey = CStr(curYr)
+    gUndoBlock = gSnapYgBlock
+    gSnapYgBlock = ws.Range("B6:F25").Value2
+    gUndoReady = True
+    On Error GoTo 0
+End Sub
+
+Private Sub ArmCtrlZUndo()
+    If Not gUndoReady Then Exit Sub
+    On Error Resume Next
+    Application.OnUndo "Hoan tac thay doi (Undo)", "UndoLastHabitEdit"
+    On Error GoTo 0
+End Sub
+
+Public Sub UndoLastHabitEdit()
+    Dim wsActive As Worksheet
+    On Error Resume Next
+    Set wsActive = ActiveSheet
+    On Error GoTo SafeExit
+
+    If Not gUndoReady Then
+        If Not wsActive Is Nothing Then ShowToast wsActive, GetFxMsg(25)
+        Exit Sub
+    End If
+
+    Dim wsCalc As Worksheet
+    Set wsCalc = GetCalcSheet()
+
+    Dim prevAnim As Boolean
+    On Error Resume Next
+    prevAnim = Application.EnableAnimations
+    Application.EnableAnimations = False
+    On Error GoTo SafeExit
+    Application.ScreenUpdating = False
+    Application.EnableEvents = False
+    Application.Calculation = xlCalculationManual
+
+    Dim wsT As Worksheet
+    Dim didUndo As Boolean
+    didUndo = False
+
+    Select Case gUndoKind
+        Case 1
+            Set wsT = GetAnchorSheet("ANCHOR_TRACKER")
+            If Not wsT Is Nothing Then
+                If KeyToString(wsCalc.Range("AN2").Value2) = gUndoKey Then
+                    If gUndoSingleCell Then
+                        Dim curSingle As Variant
+                        curSingle = wsT.Cells(gUndoRow, gUndoCol).Value2
+                        wsT.Cells(gUndoRow, gUndoCol).Value2 = gUndoOldVal
+                        gSnapTrGrid(gUndoRow - 16, gUndoCol - 2) = gUndoOldVal
+                        gUndoOldVal = curSingle
+                    Else
+                        Dim curG As Variant
+                        curG = wsT.Range("C17:AG36").Value2
+                        wsT.Range("C17:AG36").Value2 = gUndoGrid
+                        gSnapTrGrid = gUndoGrid
+                        gUndoGrid = curG
+                    End If
+                    gDirtyMonthly = True
+                    Application.Calculation = xlCalculationAutomatic
+                    SyncAllMonthlySprites wsT, wsCalc
+                    didUndo = True
+                End If
+            End If
+
+        Case 2
+            Set wsT = GetAnchorSheet("ANCHOR_TRACKER")
+            If Not wsT Is Nothing Then
+                If KeyToString(wsCalc.Range("AN2").Value2) = gUndoKey Then
+                    Dim curN As Variant, curGo As Variant
+                    curN = wsT.Range("B17:B36").Value2
+                    curGo = wsT.Range("AI17:AI36").Value2
+                    wsT.Range("B17:B36").Value2 = gUndoNames
+                    wsT.Range("AI17:AI36").Value2 = gUndoGoals
+                    gSnapTrNames = gUndoNames
+                    gSnapTrGoals = gUndoGoals
+                    gUndoNames = curN
+                    gUndoGoals = curGo
+                    gDirtyMonthly = True
+                    Application.Calculation = xlCalculationAutomatic
+                    SyncAllMonthlySprites wsT, wsCalc
+                    didUndo = True
+                End If
+            End If
+
+        Case 3
+            Set wsT = GetAnchorSheet("ANCHOR_DAILYTASKS")
+            If Not wsT Is Nothing Then
+                If KeyToString(wsCalc.Range("AN12").Value2) = gUndoKey Then
+                    Dim curDtB As Variant, curDtN As Variant
+                    curDtB = wsT.Range("B9:F28").Value2
+                    curDtN = wsT.Range("B31").Value2
+                    wsT.Range("B9:F28").Value2 = gUndoBlock
+                    wsT.Range("B31").Value2 = gUndoNote
+                    gSnapDtBlock = gUndoBlock
+                    gSnapDtNote = gUndoNote
+                    gUndoBlock = curDtB
+                    gUndoNote = curDtN
+                    gDirtyDaily = True
+                    Application.Calculation = xlCalculationAutomatic
+                    SyncDailyTaskSprite wsT, wsCalc
+                    didUndo = True
+                End If
+            End If
+
+        Case 4
+            Set wsT = GetAnchorSheet("ANCHOR_GOALS")
+            If Not wsT Is Nothing Then
+                If CStr(CLng(Val(wsCalc.Range("AN3").Value2))) = gUndoKey Then
+                    Dim curYgB As Variant
+                    curYgB = wsT.Range("B6:F25").Value2
+                    wsT.Range("B6:F25").Value2 = gUndoBlock
+                    gSnapYgBlock = gUndoBlock
+                    gUndoBlock = curYgB
+                    gDirtyGoals = True
+                    Application.Calculation = xlCalculationAutomatic
+                    SyncGoalsSprite wsT, wsCalc
+                    didUndo = True
+                End If
+            End If
+    End Select
+
+    If Application.Calculation <> xlCalculationAutomatic Then
+        Application.Calculation = xlCalculationAutomatic
+    End If
+
+    If didUndo Then
+        If IsFXEnabled() And Not wsT Is Nothing Then
+            ShowToast wsT, GetFxMsg(24)
+        End If
+    ElseIf Not wsActive Is Nothing Then
+        ShowToast wsActive, GetFxMsg(25)
+    End If
+
+SafeExit:
+    If Application.Calculation <> xlCalculationAutomatic Then Application.Calculation = xlCalculationAutomatic
+    Application.EnableEvents = True
+    On Error Resume Next
+    Application.EnableAnimations = prevAnim
+    On Error GoTo 0
+    Application.ScreenUpdating = True
+    If didUndo Then ArmCtrlZUndo
+End Sub
+
+' =============================================================================
 '  PUBLIC: LIFECYCLE & O(1) CLEANUP (CALLED BY ThisWorkbook)
 ' =============================================================================
 Public Sub InitWorkbookFastMode()
@@ -895,6 +1209,8 @@ Public Sub InitWorkbookFastMode()
     gDbIndexed = False
     EnsureDbIndexes ThisWorkbook.Worksheets(DB_SHEET)
     InitSpriteCachesFromCalc
+    ProtectVisibleSheets
+    CaptureAllSnapshots
 
     Dim wsAnn As Worksheet
     Set wsAnn = GetAnchorSheet("ANCHOR_ANNUAL")
@@ -1177,6 +1493,7 @@ End Sub
 Public Sub HandleTrackerTick(ByVal ws As Worksheet, ByVal Target As Range)
     On Error GoTo SafeExit
     gDirtyMonthly = True
+    RecordTrackerTickUndo ws, Target
 
     Dim wsCalc As Worksheet
     Set wsCalc = GetCalcSheet()
@@ -1188,11 +1505,11 @@ Public Sub HandleTrackerTick(ByVal ws As Worksheet, ByVal Target As Range)
         Application.ScreenUpdating = False
         SyncAllMonthlySprites ws, wsCalc
         Application.ScreenUpdating = True
-        Exit Sub
+        GoTo SafeExit
     End If
 
-    If Not IsCellChecked(Target.Value2) Then Exit Sub
-    If Not IsFXEnabled() Then Exit Sub
+    If Not IsCellChecked(Target.Value2) Then GoTo SafeExit
+    If Not IsFXEnabled() Then GoTo SafeExit
 
     Dim dayPct As Variant
     dayPct = ws.Cells(12, Target.Column).Value2
@@ -1229,22 +1546,24 @@ Public Sub HandleTrackerTick(ByVal ws As Worksheet, ByVal Target As Range)
 SafeExit:
     Application.EnableEvents = True
     Application.ScreenUpdating = True
+    ArmCtrlZUndo
 End Sub
 
 Public Sub HandleDailyTaskTick(ByVal ws As Worksheet, ByVal Target As Range)
     On Error GoTo SafeExit
     gDirtyDaily = True
+    RecordDailyUndo ws
 
     Dim wsCalc As Worksheet
-    Set wsCalc = ThisWorkbook.Worksheets(CALC_SHEET)
+    Set wsCalc = GetCalcSheet()
 
     Application.ScreenUpdating = False
     SyncDailyTaskSprite ws, wsCalc
     Application.ScreenUpdating = True
 
-    If Target.Cells.CountLarge <> 1 Then Exit Sub
-    If Not IsFXEnabled() Then Exit Sub
-    If Not IsCellChecked(Target.Value2) Then Exit Sub
+    If Target.Cells.CountLarge <> 1 Then GoTo SafeExit
+    If Not IsFXEnabled() Then GoTo SafeExit
+    If Not IsCellChecked(Target.Value2) Then GoTo SafeExit
 
     Dim dtPct As Variant, dtTot As Variant
     dtPct = wsCalc.Range("AN15").Value2
@@ -1260,22 +1579,24 @@ Public Sub HandleDailyTaskTick(ByVal ws As Worksheet, ByVal Target As Range)
     End If
 SafeExit:
     Application.ScreenUpdating = True
+    ArmCtrlZUndo
 End Sub
 
 Public Sub HandleYearlyGoalTick(ByVal ws As Worksheet, ByVal Target As Range)
     On Error GoTo SafeExit
     gDirtyGoals = True
+    RecordGoalsUndo ws
 
     Dim wsCalc As Worksheet
-    Set wsCalc = ThisWorkbook.Worksheets(CALC_SHEET)
+    Set wsCalc = GetCalcSheet()
 
     Application.ScreenUpdating = False
     SyncGoalsSprite ws, wsCalc
     Application.ScreenUpdating = True
 
-    If Target.Cells.CountLarge <> 1 Then Exit Sub
-    If Not IsFXEnabled() Then Exit Sub
-    If Not IsCellChecked(Target.Value2) Then Exit Sub
+    If Target.Cells.CountLarge <> 1 Then GoTo SafeExit
+    If Not IsFXEnabled() Then GoTo SafeExit
+    If Not IsCellChecked(Target.Value2) Then GoTo SafeExit
 
     Dim hitAll As Boolean, ygPct As Variant
     ygPct = wsCalc.Range("AN6").Value2
@@ -1288,6 +1609,7 @@ Public Sub HandleYearlyGoalTick(ByVal ws As Worksheet, ByVal Target As Range)
     ShowToast ws, GetFxMsg(15)
 SafeExit:
     Application.ScreenUpdating = True
+    ArmCtrlZUndo
 End Sub
 
 ' =============================================================================
@@ -1577,6 +1899,9 @@ Private Sub ReplaceSheetSpritesFromAssets(ByVal ws As Worksheet, ByRef assetShp(
     Dim prevVis As XlSheetVisibility
     prevVis = ws.Visible
     ws.Visible = xlSheetVisible
+    On Error Resume Next
+    ws.Unprotect ""
+    On Error GoTo 0
     ws.Activate
 
     Dim i As Long, k As Long
@@ -1667,6 +1992,7 @@ Public Sub SyncSpritesFromAssets()
     If Not wsT Is Nothing Then SyncAnnualSprites wsT, wsCalc
 
 Cleanup:
+    ProtectVisibleSheets
     Application.Calculation = prevCalc
     Application.EnableEvents = True
     On Error Resume Next
@@ -1792,6 +2118,8 @@ Public Sub HandleMonthlySwitch(ByVal ws As Worksheet)
     ' Single native incremental calc while ScreenUpdating = False -> then O(1) sprite diff!
     Application.Calculation = xlCalculationAutomatic
     SyncAllMonthlySprites ws, wsCalc
+    CaptureTrackerSnapshot ws
+    gUndoReady = False
 
     didSwitch = True
     If IsFXEnabled() Then
@@ -1868,11 +2196,13 @@ Public Sub HandleYearlyGoalsSwitch(ByVal ws As Worksheet)
     ws.Range("B6:F25").Value2 = loadYG
     wsCalc.Range("AN3").Value2 = newYr
 
-    Application.Calculation = prevCalc
+    Application.Calculation = xlCalculationAutomatic
     SyncGoalsSprite ws, wsCalc
+    CaptureGoalsSnapshot ws
+    gUndoReady = False
 
 Cleanup:
-    If Application.Calculation <> prevCalc Then Application.Calculation = prevCalc
+    If Application.Calculation <> xlCalculationAutomatic Then Application.Calculation = xlCalculationAutomatic
     Application.EnableEvents = True
     On Error Resume Next
     Application.EnableAnimations = prevAnim
@@ -1964,6 +2294,8 @@ Public Sub HandleDailyTasksSwitch(ByVal ws As Worksheet)
 
     Application.Calculation = xlCalculationAutomatic
     SyncDailyTaskSprite ws, wsCalc
+    CaptureDailySnapshot ws
+    gUndoReady = False
 
     didDateSwitch = True
     If IsFXEnabled() Then

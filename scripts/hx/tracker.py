@@ -186,6 +186,8 @@ def init_calc_sheet(wb, active_year: int = 2026, last_loaded_key: str = "2026-10
         ("FX_MSG_DATE_SWITCH", "📝 Đã lưu ngày cũ & nạp dữ liệu ngày mới!"),               # BA21
         ("FX_MSG_ANNUAL_HALL", "🏆 Đại Sảnh Thành Tựu Năm đã được cập nhật!"),             # BA22
         ("FX_MSG_SYNC_ASSETS", "🎨 Đã đồng bộ 6 ảnh mới từ _Assets sang toàn bộ file!"),    # BA23
+        ("FX_MSG_UNDO_OK",     "↩ Đã hoàn tác thay đổi gần nhất!"),                        # BA24
+        ("FX_MSG_UNDO_EMPTY",  "ℹ️ Chưa có thao tác nào để hoàn tác!"),                     # BA25
     ]
     for r_idx, (lbl, val) in enumerate(fx_rows):
         ws_calc.write(r_idx, CALC_FX_LBL_COL, lbl)
@@ -543,7 +545,7 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
     ch.set_legend({"none": True})
     ch.set_chartarea({"border": {"color": t.line, "width": 0.75}, "fill": {"color": t.card}})
     ch.set_plotarea({"layout": {"x": 0.045, "y": 0.2, "width": 0.94, "height": 0.62}})
-    place_chart(cv, ch, R_BAND0, C_D0, R_BAND1, C_D31)
+    place_chart(cv, ch, R_BAND0, C_D0, R_BAND1, C_D31, pad_x=2, pad_y=3)
 
     # ------------------------------------------------------------------ top-right card
     if spec.top_right == "donut":
@@ -817,6 +819,17 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
     ws.data_validation(rng(R_H0, C_NAME, R_H1, C_NAME),
                        {"validate": "any", "input_title": "Tên thói quen",
                         "input_message": "Gõ tên thói quen mới — công thức, checkbox & streak đã được nối sẵn!"})
+
+    # Register user-editable input ranges for Pro UserInterfaceOnly sheet protection
+    # (ALL headers, KPIs, COMPLETED/NOT/%, TOTAL row 37, Progress, Streaks stay LOCKED!)
+    cv.unlock(R_BAND0 + 1, C_NAME)              # B3 (Month dropdown)
+    cv.unlock(R_BAND0 + 3, C_NAME)              # B5 (Year dropdown)
+    cv.unlock(R_H0, C_NAME, R_H1, C_NAME)       # B17:B36 (Habit names)
+    cv.unlock(R_H0, C_D0, R_H1, C_D31)          # C17:AG36 (Checkbox grid ONLY — row 37 LOCKED!)
+    cv.unlock(R_H0, rc["goal"], R_H1, rc["goal"])  # AI17:AI36 (Goal column)
+    for ec in spec.extra_cols:
+        if ec["kind"] == "input":
+            cv.unlock(R_H0, rc[ec["key"]], R_H1, rc[ec["key"]])
 
     ws.hide_gridlines(2)
     ws.set_zoom(85)

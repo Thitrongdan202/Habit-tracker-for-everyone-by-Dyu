@@ -178,8 +178,13 @@ class Canvas:
         self.heights: dict[int, float] = {}
         self.hidden_cols: set[int] = set()
         self.form_checkboxes: list[tuple[int, int]] = []
+        self.unlock_ranges: list[tuple[int, int, int, int]] = []
         self.max_col = 0
         self.max_row = 0
+
+    def unlock(self, r1: int, c1: int, r2: int | None = None, c2: int | None = None):
+        """Register 0-based (r1, c1, r2, c2) user-editable range to unlock under sheet protection."""
+        self.unlock_ranges.append((r1, c1, r1 if r2 is None else r2, c1 if c2 is None else c2))
 
     # ---- geometry -------------------------------------------------------
     def col(self, c: int, width: float, hidden=False):
