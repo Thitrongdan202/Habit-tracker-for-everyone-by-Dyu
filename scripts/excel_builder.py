@@ -1074,8 +1074,8 @@ TEMPLATES: list[TemplateDef] = [
     TemplateDef(
         stem="26_Pastel_Purple_Royal_Cat", short_key="26_purple_cat",
         theme=Theme(
-            slug="purple_cat", name="PASTEL PURPLE ROYAL CAT", emoji="🐱",
-            tagline_vi="Phong cách Tím Lavender & Hồng Phấn siêu thẩm mỹ cùng Mèo Xám Hoàng Gia & tab Nhiệm Vụ Ngày nổi bật!",
+            slug="purple_cat", name="PASTEL PURPLE STARLIGHT CAT", emoji="🌙",
+            tagline_vi="Phong cách Tím Lavender & Hồng Phấn mộng mơ cùng Mèo Anh Lông Ngắn ngồi Trăng Khuyết đội Mũ Nồi Ánh Sao!",
             page="#F4F0F9", card="#FFFFFF", ink="#3B324A", muted="#827894", line="#E3D9EE",
             primary="#9D84C7", primary_dark="#6E529E", on_primary="#FFFFFF", soft="#EDE6F7",
             chart_fill="#D2C1E8", chart_line="#9D84C7",
@@ -1085,9 +1085,9 @@ TEMPLATES: list[TemplateDef] = [
             week_on=["#3B285C", "#5E253B", "#3B285C", "#5E253B", "#3B285C"],
             streak_lo="#F4F0F9", streak_mid="#D2C1E8", streak_hi="#6E529E",
             bar="#B298DC", donut_rest="#EAE2F3",
-            chart_title="AESTHETIC PURPLE CAT • BIỂU ĐỒ KỶ LUẬT MỖI NGÀY",
+            chart_title="STARLIGHT PURPLE CAT • BIỂU ĐỒ KỶ LUẬT MỖI NGÀY",
         ),
-        tracker_name="🐱 Purple Royal Cat",
+        tracker_name="🌙 Purple Starlight Cat",
         habits=[
             Habit("Thức dậy nhẹ nhàng & uống nước", goal=30, p=0.92),
             Habit("Viết 3 mục tiêu quan trọng nhất", goal=28, p=0.90),
@@ -1098,8 +1098,8 @@ TEMPLATES: list[TemplateDef] = [
             Habit("Chăm sóc da & thư giãn buổi tối", goal=28, p=0.90),
             Habit("Ngủ đủ 8 tiếng trước 23h00", goal=28, p=0.85),
         ],
-        seed=266, label_tag="PASTEL PURPLE CAT", garden_label="ROYAL GREY CATS",
-        grown_label="👑  ROYAL GREY CATS\nRAISED:", tracker_capture_range="A1:AN38",
+        seed=266, label_tag="STARLIGHT LAVENDER CAT", garden_label="STARLIGHT CAT MOON",
+        grown_label="🌙  STARLIGHT CATS\nRAISED:", tracker_capture_range="A1:AN38",
     ),
     TemplateDef(
         stem="27_Hatching_Chick_Icon_Studio", short_key="27_hatching_chick",
@@ -1199,7 +1199,7 @@ TEMPLATES: list[TemplateDef] = [
         stem="30_Shiba_Inu_Happy_Bork", short_key="30_shiba_inu",
         theme=Theme(
             slug="shiba_inu", name="SHIBA INU HAPPY BORK", emoji="🐕",
-            tagline_vi="Chú cún Shiba Inu đeo khăn đỏ Nhật Bản siêu dễ thương — tích điểm Cún Ngoan (Good Boy Points) & mở khóa Shiba Vương Miện!",
+            tagline_vi="Chú cún Shiba Inu đeo khăn đỏ Karakusa Nhật Bản siêu dễ thương — tích điểm Cún Ngoan (Good Boy Points) & mở khóa Shiba Xương Vàng!",
             page="#FFF9F0", card="#FFFFFF", ink="#3B281E", muted="#8E7260", line="#F0DFCA",
             primary="#E89B54", primary_dark="#C06E26", on_primary="#FFFFFF", soft="#FEF0DF",
             chart_fill="#F7C99B", chart_line="#D94F4F",

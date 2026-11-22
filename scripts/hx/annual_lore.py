@@ -523,7 +523,7 @@ ANNUAL_LORE: dict[str, dict] = {
     # 25 - Ginger Kitten Basket Routine
     "ginger_kitten": _lore(
         "🐱  GIỎ MÈO CAM HẠNH PHÚC — TỔNG KẾT LỊCH TRÌNH NĂM",
-        "Từ mèo cam ngủ nướng trong giỏ đến chú mèo vẫy tay rạng rỡ mỗi Sáng · Chiều · Tối!",
+        "Từ mèo cam ngủ nướng trong giỏ mây đến chú mèo nơ bạc hà ôm cá bông mỗi Sáng · Chiều · Tối!",
         "🐾  TỔNG DẤU CHÂN MÈO CAM", "ngày mèo vui ≥",
         "🐱  GIA ĐÌNH MÈO CAM 12 THÁNG (T1 – T12)",
         "🧡  NHỊP SỐNG SÁNG-CHIỀU-TỐI 12 THÁNG", "area",
@@ -531,34 +531,34 @@ ANNUAL_LORE: dict[str, dict] = {
         [
             ("🧺  Thức Giấc Khỏi Giỏ Mây", "Hoàn thành ngày đầu tiên đạt ≥ 75%"),
             ("🐾  Mèo Mướp Siêng Năng (7d)", "Duy trì chuỗi 7 ngày đều đặn Sáng/Chiều/Tối"),
-            ("🧡  Mèo Cam Năng Động (21d)", "Đạt chuỗi 21 ngày không bỏ nhịp"),
-            ("🌟  Siêu Sao Mèo Vẫy Tay (30d)", "Giữ vững chuỗi 30 ngày đáng yêu nhất"),
+            ("🧶  Mèo Cam Cuộn Len Mint (21d)", "Đạt chuỗi 21 ngày không bỏ nhịp"),
+            ("🐟  Siêu Sao Mèo Nơ Mint (30d)", "Giữ vững chuỗi 30 ngày đáng yêu nhất"),
             ("✨  Tháng Nắng Mật Ong (≥ 80%)", "Có ít nhất 1 tháng đạt trung bình ≥ 80%"),
             ("🎀  100 Ngày Mèo Hạnh Phúc", "Đạt ≥ 100 ngày ≥ 75% trong năm"),
             ("🎯  Đạt Đích Mục Tiêu Năm", "Hoàn thành ≥ 50% mục tiêu năm"),
-            ("👑  Quán Quân Tiệm Mèo Cam", "Đạt ≥ 80% cả năm hoặc ≥ 250 ngày ≥ 75%"),
+            ("🏆  Quán Quân Tiệm Mèo Cam", "Đạt ≥ 80% cả năm hoặc ≥ 250 ngày ≥ 75%"),
         ],
-        ("🧺 Mèo cam mở mắt chào ngày!", "🐾 Vươn vai thật năng động!", "🧡 Vẫy tay ăn mừng nào!", "👑 Quán quân Tiệm Mèo Cam!"),
+        ("🧺 Mèo cam mở mắt chào ngày!", "🧶 Vui chơi cùng cuộn len mint!", "🐟 Mèo nơ mint ôm cá bông!", "🏆 Quán quân Tiệm Mèo Cam!"),
     ),
-    # 26 - Pastel Purple Royal Cat
+    # 26 - Pastel Purple Starlight Cat
     "purple_cat": _lore(
-        "🐱  LÂU ĐÀI MÈO XÁM PASTEL — TỔNG KẾT & THÀNH TỰU NĂM",
-        "Tông tím oải hương dịu mắt cùng chú Mèo Xám Hoàng Gia chinh phục mọi thói quen & việc ngày!",
-        "💜  TỔNG DẤU CHÂN MÈO XÁM", "mèo xám hoàng gia ≥",
-        "🐱  LÂU ĐÀI MÈO XÁM 12 THÁNG (T1 – T12)",
+        "🌙  VƯỜN SAO MÈO LAVENDER — TỔNG KẾT & THÀNH TỰU NĂM",
+        "Tông tím oải hương mộng mơ cùng chú Mèo Anh Lông Ngắn ngồi trăng khuyết đội mũ nồi ánh sao!",
+        "💜  TỔNG ÁNH SAO MÈO LAVENDER", "mèo ánh sao ≥",
+        "🌙  VƯỜN SAO MÈO LAVENDER 12 THÁNG (T1 – T12)",
         "🔮  XU HƯỚNG THẨM MỸ & KỶ LUẬT 12 THÁNG", "area",
-        "🏅  HUY HIỆU HOÀNG TỘC MÈO XÁM", "👑  MÈO HOÀNG GIA",
+        "🏅  HUY HIỆU MÈO ÁNH SAO LAVENDER", "🌙  TRĂNG ÁNH SAO",
         [
-            ("📦  Mở Hộp Quà Mèo Xám", "Hoàn thành ngày đầu tiên đạt ≥ 75%"),
-            ("🐾  Mèo Xám Lịch Lãm (7d)", "Duy trì chuỗi 7 ngày đều đặn chuẩn aesthetic"),
-            ("💜  Quý Tộc Lavender (21d)", "Đạt chuỗi 21 ngày kỷ luật thanh lịch"),
-            ("👑  Mèo Xám Đội Vương Miện (30d)", "Giữ vững chuỗi 30 ngày hoàn mỹ"),
-            ("✨  Tháng Pastel Đỉnh Cao", "Có ít nhất 1 tháng đạt trung bình ≥ 80%"),
-            ("🏰  100 Ngày Lâu Đài Tím", "Đạt ≥ 100 ngày ≥ 75% trong năm"),
+            ("🌙  Gối Trăng Khởi Đầu", "Hoàn thành ngày đầu tiên đạt ≥ 75%"),
+            ("🧶  Mèo Bông Cuộn Len Tím (7d)", "Duy trì chuỗi 7 ngày đều đặn chuẩn aesthetic"),
+            ("🎀  Ngôi Sao Nơ Hồng (21d)", "Đạt chuỗi 21 ngày kỷ luật thanh lịch"),
+            ("✨  Mèo Mũ Nồi Ánh Sao (30d)", "Giữ vững chuỗi 30 ngày tỏa sáng trên trăng khuyết"),
+            ("💜  Tháng Pastel Đỉnh Cao", "Có ít nhất 1 tháng đạt trung bình ≥ 80%"),
+            ("🌌  100 Đêm Trăng Oải Hương", "Đạt ≥ 100 ngày ≥ 75% trong năm"),
             ("🎯  Chinh Phục Mục Tiêu Năm", "Hoàn thành ≥ 50% mục tiêu năm"),
-            ("👑  Nữ Công Tước Mèo Xám", "Đạt ≥ 80% cả năm hoặc ≥ 250 ngày ≥ 75%"),
+            ("🏆  Bậc Thầy Mèo Ánh Sao", "Đạt ≥ 80% cả năm hoặc ≥ 250 ngày ≥ 75%"),
         ],
-        ("📦 Mở hộp đón mèo xám!", "🐾 Mèo xám thật chăm chỉ!", "💜 Lâu đài tím tỏa sáng!", "👑 Hoàng tộc Mèo Xám!"),
+        ("🌙 Gối trăng lavender vừa sáng!", "🧶 Mèo bông thật chăm chỉ!", "✨ Trăng khuyết mũ nồi sao!", "🏆 Bậc Thầy Mèo Ánh Sao!"),
     ),
     # 27 - Hatching Chick Icon Studio
     "hatching_chick": _lore(
@@ -623,7 +623,7 @@ ANNUAL_LORE: dict[str, dict] = {
     # 30 - Shiba Inu Happy Bork
     "shiba_inu": _lore(
         "🐕  CÔNG VIÊN CÚN SHIBA — ĐẠI SẢNH GOOD BOY NĂM",
-        "Tích điểm Cún Ngoan mỗi ngày cùng bé Shiba khăn đỏ đáng yêu nhất vũ trụ!",
+        "Tích điểm Cún Ngoan mỗi ngày cùng bé Shiba khăn đỏ Karakusa & khúc xương giòn rụm!",
         "🦴  TỔNG ĐIỂM CÚN NGOAN", "ngày vẫy đuôi ≥",
         "🐕  ĐÀN SHIBA HẠNH PHÚC 12 THÁNG (T1 – T12)",
         "🐾  BIỂU ĐỒ GOOD BOY POINTS 12 THÁNG", "combo",
@@ -632,13 +632,13 @@ ANNUAL_LORE: dict[str, dict] = {
             ("🐾  Cún Con Chăm Ngoan", "Ghi điểm ngày Cún Ngoan đầu tiên ≥ 75%"),
             ("🐕  Vẫy Đuôi 7 Ngày (7d)", "Duy trì chuỗi 7 ngày ngoan ngoãn liên tiếp"),
             ("🧣  Chiến Binh Khăn Đỏ (21d)", "Đạt chuỗi 21 ngày kỷ luật cực đỉnh"),
-            ("👑  Shiba Đội Vương Miện (30d)", "Giữ vững chuỗi 30 ngày bất khả chiến bại"),
+            ("🦴  Siêu Cún Shiba Xương Vàng (30d)", "Giữ vững chuỗi 30 ngày bất khả chiến bại"),
             ("🌸  Tháng Hoa Anh Đào (≥ 80%)", "Có ít nhất 1 tháng đạt trung bình ≥ 80%"),
             ("🦴  100 Ngày Good Boy (100d)", "Đạt ≥ 100 ngày ≥ 75% trong năm"),
             ("🎯  Chinh Phục Mục Tiêu Năm", "Hoàn thành ≥ 50% mục tiêu trên Yearly Goals"),
-            ("👑  Huyền Thoại Shiba Trung Thành", "Đạt ≥ 80% cả năm hoặc ≥ 250 ngày ≥ 75%"),
+            ("🏆  Huyền Thoại Shiba Trung Thành", "Đạt ≥ 80% cả năm hoặc ≥ 250 ngày ≥ 75%"),
         ],
-        ("🐾 Cún Shiba đang chờ bạn!", "🐕 Vẫy đuôi siêu hăng hái!", "🧣 Chiến binh Khăn Đỏ!", "👑 Huyền Thoại Shiba Inu!"),
+        ("🐾 Cún Shiba đang chờ bạn!", "🐕 Vẫy đuôi siêu hăng hái!", "🧣 Chiến binh Khăn Đỏ!", "🏆 Huyền Thoại Shiba Inu!"),
     ),
     # 31 - Akita Inu Snow Loyal
     "akita_inu": _lore(
@@ -683,22 +683,22 @@ ANNUAL_LORE: dict[str, dict] = {
     # 33 - Peach Mochi Cat Mood Suite
     "mochi_cat": _lore(
         "🐱  HỘP MÈO MOCHI HẠNH PHÚC — THÀNH TỰU NĂM",
-        "Chăm sóc cảm xúc, hoàn thành việc nhỏ & nuôi bé mèo Mochi trắng bước ra khỏi hộp cam!",
+        "Chăm sóc cảm xúc, hoàn thành việc nhỏ & nuôi bé Mochi bánh nếp đội quýt Mikan ôm bánh cá Taiyaki!",
         "📦  TỔNG LƯỢT NUÔI MÈO MOCHI", "ngày mèo vui ≥",
         "🐱  GIA ĐÌNH MÈO MOCHI 12 THÁNG (T1 – T12)",
         "🧡  BIỂU ĐỒ KỶ LUẬT & CẢM XÚC 12 THÁNG", "column",
-        "🏅  HUY HIỆU NGƯỜI BẠN MÈO MOCHI", "🔔  CHUÔNG MÈO",
+        "🏅  HUY HIỆU NGƯỜI BẠN MÈO MOCHI", "🍊  MÈO MOCHI",
         [
             ("📦  Mở Nắp Hộp Cam", "Ghi nhận ngày đầu tiên đạt ≥ 75% thói quen"),
             ("🐾  Tai Mèo Ló Dạng (7d)", "Duy trì chuỗi 7 ngày êm dịu & đều đặn"),
-            ("🐱  Mochi Mỉm Cười (21d)", "Đạt chuỗi 21 ngày sống lành mạnh"),
-            ("🔔  Chuông Vàng Hạnh Phúc (30d)", "Giữ vững chuỗi 30 ngày tràn đầy năng lượng"),
+            ("🍡  Bánh Nếp Mochi Nở Nụ Cười (21d)", "Đạt chuỗi 21 ngày sống lành mạnh"),
+            ("🍊  Đội Quýt Mikan & Bánh Cá (30d)", "Giữ vững chuỗi 30 ngày tràn đầy năng lượng"),
             ("🍑  Tháng Đào Ngọt Ngào (≥ 80%)", "Có ít nhất 1 tháng đạt trung bình ≥ 80%"),
             ("💛  100 Ngày Yêu Đời (100d)", "Đạt ≥ 100 ngày ≥ 75% trong năm"),
             ("🎯  Chinh Phục Mục Tiêu Năm", "Hoàn thành ≥ 50% mục tiêu trên Yearly Goals"),
-            ("👑  Huyền Thoại Mèo Mochi", "Đạt ≥ 80% cả năm hoặc ≥ 250 ngày ≥ 75%"),
+            ("🏆  Huyền Thoại Mèo Mochi", "Đạt ≥ 80% cả năm hoặc ≥ 250 ngày ≥ 75%"),
         ],
-        ("📦 Bé Mochi đang ngó ra!", "🐾 Đôi tai trắng đáng yêu!", "🐱 Mèo Mochi cười rạng rỡ!", "👑 Huyền Thoại Mèo Mochi!"),
+        ("📦 Bé Mochi đang ngó ra!", "🐾 Đôi tai trắng đáng yêu!", "🍊 Đội quýt Mikan ôm bánh cá!", "🏆 Huyền Thoại Mèo Mochi!"),
     ),
     # 34 - Fluffy Bunny Sticker Pop
     "fluffy_bunny": _lore(
