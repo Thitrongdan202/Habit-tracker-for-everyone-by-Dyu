@@ -1,7 +1,7 @@
-# Habit Tracker Collection v3.5 Installer (PowerShell 5.1+ / 7+)
+# Habit Tracker Collection v3.6 Installer (PowerShell 5.1+ / 7+)
 <#
 .SYNOPSIS
-    Habit Tracker Collection v3.5 - Interactive Zero-Install Downloader (Windows PowerShell)
+    Habit Tracker Collection v3.6 - Interactive Zero-Install Downloader (Windows PowerShell)
 .DESCRIPTION
     Run in 1 line:
         irm https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu/main/install.ps1 | iex
@@ -46,16 +46,16 @@ $Templates = @(
     @{ Id = 23; Cat = "PETS";   Stem = "23_Bamboo_Panda_Zen_Garden";          Title = "Gau Truc Rung Tre Zen (Bamboo Panda)" }
     @{ Id = 24; Cat = "FOCUS";  Stem = "24_Royal_Cat_Saving_Cash";            Title = "Meo Hoang Gia Tiet Kiem & Vuong Quoc Meo" }
     @{ Id = 25; Cat = "PETS";   Stem = "25_Ginger_Kitten_Basket_Routine";     Title = "Meo Cam Gio May & Bang Xep Hang Thoi Quen" }
-    @{ Id = 26; Cat = "PETS";   Stem = "26_Pastel_Purple_Royal_Cat";          Title = "Meo Tim Pastel Nhe Nhang (Royal Cat)" }
+    @{ Id = 26; Cat = "PETS";   Stem = "26_Pastel_Purple_Royal_Cat";          Title = "Meo Anh Sao Lavender (Trang Khuyet & Mu Noi Sao)" }
     @{ Id = 27; Cat = "PETS";   Stem = "27_Hatching_Chick_Icon_Studio";       Title = "Ga Con No Trung 6 Giai Doan (Studio)" }
     @{ Id = 28; Cat = "STYLE";  Stem = "28_Cotton_Candy_Jar_Sweet";           Title = "Hu Keo Bong Gon Pastel Hong-Xanh" }
     @{ Id = 29; Cat = "NATURE"; Stem = "29_Watercolor_Rose_Bouquet";          Title = "Bo Hoa Hong Mau Nuoc & Chanh Niem" }
-    @{ Id = 30; Cat = "PETS";   Stem = "30_Shiba_Inu_Happy_Bork";             Title = "Cun Shiba Inu Khan Do & Diem Good Boy" }
-    @{ Id = 31; Cat = "PETS";   Stem = "31_Akita_Inu_Snow_Loyal";             Title = "Cun Akita Tuyet Trang & Tinh Tam Zen" }
-    @{ Id = 32; Cat = "NATURE"; Stem = "32_Sakura_Blossom_Minimalist";        Title = "[MOI] Cay Hoa Anh Dao Toi Gian (Minimalist)" }
-    @{ Id = 33; Cat = "PETS";   Stem = "33_Peach_Mochi_Cat_Mood_Suite";       Title = "[MOI] Meo Mochi Hop Cam + 6 Cam Xuc & To-Do" }
-    @{ Id = 34; Cat = "PETS";   Stem = "34_Fluffy_Bunny_Sticker_Pop";         Title = "[MOI] Tho Bong Sticker Pop 5 Mau Pastel" }
-    @{ Id = 35; Cat = "PETS";   Stem = "35_Milk_Mocha_Bear_Sweet_Love";       Title = "[MOI] Gau Milk & Mocha + 5+1 Bieu Do Donut" }
+    @{ Id = 30; Cat = "PETS";   Stem = "30_Shiba_Inu_Happy_Bork";             Title = "Cun Shiba Inu Khan Do Karakusa & Xuong Vang" }
+    @{ Id = 31; Cat = "PETS";   Stem = "31_Akita_Inu_Snow_Loyal";             Title = "Cun Akita Tuyet Trang & Chuong Shimenawa" }
+    @{ Id = 32; Cat = "NATURE"; Stem = "32_Sakura_Blossom_Minimalist";        Title = "Cay Hoa Anh Dao Toi Gian (Minimalist)" }
+    @{ Id = 33; Cat = "PETS";   Stem = "33_Peach_Mochi_Cat_Mood_Suite";       Title = "Meo Mochi Quyt Mikan + 6 Cam Xuc & To-Do" }
+    @{ Id = 34; Cat = "PETS";   Stem = "34_Fluffy_Bunny_Sticker_Pop";         Title = "Tho Bong Sticker Pop 5 Mau Pastel" }
+    @{ Id = 35; Cat = "PETS";   Stem = "35_Milk_Mocha_Bear_Sweet_Love";       Title = "Gau Milk & Mocha + 5+1 Bieu Do Donut" }
 )
 
 function Resolve-TargetFolder {
@@ -145,16 +145,16 @@ New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 
 Write-Host ""
 Write-Host "========================================================================" -ForegroundColor Magenta
-Write-Host "   HABIT TRACKER COLLECTION v3.5 - BY DYU (35 THEMES x 4 EDITIONS)" -ForegroundColor Yellow
-Write-Host "   Ultra-Smooth Pro FX Engine | Nhiem Vu Ngay | Luu Da Ngay/Thang/Nam" -ForegroundColor Cyan
+Write-Host "   HABIT TRACKER COLLECTION v3.6 - BY DYU (35 THEMES x 4 EDITIONS)" -ForegroundColor Yellow
+Write-Host "   Turbo Native Sprite Engine | FX Suite | Ctrl+Z Undo | Formula Protect" -ForegroundColor Cyan
 Write-Host "========================================================================" -ForegroundColor Magenta
 Write-Host "  Thu muc luu file: $OutDir" -ForegroundColor Green
 Write-Host ""
 Write-Host "  BUOC 1 - CHON PHIEN BAN PHU HOP (THEO THU TU UU TIEN):" -ForegroundColor White
 Write-Host "  ----------------------------------------------------------------------" -ForegroundColor DarkGray
-Write-Host "  [1] Pro Interactive (.xlsm)  [* KHUYEN DUNG SO 1 - EXCEL DESKTOP *]" -ForegroundColor Green
-Write-Host "      -> Sieu muot + Full hieu ung Nay/Phao hoa/Toast + Nut chuyen thang 1 cham" -ForegroundColor DarkGray
-Write-Host "         + Tu luu Da Thang / Da Nam / Nhiem Vu Ngay vao _Database (100% Offline)!" -ForegroundColor DarkGray
+Write-Host "  [1] Pro Interactive (.xlsm)  [* KHUYEN DUNG SO 1 - TURBO v3.6 *]" -ForegroundColor Green
+Write-Host "      -> Sieu toc ~51ms + Full FX Nay/Phao hoa/Toast + Ctrl+Z / Nut Undo" -ForegroundColor DarkGray
+Write-Host "         + Khoa bao ve cong thuc + Tu luu Da Ngay/Thang/Nam (100% Offline)!" -ForegroundColor DarkGray
 Write-Host "  [2] Excel Universal Offline (.xlsx)" -ForegroundColor Cyan
 Write-Host "      -> Khong Macro, Form Checkbox chuan moi doi Excel 2016-365 Win/Mac!" -ForegroundColor DarkGray
 Write-Host "  [3] Google Sheets Desktop (.xlsx + 1-Click Script)" -ForegroundColor Cyan

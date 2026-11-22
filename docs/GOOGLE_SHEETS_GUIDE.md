@@ -1,8 +1,8 @@
-# ☁️ Hướng Dẫn Sử Dụng Google Sheets — Desktop & Điện Thoại Khổ Dọc (v2.3)
+# ☁️ Hướng Dẫn Sử Dụng Google Sheets — Desktop & Điện Thoại Khổ Dọc (v3.6)
 
-> **1 Script duy nhất tự nhận diện cả 2 bản Cloud:**
-> - **Bản Desktop (`templates/google_sheets_edition/`):** Gọn 4 tab, lịch tháng 31 ngày + lưu 12 tháng vào `_Database`.
-> - **Bản Điện Thoại Khổ Dọc (`templates/mobile_portrait_sheets/`):** Gọn 3 tab (`📱 Tuần Này`, `🎯 Mục Tiêu & Thành Tựu`, `📖 Hướng Dẫn`), vừa khít chiều dọc iPhone/Android **0 cuộn ngang**, ô tick lớn `38pt` dễ bấm bằng ngón cái + tự lưu từng Tuần (`YYYY-MM-W#`) vào `_Database`!
+> **1 Script duy nhất (`google_sheets_1click_setup.gs` v3.6 Turbo) tự nhận diện cả 2 bản Cloud:**
+> - **Bản Desktop (`templates/google_sheets_edition/`):** Gọn 5 tab (`📖 Hướng Dẫn`, `Monthly Tracker`, `📝 Nhiệm Vụ Ngày`, `🎯 Yearly Goals & Habits`, `🏆 Tổng Kết & Thành Tựu Năm`), lịch tháng 31 ngày + lưu tự động O(1) từng Ngày & 12 Tháng vào `_Database`.
+> - **Bản Điện Thoại Khổ Dọc (`templates/mobile_portrait_sheets/`):** Gọn 4 tab (`📱 Tuần Này`, `📝 Việc Hôm Nay`, `🎯 Mục Tiêu & Thành Tựu`, `📖 Hướng Dẫn`), vừa khít chiều dọc iPhone/Android **0 cuộn ngang**, ô tick lớn `38pt` dễ bấm bằng ngón cái + tự lưu từng Tuần (`YYYY-MM-W#`) & từng Ngày (`YYYY-MM-DD`) vào `_Database`!
 
 ---
 
@@ -30,8 +30,8 @@
 ## 💻 Cách Thủ Công 3 Giây (Không Cần Apps Script)
 
 Nếu không muốn dùng Apps Script:
-- **Bản Mobile Portrait:** Chọn vùng ô `C21:I35` trên tab `📱 Tuần Này` (và `B11:B22` trên `🎯 Mục Tiêu & Thành Tựu`) → menu **Chèn (Insert) → Hộp kiểm (Checkbox)**.
-- **Bản Desktop:** Chọn vùng ô `C17:AG36` trên `Monthly Tracker` (và `B6:B25` trên `🎯 Yearly Goals & Habits`) → **Chèn (Insert) → Hộp kiểm (Checkbox)**.
+- **Bản Mobile Portrait:** Chọn vùng ô `C21:I35` trên `📱 Tuần Này`, `B16:B30` trên `📝 Việc Hôm Nay`, và `B11:B22` trên `🎯 Mục Tiêu & Thành Tựu` → menu **Chèn (Insert) → Hộp kiểm (Checkbox)**.
+- **Bản Desktop:** Chọn vùng ô `C17:AG36` trên `Monthly Tracker`, `B9:B28` trên `📝 Nhiệm Vụ Ngày`, và `B6:B25` trên `🎯 Yearly Goals & Habits` → **Chèn (Insert) → Hộp kiểm (Checkbox)**.
 
 ---
 

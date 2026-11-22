@@ -1,7 +1,7 @@
 # 🐻 Habit Tracker Collection for Everyone — by Dyu (v3.6 Turbo — 35 Themes × 4 Editions)
 
 > **Bộ sưu tập 35 mẫu Habit Tracker thẩm mỹ chuẩn Digital Planner — Đủ 4 phiên bản cho Máy tính & Điện thoại (140 file hoàn chỉnh + 210 ảnh hoạt ảnh 6 giai đoạn)!**
-> **MỚI v3.6 TURBO: Tái kiến trúc hoàn toàn động cơ hiệu năng trên toàn bộ 35 file `Pro Interactive (.xlsm)` + tối ưu `google_sheets_1click_setup.gs` — thay thế 100% Camera Linked Pictures chậm chạp bằng Native Sprite Stacks nén 6 PNG duy nhất, chỉ mục `_Database` O(1) thuần VBA (Win & Mac), ghi mảng `.Value2` & Lazy-Flush! Đổi Tháng bằng nút 1 chạm chỉ ~51 ms (nhanh gấp 80×), đổi Ngày chỉ ~40 ms (nhanh gấp 68×), file nhẹ hơn ~30% (~317 KB) mà giữ trọn 100% độ nét & Bộ Hiệu Ứng Pro (Bounce, Sparkle Burst, Toast, Quick-Action Pills)!**
+> **MỚI v3.6 TURBO: Tái kiến trúc hoàn toàn động cơ hiệu năng trên toàn bộ 35 file `Pro Interactive (.xlsm)` + tối ưu `google_sheets_1click_setup.gs` — thay thế 100% Camera Linked Pictures bằng Native Sprite Stacks nén 6 PNG duy nhất, chỉ mục `_Database` O(1) thuần VBA (Win & Mac), ghi mảng `.Value2` & Lazy-Flush! Đổi Tháng bằng nút 1 chạm chỉ ~51 ms (nhanh gấp 80×), đổi Ngày chỉ ~40 ms (nhanh gấp 68×), bổ sung `Ctrl+Z` / nút `↩ Undo` thực thụ, khóa bảo vệ dòng công thức `TOTAL` (`UserInterfaceOnly`) & vẽ lại 36 sprite thú cưng siêu sắc nét (Shiba, Akita, Ginger Kitten, Royal Cat, Starlight Lavender Cat, Mochi Cat)!**
 
 ![Version 3.6 Turbo](https://img.shields.io/badge/Version-3.6_Turbo_35_Themes_x_4_Editions-E86A92?style=for-the-badge)
 ![Pro #1 Recommended](https://img.shields.io/badge/⭐_RECOMMENDED_%231-Pro_Interactive_.XLSM_Turbo_v3.6-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white)
@@ -15,21 +15,22 @@
 
 Nếu bạn dùng **Microsoft Excel trên Windows hoặc macOS**, hãy chọn ngay **`[1] Pro Interactive (.xlsm)`** trong [`templates/pro_macro/`](templates/pro_macro/) để trải nghiệm tốc độ mượt như **App Desktop gốc** hoàn toàn 100% Offline:
 
-- **🚀 Động cơ v3.6 Turbo Performance Engine (Nhanh gấp 20×–80× so với v3.5!):**
-  - **Native Pre-Placed Sprite Stacks + Nén Đúng 6 PNG (`xl/media/`):** Bỏ hoàn toàn 54 Camera-Tool Linked Pictures gây giật lag GDI; thay bằng cụm ảnh PNG gốc siêu nét + bộ đệm so sánh thay đổi (`Stage-Diff Cache`) & tham chiếu Shape O(1) — dung lượng file thậm chí **nhẹ hơn ~30% (~257–347 KB)**!
+- **🚀 Động cơ v3.6 Turbo Performance Engine (Nhanh gấp 20×–80× so với cơ chế Linked Pictures cũ!):**
+  - **Native Pre-Placed Sprite Stacks + Nén Đúng 6 PNG (`xl/media/`):** Bỏ hoàn toàn 54 Camera-Tool Linked Pictures gây giật lag GDI; thay bằng cụm ảnh PNG gốc siêu nét + bộ đệm so sánh thay đổi (`Stage-Diff Cache`) & tham chiếu Shape O(1) — dung lượng file thậm chí **nhẹ hơn ~30% (~257–380 KB)**!
   - **Chỉ mục `_Database` O(1) thuần VBA (`Collection`, tương thích cả Windows & macOS Excel) + `.Value2` + Lazy-Flush:** Tick ô Checkbox **KHÔNG ghi `_Database`** (tự động flush khi đổi Tháng/Ngày/Năm, mở tab Tổng Kết Năm, hoặc Lưu/Đóng file!).
+  - **🛡️ Hoàn tác `Ctrl+Z` Thực Thụ & Khóa Bảo Vệ Công Thức (`UserInterfaceOnly:=True`):** Giữ snapshot trước mỗi thao tác tick/kéo-fill để bấm **`Ctrl+Z`** hoặc nút **`↩ Undo`** khôi phục tức thì cả dữ liệu lẫn sprite; đồng thời khóa an toàn dòng `TOTAL • TỔNG KẾT` (Row 37) & toàn bộ ô công thức để kéo thả checkbox không bao giờ ghi đè hỏng công thức!
   - **Giữ nguyên tính năng tự đổi ảnh trong `_Assets`:** Chỉ cần dán 6 ảnh mới vào `_Assets!B2:B7` rồi bấm nút **`🔄 Đồng bộ 6 ảnh mới (SyncSprites)`** 1 chạm!
 - **🎉 Giữ nguyên 100% Bộ Hiệu Ứng Sống Động Pro (Bật/Tắt 1 chạm ngay trên sheet!):**
   1. **Hero Mascot Bounce (`PlayHeroBounce`):** Linh vật nảy nhẹ đầy hứng khởi mỗi khi đạt **100% Ngày**, hoàn thành **100% Nhiệm Vụ Ngày**, hoặc tick xong **Mục Tiêu Năm**!
   2. **Pastel Sparkle / Heart / Star Burst (`PlaySparkleBurst`):** Pháo hoa sao & trái tim phối đúng màu chủ đề bùng nổ quanh Hero khi chạm mốc **100% Perfect Day** hoặc chuỗi **7 / 14 / 21 / 30 ngày** (tự dọn 100% hình thừa — 0 rác!).
   3. **Floating Toast Banner (`ShowToast`):** Thông báo tiếng Việt góc trên-phải tái sử dụng O(1) & tự ẩn sau 2 giây (tuyệt đối không bật `MsgBox` chắn tay!).
-  4. **Nút Quick-Action Pastel 1 Chạm:** **`◀ Tháng` · `Tháng ▶` · `✨ FX: BẬT/TẮT`** ngay góc trái bảng Tracker, **`◀ Hôm qua` · `📅 Hôm nay` · `Ngày mai ▶`** trên `📝 Nhiệm Vụ Ngày`, nút **`🎉 Thử Hiệu Ứng Pro`** trên `📖 Hướng Dẫn`, và **`🔄 Đồng bộ 6 ảnh mới`** trên `_Assets`!
+  4. **Nút Quick-Action Pastel 1 Chạm:** **`◀ Tháng` · `Tháng ▶` · `✨ FX: BẬT/TẮT` · `↩ Undo`** ngay góc trái bảng Tracker, **`◀ Hôm qua` · `📅 Hôm nay` · `Ngày mai ▶`** trên `📝 Nhiệm Vụ Ngày`, nút **`🎉 Thử Hiệu Ứng Pro`** trên `📖 Hướng Dẫn`, và **`🔄 Đồng bộ 6 ảnh mới`** trên `_Assets`!
 
-### 📊 Benchmark Tốc Độ Thực Tế Excel COM (`BEFORE v3.5` vs `AFTER v3.6 Turbo`)
+### 📊 Benchmark Tốc Độ Thực Tế Excel COM (`Linked Pictures cũ` vs `v3.6 Turbo`)
 
 Đo thực tế trên Microsoft Excel (`EnableEvents = True`, `Calculation = Automatic`) bằng [`scripts/benchmark_pro_speed.py`](scripts/benchmark_pro_speed.py):
 
-| Thao tác thực tế | `01_Sunflower` v3.5 (Trước) | `01_Sunflower` v3.6 Turbo (Sau) | `35_Milk_Mocha` v3.5 (Trước) | `35_Milk_Mocha` v3.6 Turbo (Sau) | Tăng tốc |
+| Thao tác thực tế | `01_Sunflower` (Trước) | `01_Sunflower` **v3.6 Turbo** | `35_Milk_Mocha` (Trước) | `35_Milk_Mocha` **v3.6 Turbo** | Tăng tốc |
 |---|---:|---:|---:|---:|---:|
 | **1. Tick 1 ô Checkbox (`Monthly Tracker`)** | 347.3 ms | **42.7 ms** | 333.7 ms | **42.6 ms** | **~8× nhanh hơn** |
 | **2a. Đổi Tháng bằng Dropdown (`B3`)** | 4,137.1 ms | **141.6 ms** | 3,764.8 ms | **154.7 ms** | **~24–29× nhanh hơn** |
@@ -41,7 +42,7 @@ Nếu bạn dùng **Microsoft Excel trên Windows hoặc macOS**, hãy chọn ng
 
 ---
 
-## ⚡ Cài Đặt & Tải Nhanh Bằng 1 Dòng Lệnh (Interactive Installer v3.5)
+## ⚡ Cài Đặt & Tải Nhanh Bằng 1 Dòng Lệnh (Interactive Installer v3.6)
 
 Chạy **1 dòng lệnh duy nhất** — trình cài đặt dẫn bạn chọn đúng phiên bản theo thứ tự ưu tiên (`[1] Pro #1`, `[2] Excel Offline`, `[3] Google Sheets Desktop`, `[4] Mobile Portrait`) và chọn **35 mẫu phân nhóm sẵn** (`35`, `32-35`, `30,33,34,35`, hoặc `A` tải toàn bộ **35 mẫu**) vào thư mục `template/`:
 
@@ -63,14 +64,14 @@ curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-ev
 
 | Thứ tự | Phiên bản | Thư mục | Số tab | Điểm nổi bật | Phù hợp với |
 |---|---|---|---|---|---|
-| **#1 ⭐** | **⚡ Pro Interactive (`.xlsm`)** *(Khuyên dùng #1)* | [`templates/pro_macro/`](templates/pro_macro/) | **5 tab** | **Turbo Engine & FX Suite v3.6** (Native Sprite Stacks 6 PNG siêu tốc ~51ms + Bounce + Sparkle Burst + Toast + Nút chuyển Tháng/Ngày 1 chạm + O(1) Lazy-Flush `_Database`) — 100% Offline! | **Excel Desktop (Windows & Mac)** — trải nghiệm đẹp, nhanh và mượt nhất! |
+| **#1 ⭐** | **⚡ Pro Interactive (`.xlsm`)** *(Khuyên dùng #1)* | [`templates/pro_macro/`](templates/pro_macro/) | **5 tab** | **Turbo Engine & FX Suite v3.6** (Native Sprite Stacks 6 PNG siêu tốc ~51ms + Bounce + Sparkle Burst + Toast + `Ctrl+Z` / `↩ Undo` + Khóa bảo vệ dòng công thức + O(1) Lazy-Flush `_Database`) — 100% Offline! | **Excel Desktop (Windows & Mac)** — trải nghiệm đẹp, nhanh và mượt nhất! |
 | **#2** | **✨ Excel Universal Offline (`.xlsx`)** | [`templates/excel_universal_offline/`](templates/excel_universal_offline/) | **5 tab** | **KHÔNG Macro / 0 cảnh báo bảo mật**, dùng **Form Control Checkboxes** ẩn sạch `TRUE/FALSE` (`;;;`), chạy mọi đời **Excel 2016–365 Win/Mac** + đủ 54 hoạt ảnh offline! | Máy công ty chặn Macro hoặc dùng Excel 2016/2019/2021 không cần VBA |
 | **#3** | **☁️ Google Sheets Desktop (`.xlsx` + `.gs`)** | [`templates/google_sheets_edition/`](templates/google_sheets_edition/) | **5 tab** | Gọn 5 tab + `_Database` + hoạt ảnh `=IMAGE()` động. Chạy [`google_sheets_1click_setup.gs`](scripts/google_sheets_1click_setup.gs) 1 lần → **Checkbox Pastel & tự lưu từng Ngày + 12 Tháng** trên Cloud! | Dùng online trên trình duyệt & đồng bộ Google Drive |
 | **#4** | **📱 Mobile Portrait (`.xlsx` + `.gs`)** | [`templates/mobile_portrait_sheets/`](templates/mobile_portrait_sheets/) | **4 tab** | **Khổ dọc 8 cột `B:I` riêng cho iPhone/Android (0 cuộn ngang!)**, gồm tab **`📝 Việc Hôm Nay`**, ô tick lớn `38pt` dễ chạm ngón cái & tự lưu từng Tuần/Ngày! | Check-in thói quen & việc đột xuất 1 chạm ngay trên điện thoại |
 
 ---
 
-## 🎀 Showcase 4 Mẫu Mới Trong v3.5 (`#32` – `#35`)
+## 🎀 Showcase 4 Mẫu Signature (`#32` – `#35`)
 
 ### 35. 🐻 Milk & Mocha Bear Sweet Love — 5 Biểu Đồ Tròn Tuần + 1 Tổng Tháng
 ![Milk & Mocha Bear Sweet Love](previews/35_milk_mocha_tracker.png)
@@ -169,23 +170,23 @@ curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-ev
 | **23** | 🐼 **Bamboo Panda Zen Garden** | [`_Pro.xlsm`](templates/pro_macro/23_Bamboo_Panda_Zen_Garden_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/23_Bamboo_Panda_Zen_Garden.xlsx) | [Desktop](templates/google_sheets_edition/23_Bamboo_Panda_Zen_Garden.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/23_Bamboo_Panda_Zen_Garden_Mobile.xlsx) |
 | **24** | 👑 **Royal Cat Saving Cash** | [`_Pro.xlsm`](templates/pro_macro/24_Royal_Cat_Saving_Cash_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/24_Royal_Cat_Saving_Cash.xlsx) | [Desktop](templates/google_sheets_edition/24_Royal_Cat_Saving_Cash.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/24_Royal_Cat_Saving_Cash_Mobile.xlsx) |
 | **25** | 🐱 **Ginger Kitten Basket Routine** | [`_Pro.xlsm`](templates/pro_macro/25_Ginger_Kitten_Basket_Routine_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/25_Ginger_Kitten_Basket_Routine.xlsx) | [Desktop](templates/google_sheets_edition/25_Ginger_Kitten_Basket_Routine.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/25_Ginger_Kitten_Basket_Routine_Mobile.xlsx) |
-| **26** | 💜 **Pastel Purple Royal Cat** | [`_Pro.xlsm`](templates/pro_macro/26_Pastel_Purple_Royal_Cat_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/26_Pastel_Purple_Royal_Cat.xlsx) | [Desktop](templates/google_sheets_edition/26_Pastel_Purple_Royal_Cat.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/26_Pastel_Purple_Royal_Cat_Mobile.xlsx) |
+| **26** | 🌙 **Pastel Purple Starlight Cat** *(Trăng Khuyết & Mũ Nồi Sao)* | [`_Pro.xlsm`](templates/pro_macro/26_Pastel_Purple_Royal_Cat_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/26_Pastel_Purple_Royal_Cat.xlsx) | [Desktop](templates/google_sheets_edition/26_Pastel_Purple_Royal_Cat.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/26_Pastel_Purple_Royal_Cat_Mobile.xlsx) |
 | **27** | 🐣 **Hatching Chick Icon Studio** | [`_Pro.xlsm`](templates/pro_macro/27_Hatching_Chick_Icon_Studio_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/27_Hatching_Chick_Icon_Studio.xlsx) | [Desktop](templates/google_sheets_edition/27_Hatching_Chick_Icon_Studio.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/27_Hatching_Chick_Icon_Studio_Mobile.xlsx) |
 | **28** | 🍬 **Cotton Candy Jar Sweet** | [`_Pro.xlsm`](templates/pro_macro/28_Cotton_Candy_Jar_Sweet_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/28_Cotton_Candy_Jar_Sweet.xlsx) | [Desktop](templates/google_sheets_edition/28_Cotton_Candy_Jar_Sweet.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/28_Cotton_Candy_Jar_Sweet_Mobile.xlsx) |
 | **29** | 🌹 **Watercolor Rose Bouquet** | [`_Pro.xlsm`](templates/pro_macro/29_Watercolor_Rose_Bouquet_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/29_Watercolor_Rose_Bouquet.xlsx) | [Desktop](templates/google_sheets_edition/29_Watercolor_Rose_Bouquet.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/29_Watercolor_Rose_Bouquet_Mobile.xlsx) |
-| **30** | 🐕 **Shiba Inu Happy Bork** | [`_Pro.xlsm`](templates/pro_macro/30_Shiba_Inu_Happy_Bork_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/30_Shiba_Inu_Happy_Bork.xlsx) | [Desktop](templates/google_sheets_edition/30_Shiba_Inu_Happy_Bork.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/30_Shiba_Inu_Happy_Bork_Mobile.xlsx) |
-| **31** | ❄️ **Akita Inu Snow Loyal** | [`_Pro.xlsm`](templates/pro_macro/31_Akita_Inu_Snow_Loyal_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/31_Akita_Inu_Snow_Loyal.xlsx) | [Desktop](templates/google_sheets_edition/31_Akita_Inu_Snow_Loyal.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/31_Akita_Inu_Snow_Loyal_Mobile.xlsx) |
-| **32** | 🌸 **Sakura Blossom Minimalist** *(Mới v3.5!)* | [`_Pro.xlsm`](templates/pro_macro/32_Sakura_Blossom_Minimalist_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/32_Sakura_Blossom_Minimalist.xlsx) | [Desktop](templates/google_sheets_edition/32_Sakura_Blossom_Minimalist.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/32_Sakura_Blossom_Minimalist_Mobile.xlsx) |
-| **33** | 🐱 **Peach Mochi Cat Mood Suite** *(Mới v3.5!)* | [`_Pro.xlsm`](templates/pro_macro/33_Peach_Mochi_Cat_Mood_Suite_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/33_Peach_Mochi_Cat_Mood_Suite.xlsx) | [Desktop](templates/google_sheets_edition/33_Peach_Mochi_Cat_Mood_Suite.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/33_Peach_Mochi_Cat_Mood_Suite_Mobile.xlsx) |
-| **34** | 🐰 **Fluffy Bunny Sticker Pop** *(Mới v3.5!)* | [`_Pro.xlsm`](templates/pro_macro/34_Fluffy_Bunny_Sticker_Pop_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/34_Fluffy_Bunny_Sticker_Pop.xlsx) | [Desktop](templates/google_sheets_edition/34_Fluffy_Bunny_Sticker_Pop.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/34_Fluffy_Bunny_Sticker_Pop_Mobile.xlsx) |
-| **35** | 🐻 **Milk & Mocha Bear Sweet Love** *(Mới v3.5!)* | [`_Pro.xlsm`](templates/pro_macro/35_Milk_Mocha_Bear_Sweet_Love_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/35_Milk_Mocha_Bear_Sweet_Love.xlsx) | [Desktop](templates/google_sheets_edition/35_Milk_Mocha_Bear_Sweet_Love.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/35_Milk_Mocha_Bear_Sweet_Love_Mobile.xlsx) |
+| **30** | 🐕 **Shiba Inu Happy Bork** *(Khăn Đỏ Karakusa & Xương Vàng)* | [`_Pro.xlsm`](templates/pro_macro/30_Shiba_Inu_Happy_Bork_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/30_Shiba_Inu_Happy_Bork.xlsx) | [Desktop](templates/google_sheets_edition/30_Shiba_Inu_Happy_Bork.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/30_Shiba_Inu_Happy_Bork_Mobile.xlsx) |
+| **31** | ❄️ **Akita Inu Snow Loyal** *(Tuyết Trắng & Vòng Chuông Shimenawa)* | [`_Pro.xlsm`](templates/pro_macro/31_Akita_Inu_Snow_Loyal_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/31_Akita_Inu_Snow_Loyal.xlsx) | [Desktop](templates/google_sheets_edition/31_Akita_Inu_Snow_Loyal.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/31_Akita_Inu_Snow_Loyal_Mobile.xlsx) |
+| **32** | 🌸 **Sakura Blossom Minimalist** *(Signature)* | [`_Pro.xlsm`](templates/pro_macro/32_Sakura_Blossom_Minimalist_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/32_Sakura_Blossom_Minimalist.xlsx) | [Desktop](templates/google_sheets_edition/32_Sakura_Blossom_Minimalist.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/32_Sakura_Blossom_Minimalist_Mobile.xlsx) |
+| **33** | 🐱 **Peach Mochi Cat Mood Suite** *(Bánh Nếp, Quýt Mikan & Taiyaki)* | [`_Pro.xlsm`](templates/pro_macro/33_Peach_Mochi_Cat_Mood_Suite_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/33_Peach_Mochi_Cat_Mood_Suite.xlsx) | [Desktop](templates/google_sheets_edition/33_Peach_Mochi_Cat_Mood_Suite.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/33_Peach_Mochi_Cat_Mood_Suite_Mobile.xlsx) |
+| **34** | 🐰 **Fluffy Bunny Sticker Pop** *(Signature)* | [`_Pro.xlsm`](templates/pro_macro/34_Fluffy_Bunny_Sticker_Pop_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/34_Fluffy_Bunny_Sticker_Pop.xlsx) | [Desktop](templates/google_sheets_edition/34_Fluffy_Bunny_Sticker_Pop.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/34_Fluffy_Bunny_Sticker_Pop_Mobile.xlsx) |
+| **35** | 🐻 **Milk & Mocha Bear Sweet Love** *(Signature)* | [`_Pro.xlsm`](templates/pro_macro/35_Milk_Mocha_Bear_Sweet_Love_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/35_Milk_Mocha_Bear_Sweet_Love.xlsx) | [Desktop](templates/google_sheets_edition/35_Milk_Mocha_Bear_Sweet_Love.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/35_Milk_Mocha_Bear_Sweet_Love_Mobile.xlsx) |
 
 ---
 
-## 🎨 Giao Diện Pro v3.5 Thực Tế (`01_Sunflower` + Bộ Sưu Tập `#01`–`#31`)
+## 🎨 Giao Diện Pro v3.6 Thực Tế (`01_Sunflower` + Bộ Sưu Tập `#01`–`#31`)
 
-![Sunflower Pro v3.5 Tracker](previews/01_sunflower_tracker.png)
-![Sunflower Pro v3.5 Guide](previews/01_sunflower_guide.png)
+![Sunflower Pro v3.6 Tracker](previews/01_sunflower_tracker.png)
+![Sunflower Pro v3.6 Guide](previews/01_sunflower_guide.png)
 
 <details>
 <summary>🌻 Mở rộng xem ảnh chụp 31 mẫu cổ điển & linh vật (#02 – #31)</summary>
@@ -216,7 +217,7 @@ curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-ev
 | **23. 🐼 Bamboo Panda Zen Garden** | ![Bamboo Panda](previews/23_bamboo_panda_tracker.png) |
 | **24. 👑 Royal Cat Saving Cash** | ![Royal Cat](previews/24_royal_cat_cash_tracker.png) |
 | **25. 🐱 Ginger Kitten Basket** | ![Ginger Kitten](previews/25_ginger_kitten_tracker.png) |
-| **26. 💜 Pastel Purple Royal Cat** | ![Purple Cat](previews/26_purple_cat_tracker.png) |
+| **26. 🌙 Pastel Purple Starlight Cat** | ![Starlight Lavender Cat](previews/26_purple_cat_tracker.png) |
 | **27. 🐣 Hatching Chick Studio** | ![Hatching Chick](previews/27_hatching_chick_tracker.png) |
 | **28. 🍬 Cotton Candy Jar Sweet** | ![Candy Jar](previews/28_candy_jar_tracker.png) |
 | **29. 🌹 Watercolor Rose Bouquet** | ![Rose Bouquet](previews/29_rose_bouquet_tracker.png) |
@@ -227,9 +228,12 @@ curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-ev
 
 ---
 
-## 🎭 Bộ 210 Ảnh Hoạt Ảnh 6 Giai Đoạn (`assets/` — 35 Chủ Đề)
+## 🎭 Bộ 210 Ảnh Hoạt Ảnh 6 Giai Đoạn (`assets/` — 35 Chủ Đề, v3.6 Vector Kawaii)
 
-### Batch 4 (Chủ đề `#32`–`#35` — 24 Sprites Mới v3.5!)
+### Bộ 6 Thú Cưng Vẽ Lại Chuẩn Kawaii Vector Bézier (`#24`, `#25`, `#26`, `#30`, `#31`, `#33`)
+![36 Overhauled Pet Sprites Contact Sheet](previews/assets_contact_sheet_pets_overhaul.png)
+
+### Batch 4 (Chủ đề `#32`–`#35` — 24 Sprites Signature)
 ![24 Sprites Contact Sheet Batch 4](previews/assets_contact_sheet_batch4.png)
 
 <details>
@@ -243,7 +247,7 @@ curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-ev
 
 ---
 
-## ☁️ Kích Hoạt Google Sheets Trong 10 Giây (1-Click Setup)
+## ☁️ Kích Hoạt Google Sheets Trong 10 Giây (1-Click Setup v3.6)
 
 1. Tải mẫu từ [`templates/google_sheets_edition/`](templates/google_sheets_edition/) hoặc [`templates/mobile_portrait_sheets/`](templates/mobile_portrait_sheets/) lên Google Drive → **Mở bằng Google Sheets** → **Tệp → Lưu dưới dạng Google Trang tính**.
 2. Chọn **Tiện ích mở rộng (Extensions) → Apps Script** → dán toàn bộ code trong [`scripts/google_sheets_1click_setup.gs`](scripts/google_sheets_1click_setup.gs) → **Lưu (`Ctrl+S`)** → bấm **Run `setupHabitTracker`**.
@@ -252,17 +256,17 @@ Xem thêm hướng dẫn tại [`docs/GOOGLE_SHEETS_GUIDE.md`](docs/GOOGLE_SHEET
 
 ---
 
-## 🛠️ Dành Cho Developer (Build & QA v3.5)
+## 🛠️ Dành Cho Developer (Build & QA v3.6)
 
 ```powershell
-# Build theo lô (tự recycle Excel COM mỗi 4-5 file):
-python scripts/build_v30_batch.py --start 32 --end 35
-
-# Upgrade riêng toàn bộ 35 Pro (.xlsm) sang FX Engine v3.5:
+# Build Pro Interactive (.xlsm) theo lô với Turbo Engine v3.6 (tự recycle Excel COM mỗi 5 file):
 python scripts/excel_com_enhancer.py pro --start 1 --end 5
 
-# Chạy bộ QA tự động v3.5 trên toàn bộ 35 Pro + 4 mẫu mới (tĩnh + live FX COM cô lập):
-python scripts/qa_verify_v35.py
+# Đo benchmark tốc độ thực tế Excel COM trên bản Pro v3.6:
+python scripts/benchmark_pro_speed.py
+
+# Chạy bộ QA tự động v3.6 trên toàn bộ 35 file Pro (tĩnh + live COM + Ctrl+Z Undo & Protection):
+python scripts/qa_verify_v36.py
 ```
 
 ---
