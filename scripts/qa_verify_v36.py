@@ -174,6 +174,7 @@ def audit_com_all_35(pro_files: list[Path], tmp_dir: Path) -> list[str]:
             for fpath in chunk:
                 dst = tmp_dir / fpath.name
                 shutil.copy2(fpath, dst)
+                xl.EnableEvents = True
                 wb = xl.Workbooks.Open(str(dst.resolve()))
                 try:
                     xl.EnableEvents = False
