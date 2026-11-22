@@ -35,14 +35,15 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     cv.row(1, 38)
     cv.row(2, 24)
     cv.row(3, 24)
-    cv.merge(1, 1, 1, 6, f"{t.emoji}  {t.name}  —  HƯỚNG DẪN SỬ DỤNG (v3.5)",
+    ver_tag = "v3.6 Turbo" if edition == "pro_xlsm" else "v3.5"
+    cv.merge(1, 1, 1, 6, f"{t.emoji}  {t.name}  —  HƯỚNG DẪN SỬ DỤNG ({ver_tag})",
              font_name=t.font_title, font_size=15.5, bold=True, align="center",
              bg_color=t.primary, font_color=t.on_primary)
     cv.merge(2, 1, 2, 6, t.tagline_vi, font_size=10, italic=True, align="center",
              bg_color=t.soft, font_color=t.ink)
 
     if edition == "pro_xlsm":
-        mode_txt = "⚡ BẢN PRO INTERACTIVE v3.5 (.XLSM)  •  Siêu mượt + Hiệu ứng Nảy/Pháo hoa/Toast  •  Tự lưu Đa Ngày/Tháng/Năm  •  100% Offline"
+        mode_txt = "⚡ BẢN PRO INTERACTIVE v3.6 TURBO (.XLSM)  •  Đổi Tháng/Ngày < 150ms + Hiệu ứng Pro  •  Tự lưu Đa Ngày/Tháng/Năm  •  100% Offline"
     elif edition == "offline":
         mode_txt = "✨ BẢN EXCEL OFFLINE KHÔNG MACRO (.XLSX)  •  Gọn nhẹ 5 tab  •  Chạy mọi Excel 2016–365 Win/Mac  •  0 cảnh báo bảo mật"
     else:
@@ -73,7 +74,7 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
 
     # ------------------------------------------------------------------ TAB MAP (5 CLEAN TABS)
     cv.row(r, 26)
-    cv.merge(r, 1, r, 6, "🗂️  CẤU TRÚC 5 SHEET GỌN ĐẸP TRONG FILE (v3.5)", bold=True, font_size=10.5,
+    cv.merge(r, 1, r, 6, f"🗂️  CẤU TRÚC 5 SHEET GỌN ĐẸP TRONG FILE ({ver_tag})", bold=True, font_size=10.5,
              align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
 
     if edition == "pro_xlsm":
@@ -256,7 +257,14 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
 
     # Row 27 Yellow Tip Box — ZERO markdown backticks, generous height + indent=1!
     r_tip = r_sdesc + 1
-    if universal:
+    if edition == "pro_xlsm":
+        tip_txt = (
+            "✨  CÁCH TỰ ĐỔI BỘ ẢNH HOẠT ẢNH RIÊNG (KHÔNG CẦN LINK / KHÔNG CẦN MẠNG):  "
+            "1) Chuột phải tên tab bất kỳ → chọn Unhide → chọn _Assets → OK.  "
+            "2) Thay 6 ảnh trong ô B2:B7 (Stage 0 → Stage 5) bằng ảnh PNG/sticker của bạn.  "
+            "3) Bấm nút 🔄 Đồng bộ ảnh mới (SyncSpritesFromAssets) ngay trên _Assets rồi ẩn lại → toàn bộ 31 ngày, Hero & 12 tháng cập nhật ngay lập tức!"
+        )
+    elif universal:
         tip_txt = (
             "✨  CÁCH TỰ ĐỔI BỘ ẢNH HOẠT ẢNH RIÊNG (KHÔNG CẦN LINK / KHÔNG CẦN MẠNG):  "
             "1) Chuột phải tên tab bất kỳ → chọn Unhide → chọn _Assets → OK.  "
@@ -280,8 +288,9 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     cv.row(r_foot - 1, 10)
     cv.row(r_foot, 28)
     cv.row(r_foot + 1, 12)
+    foot_ver = "v3.6 Turbo by Dyu  •  Sub-150ms Native Sprite Engine & Pro FX" if edition == "pro_xlsm" else "v3.5 by Dyu  •  Ultra-Smooth Pro FX & Unified 5-Tab Edition"
     cv.merge(r_foot, 1, r_foot, 6,
-             f"💛  Habit Tracker Collection v3.5 by Dyu  •  Ultra-Smooth Pro FX & Unified 5-Tab Edition  •  {REPO_URL}",
+             f"💛  Habit Tracker Collection {foot_ver}  •  {REPO_URL}",
              bold=False, font_size=9, italic=True, align="center", bg_color=t.page, font_color=t.muted)
 
     wb.define_name("ANCHOR_GUIDE", f"={q}!$B$2")

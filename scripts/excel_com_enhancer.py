@@ -17,8 +17,12 @@ Usage:
 """
 from __future__ import annotations
 
+import hashlib
+import os
+import re
 import sys
 import time
+import zipfile
 from collections import defaultdict
 from pathlib import Path
 
@@ -32,7 +36,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from excel_builder import (build_base_pro, build_base_offline, build_all_gsheets)
 from hx.tracker import CALC_SHEET
 from hx.guide import GUIDE_SHEET
-from hx.annual import ASSETS_SHEET, DATABASE_SHEET, HISTORY_SHEET, YEARLY_GOALS_SHEET
+from hx.annual import ANNUAL_SHEET, ASSETS_SHEET, DATABASE_SHEET, HISTORY_SHEET, YEARLY_GOALS_SHEET
 from hx.daily_tasks import DAILY_TASKS_SHEET
 
 ASSETS_DIR = ROOT / "assets"
@@ -46,7 +50,11 @@ THISWORKBOOK_EVENT_VBA = (
     "Private Sub Workbook_Open()\r\n"
     "    modHabitState.InitWorkbookFastMode\r\n"
     "End Sub\r\n"
+    "Private Sub Workbook_BeforeSave(ByVal SaveAsUI As Boolean, Cancel As Boolean)\r\n"
+    "    modHabitState.FlushAllDirty\r\n"
+    "End Sub\r\n"
     "Private Sub Workbook_BeforeClose(Cancel As Boolean)\r\n"
+    "    modHabitState.FlushAllDirty\r\n"
     "    modHabitState.CleanupAllFX\r\n"
     "End Sub\r\n"
     "Private Sub Workbook_SheetActivate(ByVal Sh As Object)\r\n"
@@ -61,6 +69,8 @@ TRACKER_EVENT_VBA = (
     "        modHabitState.HandleMonthlySwitch Me\r\n"
     "    ElseIf Not Intersect(Target, Me.Range(\"C17:AG36\")) Is Nothing Then\r\n"
     "        modHabitState.HandleTrackerTick Me, Target\r\n"
+    "    ElseIf Not Intersect(Target, Me.Range(\"B17:B36,AI17:AI36\")) Is Nothing Then\r\n"
+    "        modHabitState.HandleTrackerMetaEdit Me\r\n"
     "    End If\r\n"
     "End Sub\r\n"
 )
@@ -72,6 +82,8 @@ YEARLY_GOALS_EVENT_VBA = (
     "        modHabitState.HandleYearlyGoalsSwitch Me\r\n"
     "    ElseIf Not Intersect(Target, Me.Range(\"B6:B25\")) Is Nothing Then\r\n"
     "        modHabitState.HandleYearlyGoalTick Me, Target\r\n"
+    "    ElseIf Not Intersect(Target, Me.Range(\"C6:F25\")) Is Nothing Then\r\n"
+    "        modHabitState.HandleGoalsMetaEdit Me\r\n"
     "    End If\r\n"
     "End Sub\r\n"
 )
@@ -83,6 +95,17 @@ DAILY_TASKS_EVENT_VBA = (
     "        modHabitState.HandleDailyTasksSwitch Me\r\n"
     "    ElseIf Not Intersect(Target, Me.Range(\"B9:B28\")) Is Nothing Then\r\n"
     "        modHabitState.HandleDailyTaskTick Me, Target\r\n"
+    "    ElseIf Not Intersect(Target, Me.Range(\"C9:F28,B31\")) Is Nothing Then\r\n"
+    "        modHabitState.HandleDailyMetaEdit Me\r\n"
+    "    End If\r\n"
+    "End Sub\r\n"
+)
+
+ANNUAL_EVENT_VBA = (
+    "Option Explicit\r\n"
+    "Private Sub Worksheet_Change(ByVal Target As Range)\r\n"
+    "    If Not Intersect(Target, Me.Range(\"B3\")) Is Nothing Then\r\n"
+    "        modHabitState.HandleAnnualYearSwitch Me\r\n"
     "    End If\r\n"
     "End Sub\r\n"
 )
@@ -190,6 +213,231 @@ def add_pro_pill_buttons(wb, meta: dict):
     gt = sec5_bar.Top + (sec5_bar.Height - gh) / 2.0
     _add_pill_button(ws_g, "BTN_DEMO_FX", "🎉 Thử Hiệu Ứng Pro", gl, gt, gw, gh,
                      bgr_wht, bgr_sft, bgr_dk, "BtnDemoFX", font_size=8.2)
+
+    # 4. `_Assets` 1-Click Custom Sprite Sync button (`D2:F2` right beside B2:B7 & C2)
+    ws_a = wb.Worksheets(ASSETS_SHEET)
+    d2 = ws_a.Range("D2")
+    _add_pill_button(ws_a, "BTN_SYNC_ASSETS", "🔄 Đồng bộ 6 ảnh mới (SyncSprites)",
+                     d2.Left + 8.0, d2.Top + 12.0, 220.0, 32.0,
+                     bgr_pri, bgr_dk, bgr_onp, "SyncSpritesFromAssets", font_size=9.0)
+
+
+def _map_anim_to_stack_info(anim_name: str) -> tuple[str, str, bool]:
+    """Map legacy `Anim_*` manifest names to v3.6 Pure-ASCII Sprite Stack prefix & `_Calc` stage cell."""
+    if anim_name.startswith("Anim_Day"):
+        d_num = int(anim_name[8:10])
+        col_let = xl_rowcol_to_cell(14, d_num, False, False)  # row 15 (0-based 14), col 1..31 -> B15..AF15
+        return f"SPR_D{d_num:02d}_S", col_let, True
+    if anim_name == "Anim_MonthlyHero":
+        return "SPR_MHERO_S", "C14", False
+    if anim_name == "Anim_DailyTaskHero":
+        return "SPR_DHERO_S", "AN16", False
+    if anim_name == "Anim_YearlyGoals":
+        return "SPR_GHERO_S", "AN7", False
+    if anim_name == "Anim_AnnualHero":
+        return "SPR_AHERO_S", "AN8", False
+    if anim_name == "Anim_AchBadges":
+        return "SPR_BHERO_S", "AN9", False
+    if anim_name.startswith("Anim_AnnualM"):
+        m_num = int(anim_name[12:14])
+        return f"SPR_AM{m_num:02d}_S", f"AW{1 + m_num}", False
+    raise ValueError(f"Unmapped dynamic animation slot: {anim_name}")
+
+
+def add_pro_native_sprite_stacks(wb, meta: dict, slug: str) -> tuple[int, list[dict]]:
+    """v3.6 Turbo: Place crisp Native Pre-Placed PNG Sprite Stacks (`SPR_*_S0..S5` + `Guide_Stage0..5`).
+    Eliminates 100% of slow Camera-Tool Linked Pictures & `Anim_*` Named Ranges!"""
+    img_paths = [str((ASSETS_DIR / slug / f"stage_{k}.png").resolve()) for k in range(6)]
+    pic_count = 0
+    stack_slots: list[dict] = []
+
+    # 1. Dynamic 6-stage sprite stacks grouped by worksheet
+    dyn_groups = defaultdict(list)
+    for item in meta["dyn_anims"]:
+        dyn_groups[item["sheet"]].append(item)
+
+    for sheet_name, items in dyn_groups.items():
+        ws_dst = wb.Worksheets(sheet_name)
+        ws_dst.Activate()
+        for it in items:
+            prefix, calc_cell, allow_seven = _map_anim_to_stack_info(it["name"])
+            dst = ws_dst.Range(ws_dst.Cells(it["r1"] + 1, it["c1"] + 1),
+                               ws_dst.Cells(it["r2"] + 1, it["c2"] + 1))
+            align_bottom = it.get("align_bottom", False)
+            pad_x = 1.5 if align_bottom else 4.5
+            pad_y = 2.5 if align_bottom else 4.5
+            max_w = max(8.0, dst.Width - 2.0 * pad_x)
+            max_h = max(8.0, dst.Height - 2.0 * pad_y)
+            side = min(max_w, max_h)
+            left = dst.Left + (dst.Width - side) / 2.0
+            top = (dst.Top + dst.Height - side - 2.0) if align_bottom else (dst.Top + (dst.Height - side) / 2.0)
+
+            for k in range(6):
+                shp = ws_dst.Shapes.AddPicture(
+                    Filename=img_paths[k], LinkToFile=False, SaveWithDocument=True,
+                    Left=left, Top=top, Width=side, Height=side,
+                )
+                shp.Name = f"{prefix}{k}"
+                shp.Line.Visible = 0
+                shp.LockAspectRatio = -1
+                shp.Placement = 1
+                shp.Visible = -1 if k == 0 else 0
+                pic_count += 1
+
+            stack_slots.append({
+                "sheet": sheet_name,
+                "prefix": prefix,
+                "calc_cell": calc_cell,
+                "allow_seven": allow_seven,
+            })
+
+    # 2. Static Guide Stage 0..5 previews (`Guide_Stage0`..`Guide_Stage5`, native PNGs!)
+    for sp in meta["static_pics"]:
+        ws_dst = wb.Worksheets(sp["sheet"])
+        nm = sp.get("name", "")
+        st_idx = int(nm[-1]) if nm and nm[-1].isdigit() else 0
+        dst = ws_dst.Range(ws_dst.Cells(sp["r1"] + 1, sp["c1"] + 1),
+                           ws_dst.Cells(sp["r2"] + 1, sp["c2"] + 1))
+        pad = 4.5
+        side = min(max(8.0, dst.Width - 2.0 * pad), max(8.0, dst.Height - 2.0 * pad))
+        left = dst.Left + (dst.Width - side) / 2.0
+        top = dst.Top + (dst.Height - side) / 2.0
+        shp = ws_dst.Shapes.AddPicture(
+            Filename=img_paths[st_idx], LinkToFile=False, SaveWithDocument=True,
+            Left=left, Top=top, Width=side, Height=side,
+        )
+        shp.Name = nm
+        shp.Line.Visible = 0
+        shp.LockAspectRatio = -1
+        shp.Placement = 1
+        shp.Visible = -1
+        pic_count += 1
+
+    return pic_count, stack_slots
+
+
+def sync_initial_pro_sprite_visibility(wb, stack_slots: list[dict]):
+    """Set initial `.Visible` on every `SPR_*_S0..S5` stack to match live `_Calc` stage indices."""
+    ws_calc = wb.Worksheets(CALC_SHEET)
+    by_sheet = defaultdict(list)
+    for slot in stack_slots:
+        by_sheet[slot["sheet"]].append(slot)
+    for sheet_name, slots in by_sheet.items():
+        ws = wb.Worksheets(sheet_name)
+        for slot in slots:
+            raw = ws_calc.Range(slot["calc_cell"]).Value2
+            try:
+                st = int(round(float(raw)))
+            except Exception:
+                st = 1
+            st = max(1, min(7 if slot["allow_seven"] else 6, st))
+            prefix = slot["prefix"]
+            for k in range(6):
+                want = -1 if (k == st - 1 and st <= 6) else 0
+                ws.Shapes(f"{prefix}{k}").Visible = want
+
+
+def deduplicate_xlsm_media(xlsm_path: Path, slug: str) -> tuple[int, int]:
+    """Post-COM OOXML Sprite-Aware Media Deduplication:
+    Maps every `SPR_*_S<k>`, `Guide_Stage<k>`, and `ASSET_S<k>` shape across ALL drawings
+    directly to the 6 canonical high-DPI `xl/media/image1.png..image6.png` (`stage_0..5.png`),
+    eliminating 100% of Excel's per-size re-encoded duplicates!
+    Preserves `vbaProject.bin`, drawings, charts, and XMLs 100% cleanly."""
+    import xml.etree.ElementTree as ET
+
+    stage_bytes = [(ASSETS_DIR / slug / f"stage_{k}.png").read_bytes() for k in range(6)]
+
+    with zipfile.ZipFile(xlsm_path, "r") as zin:
+        infos = zin.infolist()
+        blobs = {info.filename: zin.read(info.filename) for info in infos}
+
+    raw_media = sorted(n for n in blobs if n.startswith("xl/media/"))
+
+    # Inspect each drawing XML -> map (rels_path, rId) -> stage index (0..5)
+    rels_rid_to_stage: dict[str, dict[str, int]] = {}
+    referenced_other_media: set[str] = set()
+
+    for fname, data in blobs.items():
+        if not (fname.startswith("xl/drawings/drawing") and fname.endswith(".xml")):
+            continue
+        rels_name = f"xl/drawings/_rels/{os.path.basename(fname)}.rels"
+        rid_map: dict[str, int] = {}
+        try:
+            root = ET.fromstring(data)
+            for pic in root.iter():
+                if not pic.tag.endswith("}pic"):
+                    continue
+                shp_name = ""
+                rid = ""
+                for elem in pic.iter():
+                    if elem.tag.endswith("}cNvPr") and not shp_name:
+                        shp_name = elem.attrib.get("name", "")
+                    elif elem.tag.endswith("}blip") and not rid:
+                        for ak, av in elem.attrib.items():
+                            if ak.endswith("}embed"):
+                                rid = av
+                                break
+                if rid and shp_name:
+                    m_st = re.search(r"(?:_S|Guide_Stage|ASSET_S)([0-5])$", shp_name)
+                    if m_st:
+                        rid_map[rid] = int(m_st.group(1))
+        except Exception:
+            pass
+        if rid_map:
+            rels_rid_to_stage[rels_name] = rid_map
+
+    # Rewrite drawing `.rels` files to point sprite rIds -> `../media/image1.png..image6.png`
+    rel_tag_pat = re.compile(r'(<Relationship\b[^>]*>)')
+    id_pat = re.compile(r'\bId="([^"]+)"')
+    tgt_pat = re.compile(r'\bTarget="([^"]+)"')
+
+    updated_blobs: dict[str, bytes] = {}
+    for fname, data in blobs.items():
+        if fname.endswith(".rels") and b"media/" in data:
+            txt = data.decode("utf-8")
+            rid_map = rels_rid_to_stage.get(fname, {})
+
+            def _fix_rel(m: re.Match) -> str:
+                tag = m.group(1)
+                im = id_pat.search(tag)
+                tm = tgt_pat.search(tag)
+                if not im or not tm:
+                    return tag
+                rid = im.group(1)
+                tgt = tm.group(1)
+                if rid in rid_map:
+                    canon_tgt = f"../media/image{rid_map[rid] + 1}.png"
+                    return tgt_pat.sub(f'Target="{canon_tgt}"', tag, count=1)
+                if "media/" in tgt:
+                    referenced_other_media.add("xl/media/" + os.path.basename(tgt))
+                return tag
+
+            new_txt = rel_tag_pat.sub(_fix_rel, txt)
+            updated_blobs[fname] = new_txt.encode("utf-8")
+
+    canon_media = {f"xl/media/image{k + 1}.png": stage_bytes[k] for k in range(6)}
+
+    tmp_path = xlsm_path.with_suffix(".dedup.tmp")
+    with zipfile.ZipFile(tmp_path, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=6) as zout:
+        written_media: set[str] = set()
+        for info in infos:
+            fname = info.filename
+            if fname.startswith("xl/media/"):
+                if fname in canon_media:
+                    zout.writestr(fname, canon_media[fname])
+                    written_media.add(fname)
+                elif fname in referenced_other_media:
+                    zout.writestr(info, blobs[fname])
+                    written_media.add(fname)
+                continue
+            zout.writestr(info, updated_blobs.get(fname, blobs[fname]))
+        for cname, cbytes in canon_media.items():
+            if cname not in written_media:
+                zout.writestr(cname, cbytes)
+                written_media.add(cname)
+
+    tmp_path.replace(xlsm_path)
+    return len(raw_media), len(written_media)
 
 
 def paste_linked_picture_fast(xl, src_cell, dst_ws, left: float, top: float, width: float, height: float,
@@ -335,6 +583,7 @@ def enhance_one(xl, meta: dict, capture_previews: bool = True):
                 Filename=str(img_path), LinkToFile=False, SaveWithDocument=True,
                 Left=left, Top=top, Width=side, Height=side
             )
+            shp.Name = f"ASSET_S{idx}"
             shp.Placement = 1
             shp.Line.Visible = False
 
@@ -353,53 +602,58 @@ def enhance_one(xl, meta: dict, capture_previews: bool = True):
             ws.Activate()
             cb_count += add_checkboxes_fast(ws, coords)
 
-        # 3. Register ALL dynamic Named Ranges first
-        for item in meta["dyn_anims"]:
-            wb.Names.Add(Name=item["name"], RefersTo=item["refers_to"])
+        # 3 & 4. Dynamic Visuals:
+        #   - pro_xlsm (v3.6 Turbo): Native Pre-Placed Sprite Stacks (ZERO Camera Linked Pictures!)
+        #   - offline: Legacy Linked Pictures (kept intact for offline no-macro builds)
+        stack_slots: list[dict] = []
+        if edition == "pro_xlsm":
+            pic_count, stack_slots = add_pro_native_sprite_stacks(wb, meta, slug)
+        else:
+            for item in meta["dyn_anims"]:
+                wb.Names.Add(Name=item["name"], RefersTo=item["refers_to"])
 
-        # 4. Paste ALL Linked Pictures grouped by sheet (minimal activations + deterministic Hero names!)
-        pic_groups = defaultdict(list)
-        for item in meta["dyn_anims"]:
-            pic_groups[item["sheet"]].append({
-                "name": item.get("name"),
-                "r1": item["r1"], "c1": item["c1"], "r2": item["r2"], "c2": item["c2"],
-                "formula": f"={item['name']}",
-                "align_bottom": item.get("align_bottom", False),
-            })
-        for sp in meta["static_pics"]:
-            pic_groups[sp["sheet"]].append({
-                "name": sp.get("name"),
-                "r1": sp["r1"], "c1": sp["c1"], "r2": sp["r2"], "c2": sp["c2"],
-                "formula": sp["formula"],
-                "align_bottom": False,
-            })
+            pic_groups = defaultdict(list)
+            for item in meta["dyn_anims"]:
+                pic_groups[item["sheet"]].append({
+                    "name": item.get("name"),
+                    "r1": item["r1"], "c1": item["c1"], "r2": item["r2"], "c2": item["c2"],
+                    "formula": f"={item['name']}",
+                    "align_bottom": item.get("align_bottom", False),
+                })
+            for sp in meta["static_pics"]:
+                pic_groups[sp["sheet"]].append({
+                    "name": sp.get("name"),
+                    "r1": sp["r1"], "c1": sp["c1"], "r2": sp["r2"], "c2": sp["c2"],
+                    "formula": sp["formula"],
+                    "align_bottom": False,
+                })
 
-        src_anchor = ws_a.Range("B2")
-        pic_count = 0
-        for sheet_name, items in pic_groups.items():
-            ws_dst = wb.Worksheets(sheet_name)
-            ws_dst.Activate()
-            src_anchor.Copy()
-            time.sleep(0.03)
-            for idx_p, it in enumerate(items):
-                dst = ws_dst.Range(ws_dst.Cells(it["r1"] + 1, it["c1"] + 1),
-                                   ws_dst.Cells(it["r2"] + 1, it["c2"] + 1))
-                paste_linked_picture_fast(
-                    xl, src_anchor, ws_dst,
-                    dst.Left, dst.Top, dst.Width, dst.Height,
-                    it["formula"], align_bottom=it["align_bottom"],
-                    need_copy=(idx_p == 0),
-                    shape_name=it.get("name"),
-                )
-                pic_count += 1
-            xl.CutCopyMode = False
+            src_anchor = ws_a.Range("B2")
+            pic_count = 0
+            for sheet_name, items in pic_groups.items():
+                ws_dst = wb.Worksheets(sheet_name)
+                ws_dst.Activate()
+                src_anchor.Copy()
+                time.sleep(0.03)
+                for idx_p, it in enumerate(items):
+                    dst = ws_dst.Range(ws_dst.Cells(it["r1"] + 1, it["c1"] + 1),
+                                       ws_dst.Cells(it["r2"] + 1, it["c2"] + 1))
+                    paste_linked_picture_fast(
+                        xl, src_anchor, ws_dst,
+                        dst.Left, dst.Top, dst.Width, dst.Height,
+                        it["formula"], align_bottom=it["align_bottom"],
+                        need_copy=(idx_p == 0),
+                        shape_name=it.get("name"),
+                    )
+                    pic_count += 1
+                xl.CutCopyMode = False
 
-        # 5. Inject v3.5 Ultra-Smooth FX VBA Engine & Quick-Action Pastel Pill Buttons into Pro `.xlsm`
+        # 5. Inject v3.6 Turbo VBA Engine & Quick-Action Pastel Pill Buttons into Pro `.xlsm`
         if edition == "pro_xlsm":
             vbp = wb.VBProject
             vbp.VBComponents.Import(str(VBA_MOD_PATH.resolve()))
 
-            # Inject ThisWorkbook lifecycle events (Workbook_Open, BeforeClose, SheetActivate)
+            # Inject ThisWorkbook lifecycle events (Open, BeforeSave, BeforeClose, SheetActivate)
             cm_wb = vbp.VBComponents(wb.CodeName).CodeModule
             if cm_wb.CountOfLines > 0:
                 cm_wb.DeleteLines(1, cm_wb.CountOfLines)
@@ -423,7 +677,13 @@ def enhance_one(xl, meta: dict, capture_previews: bool = True):
                 cm_dt.DeleteLines(1, cm_dt.CountOfLines)
             cm_dt.AddFromString(DAILY_TASKS_EVENT_VBA)
 
-            # Mount Effect 4: Sleek Quick-Action Pastel Pill Buttons (Tracker, Daily Tasks, Guide)
+            ws_ann = wb.Worksheets(ANNUAL_SHEET)
+            cm_ann = vbp.VBComponents(ws_ann.CodeName).CodeModule
+            if cm_ann.CountOfLines > 0:
+                cm_ann.DeleteLines(1, cm_ann.CountOfLines)
+            cm_ann.AddFromString(ANNUAL_EVENT_VBA)
+
+            # Mount Quick-Action Pastel Pill Buttons (Tracker, Daily Tasks, Guide, _Assets)
             add_pro_pill_buttons(wb, meta)
 
         # Disable Page Breaks on every worksheet for zero-lag scrolling & ticking!
@@ -433,11 +693,13 @@ def enhance_one(xl, meta: dict, capture_previews: bool = True):
             except Exception:
                 pass
 
-        # 6. Restore calculation & force full rebuild
+        # 6. Restore calculation & force full rebuild, then sync initial native sprite visibility!
         xl.Calculation = -4105  # xlCalculationAutomatic
-        xl.ScreenUpdating = True
         xl.CalculateFullRebuild()
-        time.sleep(0.4)
+        if edition == "pro_xlsm" and stack_slots:
+            sync_initial_pro_sprite_visibility(wb, stack_slots)
+        xl.ScreenUpdating = True
+        time.sleep(0.25)
 
         # Hide internal sheets cleanly (`xlSheetHidden = 0`)
         for hname in hidden_names:
@@ -467,12 +729,18 @@ def enhance_one(xl, meta: dict, capture_previews: bool = True):
 
         wb.Worksheets(GUIDE_SHEET).Activate()
         wb.Save()
-        dt = time.perf_counter() - t0
-        print(f"  ✓ [{edition}] {final_path.name} ({final_path.stat().st_size:,} B, cbs={cb_count}, pics={pic_count}, {dt:.1f}s)",
-              flush=True)
     finally:
         xl.EnableEvents = True
         wb.Close(SaveChanges=False)
+
+    # 8. Post-COM OOXML SHA-256 Media Deduplication -> ONLY 6 unique PNGs inside `xl/media/`!
+    media_info = ""
+    if edition == "pro_xlsm":
+        raw_m, uniq_m = deduplicate_xlsm_media(final_path, slug)
+        media_info = f", media={uniq_m}/{raw_m}"
+    dt = time.perf_counter() - t0
+    print(f"  ✓ [{edition}] {final_path.name} ({final_path.stat().st_size:,} B, cbs={cb_count}, pics={pic_count}{media_info}, {dt:.1f}s)",
+          flush=True)
 
 
 def derive_offline_from_pro(xl, only: list[str] | None = None):
