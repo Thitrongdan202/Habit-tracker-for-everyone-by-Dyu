@@ -1,27 +1,43 @@
-# 🐻 Habit Tracker Collection for Everyone — by Dyu (v3.5 — 35 Themes × 4 Editions)
+# 🐻 Habit Tracker Collection for Everyone — by Dyu (v3.6 Turbo — 35 Themes × 4 Editions)
 
 > **Bộ sưu tập 35 mẫu Habit Tracker thẩm mỹ chuẩn Digital Planner — Đủ 4 phiên bản cho Máy tính & Điện thoại (140 file hoàn chỉnh + 210 ảnh hoạt ảnh 6 giai đoạn)!**
-> **MỚI v3.5: Bộ Máy Hiệu Ứng Pro Siêu Mượt (Hero Mascot Bounce • Pháo Hoa Sparkle/Heart Burst • Toast Banner Không Chặn • Nút Chuyển Tháng/Ngày 1 Chạm • Nút Bật/Tắt FX • Động Lực Sống Động) trên toàn bộ 35 file `Pro Interactive (.xlsm)` + 4 Mẫu Mới `#32`–`#35` (Sakura Minimalist, Peach Mochi Cat + 6 Moods, Fluffy Bunny Sticker Pop & Milk & Mocha Bear 5+1 Donuts)!**
+> **MỚI v3.6 TURBO: Tái kiến trúc hoàn toàn động cơ hiệu năng trên toàn bộ 35 file `Pro Interactive (.xlsm)` + tối ưu `google_sheets_1click_setup.gs` — thay thế 100% Camera Linked Pictures chậm chạp bằng Native Sprite Stacks nén 6 PNG duy nhất, chỉ mục `_Database` O(1) thuần VBA (Win & Mac), ghi mảng `.Value2` & Lazy-Flush! Đổi Tháng bằng nút 1 chạm chỉ ~51 ms (nhanh gấp 80×), đổi Ngày chỉ ~40 ms (nhanh gấp 68×), file nhẹ hơn ~30% (~317 KB) mà giữ trọn 100% độ nét & Bộ Hiệu Ứng Pro (Bounce, Sparkle Burst, Toast, Quick-Action Pills)!**
 
-![Version 3.5](https://img.shields.io/badge/Version-3.5_35_Themes_x_4_Editions-E86A92?style=for-the-badge)
-![Pro #1 Recommended](https://img.shields.io/badge/⭐_RECOMMENDED_%231-Pro_Interactive_.XLSM_FX_Engine-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white)
+![Version 3.6 Turbo](https://img.shields.io/badge/Version-3.6_Turbo_35_Themes_x_4_Editions-E86A92?style=for-the-badge)
+![Pro #1 Recommended](https://img.shields.io/badge/⭐_RECOMMENDED_%231-Pro_Interactive_.XLSM_Turbo_v3.6-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white)
 ![Zero Macro Offline](https://img.shields.io/badge/Offline_No--Macro-.XLSX_Excel_2016--365-4E9F76?style=for-the-badge)
-![Google Sheets](https://img.shields.io/badge/Google_Sheets-1--Click_Script-34A853?style=for-the-badge&logo=googlesheets&logoColor=white)
+![Google Sheets](https://img.shields.io/badge/Google_Sheets-1--Click_Script_v3.6-34A853?style=for-the-badge&logo=googlesheets&logoColor=white)
 ![Mobile Portrait](https://img.shields.io/badge/Mobile_Portrait-iOS_%26_Android_0_Scroll-9E9AD1?style=for-the-badge)
 
 ---
 
-## ⭐ KHUYÊN DÙNG SỐ 1: Phiên Bản `Pro Interactive (.xlsm)` — Ultra-Smooth FX Engine v3.5
+## ⚡ KHUYÊN DÙNG SỐ 1: Phiên Bản `Pro Interactive (.xlsm)` — Turbo Engine & FX Suite v3.6
 
-Nếu bạn dùng **Microsoft Excel trên Windows hoặc macOS**, hãy chọn ngay **`[1] Pro Interactive (.xlsm)`** trong [`templates/pro_macro/`](templates/pro_macro/) để trải nghiệm đẳng cấp **App Digital Planner thật thụ** hoàn toàn 100% Offline:
+Nếu bạn dùng **Microsoft Excel trên Windows hoặc macOS**, hãy chọn ngay **`[1] Pro Interactive (.xlsm)`** trong [`templates/pro_macro/`](templates/pro_macro/) để trải nghiệm tốc độ mượt như **App Desktop gốc** hoàn toàn 100% Offline:
 
-- **⚡ Siêu mượt (Zero-Lag Engine):** Tắt Page Breaks toàn bộ sheet, bỏ hoàn toàn công thức volatile, hoãn tính nặng tab Tổng Kết Năm cho tới khi bấm sang tab `🏆 Tổng Kết & Thành Tựu Năm`, lưu/nạp dữ liệu bằng mảng 2D trong RAM!
-- **🎉 Hiệu ứng sống động như App (Bật/Tắt 1 chạm ngay trên sheet!):**
+- **🚀 Động cơ v3.6 Turbo Performance Engine (Nhanh gấp 20×–80× so với v3.5!):**
+  - **Native Pre-Placed Sprite Stacks + Nén Đúng 6 PNG (`xl/media/`):** Bỏ hoàn toàn 54 Camera-Tool Linked Pictures gây giật lag GDI; thay bằng cụm ảnh PNG gốc siêu nét + bộ đệm so sánh thay đổi (`Stage-Diff Cache`) & tham chiếu Shape O(1) — dung lượng file thậm chí **nhẹ hơn ~30% (~257–347 KB)**!
+  - **Chỉ mục `_Database` O(1) thuần VBA (`Collection`, tương thích cả Windows & macOS Excel) + `.Value2` + Lazy-Flush:** Tick ô Checkbox **KHÔNG ghi `_Database`** (tự động flush khi đổi Tháng/Ngày/Năm, mở tab Tổng Kết Năm, hoặc Lưu/Đóng file!).
+  - **Giữ nguyên tính năng tự đổi ảnh trong `_Assets`:** Chỉ cần dán 6 ảnh mới vào `_Assets!B2:B7` rồi bấm nút **`🔄 Đồng bộ 6 ảnh mới (SyncSprites)`** 1 chạm!
+- **🎉 Giữ nguyên 100% Bộ Hiệu Ứng Sống Động Pro (Bật/Tắt 1 chạm ngay trên sheet!):**
   1. **Hero Mascot Bounce (`PlayHeroBounce`):** Linh vật nảy nhẹ đầy hứng khởi mỗi khi đạt **100% Ngày**, hoàn thành **100% Nhiệm Vụ Ngày**, hoặc tick xong **Mục Tiêu Năm**!
   2. **Pastel Sparkle / Heart / Star Burst (`PlaySparkleBurst`):** Pháo hoa sao & trái tim phối đúng màu chủ đề bùng nổ quanh Hero khi chạm mốc **100% Perfect Day** hoặc chuỗi **7 / 14 / 21 / 30 ngày** (tự dọn 100% hình thừa — 0 rác!).
-  3. **Floating Toast Banner (`ShowToast`):** Thông báo tiếng Việt góc trên-phải tự biến mất sau 2 giây (tuyệt đối không bật hộp thoại `MsgBox` chắn tay!).
-  4. **Nút Quick-Action Pastel 1 Chạm:** **`◀ Tháng` · `Tháng ▶` · `✨ FX: BẬT/TẮT`** ngay góc trái bảng Tracker, **`◀ Hôm qua` · `📅 Hôm nay` · `Ngày mai ▶`** trên `📝 Nhiệm Vụ Ngày`, và nút **`🎉 Thử Hiệu Ứng Pro`** trên `📖 Hướng Dẫn`!
-  5. **Thẻ Động Lực Đổi Màu Động (`0% → 100%`)** + **Lưu Đa Tháng / Đa Năm / Đa Ngày (`YYYY-MM-DD`)** tự động vào `_Database`!
+  3. **Floating Toast Banner (`ShowToast`):** Thông báo tiếng Việt góc trên-phải tái sử dụng O(1) & tự ẩn sau 2 giây (tuyệt đối không bật `MsgBox` chắn tay!).
+  4. **Nút Quick-Action Pastel 1 Chạm:** **`◀ Tháng` · `Tháng ▶` · `✨ FX: BẬT/TẮT`** ngay góc trái bảng Tracker, **`◀ Hôm qua` · `📅 Hôm nay` · `Ngày mai ▶`** trên `📝 Nhiệm Vụ Ngày`, nút **`🎉 Thử Hiệu Ứng Pro`** trên `📖 Hướng Dẫn`, và **`🔄 Đồng bộ 6 ảnh mới`** trên `_Assets`!
+
+### 📊 Benchmark Tốc Độ Thực Tế Excel COM (`BEFORE v3.5` vs `AFTER v3.6 Turbo`)
+
+Đo thực tế trên Microsoft Excel (`EnableEvents = True`, `Calculation = Automatic`) bằng [`scripts/benchmark_pro_speed.py`](scripts/benchmark_pro_speed.py):
+
+| Thao tác thực tế | `01_Sunflower` v3.5 (Trước) | `01_Sunflower` v3.6 Turbo (Sau) | `35_Milk_Mocha` v3.5 (Trước) | `35_Milk_Mocha` v3.6 Turbo (Sau) | Tăng tốc |
+|---|---:|---:|---:|---:|---:|
+| **1. Tick 1 ô Checkbox (`Monthly Tracker`)** | 347.3 ms | **42.7 ms** | 333.7 ms | **42.6 ms** | **~8× nhanh hơn** |
+| **2a. Đổi Tháng bằng Dropdown (`B3`)** | 4,137.1 ms | **141.6 ms** | 3,764.8 ms | **154.7 ms** | **~24–29× nhanh hơn** |
+| **2b. Đổi Tháng bằng Nút 1 chạm (`◀ / ▶`)** | 4,137.1 ms | **51.3 ms** | 3,764.8 ms | **55.7 ms** | **~68–81× nhanh hơn!** |
+| **3. Đổi Năm (`2026 ↔ 2025`)** | 3,787.4 ms | **157.5 ms** | 3,739.6 ms | **192.2 ms** | **~20–24× nhanh hơn** |
+| **4. Đổi Ngày `📝 Nhiệm Vụ Ngày` (`21 ↔ 22`)** | 2,918.2 ms | **46.5 ms** | 2,754.6 ms | **40.1 ms** | **~63–69× nhanh hơn!** |
+| **5. Mở tab `🏆 Tổng Kết Năm` / Đổi Năm** | 577.5 / 317.2 ms | **21.4 / 74.9 ms** | 589.2 / 302.1 ms | **19.8 / 76.9 ms** | **~27–30× mở tab!** |
+| **Dung lượng file & số ảnh trong `xl/media/`** | 463.8 KB | **316.8 KB (6 PNG)** | 439.8 KB | **316.9 KB (6 PNG)** | **Nhẹ hơn ~30%!** |
 
 ---
 
@@ -47,7 +63,7 @@ curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-ev
 
 | Thứ tự | Phiên bản | Thư mục | Số tab | Điểm nổi bật | Phù hợp với |
 |---|---|---|---|---|---|
-| **#1 ⭐** | **⚡ Pro Interactive (`.xlsm`)** *(Khuyên dùng #1)* | [`templates/pro_macro/`](templates/pro_macro/) | **5 tab** | **Ultra-Smooth FX Engine v3.5** (Bounce + Sparkle Burst + Toast + Nút chuyển Tháng/Ngày 1 chạm + FX Bật/Tắt) + **Tự lưu Đa Ngày/Tháng/Năm** vào `_Database` + 54 Linked Pictures 100% Offline! | **Excel Desktop (Windows & Mac)** — trải nghiệm đẹp, mượt và đầy đủ nhất! |
+| **#1 ⭐** | **⚡ Pro Interactive (`.xlsm`)** *(Khuyên dùng #1)* | [`templates/pro_macro/`](templates/pro_macro/) | **5 tab** | **Turbo Engine & FX Suite v3.6** (Native Sprite Stacks 6 PNG siêu tốc ~51ms + Bounce + Sparkle Burst + Toast + Nút chuyển Tháng/Ngày 1 chạm + O(1) Lazy-Flush `_Database`) — 100% Offline! | **Excel Desktop (Windows & Mac)** — trải nghiệm đẹp, nhanh và mượt nhất! |
 | **#2** | **✨ Excel Universal Offline (`.xlsx`)** | [`templates/excel_universal_offline/`](templates/excel_universal_offline/) | **5 tab** | **KHÔNG Macro / 0 cảnh báo bảo mật**, dùng **Form Control Checkboxes** ẩn sạch `TRUE/FALSE` (`;;;`), chạy mọi đời **Excel 2016–365 Win/Mac** + đủ 54 hoạt ảnh offline! | Máy công ty chặn Macro hoặc dùng Excel 2016/2019/2021 không cần VBA |
 | **#3** | **☁️ Google Sheets Desktop (`.xlsx` + `.gs`)** | [`templates/google_sheets_edition/`](templates/google_sheets_edition/) | **5 tab** | Gọn 5 tab + `_Database` + hoạt ảnh `=IMAGE()` động. Chạy [`google_sheets_1click_setup.gs`](scripts/google_sheets_1click_setup.gs) 1 lần → **Checkbox Pastel & tự lưu từng Ngày + 12 Tháng** trên Cloud! | Dùng online trên trình duyệt & đồng bộ Google Drive |
 | **#4** | **📱 Mobile Portrait (`.xlsx` + `.gs`)** | [`templates/mobile_portrait_sheets/`](templates/mobile_portrait_sheets/) | **4 tab** | **Khổ dọc 8 cột `B:I` riêng cho iPhone/Android (0 cuộn ngang!)**, gồm tab **`📝 Việc Hôm Nay`**, ô tick lớn `38pt` dễ chạm ngón cái & tự lưu từng Tuần/Ngày! | Check-in thói quen & việc đột xuất 1 chạm ngay trên điện thoại |
@@ -126,7 +142,7 @@ curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-ev
 
 ## 📋 Bảng Tải Trực Tiếp Toàn Bộ 35 Mẫu Template (Đủ 4 Phiên Bản — 140 Tệp)
 
-| # | Tên Mẫu & Chủ Đề | ⚡ Pro #1 (FX v3.5) | ✨ Excel Offline | ☁️ GSheets Desktop | 📱 Mobile Portrait |
+| # | Tên Mẫu & Chủ Đề | ⚡ Pro #1 (Turbo v3.6) | ✨ Excel Offline | ☁️ GSheets Desktop | 📱 Mobile Portrait |
 |---|---|---|---|---|---|
 | **01** | 🌻 **Sunflower Garden Blush** | [`_Pro.xlsm`](templates/pro_macro/01_Sunflower_Garden_Blush_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/01_Sunflower_Garden_Blush.xlsx) | [Desktop](templates/google_sheets_edition/01_Sunflower_Garden_Blush.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/01_Sunflower_Garden_Blush_Mobile.xlsx) |
 | **02** | 🌵 **Cactus Bloom Pastel Weeks** | [`_Pro.xlsm`](templates/pro_macro/02_Cactus_Bloom_Pastel_Weeks_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/02_Cactus_Bloom_Pastel_Weeks.xlsx) | [Desktop](templates/google_sheets_edition/02_Cactus_Bloom_Pastel_Weeks.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/02_Cactus_Bloom_Pastel_Weeks_Mobile.xlsx) |

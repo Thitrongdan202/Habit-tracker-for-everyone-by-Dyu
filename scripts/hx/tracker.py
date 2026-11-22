@@ -178,13 +178,14 @@ def init_calc_sheet(wb, active_year: int = 2026, last_loaded_key: str = "2026-10
         ("FX_MSG_MONTH_SWITCH","📅 Đã lưu tháng cũ & mở dữ liệu tháng mới!"),              # BA13
         ("FX_MSG_DAILY_100",   "🎉 Xuất sắc 100%! Toàn bộ nhiệm vụ ngày đã xong!"),        # BA14
         ("FX_MSG_GOAL_DONE",   "🎯 Chúc mừng! Bạn vừa chinh phục thêm Mục Tiêu Năm!"),     # BA15
-        ("FX_MSG_DEMO",        "🎉 Hiệu ứng Pro v3.5 đang BẬT — Siêu mượt & sống động!"),  # BA16
+        ("FX_MSG_DEMO",        "🎉 Hiệu ứng Pro v3.6 Turbo đang BẬT — Siêu tốc & sống động!"), # BA16
         ("FX_LBL_ON",          "✨ FX: BẬT"),                                               # BA17
         ("FX_LBL_OFF",         "💤 FX: TẮT"),                                               # BA18
         ("FX_MSG_FX_ON",       "✨ Đã BẬT hiệu ứng Pro (Nảy, Pháo hoa & Toast)!"),         # BA19
-        ("FX_MSG_FX_OFF",      "💤 Đã TẮT hiệu ứng — Giữ tốc độ siêu mượt tối đa!"),       # BA20
+        ("FX_MSG_FX_OFF",      "💤 Đã TẮT hiệu ứng — Giữ tốc độ siêu tốc tối đa!"),         # BA20
         ("FX_MSG_DATE_SWITCH", "📝 Đã lưu ngày cũ & nạp dữ liệu ngày mới!"),               # BA21
         ("FX_MSG_ANNUAL_HALL", "🏆 Đại Sảnh Thành Tựu Năm đã được cập nhật!"),             # BA22
+        ("FX_MSG_SYNC_ASSETS", "🎨 Đã đồng bộ 6 ảnh mới từ _Assets sang toàn bộ file!"),    # BA23
     ]
     for r_idx, (lbl, val) in enumerate(fx_rows):
         ws_calc.write(r_idx, CALC_FX_LBL_COL, lbl)
@@ -593,8 +594,12 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
             cv.put(R_IMG, c, f'=IF({dc}="","",_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN(6,MAX(1,{st_ref}))-1)&".png"))',
                    bg_color=t.card, align="center")
         col_rng = f"{colname(c)}${R_H0 + 1}:{colname(c)}${R_H1 + 1}"
-        cv.put(R_DONE, c, f'=IF({dc}="","",COUNTIFS({names_local},"?*",{col_rng},TRUE)+'
-                          f'COUNTIFS({names_local},"?*",{col_rng},"{CHECK_ALT}"))',
+        if spec.pro_mode:
+            done_f = f'=IF({dc}="","",COUNTIFS({names_local},"?*",{col_rng},TRUE))'
+        else:
+            done_f = (f'=IF({dc}="","",COUNTIFS({names_local},"?*",{col_rng},TRUE)+'
+                      f'COUNTIFS({names_local},"?*",{col_rng},"{CHECK_ALT}"))')
+        cv.put(R_DONE, c, done_f,
                align="center", font_size=9, bold=True, bg_color=t.week_tint[w], font_color=t.ink)
         cv.put(R_NOT, c, f'=IF({dc}="","",{S["hc"]}-{cell(R_DONE, c)})', align="center", font_size=9,
                bg_color=t.card, font_color=t.muted)
@@ -681,7 +686,13 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
         for k in range(1, 32):
             tr_ref = f"{q}!{cell(r, day_col(k))}"
             prev = "0" if k == 1 else cell(r_calc, k - 1)
-            ws_calc.write_formula(r_calc, k, f'=IF(AND({k}<={S["dim"]},{_done_test(tr_ref)}),{prev}+1,0)')
+            if spec.pro_mode:
+                if k <= 28:
+                    ws_calc.write_formula(r_calc, k, f'=IF({tr_ref}=TRUE,{prev}+1,0)')
+                else:
+                    ws_calc.write_formula(r_calc, k, f'=IF(AND({k}<={S["dim"]},{tr_ref}=TRUE),{prev}+1,0)')
+            else:
+                ws_calc.write_formula(r_calc, k, f'=IF(AND({k}<={S["dim"]},{_done_test(tr_ref)}),{prev}+1,0)')
 
         run_calc = f"{cq}!$B{X_calc}:$AF{X_calc}"
         nm_q = f"{q}!${colname(C_NAME)}{X}"
@@ -748,11 +759,14 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
     cv.box(R_WEEK, C_R0, R_TOT, C_RE, t.line)
 
     # ------------------------------------------------------------------ conditional formats
-    body = rng(R_H0, C_D0, R_H1, C_D31, absolute=False)
-    day_hdr = f"{colname(C_D0)}${R_DAY + 1}"
-    ws.conditional_format(body, {"type": "formula", "criteria": f'={day_hdr}=""',
-                                 "format": wb.add_format({"bg_color": t.page, "font_color": t.page}),
-                                 "stop_if_true": True})
+    # v3.6 Turbo CF Optimization: Days 1..28 NEVER disappear in any month!
+    # Scope out-of-month hiding CF strictly to Days 29..31 (AE:AG = 3 cols instead of 31 -> 10x faster!).
+    c_d29 = day_col(29)
+    body_tail = rng(R_H0, c_d29, R_H1, C_D31, absolute=False)
+    day_hdr_tail = f"{colname(c_d29)}${R_DAY + 1}"
+    ws.conditional_format(body_tail, {"type": "formula", "criteria": f'={day_hdr_tail}=""',
+                                      "format": wb.add_format({"bg_color": t.page, "font_color": t.page}),
+                                      "stop_if_true": True})
     for w in range(5):
         days = week_days(w)
         a = rng(R_H0, day_col(days[0]), R_H1, day_col(days[-1]), absolute=False)
@@ -761,11 +775,16 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
         cf_props = {"bg_color": chk_bg, "font_color": t.week_check[w]}
         if spec.gsheets:
             cf_props["bold"] = True
-        ws.conditional_format(a, {"type": "formula", "criteria": f'=OR({tl}=TRUE,{tl}="{CHECK_ALT}")',
-                                  "format": wb.add_format(cf_props)})
+        if spec.pro_mode:
+            # Native C++ cell-value equality (TRUE) — 100% identical pastel fill, ZERO formula overhead!
+            ws.conditional_format(a, {"type": "cell", "criteria": "==", "value": True,
+                                      "format": wb.add_format(cf_props)})
+        else:
+            ws.conditional_format(a, {"type": "formula", "criteria": f'=OR({tl}=TRUE,{tl}="{CHECK_ALT}")',
+                                      "format": wb.add_format(cf_props)})
     for r in (R_WD, R_DAY, R_DONE, R_NOT, R_PCT, R_TOT):
-        ws.conditional_format(rng(r, C_D0, r, C_D31, absolute=False),
-                              {"type": "formula", "criteria": f'={colname(C_D0)}${R_DAY + 1}=""',
+        ws.conditional_format(rng(r, c_d29, r, C_D31, absolute=False),
+                              {"type": "formula", "criteria": f'={day_hdr_tail}=""',
                                "format": wb.add_format({"bg_color": t.page}), "stop_if_true": True})
     if t.pct_traffic_light:
         # Traffic-Light % Completed Heatmap (Ref 15 Mocha Sunflower): >=75% Emerald, 50-74% Amber, <50% Coral
