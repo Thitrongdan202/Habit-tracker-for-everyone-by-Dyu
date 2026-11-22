@@ -1526,6 +1526,7 @@ def build_template(tdef: TemplateDef, out_path: Path, edition: str = "pro_xlsm")
         "dyn_anims": dyn_anims,
         "static_pics": static_pics,
         "checkboxes": checkboxes,
+        "tracker_unlock_ranges": cv.unlock_ranges,
         "captures": captures,
         "base_path": str(out_path),
     }

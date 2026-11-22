@@ -165,23 +165,26 @@ def add_pro_pill_buttons(wb, meta: dict):
     bgr_onp = _hex_to_bgr(meta.get("theme_on_primary", "#FFFFFF"))
     bgr_wht = _hex_to_bgr("#FFFFFF")
 
-    # 1. Monthly Tracker (`B7` cell tray): [◀ Tháng] [Tháng ▶] [✨ FX: BẬT]
+    # 1. Monthly Tracker (`B7` cell tray): [◀ Tháng] [Tháng ▶] [✨ FX: BẬT] [↩ Undo]
     ws_tr = wb.Worksheets(meta["tracker_sheet"])
     b7 = ws_tr.Range("B7")
-    pad_x = 3.0
-    gap = 3.0
+    pad_x = 2.0
+    gap = 2.0
     bh = min(19.0, max(15.0, b7.Height - 5.0))
     bt = b7.Top + (b7.Height - bh) / 2.0
-    avail_w = b7.Width - 2 * pad_x - 2 * gap
-    w_nav = avail_w * 0.305
-    w_fx  = avail_w - 2 * w_nav
+    avail_w = b7.Width - 2 * pad_x - 3 * gap
+    w_nav  = avail_w * 0.242
+    w_fx   = avail_w * 0.282
+    w_undo = avail_w - 2 * w_nav - w_fx
     x0 = b7.Left + pad_x
     _add_pill_button(ws_tr, "BTN_PREV_MONTH", "◀ Tháng", x0, bt, w_nav, bh,
-                     bgr_sft, bgr_pri, bgr_ink, "BtnPrevMonth", font_size=7.6)
+                     bgr_sft, bgr_pri, bgr_ink, "BtnPrevMonth", font_size=7.0)
     _add_pill_button(ws_tr, "BTN_NEXT_MONTH", "Tháng ▶", x0 + w_nav + gap, bt, w_nav, bh,
-                     bgr_sft, bgr_pri, bgr_ink, "BtnNextMonth", font_size=7.6)
+                     bgr_sft, bgr_pri, bgr_ink, "BtnNextMonth", font_size=7.0)
     _add_pill_button(ws_tr, "BTN_FX_TOGGLE", "✨ FX: BẬT", x0 + 2 * (w_nav + gap), bt, w_fx, bh,
-                     bgr_pri, bgr_dk, bgr_onp, "BtnToggleFX", font_size=7.6)
+                     bgr_pri, bgr_dk, bgr_onp, "BtnToggleFX", font_size=7.0)
+    _add_pill_button(ws_tr, "BTN_UNDO", "↩ Undo", x0 + 2 * (w_nav + gap) + w_fx + gap, bt, w_undo, bh,
+                     bgr_wht, bgr_pri, bgr_dk, "UndoLastHabitEdit", font_size=7.0)
 
     # 2. Daily One-Off Tasks (`D6:F6` cell tray): [◀ Hôm qua] [📅 Hôm nay] [Ngày mai ▶]
     ws_dt = wb.Worksheets(DAILY_TASKS_SHEET)
@@ -314,6 +317,79 @@ def add_pro_native_sprite_stacks(wb, meta: dict, slug: str) -> tuple[int, list[d
         pic_count += 1
 
     return pic_count, stack_slots
+
+
+def clamp_pro_top_chart(wb, meta: dict):
+    """Ensure the top Daily Productivity chart on Monthly Tracker ends cleanly ABOVE Row 8
+    so it NEVER overlaps down into Row 8 or the habit checkbox grid!"""
+    ws_tr = wb.Worksheets(meta["tracker_sheet"])
+    row2_top = float(ws_tr.Rows(2).Top)
+    row8_top = float(ws_tr.Rows(8).Top)
+    col35_left = float(ws_tr.Columns(35).Left)
+    max_bottom = row8_top - 2.5
+    for co in ws_tr.ChartObjects():
+        if float(co.Top) < row8_top and float(co.Left) < col35_left:
+            new_top = row2_top + 1.5
+            new_h = max(40.0, max_bottom - new_top)
+            co.Top = new_top
+            co.Height = new_h
+            co.Placement = 1  # xlMoveAndSize
+
+
+def apply_pro_sheet_protection(wb, meta: dict):
+    """Unlock ONLY legitimate user-editable cells across the 5 visible Pro tabs, lock ALL
+    headers/KPIs/formulas/TOTAL row 37, and protect with `UserInterfaceOnly=True` (no password)!"""
+    # 1. Monthly Tracker
+    ws_tr = wb.Worksheets(meta["tracker_sheet"])
+    ws_tr.Cells.Locked = True
+    for (r1, c1, r2, c2) in meta.get("tracker_unlock_ranges", []):
+        rng_obj = ws_tr.Range(ws_tr.Cells(r1 + 1, c1 + 1), ws_tr.Cells(r2 + 1, c2 + 1))
+        rng_obj.Locked = False
+        # Belt-and-suspenders: never unlock any formula cell inside an unlocked addon block!
+        try:
+            f_cells = rng_obj.SpecialCells(-4123)  # xlCellTypeFormulas
+            f_cells.Locked = True
+        except Exception:
+            pass
+    # Belt-and-suspenders: guarantee TOTAL row 37 is 100% locked!
+    ws_tr.Rows(37).Locked = True
+
+    # 2. Daily One-Off Tasks
+    ws_dt = wb.Worksheets(DAILY_TASKS_SHEET)
+    ws_dt.Cells.Locked = True
+    ws_dt.Range("D5:F5").Locked = False
+    ws_dt.Range("B9:F28").Locked = False
+    ws_dt.Range("B31:F35").Locked = False
+
+    # 3. Yearly Goals & Habits
+    ws_yg = wb.Worksheets(YEARLY_GOALS_SHEET)
+    ws_yg.Cells.Locked = True
+    ws_yg.Range("I2").Locked = False
+    ws_yg.Range("B6:F25").Locked = False
+
+    # 4. Annual Achievements — ONLY Year dropdown B3 unlocked!
+    ws_ann = wb.Worksheets(ANNUAL_SHEET)
+    ws_ann.Cells.Locked = True
+    ws_ann.Range("B3").Locked = False
+
+    # 5. Guide — ONLY the 3 threshold config cells unlocked!
+    ws_g = wb.Worksheets(GUIDE_SHEET)
+    ws_g.Cells.Locked = True
+    for thr_nm in ("CFG_THR_1", "CFG_THR_2", "CFG_THR_3"):
+        try:
+            wb.Names(thr_nm).RefersToRange.Locked = False
+        except Exception:
+            pass
+
+    for ws_p in (ws_g, ws_tr, ws_dt, ws_yg, ws_ann):
+        ws_p.Protect(
+            Password="",
+            DrawingObjects=False,
+            Contents=True,
+            Scenarios=False,
+            UserInterfaceOnly=True,
+            AllowFormattingCells=False,
+        )
 
 
 def sync_initial_pro_sprite_visibility(wb, stack_slots: list[dict]):
@@ -696,8 +772,11 @@ def enhance_one(xl, meta: dict, capture_previews: bool = True):
         # 6. Restore calculation & force full rebuild, then sync initial native sprite visibility!
         xl.Calculation = -4105  # xlCalculationAutomatic
         xl.CalculateFullRebuild()
-        if edition == "pro_xlsm" and stack_slots:
-            sync_initial_pro_sprite_visibility(wb, stack_slots)
+        if edition == "pro_xlsm":
+            if stack_slots:
+                sync_initial_pro_sprite_visibility(wb, stack_slots)
+            clamp_pro_top_chart(wb, meta)
+            apply_pro_sheet_protection(wb, meta)
         xl.ScreenUpdating = True
         time.sleep(0.25)
 

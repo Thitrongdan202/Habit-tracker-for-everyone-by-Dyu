@@ -131,6 +131,7 @@ def add_rainbow_bottom_blocks(wb, cv: Canvas, tr: TrackerRefs):
         cv.merge(r0 + 1 + i, C_R0, r0 + 1 + i, C_RE, note, font_size=9, align="left", indent=1,
                  bg_color=t.card, font_color=t.ink)
         cv.hline(r0 + 1 + i, C_R0, C_RE, t.line)
+    cv.unlock(r0 + 1, C_R0, r0 + 6, C_RE)
     cv.box(r0, C_R0, r0 + 6, C_RE, t.line)
 
     # ---- BLOCK 2: WEEKLY HABITS CHECKLIST ----
@@ -165,6 +166,7 @@ def add_rainbow_bottom_blocks(wb, cv: Canvas, tr: TrackerRefs):
             cv.merge(rr, c1 + 1, rr, c2, task, font_size=9, align="left", indent=1, bg_color=t.card,
                      font_color=t.ink)
             cv.hline(rr, c1, c2, t.line)
+        cv.unlock(r1 + 1, c1, r1 + 6, c2)
         cv.vline(c2, r1, r1 + 6, t.line, where="right")
 
     done_terms = "+".join(
@@ -253,6 +255,7 @@ def add_wellness_mood_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 55) -> 
 
     cv.grid(r_sleep, C_NAME, r_calm, C_D31, t.line)
     cv.box(r0, C_NAME, r_calm, C_D31, t.line)
+    cv.unlock(r_sleep, C_D0, r_calm, C_D31)
 
     # Conditional heatmaps + dropdown validation
     sleep_rng = rng(r_sleep, C_D0, r_sleep, C_D31)
@@ -451,6 +454,7 @@ def add_sakura_study_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 77) -> d
                align="center", font_size=8.5, bg_color=t.card, font_color=t.muted)
 
     hrs_rng = rng(r_hrs, C_D0, r_hrs, C_D31)
+    cv.unlock(r_hrs, C_D0, r_hrs, C_D31)
     cv.grid(r_hrs, C_NAME, r_pom, C_D31, t.line)
     cv.box(r0, C_NAME, r_pom, C_D31, t.line)
     ws.conditional_format(hrs_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 0,
@@ -499,6 +503,7 @@ def add_sakura_study_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 77) -> d
     cv.merge(r_ch0 + 1, C_R0, r_ch0 + 4, C_RE,
              "• Ưu tiên 2 phiên Deep Work 90 phút vào buổi sáng.\n• Tắt thông báo điện thoại khi học.\n• Ôn tập lại ghi chú mỗi tối Chủ nhật.",
              font_size=9, align="left", indent=1, text_wrap=True, bg_color=t.card, font_color=t.ink)
+    cv.unlock(r_ch0 + 1, C_R0, r_ch0 + 4, C_RE)
     cv.merge(r_ch0 + 5, C_R0, r_ch1, C_RE,
              f'="🌸 Ngày nở hoa: "&{tr.s["grown"]}&" ngày"&CHAR(10)&"🍅 Tổng Pomodoro: "&SUM({rng(r_pom, C_D0, r_pom, C_D31)})&" phiên"',
              bold=True, font_size=9.5, align="center", text_wrap=True, bg_color=t.soft, font_color=t.primary_dark)
@@ -546,6 +551,7 @@ def add_ocean_fitness_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 88) -> 
 
     en_rng = rng(r_en, C_D0, r_en, C_D31)
     wat_rng = rng(r_wat, C_D0, r_wat, C_D31)
+    cv.unlock(r_en, C_D0, r_wat, C_D31)
     cv.grid(r_en, C_NAME, r_wat, C_D31, t.line)
     cv.box(r0, C_NAME, r_wat, C_D31, t.line)
     ws.conditional_format(en_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 1,
@@ -638,6 +644,7 @@ def add_matcha_routine_block(wb, cv: Canvas, tr: TrackerRefs, morning_count: int
         cv.put(r_mood, c, val, align="center", font_size=9, bold=True, bg_color=t.card,
                font_color=t.ink, num_format="0")
     mood_rng = rng(r_mood, C_D0, r_mood, C_D31)
+    cv.unlock(r_mood, C_D0, r_mood, C_D31)
     cv.grid(r_mood, C_NAME, r_mood, C_D31, t.line)
     cv.box(r0, C_NAME, r_mood, C_D31, t.line)
     ws.conditional_format(mood_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 1,
@@ -691,6 +698,7 @@ def add_matcha_routine_block(wb, cv: Canvas, tr: TrackerRefs, morning_count: int
         cv.merge(rc0 + 1 + i, C_D0 + 11, rc0 + 1 + i, C_RE, line, font_size=9, align="left", indent=1,
                  bg_color=t.card, font_color=t.ink)
         cv.hline(rc0 + 1 + i, C_D0 + 11, C_RE, t.line)
+    cv.unlock(rc0 + 1, C_D0 + 11, rc0 + 4, C_RE)
     cv.box(rc0, C_D0 + 11, rc0 + 4, C_RE, t.line)
 
     return {"morning_pct": f"{q}!{m_pct_addr}", "evening_pct": f"{q}!{e_pct_addr}",
@@ -770,6 +778,7 @@ def add_dream_house_notes_block(wb, cv: Canvas, tr: TrackerRefs):
         cv.merge(r0 + 1 + i, C_NAME, r0 + 1 + i, c_mid, txt, font_size=9.5, align="left", indent=1,
                  bg_color="#FFFFFF", font_color=t.ink)
         cv.hline(r0 + 1 + i, C_NAME, c_mid, "#D1FAE5")
+    cv.unlock(r0 + 1, C_NAME, r0 + 5, c_mid)
     cv.box(r0, C_NAME, r0 + 5, c_mid, "#0D9468")
 
     # Middle half: FAILURE / LESSONS NOTES (Coral Red #E63956) — Col S .. Col AG (18..32)
@@ -787,6 +796,7 @@ def add_dream_house_notes_block(wb, cv: Canvas, tr: TrackerRefs):
         cv.merge(r0 + 1 + i, c_fail0, r0 + 1 + i, C_D31, txt, font_size=9.5, align="left", indent=1,
                  bg_color="#FFFFFF", font_color=t.ink)
         cv.hline(r0 + 1 + i, c_fail0, C_D31, "#FFE4E6")
+    cv.unlock(r0 + 1, c_fail0, r0 + 5, C_D31)
     cv.box(r0, c_fail0, r0 + 5, C_D31, "#E63956")
 
     # Right summary card: DREAM HOME ARCHITECT STATUS (C_R0..C_RE)
@@ -846,6 +856,7 @@ def add_wildflower_mood_row(wb, cv: Canvas, tr: TrackerRefs, seed: int = 171):
         cv.put(r0 + 2, c, val, align="center", font_size=13, bg_color=t.card, font_color=t.ink)
 
     mood_rng = rng(r0 + 2, C_D0, r0 + 2, C_D31)
+    cv.unlock(r0 + 2, C_D0, r0 + 2, C_D31)
     ws.data_validation(mood_rng, {
         "validate": "list",
         "source": f"={mood_lookup_ref()}",
@@ -926,6 +937,7 @@ def add_plum_oak_master_panels(wb, cv: Canvas, tr: TrackerRefs):
             cv.put(rr, wc + 1, "", bg_color=t.card)
     cv.grid(r0 + 1, C_NAME, r0 + 7, 15, t.line)
     cv.box(r0 + 1, C_NAME, r0 + 7, 15, t.line)
+    cv.unlock(r0 + 2, C_NAME, r0 + 7, 15)
 
     # Panel 2 (Middle, Col R..AC = 17..28): MONTHLY HABITS (task + DONE checkbox!)
     c_m0, c_m1 = 17, 28
@@ -948,6 +960,7 @@ def add_plum_oak_master_panels(wb, cv: Canvas, tr: TrackerRefs):
         cv.checkbox(rr, c_m1, done, align="center", font_color=t.primary, bg_color=t.card)
     cv.grid(r0 + 1, c_m0, r0 + 7, c_m1, t.line)
     cv.box(r0 + 1, c_m0, r0 + 7, c_m1, t.line)
+    cv.unlock(r0 + 2, c_m0, r0 + 7, c_m1)
 
     # Panel 3 (Right, Col AE..C_RE = 30..C_RE): MONTHLY NOTES & REFLECTION
     c_n0 = 30
@@ -967,6 +980,7 @@ def add_plum_oak_master_panels(wb, cv: Canvas, tr: TrackerRefs):
                  bg_color=t.card, font_color=t.ink)
         cv.hline(rr, c_n0, C_RE, t.line)
     cv.box(r0 + 1, c_n0, r0 + 7, C_RE, t.line)
+    cv.unlock(r0 + 2, c_n0, r0 + 7, C_RE)
 
 
 # --------------------------------------------------------------------------- #
@@ -1039,6 +1053,7 @@ def add_alpaca_mini_panel(wb, cv: Canvas, tr: TrackerRefs, kind: str = "budget")
     })
     cv.grid(r0 + 1, C_NAME, r0 + 5, C_D31, t.line)
     cv.box(r0, C_NAME, r0 + 5, C_D31, t.line)
+    cv.unlock(r0 + 2, C_NAME, r0 + 5, 24)
 
     # Right summary card
     cv.merge(r0 + 1, C_R0, r0 + 1, C_RE, "TỔNG THỰC TẾ", bold=True, font_size=8, align="center",
@@ -1108,6 +1123,7 @@ def add_royal_cat_cash_panel(wb, cv: Canvas, tr: TrackerRefs):
                  num_format="+#,##0;-#,##0;0", bg_color=bg, font_color=t.primary_dark)
     cv.grid(r0 + 1, 15, r0 + 5, C_RE, t.line)
     cv.box(r0, 15, r0 + 5, C_RE, t.line)
+    cv.unlock(r0 + 2, 23, r0 + 5, C_R0 + 1)
 
 
 # --------------------------------------------------------------------------- #
@@ -1219,6 +1235,7 @@ def add_dog_companion_panel(wb, cv: Canvas, tr: TrackerRefs, kind: str = "shiba"
              bg_color=t.soft, font_color=t.ink)
     cv.merge(r0 + 2, 17, r0 + 3, C_RE, note_val, font_size=9.5, align="left", indent=1, text_wrap=True,
              bg_color=t.card, font_color=t.ink)
+    cv.unlock(r0 + 2, 17, r0 + 3, C_RE)
     cv.grid(r0 + 1, C_NAME, r0 + 3, C_RE, t.line)
     cv.box(r0, C_NAME, r0 + 3, C_RE, t.line)
 
@@ -1251,6 +1268,7 @@ def add_sakura_minimalist_bar(wb, cv: Canvas, tr: TrackerRefs):
     cv.merge(r0 + 1, 17, r0 + 1, C_RE,
              "• Ít nhưng tinh — tập trung hoàn thành trọn vẹn từng thói quen cốt lõi để mỗi ngày đều nở hoa anh đào.",
              font_size=9.2, align="left", indent=1, text_wrap=True, bg_color=t.card, font_color=t.ink)
+    cv.unlock(r0 + 1, 17, r0 + 1, C_RE)
     cv.grid(r0, C_NAME, r0 + 1, C_RE, t.line)
     cv.box(r0, C_NAME, r0 + 1, C_RE, t.line)
 
@@ -1288,6 +1306,7 @@ def add_mochi_cat_mood_suite(wb, cv: Canvas, tr: TrackerRefs, seed: int = 330):
         cv.put(r0 + 1, c, val, align="center", font_size=11, bg_color=t.card, font_color=t.ink)
 
     mood_strip_rng = rng(r0 + 1, C_D0, r0 + 1, C_D31)
+    cv.unlock(r0 + 1, C_D0, r0 + 1, C_D31)
     ws.data_validation(mood_strip_rng, {
         "validate": "list", "source": f"={mood6_lookup_ref()}",
         "input_title": "Chọn Tâm Trạng (6 Mức)",
@@ -1331,6 +1350,7 @@ def add_mochi_cat_mood_suite(wb, cv: Canvas, tr: TrackerRefs, seed: int = 330):
                  bg_color=t.card if idx_td % 2 == 0 else t.page, font_color=t.ink)
     cv.grid(r_b + 1, C_NAME, r_b + 4, 10, t.line)
     cv.box(r_b, C_NAME, r_b + 4, 10, t.line)
+    cv.unlock(r_b + 1, C_NAME, r_b + 4, 10)
 
     cv.merge(r_b, 12, r_b, 24, "✨  ĐIỀU LÀM TỐT (WHAT WENT WELL)", bold=True, font_size=9,
              align="left", indent=1, bg_color="#FCD5B5", font_color=t.ink)
@@ -1340,6 +1360,7 @@ def add_mochi_cat_mood_suite(wb, cv: Canvas, tr: TrackerRefs, seed: int = 330):
              "• Hoàn thành sớm toàn bộ việc ưu tiên trong tuần!",
              font_size=9.2, align="left", indent=1, text_wrap=True, bg_color=t.card, font_color=t.ink)
     cv.box(r_b, 12, r_b + 4, 24, t.line)
+    cv.unlock(r_b + 1, 12, r_b + 4, 24)
 
     cv.merge(r_b, 26, r_b, C_RE, "💡  ĐIỀU CẦN CẢI THIỆN (WHAT DIDN'T GO WELL)", bold=True, font_size=9,
              align="left", indent=1, bg_color="#F4A261", font_color="#FFFFFF")
@@ -1348,6 +1369,7 @@ def add_mochi_cat_mood_suite(wb, cv: Canvas, tr: TrackerRefs, seed: int = 330):
              "• Tuần tới cần đặt báo thức ngủ lúc 22h45 & chuẩn bị đồ từ tối hôm trước!",
              font_size=9.2, align="left", indent=1, text_wrap=True, bg_color=t.card, font_color=t.ink)
     cv.box(r_b, 26, r_b + 4, C_RE, t.line)
+    cv.unlock(r_b + 1, 26, r_b + 4, C_RE)
 
 
 # --------------------------------------------------------------------------- #

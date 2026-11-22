@@ -55,7 +55,7 @@ REQUIRED_SHAPES = (
     + [f"Guide_Stage{s}" for s in range(6)]
     + [f"ASSET_S{s}" for s in range(6)]
     + [
-        "BTN_PREV_MONTH", "BTN_NEXT_MONTH", "BTN_FX_TOGGLE",
+        "BTN_PREV_MONTH", "BTN_NEXT_MONTH", "BTN_FX_TOGGLE", "BTN_UNDO",
         "BTN_PREV_DAY", "BTN_TODAY", "BTN_NEXT_DAY",
         "BTN_DEMO_FX", "BTN_SYNC_ASSETS",
     ]
@@ -78,7 +78,8 @@ def audit_vba_and_gs() -> list[str]:
     if "Scripting.Dictionary" in vba_txt:
         issues.append("VBA uses Windows-only Scripting.Dictionary (crashes macOS Excel)!")
     for sym in ("SyncAllMonthlySprites", "FlushAllDirty", "SyncSpritesFromAssets",
-                "HandleAnnualYearSwitch", "EnsureDbIndexes", "PlayHeroBounce", "PlaySparkleBurst", "ShowToast"):
+                "HandleAnnualYearSwitch", "EnsureDbIndexes", "PlayHeroBounce", "PlaySparkleBurst", "ShowToast",
+                "UndoLastHabitEdit", "ProtectVisibleSheets"):
         if sym not in vba_txt:
             issues.append(f"VBA missing required procedure: {sym}")
 
@@ -173,6 +174,7 @@ def audit_com_all_35(pro_files: list[Path], tmp_dir: Path) -> list[str]:
             for fpath in chunk:
                 dst = tmp_dir / fpath.name
                 shutil.copy2(fpath, dst)
+                xl.EnableEvents = True
                 wb = xl.Workbooks.Open(str(dst.resolve()))
                 try:
                     xl.EnableEvents = False
@@ -196,6 +198,16 @@ def audit_com_all_35(pro_files: list[Path], tmp_dir: Path) -> list[str]:
                                 issues.append(f"{fpath.name}[{ws.Name}]: Camera LinkedPicture {nm} (type={shp.Type})")
                             if nm == "FX_TOAST" or nm.startswith("FX_PARTICLE_"):
                                 issues.append(f"{fpath.name}[{ws.Name}]: orphan FX shape {nm}")
+                    # Verify v3.6.1 UX Hardening: Protection + Row 37 locked + Chart 1 strictly ABOVE Row 8!
+                    ws_tr = wb.Names("ANCHOR_TRACKER").RefersToRange.Worksheet
+                    if not ws_tr.ProtectContents or not ws_tr.ProtectionMode:
+                        issues.append(f"{fpath.name}: Tracker missing UserInterfaceOnly protection!")
+                    if ws_tr.Range("K37").Locked is not True or ws_tr.Range("C17").Locked is not False:
+                        issues.append(f"{fpath.name}: Invalid lock map on Tracker (K37={ws_tr.Range('K37').Locked}, C17={ws_tr.Range('C17').Locked})")
+                    row8_top = float(ws_tr.Rows(8).Top)
+                    c1 = ws_tr.ChartObjects(1)
+                    if float(c1.Top) + float(c1.Height) >= row8_top:
+                        issues.append(f"{fpath.name}: Chart 1 bottom ({float(c1.Top)+float(c1.Height):.1f}) >= Row 8 top ({row8_top:.1f})")
                 finally:
                     wb.Close(SaveChanges=False)
                 print(f"  [COM OK] {fpath.name}", flush=True)
@@ -343,6 +355,29 @@ def audit_deep_interactive(tmp_dir: Path) -> list[str]:
                     xl.Run(f"'{wb.Name}'!modHabitState.SyncSpritesFromAssets")
                     if _get_visible_stage(ws_tr, "SPR_MHERO_S") < 0:
                         issues.append(f"{fname}: SyncSpritesFromAssets broke SPR_MHERO_S visibility!")
+
+                # 8. v3.6.1 Pro UX Hardening: Row 37 protection + Real Ctrl+Z Multi-Cell Undo!
+                ws_tr.Activate()
+                ws_tr.Protect(Password="", DrawingObjects=False, Contents=True, Scenarios=False,
+                              UserInterfaceOnly=False, AllowFormattingCells=False)
+                blocked_k37 = False
+                try:
+                    ws_tr.Range("K17:K36").AutoFill(Destination=ws_tr.Range("K17:K37"))
+                except Exception:
+                    blocked_k37 = True
+                if not blocked_k37:
+                    issues.append(f"{fname}: AutoFill onto K37 (TOTAL row) was NOT blocked!")
+                xl.Run(f"'{wb.Name}'!modHabitState.ProtectVisibleSheets")
+
+                orig_k = ws_tr.Range("K17:K36").Value2
+                ws_tr.Range("K17:K36").Value2 = [[True] for _ in range(20)]
+                xl.Run(f"'{wb.Name}'!modHabitState.UndoLastHabitEdit")
+                if ws_tr.Range("K17:K36").Value2 != orig_k:
+                    issues.append(f"{fname}: Multi-cell UndoLastHabitEdit did NOT restore K17:K36!")
+                xl.Run(f"'{wb.Name}'!modHabitState.UndoLastHabitEdit")
+                if ws_tr.Range("K36").Value2 is not True:
+                    issues.append(f"{fname}: UndoLastHabitEdit Redo toggle failed!")
+                xl.Run(f"'{wb.Name}'!modHabitState.UndoLastHabitEdit")
 
                 # Final CleanupAllFX -> 0 orphan FX shapes across entire workbook!
                 xl.Run(f"'{wb.Name}'!modHabitState.CleanupAllFX")
