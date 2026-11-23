@@ -740,11 +740,111 @@ ANNUAL_LORE: dict[str, dict] = {
         ],
         ("🌷 Tưới giọt nước đầu tiên!", "🐻 Milk & Mocha đang cười!", "💕 Trái tim hồng rực rỡ!", "🏆 Huyền Thoại Milk & Mocha!"),
     ),
+    # 36 - Digimon Veemon Miracle Evolution (7 Stages!)
+    "digimon_veemon": _lore(
+        "⚡  ĐẠI SẢNH KỲ TÍCH VEEMON — TỔNG KẾT TIẾN HÓA NĂM",
+        "Từ Digi-Egg of Miracles đến Golden Armor Magnamon — chinh phục 7 cấp tiến hóa cùng kỷ luật mỗi ngày!",
+        "⚡  TỔNG ĐIỂM DIGIVICE D-3", "ngày Ultimate/Mega ≥",
+        "👑  BIÊN NIÊN SỬ TIẾN HÓA VEEMON 12 THÁNG (T1 – T12)",
+        "⚡  BIỂU ĐỒ NĂNG LƯỢNG KỲ TÍCH 12 THÁNG", "combo",
+        "🏅  HUY CHƯƠNG HOÀNG KIM CREST OF MIRACLES", "👑  MAGNAMON",
+        [
+            ("🥚  Nở Trứng Kỳ Tích (Chibomon)", "Hoàn thành ngày đầu tiên đạt ≥ 80% — đánh thức Digi-Egg!"),
+            ("🐾  Khởi Động DemiVeemon (7d)", "Duy trì chuỗi 7 ngày kỷ luật bền bỉ liên tiếp"),
+            ("🔥  Giáp Lửa Flamedramon (21d)", "Đạt chuỗi 21 ngày bùng cháy ý chí không bỏ cuộc"),
+            ("🛡️  Hợp Thể Paildramon (30d)", "Giữ vững chuỗi 30 ngày sức mạnh đỉnh cao"),
+            ("⚡  Tháng Kỳ Tích (≥ 80%)", "Có ít nhất 1 tháng đạt trung bình ≥ 80%"),
+            ("💎  100 Ngày Hoàng Kim (100d)", "Đạt ≥ 100 ngày Ultimate/Mega (≥ 80%) trong năm"),
+            ("🎯  Chinh Phục Digital World", "Hoàn thành ≥ 50% mục tiêu trên Yearly Goals"),
+            ("👑  Huyền Thoại Royal Knight Magnamon", "Đạt ≥ 80% cả năm hoặc ≥ 250 ngày ≥ 80%"),
+        ],
+        ("🥚 Trứng Kỳ Tích đang phát sáng!", "⚡ Veemon sẵn sàng chiến đấu!", "🛡️ Paildramon tỏa sáng rực rỡ!", "👑 Royal Knight Magnamon!"),
+    ),
+    # 37 - Digimon Agumon Courage Evolution (7 Stages!)
+    "digimon_agumon": _lore(
+        "🔥  ĐẠI SẢNH DŨNG KHÍ AGUMON — TỔNG KẾT TIẾN HÓA NĂM",
+        "Thắp sáng Huy hiệu Dũng Khí (Crest of Courage) — rèn luyện từng ngày từ Agumon lên chiến thần WarGreymon!",
+        "🔥  TỔNG ĐIỂM DŨNG KHÍ COURAGE", "ngày Ultimate/Mega ≥",
+        "🦖  HÀNH TRÌNH TIẾN HÓA AGUMON 12 THÁNG (T1 – T12)",
+        "🔥  BIỂU ĐỒ NGỌN LỬA DŨNG KHÍ 12 THÁNG", "column",
+        "🏅  HUY CHƯƠNG CHIẾN THẦN CREST OF COURAGE", "⚔️  WARGREYMON",
+        [
+            ("🥚  Ngọn Lửa Đầu Tiên (Botamon)", "Đạt ngày kỷ luật đầu tiên ≥ 80% — thắp sáng Crest!"),
+            ("🦖  Tiếng Gầm Agumon (7d)", "Duy trì chuỗi 7 ngày dũng cảm không chùn bước"),
+            ("🔥  Uy Lực Greymon (21d)", "Đạt chuỗi 21 ngày kỷ luật thép liên tiếp"),
+            ("⚙️  Siêu Chiến Binh MetalGreymon (30d)", "Giữ vững chuỗi 30 ngày kiên cường phi thường"),
+            ("☀️  Tháng Dũng Khí Rực Cháy (≥ 80%)", "Có ít nhất 1 tháng đạt trung bình ≥ 80%"),
+            ("🛡️  100 Ngày Chiến Binh (100d)", "Đạt ≥ 100 ngày Ultimate/Mega (≥ 80%) trong năm"),
+            ("🎯  Mục Tiêu Anh Hùng Năm", "Hoàn thành ≥ 50% mục tiêu trên Yearly Goals"),
+            ("⚔️  Huyền Thoại WarGreymon", "Đạt ≥ 80% cả năm hoặc ≥ 250 ngày ≥ 80%"),
+        ],
+        ("🥚 Đánh thức ngọn lửa Dũng Khí!", "🦖 Agumon đang mạnh mẽ hơn!", "⚙️ MetalGreymon bứt phá!", "⚔️ Chiến thần WarGreymon!"),
+    ),
+    # 38 - Digimon Gatomon Light Evolution (7 Stages!)
+    "digimon_gatomon": _lore(
+        "✨  THÁNH ĐƯỜNG ÁNH SÁNG GATOMON — TỔNG KẾT TIẾN HÓA NĂM",
+        "Huy hiệu Ánh Sáng (Crest of Light) — nuôi dưỡng sự tử tế & kỷ luật từ Gatomon lên Angewomon & LovelyAngemon!",
+        "✨  TỔNG ĐIỂM VÒNG THÁNH ÁNH SÁNG", "ngày Thiên Thần ≥",
+        "🪽  HÀNH TRÌNH ÁNH SÁNG GATOMON 12 THÁNG (T1 – T12)",
+        "💖  BIỂU ĐỒ HÀO QUANG ÁNH SÁNG 12 THÁNG", "area",
+        "🏅  HUY CHƯƠNG THIÊN THẦN CREST OF LIGHT", "💖  LOVELYANGEMON",
+        [
+            ("🥚  Tia Sáng Đầu Tiên (YukimiBotamon)", "Hoàn thành ngày kỷ luật đầu tiên ≥ 80%"),
+            ("🐶  Bước Chân Salamon (7d)", "Duy trì chuỗi 7 ngày sống tích cực liên tiếp"),
+            ("🐾  Vòng Thánh Gatomon (21d)", "Đạt chuỗi 21 ngày kỷ luật dịu dàng & vững vàng"),
+            ("🪽  Đôi Cánh Angewomon (30d)", "Giữ vững chuỗi 30 ngày tỏa sáng không gián đoạn"),
+            ("🌸  Tháng Hào Quang (≥ 80%)", "Có ít nhất 1 tháng đạt trung bình ≥ 80%"),
+            ("✨  100 Ngày Ánh Sáng (100d)", "Đạt ≥ 100 ngày Ultimate/Mega (≥ 80%) trong năm"),
+            ("🎯  Trọn Vẹn Mục Tiêu Năm", "Hoàn thành ≥ 50% mục tiêu trên Yearly Goals"),
+            ("💖  Huyền Thoại LovelyAngemon", "Đạt ≥ 80% cả năm hoặc ≥ 250 ngày ≥ 80%"),
+        ],
+        ("🥚 Tia sáng dịu dàng hé mở!", "🐾 Gatomon bảo vệ vòng thánh!", "🪽 Đôi cánh Angewomon rực sáng!", "💖 Huyền thoại LovelyAngemon!"),
+    ),
+    # 39 - Digimon Gabumon Friendship Evolution (7 Stages!)
+    "digimon_gabumon": _lore(
+        "❄️  ĐỈNH BĂNG TÌNH BẠN GABUMON — TỔNG KẾT TIẾN HÓA NĂM",
+        "Huy hiệu Tình Bạn (Crest of Friendship) — bền bỉ, trung thành & bứt tốc từ Gabumon đến MetalGarurumon!",
+        "🐺  TỔNG ĐIỂM TÌNH BẠN FRIENDSHIP", "ngày Sói Băng ≥",
+        "❄️  HÀNH TRÌNH TIẾN HÓA GABUMON 12 THÁNG (T1 – T12)",
+        "🚀  BIỂU ĐỒ TỐC ĐỘ SÓI BĂNG 12 THÁNG", "combo",
+        "🏅  HUY CHƯƠNG SÓI BĂNG CREST OF FRIENDSHIP", "🚀  METALGARURUMON",
+        [
+            ("🥚  Dấu Ấn Băng Giá (Punimon)", "Hoàn thành ngày đầu tiên đạt ≥ 80%"),
+            ("🐾  Đồng Hành Gabumon (7d)", "Duy trì chuỗi 7 ngày trung thành với kỷ luật"),
+            ("🐺  Bản Lĩnh Garurumon (21d)", "Đạt chuỗi 21 ngày vững vàng trước mọi thử thách"),
+            ("⚡  Chiến Sói WereGarurumon (30d)", "Giữ vững chuỗi 30 ngày sức mạnh kiên định"),
+            ("❄️  Tháng Băng Tuyết Tuyệt Đối (≥ 80%)", "Có ít nhất 1 tháng đạt trung bình ≥ 80%"),
+            ("💠  100 Ngày Trung Thành (100d)", "Đạt ≥ 100 ngày Ultimate/Mega (≥ 80%) trong năm"),
+            ("🎯  Chinh Phục Mục Tiêu Năm", "Hoàn thành ≥ 50% mục tiêu trên Yearly Goals"),
+            ("🚀  Huyền Thoại MetalGarurumon", "Đạt ≥ 80% cả năm hoặc ≥ 250 ngày ≥ 80%"),
+        ],
+        ("🥚 Dấu ấn Tình Bạn thức giấc!", "🐺 Garurumon tăng tốc băng giá!", "⚡ WereGarurumon bất khuất!", "🚀 Siêu chiến binh MetalGarurumon!"),
+    ),
+    # 40 - Digimon Piyomon Love Evolution (7 Stages!)
+    "digimon_piyomon": _lore(
+        "❤️  BẦU TRỜI PHƯỢNG HOÀNG PIYOMON — TỔNG KẾT TIẾN HÓA NĂM",
+        "Huy hiệu Tình Yêu (Crest of Love) — sải cánh rực rỡ mỗi ngày từ Biyomon lên Garudamon & Phoenixmon!",
+        "🔥  TỔNG ĐIỂM CÁNH LỬA CREST OF LOVE", "ngày Phượng Hoàng ≥",
+        "🦅  HÀNH TRÌNH TIẾN HÓA PIYOMON 12 THÁNG (T1 – T12)",
+        "❤️  BIỂU ĐỒ ĐÔI CÁNH YÊU THƯƠNG 12 THÁNG", "area",
+        "🏅  HUY CHƯƠNG PHƯỢNG HOÀNG CREST OF LOVE", "👑  PHOENIXMON",
+        [
+            ("🥚  Hạt Mầm Yêu Thương (Nyokimon)", "Hoàn thành ngày kỷ luật đầu tiên ≥ 80%"),
+            ("🐦  Đôi Cánh Biyomon (7d)", "Duy trì chuỗi 7 ngày ấm áp & kiên trì"),
+            ("🔥  Sải Cánh Birdramon (21d)", "Đạt chuỗi 21 ngày rực cháy đam mê"),
+            ("🦅  Uy Nghi Garudamon (30d)", "Giữ vững chuỗi 30 ngày vút bay mạnh mẽ"),
+            ("🌅  Tháng Hoàng Hôn Rực Rỡ (≥ 80%)", "Có ít nhất 1 tháng đạt trung bình ≥ 80%"),
+            ("❤️  100 Ngày Phượng Hoàng (100d)", "Đạt ≥ 100 ngày Ultimate/Mega (≥ 80%) trong năm"),
+            ("🎯  Chạm Đích Mục Tiêu Năm", "Hoàn thành ≥ 50% mục tiêu trên Yearly Goals"),
+            ("👑  Huyền Thoại Bất Tử Phoenixmon", "Đạt ≥ 80% cả năm hoặc ≥ 250 ngày ≥ 80%"),
+        ],
+        ("🥚 Hạt mầm Yêu Thương nảy nở!", "🐦 Biyomon tung cánh bay cao!", "🦅 Garudamon rực cháy bầu trời!", "👑 Phượng Hoàng Bất Tử Phoenixmon!"),
+    ),
 }
 
 
 def get_annual_lore(slug: str) -> dict:
-    """Return bespoke Annual Achievements lore pack for `slug` (35 themes supported)."""
+    """Return bespoke Annual Achievements lore pack for `slug` (40 themes supported)."""
     if slug in ANNUAL_LORE:
         return ANNUAL_LORE[slug]
     raise KeyError(f"Missing bespoke Annual Achievements lore for slug={slug!r}")

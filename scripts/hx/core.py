@@ -70,6 +70,21 @@ class Theme:
     hero_header_fg: str | None = None     # Optional accent banner fg on Grown Hero card
     warn_fill: str = "#FFF6DD"
     warn_line: str = "#F1D88A"
+    num_stages: int = 6                   # 6 for themes #01-#35, 7 for Digimon #36-#40
+    stage_names: list | None = None       # Optional list of 7 Digimon names for Guide
+
+    @property
+    def max_stage_idx(self) -> int:
+        return self.num_stages - 1
+
+    @property
+    def hide_stage_val(self) -> int:
+        return self.num_stages + 1
+
+    @property
+    def assets_range(self) -> str:
+        # B2..B(2+num_stages): e.g. $B$2:$B$8 for 6 stages (B8 blank), $B$2:$B$9 for 7 stages (B9 blank)
+        return f"$B$2:$B${2 + self.num_stages}"
 
     @property
     def img_base(self) -> str:

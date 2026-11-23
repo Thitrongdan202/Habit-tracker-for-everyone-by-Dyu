@@ -25,33 +25,39 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     cv = Canvas(wb, ws, styles, GUIDE_SHEET, universal=universal, gsheets=gsheets)
     q = qs(GUIDE_SHEET)
 
+    is_7 = (t.num_stages == 7)
+    last_c = 7 if is_7 else 6  # 6 cols (B:G) for 6-stage, 7 cols (B:H) for 7-stage Digimon!
+    col_w = 19.2 if is_7 else 22.0
+
     cv.col(0, 3.0)
-    for c in range(1, 7):
-        cv.col(c, 22.0)
-    cv.col(7, 3.0)
+    for c in range(1, last_c + 1):
+        cv.col(c, col_w)
+    cv.col(last_c + 1, 3.0)
     cv.row(0, 12)
 
     # ------------------------------------------------------------------ HERO BANNER (Rows 2..4)
     cv.row(1, 38)
     cv.row(2, 24)
     cv.row(3, 24)
-    ver_tag = "v3.6 Turbo" if edition == "pro_xlsm" else "v3.5"
-    cv.merge(1, 1, 1, 6, f"{t.emoji}  {t.name}  —  HƯỚNG DẪN SỬ DỤNG ({ver_tag})",
+    ver_tag = "v3.7 Turbo" if (is_7 and edition == "pro_xlsm") else ("v3.7" if is_7 else ("v3.6 Turbo" if edition == "pro_xlsm" else "v3.5"))
+    cv.merge(1, 1, 1, last_c, f"{t.emoji}  {t.name}  —  HƯỚNG DẪN SỬ DỤNG ({ver_tag})",
              font_name=t.font_title, font_size=15.5, bold=True, align="center",
              bg_color=t.primary, font_color=t.on_primary)
-    cv.merge(2, 1, 2, 6, t.tagline_vi, font_size=10, italic=True, align="center",
+    cv.merge(2, 1, 2, last_c, t.tagline_vi, font_size=10, italic=True, align="center",
              bg_color=t.soft, font_color=t.ink)
 
     if edition == "pro_xlsm":
-        mode_txt = "⚡ BẢN PRO INTERACTIVE v3.6 TURBO (.XLSM)  •  Đổi Tháng/Ngày < 150ms + Hiệu ứng Pro  •  Tự lưu Đa Ngày/Tháng/Năm  •  100% Offline"
+        mode_txt = (
+            f"⚡ BẢN PRO INTERACTIVE {ver_tag.upper()} (.XLSM)  •  Đổi Tháng/Ngày < 150ms + Hiệu ứng Pro & Ctrl+Z Undo  •  Tự lưu Đa Ngày/Tháng/Năm  •  100% Offline"
+        )
     elif edition == "offline":
-        mode_txt = "✨ BẢN EXCEL OFFLINE KHÔNG MACRO (.XLSX)  •  Gọn nhẹ 5 tab  •  Chạy mọi Excel 2016–365 Win/Mac  •  0 cảnh báo bảo mật"
+        mode_txt = f"✨ BẢN EXCEL OFFLINE KHÔNG MACRO ({ver_tag} .XLSX)  •  Gọn nhẹ 5 tab  •  Chạy mọi Excel 2016–365 Win/Mac  •  0 cảnh báo bảo mật"
     else:
-        mode_txt = "☁️ BẢN GOOGLE SHEETS EDITION  •  Gọn 5 tab + _Database  •  Hoạt ảnh =IMAGE() động  •  Kèm Script 1-Click Checkbox!"
+        mode_txt = f"☁️ BẢN GOOGLE SHEETS EDITION ({ver_tag})  •  Gọn 5 tab + _Database  •  Hoạt ảnh =IMAGE() động  •  Kèm Script 1-Click Checkbox!"
 
-    cv.merge(3, 1, 3, 6, mode_txt, font_size=9, bold=True, align="center",
+    cv.merge(3, 1, 3, last_c, mode_txt, font_size=9, bold=True, align="center",
              bg_color=t.card, font_color=t.primary_dark)
-    cv.box(1, 1, 3, 6, t.line)
+    cv.box(1, 1, 3, last_c, t.line)
     r = 4
 
     # Google Sheets crisp 1-line 3-second tip banner right under hero!
@@ -60,13 +66,13 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
         r += 1
         cv.row(r, 46)
         cv.merge(
-            r, 1, r, 6,
+            r, 1, r, last_c,
             "💡 Mẹo mở trên Google Sheets (3 giây): Chọn vùng ô TRUE/FALSE → Chèn (Insert) → Hộp kiểm (Checkbox) "
             "— HOẶC vào Tiện ích mở rộng (Extensions) → Apps Script → dán file google_sheets_1click_setup.gs và chạy setupHabitTracker() để bật Checkbox & tự động lưu 12 tháng vào _Database!",
             font_size=9.5, bold=False, align="left", indent=1, text_wrap=True,
             bg_color=t.warn_fill, font_color=t.ink,
         )
-        cv.box(r, 1, r, 6, t.warn_line)
+        cv.box(r, 1, r, last_c, t.warn_line)
         r += 1
 
     cv.row(r, 12)
@@ -74,18 +80,18 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
 
     # ------------------------------------------------------------------ TAB MAP (5 CLEAN TABS)
     cv.row(r, 26)
-    cv.merge(r, 1, r, 6, f"🗂️  CẤU TRÚC 5 SHEET GỌN ĐẸP TRONG FILE ({ver_tag})", bold=True, font_size=10.5,
+    cv.merge(r, 1, r, last_c, f"🗂️  CẤU TRÚC 5 SHEET GỌN ĐẸP TRONG FILE ({ver_tag})", bold=True, font_size=10.5,
              align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
 
     if edition == "pro_xlsm":
         tracker_desc = "Bảng theo dõi 31 ngày siêu gọn: đổi dropdown Tháng (B3) / Năm (B5) tự lưu tháng cũ & tải tháng mới vào _Database!"
     elif edition == "offline":
-        tracker_desc = "Bảng theo dõi 31 ngày không Macro siêu nhẹ: lịch động, hoạt ảnh 6 giai đoạn offline & Streak Heatmap!"
+        tracker_desc = f"Bảng theo dõi 31 ngày không Macro siêu nhẹ: lịch động, hoạt ảnh {t.num_stages} giai đoạn offline & Streak Heatmap!"
     else:
         tracker_desc = "Bảng theo dõi 31 ngày Google Sheets: kết hợp script 1-click để bật Checkbox & tự lưu/nạp 12 tháng trong _Database!"
 
     tab_rows = [
-        (GUIDE_SHEET, "Trang chào mừng, hướng dẫn nhanh & bảng tùy chỉnh ngưỡng tăng trưởng 6 giai đoạn."),
+        (GUIDE_SHEET, f"Trang chào mừng, hướng dẫn nhanh & bảng tùy chỉnh ngưỡng tiến hóa {t.num_stages} giai đoạn."),
         (tracker_sheet, tracker_desc),
     ] + extra_tabs
 
@@ -96,10 +102,10 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
         bg = t.card if idx % 2 == 0 else t.page
         cv.merge(rr, 1, rr, 2, tname, bold=True, font_size=10, align="left", indent=1,
                  bg_color=bg, font_color=t.primary_dark)
-        cv.merge(rr, 3, rr, 6, desc, bold=False, font_size=10, align="left", indent=1, text_wrap=True,
+        cv.merge(rr, 3, rr, last_c, desc, bold=False, font_size=10, align="left", indent=1, text_wrap=True,
                  bg_color=bg, font_color=t.ink)
-        cv.hline(rr, 1, 6, t.line)
-    cv.box(r, 1, r + len(tab_rows), 6, t.line)
+        cv.hline(rr, 1, last_c, t.line)
+    cv.box(r, 1, r + len(tab_rows), last_c, t.line)
     r = r + len(tab_rows) + 2
     cv.row(r - 1, 12)
 
@@ -156,7 +162,7 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
         ]
 
     end1 = info_card(r, 1, 3, "📌  1. CÁCH SỬ DỤNG & TICK HẰNG NGÀY", sec1)
-    end2 = info_card(r, 4, 6, "⚡  2. DỮ LIỆU MẪU, RESET & SANG THÁNG MỚI", sec2)
+    end2 = info_card(r, 4, last_c, "⚡  2. DỮ LIỆU MẪU, RESET & SANG THÁNG MỚI", sec2)
     r = max(end1, end2) + 1
     cv.row(r - 1, 12)
 
@@ -186,15 +192,19 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
         ]
 
     end3 = info_card(r, 1, 3, "🧩  3. TÙY BIẾN THÓI QUEN & MỤC TIÊU NĂM", sec3)
-    end4 = info_card(r, 4, 6, "🏆  4. LỊCH ĐỘNG, ĐA THÁNG/NĂM & THÀNH TỰU", sec4)
+    end4 = info_card(r, 4, last_c, "🏆  4. LỊCH ĐỘNG, ĐA THÁNG/NĂM & THÀNH TỰU", sec4)
     r = max(end3, end4) + 1
     cv.row(r - 1, 12)
 
-    # ------------------------------------------------------------------ SEC 5: CUSTOM ANIMATION & THRESHOLDS (Rows 22..27)
+    # ------------------------------------------------------------------ SEC 5: CUSTOM ANIMATION & THRESHOLDS
     r_cfg = r
     cv.row(r_cfg, 26)
-    cv.merge(r_cfg, 1, r_cfg, 6,
-             "🎨  5. HOẠT ẢNH 6 GIAI ĐOẠN (LIVE GROWTH ANIMATION) & TÙY CHỈNH NGƯỠNG",
+    sec5_title = (
+        "⚡  5. HOẠT ẢNH TIẾN HÓA 7 GIAI ĐOẠN (DIGIVOLUTION 0% → 100%) & TÙY CHỈNH NGƯỠNG"
+        if is_7 else
+        "🎨  5. HOẠT ẢNH 6 GIAI ĐOẠN (LIVE GROWTH ANIMATION) & TÙY CHỈNH NGƯỠNG"
+    )
+    cv.merge(r_cfg, 1, r_cfg, last_c, sec5_title,
              bold=True, font_size=10.5, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
 
     cur_r = r_cfg + 1
@@ -202,49 +212,84 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
         cv.row(cur_r, 28)
         cv.merge(cur_r, 1, cur_r, 2, "🔗  Đường dẫn ảnh (CFG_IMG_BASE):", bold=True, font_size=9.5,
                  align="left", indent=1, bg_color=t.soft, font_color=t.ink)
-        cv.merge(cur_r, 3, cur_r, 6, t.img_base, bold=False, font_size=8.8, align="left",
+        cv.merge(cur_r, 3, cur_r, last_c, t.img_base, bold=False, font_size=8.8, align="left",
                  bg_color=t.warn_fill, font_color=t.ink, indent=1)
         wb.define_name("CFG_IMG_BASE", f"={q}!{acell(cur_r, 3)}")
-        cv.hline(cur_r, 1, 6, t.line)
+        cv.hline(cur_r, 1, last_c, t.line)
         cur_r += 1
 
-    # Row 23 Threshold bar — SYMMETRICALLY CENTERED!
+    # Threshold bar — 3 thresholds for 6-stage, 4 thresholds (2 neat rows) for 7-stage Digimon!
     r_thr = cur_r
-    cv.row(r_thr, 28)
-    cv.put(r_thr, 1, "Ngưỡng Stage 2:", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
-    cv.put(r_thr, 2, 0.25, bold=True, font_size=10, align="center", num_format="0%",
-           bg_color=t.warn_fill, font_color=t.primary_dark)
-    cv.put(r_thr, 3, "Ngưỡng Stage 3:", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
-    cv.put(r_thr, 4, 0.50, bold=True, font_size=10, align="center", num_format="0%",
-           bg_color=t.warn_fill, font_color=t.primary_dark)
-    cv.put(r_thr, 5, "Ngưỡng Đạt (Grown):", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
-    cv.put(r_thr, 6, 0.75, bold=True, font_size=10, align="center", num_format="0%",
-           bg_color=t.warn_fill, font_color=t.primary_dark)
-    wb.define_name("CFG_THR_1", f"={q}!{acell(r_thr, 2)}")
-    wb.define_name("CFG_THR_2", f"={q}!{acell(r_thr, 4)}")
-    wb.define_name("CFG_THR_3", f"={q}!{acell(r_thr, 6)}")
-    cv.hline(r_thr, 1, 6, t.line)
+    if is_7:
+        cv.row(r_thr, 26)
+        cv.row(r_thr + 1, 26)
+        # Row 1: Stage 2 (20%) & Stage 3 (40%)
+        cv.merge(r_thr, 1, r_thr, 2, "Ngưỡng Stage 2 (Baby II):", bold=True, font_size=9.2, align="center", bg_color=t.soft, font_color=t.ink)
+        cv.put(r_thr, 3, 0.20, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+        cv.merge(r_thr, 4, r_thr, 6, "Ngưỡng Stage 3 (Rookie):", bold=True, font_size=9.2, align="center", bg_color=t.soft, font_color=t.ink)
+        cv.put(r_thr, 7, 0.40, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+        # Row 2: Stage 4 (60%) & Stage 5 / Grown Ultimate (80%)
+        cv.merge(r_thr + 1, 1, r_thr + 1, 2, "Ngưỡng Stage 4 (Champion):", bold=True, font_size=9.2, align="center", bg_color=t.soft, font_color=t.ink)
+        cv.put(r_thr + 1, 3, 0.60, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+        cv.merge(r_thr + 1, 4, r_thr + 1, 6, "Ngưỡng Stage 5 • Đạt (Ultimate):", bold=True, font_size=9.2, align="center", bg_color=t.soft, font_color=t.ink)
+        cv.put(r_thr + 1, 7, 0.80, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+        wb.define_name("CFG_THR_0", f"={q}!{acell(r_thr, 3)}")
+        wb.define_name("CFG_THR_1", f"={q}!{acell(r_thr, 7)}")
+        wb.define_name("CFG_THR_2", f"={q}!{acell(r_thr + 1, 3)}")
+        wb.define_name("CFG_THR_3", f"={q}!{acell(r_thr + 1, 7)}")
+        cv.grid(r_thr, 1, r_thr + 1, last_c, t.line)
+        r_shead = r_thr + 2
+    else:
+        cv.row(r_thr, 28)
+        cv.put(r_thr, 1, "Ngưỡng Stage 2:", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
+        cv.put(r_thr, 2, 0.25, bold=True, font_size=10, align="center", num_format="0%",
+               bg_color=t.warn_fill, font_color=t.primary_dark)
+        cv.put(r_thr, 3, "Ngưỡng Stage 3:", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
+        cv.put(r_thr, 4, 0.50, bold=True, font_size=10, align="center", num_format="0%",
+               bg_color=t.warn_fill, font_color=t.primary_dark)
+        cv.put(r_thr, 5, "Ngưỡng Đạt (Grown):", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
+        cv.put(r_thr, 6, 0.75, bold=True, font_size=10, align="center", num_format="0%",
+               bg_color=t.warn_fill, font_color=t.primary_dark)
+        wb.define_name("CFG_THR_1", f"={q}!{acell(r_thr, 2)}")
+        wb.define_name("CFG_THR_2", f"={q}!{acell(r_thr, 4)}")
+        wb.define_name("CFG_THR_3", f"={q}!{acell(r_thr, 6)}")
+        cv.hline(r_thr, 1, 6, t.line)
+        r_shead = r_thr + 1
 
-    # Rows 24..26: Stage 0..5 headers, airy 94pt sprite row, descriptions
-    r_shead = r_thr + 1
-    r_simg = r_thr + 2
-    r_sdesc = r_thr + 3
-    cv.row(r_shead, 24)
-    cv.row(r_simg, 94)
-    cv.row(r_sdesc, 24)
-    stage_meta = [
-        ("Stage 0", "0% (Chưa bắt đầu)"),
-        ("Stage 1", "1% – 24% (Khởi động)"),
-        ("Stage 2", "25% – 49% (Đang lớn)"),
-        ("Stage 3", "50% – 74% (Ổn định)"),
-        ("Stage 4", "75% – 99% (Sắp trọn vẹn)"),
-        ("Stage 5", "100% (Hoàn hảo ✨)"),
-    ]
+    # Stage headers, airy 94pt sprite row, descriptions (6 stages OR 7 Digimon stages!)
+    r_simg = r_shead + 1
+    r_sdesc = r_shead + 2
+    cv.row(r_shead, 26 if is_7 else 24)
+    cv.row(r_simg, 96 if is_7 else 94)
+    cv.row(r_sdesc, 34 if is_7 else 24)
+    if is_7:
+        snames = t.stage_names or ["Digi-Egg", "Baby I", "Baby II", "Rookie", "Champion", "Ultimate", "Mega"]
+        pct_subs = [
+            "0%\n(Chờ nở)",
+            "1% – 19%\n(Baby I)",
+            "20% – 39%\n(Baby II)",
+            "40% – 59%\n(Rookie)",
+            "60% – 79%\n(Champion)",
+            "80% – 99%\n(Ultimate)",
+            "100% MEGA ✨\n(Tối thượng!)",
+        ]
+        stage_meta = [(f"S{i} • {snames[i]}", pct_subs[i]) for i in range(7)]
+    else:
+        stage_meta = [
+            ("Stage 0", "0% (Chưa bắt đầu)"),
+            ("Stage 1", "1% – 24% (Khởi động)"),
+            ("Stage 2", "25% – 49% (Đang lớn)"),
+            ("Stage 3", "50% – 74% (Ổn định)"),
+            ("Stage 4", "75% – 99% (Sắp trọn vẹn)"),
+            ("Stage 5", "100% (Hoàn hảo ✨)"),
+        ]
     guide_sprite_slots = []
     for idx, (st_title, st_sub) in enumerate(stage_meta):
         c = 1 + idx
-        cv.put(r_shead, c, st_title, bold=True, font_size=9.5, align="center",
-               bg_color=t.soft, font_color=t.ink)
+        is_mega = is_7 and (idx == 6)
+        cv.put(r_shead, c, st_title, bold=True, font_size=(9.0 if is_7 else 9.5), align="center",
+               bg_color=(t.primary if is_mega else t.soft),
+               font_color=(t.on_primary if is_mega else t.ink))
         if universal:
             cv.put(r_simg, c, "", align="center", bg_color=t.card)
             guide_sprite_slots.append({"name": f"Guide_Stage{idx}", "sheet": GUIDE_SHEET,
@@ -252,44 +297,51 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
                                        "formula": f"=_Assets!$B${2 + idx}"})
         else:
             cv.put(r_simg, c, f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_{idx}.png")', align="center", bg_color=t.card)
-        cv.put(r_sdesc, c, st_sub, bold=False, font_size=8.8, align="center", bg_color=t.card, font_color=t.muted)
-    cv.grid(r_shead, 1, r_sdesc, 6, t.line)
+        cv.put(r_sdesc, c, st_sub, bold=is_mega, font_size=8.6, align="center", text_wrap=True,
+               bg_color=(t.soft if is_mega else t.card),
+               font_color=(t.primary_dark if is_mega else t.muted))
+    cv.grid(r_shead, 1, r_sdesc, last_c, t.line)
 
-    # Row 27 Yellow Tip Box — ZERO markdown backticks, generous height + indent=1!
+    # Tip Box — ZERO markdown backticks, generous height + indent=1!
     r_tip = r_sdesc + 1
+    slot_range_txt = f"B2:B{1 + t.num_stages} (Stage 0 → Stage {t.max_stage_idx})"
     if edition == "pro_xlsm":
         tip_txt = (
-            "✨  CÁCH TỰ ĐỔI BỘ ẢNH HOẠT ẢNH RIÊNG (KHÔNG CẦN LINK / KHÔNG CẦN MẠNG):  "
-            "1) Chuột phải tên tab bất kỳ → chọn Unhide → chọn _Assets → OK.  "
-            "2) Thay 6 ảnh trong ô B2:B7 (Stage 0 → Stage 5) bằng ảnh PNG/sticker của bạn.  "
-            "3) Bấm nút 🔄 Đồng bộ ảnh mới (SyncSpritesFromAssets) ngay trên _Assets rồi ẩn lại → toàn bộ 31 ngày, Hero & 12 tháng cập nhật ngay lập tức!"
+            f"✨  CÁCH TỰ ĐỔI BỘ ẢNH HOẠT ẢNH RIÊNG (KHÔNG CẦN LINK / KHÔNG CẦN MẠNG):  "
+            f"1) Chuột phải tên tab bất kỳ → chọn Unhide → chọn _Assets → OK.  "
+            f"2) Thay {t.num_stages} ảnh trong ô {slot_range_txt} bằng ảnh PNG/sticker của bạn.  "
+            f"3) Bấm nút 🔄 Đồng bộ {t.num_stages} ảnh mới (SyncSpritesFromAssets) ngay trên _Assets rồi ẩn lại → toàn bộ 31 ngày, Hero & 12 tháng cập nhật ngay lập tức!"
         )
     elif universal:
         tip_txt = (
-            "✨  CÁCH TỰ ĐỔI BỘ ẢNH HOẠT ẢNH RIÊNG (KHÔNG CẦN LINK / KHÔNG CẦN MẠNG):  "
-            "1) Chuột phải tên tab bất kỳ → chọn Unhide → chọn _Assets → OK.  "
-            "2) Thay 6 ảnh trong ô B2:B7 (Stage 0 → Stage 5) bằng ảnh PNG/sticker của bạn.  "
-            "3) Ẩn lại _Assets → toàn bộ 31 ngày, Monthly Hero, Yearly Goals & 12 tháng Tổng Kết Năm tự động đổi theo ảnh của bạn!"
+            f"✨  CÁCH TỰ ĐỔI BỘ ẢNH HOẠT ẢNH RIÊNG (KHÔNG CẦN LINK / KHÔNG CẦN MẠNG):  "
+            f"1) Chuột phải tên tab bất kỳ → chọn Unhide → chọn _Assets → OK.  "
+            f"2) Thay {t.num_stages} ảnh trong ô {slot_range_txt} bằng ảnh PNG/sticker của bạn.  "
+            f"3) Ẩn lại _Assets → toàn bộ 31 ngày, Monthly Hero, Yearly Goals & 12 tháng Tổng Kết Năm tự động đổi theo ảnh của bạn!"
         )
     else:
         tip_txt = (
-            "💡  Muốn tự thay bộ icon riêng trên Google Sheets? Tạo 6 file PNG (stage_0.png → stage_5.png), "
-            "tải lên GitHub public rồi dán URL thư mục gốc vào ô vàng CFG_IMG_BASE ở trên. "
-            "Hoặc sửa 3 ô ngưỡng vàng (25% / 50% / 75%) để điều chỉnh tốc độ tăng trưởng!"
+            f"💡  Muốn tự thay bộ icon riêng trên Google Sheets? Tạo {t.num_stages} file PNG (stage_0.png → stage_{t.max_stage_idx}.png), "
+            f"tải lên GitHub public rồi dán URL thư mục gốc vào ô vàng CFG_IMG_BASE ở trên. "
+            f"Hoặc sửa các ô ngưỡng màu vàng để tùy chỉnh tốc độ tiến hóa!"
         )
     tip_lines = text_lines(tip_txt, 118, factor=0.76)
     cv.row(r_tip, max(64, tip_lines * 16 + 20))
-    cv.merge(r_tip, 1, r_tip, 6, tip_txt, bold=False, font_size=9.5, align="left", text_wrap=True,
+    cv.merge(r_tip, 1, r_tip, last_c, tip_txt, bold=False, font_size=9.5, align="left", text_wrap=True,
              bg_color=t.warn_fill, font_color=t.ink, indent=1)
-    cv.box(r_cfg, 1, r_tip, 6, t.line)
+    cv.box(r_cfg, 1, r_tip, last_c, t.line)
 
     # Footer row — generous 28pt height, centered, NEVER clipped!
     r_foot = r_tip + 2
     cv.row(r_foot - 1, 10)
     cv.row(r_foot, 28)
     cv.row(r_foot + 1, 12)
-    foot_ver = "v3.6 Turbo by Dyu  •  Sub-150ms Native Sprite Engine & Pro FX" if edition == "pro_xlsm" else "v3.5 by Dyu  •  Ultra-Smooth Pro FX & Unified 5-Tab Edition"
-    cv.merge(r_foot, 1, r_foot, 6,
+    foot_ver = (
+        f"{ver_tag} by Dyu  •  Sub-150ms Native Sprite Engine & Pro FX + Ctrl+Z Undo"
+        if edition == "pro_xlsm" else
+        f"{ver_tag} by Dyu  •  Unified 5-Tab Habit Tracker Collection"
+    )
+    cv.merge(r_foot, 1, r_foot, last_c,
              f"💛  Habit Tracker Collection {foot_ver}  •  {REPO_URL}",
              bold=False, font_size=9, italic=True, align="center", bg_color=t.page, font_color=t.muted)
 
@@ -304,5 +356,9 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     ws.set_margins(0.35, 0.35, 0.4, 0.4)
     cv.flush()
 
-    # Return 1-based last row including bottom gutter so PNG capture NEVER clips the footer!
-    return {"linked_pictures": guide_sprite_slots, "guide_last_row": r_foot + 2}
+    # Return 1-based last row & last col including gutter so PNG capture NEVER clips!
+    return {
+        "linked_pictures": guide_sprite_slots,
+        "guide_last_row": r_foot + 2,
+        "guide_last_col": "I" if is_7 else "H",
+    }

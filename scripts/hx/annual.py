@@ -160,7 +160,7 @@ def build_yearly_goals_v21(wb, styles: Styles, ws_calc, year: int = 2026,
     ws_calc.write_formula(3, CALC_STATE_VAL_COL, f'=COUNTIFS({goal_rng_q},"?*",{chk_rng_q},TRUE)')
     ws_calc.write_formula(4, CALC_STATE_VAL_COL, f'=COUNTIF({goal_rng_q},"?*")')
     ws_calc.write_formula(5, CALC_STATE_VAL_COL, f"=IFERROR({acell(3, CALC_STATE_VAL_COL)}/{acell(4, CALC_STATE_VAL_COL)},0)")
-    ws_calc.write_formula(6, CALC_STATE_VAL_COL, stage6_formula(acell(5, CALC_STATE_VAL_COL)))
+    ws_calc.write_formula(6, CALC_STATE_VAL_COL, stage6_formula(acell(5, CALC_STATE_VAL_COL), t.num_stages))
 
     # Sidebar: INSTRUCTIONS card (rows 3..13, cols 7..8)
     cv.merge(3, 7, 3, 8, "📌  INSTRUCTIONS • HƯỚNG DẪN", bold=True, font_size=9.5, align="center",
@@ -193,13 +193,13 @@ def build_yearly_goals_v21(wb, styles: Styles, ws_calc, year: int = 2026,
         cv.merge(rp + 1, 8, rp + 3, 8, "", align="center", bg_color=t.card)
         dyn_anims.append({
             "name": "Anim_YearlyGoals",
-            "refers_to": f"=INDEX({ASSETS_SHEET}!$B$2:$B$8,{yg_stage_ref})",
+            "refers_to": f"=INDEX({ASSETS_SHEET}!{t.assets_range},{yg_stage_ref})",
             "sheet": name, "r1": rp + 1, "c1": 8, "r2": rp + 3, "c2": 8,
             "align_bottom": False,
         })
     else:
         cv.merge(rp + 1, 8, rp + 3, 8,
-                 f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN(6,MAX(1,{yg_stage_ref}))-1)&".png")',
+                 f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN({t.num_stages},MAX(1,{yg_stage_ref}))-1)&".png")',
                  align="center", bg_color=t.card)
     cv.merge(rp + 4, 7, rp + 4, 8,
              f'="trên "&{yg_tot_ref}&" mục tiêu  •  "&TEXT({yg_pct_ref},"0%")',
@@ -290,7 +290,7 @@ def build_annual_achievements_sheet(
             ws_calc.write_formula(rm, c_prf,  f"=IF({is_live},{pro_tr.s['perfect']},IFERROR(INDEX({db_q}!$AR$2:$AR$300,MATCH({key_ref},{db_keys},0)),0))")
             ws_calc.write_formula(rm, c_str,  f"=IF({is_live},{pro_tr.s['best']},IFERROR(INDEX({db_q}!$AS$2:$AS$300,MATCH({key_ref},{db_keys},0)),0))")
 
-        ws_calc.write_formula(rm, c_stg, stage6_formula(acell(rm, c_pct)))
+        ws_calc.write_formula(rm, c_stg, stage6_formula(acell(rm, c_pct), t.num_stages))
 
     # Selected-year Yearly Goals lookup on _Calc!AX1:AY3
     ws_calc.write(0, CALC_ANN_YG_LBL_COL, "AnnualYGDone")
@@ -319,10 +319,10 @@ def build_annual_achievements_sheet(
     ws_calc.write_formula(9, CALC_STATE_VAL_COL,
                           f'=IFERROR(MIN(1,SUM({done_col_rng})/SUMIF({done_col_rng},">0",{goal_col_rng})),0)')
     ws_calc.write_formula(10, CALC_STATE_VAL_COL, f"=1-{ann_overall_calc}")
-    ws_calc.write_formula(7, CALC_STATE_VAL_COL, stage6_formula(ann_overall_calc))
+    ws_calc.write_formula(7, CALC_STATE_VAL_COL, stage6_formula(ann_overall_calc, t.num_stages))
     # AchBadgesStageIdx: reads the 8 badge progress cells on Annual sheet (H35:H42 -> 0-based rows 34..41, col 7)
     ws_calc.write_formula(8, CALC_STATE_VAL_COL,
-                          stage6_formula(f'(COUNTIF({q}!$H$35:$H$42,">=1")/8)'))
+                          stage6_formula(f'(COUNTIF({q}!$H$35:$H$42,">=1")/8)', t.num_stages))
 
     ann_done_q = f"{cq}!{done_col_rng}"
     ann_goal_q = f"{cq}!{goal_col_rng}"
@@ -406,13 +406,13 @@ def build_annual_achievements_sheet(
         cv.merge(*hero_ann_box, "", align="center", bg_color=t.card)
         dyn_anims.append({
             "name": "Anim_AnnualHero",
-            "refers_to": f"=INDEX({ASSETS_SHEET}!$B$2:$B$8,{ann_hero_stg_q})",
+            "refers_to": f"=INDEX({ASSETS_SHEET}!{t.assets_range},{ann_hero_stg_q})",
             "sheet": name, "r1": 6, "c1": 6, "r2": 9, "c2": 7,
             "align_bottom": False,
         })
     else:
         cv.merge(*hero_ann_box,
-                 f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN(6,MAX(1,{ann_hero_stg_q}))-1)&".png")',
+                 f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN({t.num_stages},MAX(1,{ann_hero_stg_q}))-1)&".png")',
                  align="center", bg_color=t.card)
     cv.merge(10, 4, 10, 7, f'="Biểu tượng tăng trưởng theo % năm "&{sel_y_local}',
              font_size=8.3, italic=True, align="center", bg_color=t.card, font_color=t.muted)
@@ -478,13 +478,13 @@ def build_annual_achievements_sheet(
             cv.put(r_g + 2, c, "", align="center", bg_color=t.card)
             dyn_anims.append({
                 "name": f"Anim_AnnualM{m:02d}",
-                "refers_to": f"=INDEX({ASSETS_SHEET}!$B$2:$B$8,{m_stg_q})",
+                "refers_to": f"=INDEX({ASSETS_SHEET}!{t.assets_range},{m_stg_q})",
                 "sheet": name, "r1": r_g + 2, "c1": c, "r2": r_g + 2, "c2": c,
                 "align_bottom": True,
             })
         else:
             cv.put(r_g + 2, c,
-                   f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN(6,MAX(1,{m_stg_q}))-1)&".png")',
+                   f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN({t.num_stages},MAX(1,{m_stg_q}))-1)&".png")',
                    align="center", bg_color=t.card)
 
         cv.put(r_g + 3, c, f"={cq}!{acell(rm, CALC_ANN_COL0 + 2)}", align="center", font_size=9,
@@ -649,13 +649,13 @@ def build_annual_achievements_sheet(
         cv.merge(*ach_icon_box, "", align="center", bg_color=t.card)
         dyn_anims.append({
             "name": "Anim_AchBadges",
-            "refers_to": f"=INDEX({ASSETS_SHEET}!$B$2:$B$8,{ach_stg_q})",
+            "refers_to": f"=INDEX({ASSETS_SHEET}!{t.assets_range},{ach_stg_q})",
             "sheet": name, "r1": r_b0 + 4, "c1": 11, "r2": r_b0 + 7, "c2": 13,
             "align_bottom": False,
         })
     else:
         cv.merge(*ach_icon_box,
-                 f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN(6,MAX(1,{ach_stg_q}))-1)&".png")',
+                 f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN({t.num_stages},MAX(1,{ach_stg_q}))-1)&".png")',
                  align="center", bg_color=t.card)
 
     r0_msg, r1_msg, r2_msg, r3_msg = lore["ranks"]

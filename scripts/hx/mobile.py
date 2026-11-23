@@ -55,13 +55,16 @@ MOBILE_GOALS_SAMPLE = [
 ]
 
 
-def _stage6(pct_ref: str) -> str:
+def _stage6(pct_ref: str, num_stages: int = 6) -> str:
+    if num_stages == 7:
+        return (f"=1+({pct_ref}>0)+({pct_ref}>=CFG_THR_0)+({pct_ref}>=CFG_THR_1)"
+                f"+({pct_ref}>=CFG_THR_2)+({pct_ref}>=CFG_THR_3)+({pct_ref}>=0.999)")
     return (f"=1+({pct_ref}>0)+({pct_ref}>=CFG_THR_1)+({pct_ref}>=CFG_THR_2)"
             f"+({pct_ref}>=CFG_THR_3)+({pct_ref}>=0.999)")
 
 
-def _img_formula(stage_ref: str, blank_guard: str | None = None) -> str:
-    core = f'_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN(6,MAX(1,{stage_ref}))-1)&".png")'
+def _img_formula(stage_ref: str, blank_guard: str | None = None, num_stages: int = 6) -> str:
+    core = f'_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN({num_stages},MAX(1,{stage_ref}))-1)&".png")'
     if blank_guard:
         return f'=IF({blank_guard}="","",{core})'
     return f"={core}"
@@ -262,7 +265,7 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
     ws_calc.write_formula(8, 4, "=MAX(0,$N$3:$N$17)")
     ws_calc.write_formula(9, 4, f'=COUNTIF({wq}!$C${R_PCT + 1}:$I${R_PCT + 1},">=0.999")')
     ws_calc.write_formula(10, 4, f'=COUNTIF({wq}!$C${R_PCT + 1}:$I${R_PCT + 1},">="&CFG_THR_3)')
-    ws_calc.write_formula(11, 4, _stage6("$E$8"))
+    ws_calc.write_formula(11, 4, _stage6("$E$8", t.num_stages))
     ws_calc.write_formula(12, 4, '=TEXT($E$2,"0000")&"-"&TEXT($E$1,"00")&"-W"&$E$3')
     ws_calc.write(13, 4, week_key)  # LastLoadedWeekKey (updated by Apps Script onEdit)
     ws_calc.write(14, 4, year)      # LastGoalYear (updated by Apps Script onEdit)
@@ -273,7 +276,7 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
     ws_calc.write_formula(15, 4, f'=COUNTIFS({gq}!$C${R_G0 + 1}:$C${R_G1 + 1},"?*",{gq}!$B${R_G0 + 1}:$B${R_G1 + 1},TRUE)')
     ws_calc.write_formula(16, 4, f'=COUNTIF({gq}!$C${R_G0 + 1}:$C${R_G1 + 1},"?*")')
     ws_calc.write_formula(17, 4, "=IFERROR($E$16/$E$17,0)")
-    ws_calc.write_formula(18, 4, _stage6("$E$18"))
+    ws_calc.write_formula(18, 4, _stage6("$E$18", t.num_stages))
 
     # Annual metrics for Selected Year on Tab 2 (`$E$3`): combines live active week (if same year) + other saved weeks in `_Database`!
     sel_y_g = f"{gq}!$E$3"
@@ -312,7 +315,7 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
     )
     ws_calc.write_formula(25, 4, f"=MAX(IF({sel_y_g}=$E$2,$E$8,0),MAX($Q$2:$Q$65))")
     # Badges stage index (reads 6 badge progress cells on Tab 2: F32:F37 -> 0-based rows 31..36)
-    ws_calc.write_formula(26, 4, _stage6(f'(COUNTIF({gq}!$F$32:$F$37,">=1")/6)'))
+    ws_calc.write_formula(26, 4, _stage6(f'(COUNTIF({gq}!$F$32:$F$37,">=1")/6)', t.num_stages))
     # Monday of Week 1 of (Year, Month)
     ws_calc.write_formula(27, 4, "=DATE($E$2,$E$1,1)-WEEKDAY(DATE($E$2,$E$1,1),2)+1")
 
@@ -321,9 +324,10 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
         col_wk = 2 + dow  # Col C (2) .. Col I (8)
         dc = f"{wq}!{acell(R_DAY_HDR, col_wk)}"
         pc = f"{wq}!{acell(R_PCT, col_wk)}"
+        st_expr = _stage6(pc, t.num_stages)[1:]
         ws_calc.write_formula(
             0, 6 + dow,
-            f'=IF({dc}="",7,1+({pc}>0)+({pc}>=CFG_THR_1)+({pc}>=CFG_THR_2)+({pc}>=CFG_THR_3)+({pc}>=0.999))'
+            f'=IF({dc}="",{t.hide_stage_val},{st_expr})'
         )
 
     # 15x7 running streak matrix on `_Calc!G3:M17` + row max in `N3:N17`
@@ -406,7 +410,7 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
     cv1.merge(11, 1, 11, 4, f'="🔥 Chuỗi tuần: "&{E(9)}&"d  •  ✨ "&{E(10)}&" ngày 100%"',
               bold=False, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
     # Right side: Large Dynamic Weekly Hero Sprite!
-    cv1.merge(8, 5, 11, 8, _img_formula(E(12)), align="center", bg_color=t.card)
+    cv1.merge(8, 5, 11, 8, _img_formula(E(12), num_stages=t.num_stages), align="center", bg_color=t.card)
     cv1.vline(4, 8, 11, t.line, where="right")
     cv1.box(7, 1, 11, 8, t.line)
 
@@ -432,7 +436,7 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
         col_l = colname(c)
         dc = f"{col_l}${R_DAY_HDR + 1}"
         st_ref = f"{cq}!{acell(0, 6 + dow)}"
-        cv1.put(14, c, _img_formula(st_ref, blank_guard=dc), align="center", bg_color=t.card)
+        cv1.put(14, c, _img_formula(st_ref, blank_guard=dc, num_stages=t.num_stages), align="center", bg_color=t.card)
         col_body = f"{col_l}${R_H0 + 1}:{col_l}${R_H1 + 1}"
         cv1.put(15, c,
                 f'=IF({dc}="","",COUNTIFS({names_rng},"?*",{col_body},TRUE)+COUNTIFS({names_rng},"?*",{col_body},"{CHECK_ALT}"))',
@@ -615,7 +619,7 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
     ws_calc.write_formula(29, 4, f'=COUNTIFS({tq}!$C$16:$C$30,"?*",{tq}!$B$16:$B$30,TRUE)')  # E30: Done
     ws_calc.write_formula(30, 4, f'=COUNTIF({tq}!$C$16:$C$30,"?*")')                        # E31: Total
     ws_calc.write_formula(31, 4, f"=IFERROR({E(30)}/{E(31)},0)")                            # E32: Pct
-    ws_calc.write_formula(32, 4, _stage6(E(32)))                                            # E33: StageIdx (1..6)
+    ws_calc.write_formula(32, 4, _stage6(E(32), t.num_stages))                                # E33: StageIdx (1..6/7)
 
     cvt = Canvas(wb, ws_dt, styles, MOBILE_TASKS_SHEET, universal=False, gsheets=False)
     cvt.col(0, 1.5)
@@ -679,7 +683,7 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
               align="center", bg_color=t.card, font_color=t.ink)
     cvt.merge(11, 1, 11, 4, f'="⏳ Còn "&({E(31)}-{E(30)})&" việc"', font_size=9.2, bold=True,
               align="center", bg_color=t.soft, font_color=t.ink)
-    cvt.merge(8, 5, 11, 8, _img_formula(E(33)), align="center", bg_color=t.card)
+    cvt.merge(8, 5, 11, 8, _img_formula(E(33), num_stages=t.num_stages), align="center", bg_color=t.card)
     cvt.vline(4, 8, 11, t.line, where="right")
     cvt.box(7, 1, 11, 8, t.line)
 
@@ -777,7 +781,7 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
     cv2.merge(6, 1, 6, 4, f'="Mục tiêu đã đạt năm "&$E$3', bold=False, font_size=9.5, italic=True,
               align="center", bg_color=t.soft, font_color=t.muted)
     # Right side: Live Yearly Hero Sprite!
-    cv2.merge(3, 5, 6, 8, _img_formula(E(19)), align="center", bg_color=t.card)
+    cv2.merge(3, 5, 6, 8, _img_formula(E(19), num_stages=t.num_stages), align="center", bg_color=t.card)
     cv2.vline(4, 3, 6, t.line, where="right")
     cv2.box(1, 1, 6, 8, t.line)
 
@@ -902,7 +906,7 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
     cv2.merge(r_bc + 1, 1, r_bc + 1, 5,
               f'=IF({unlocked_e}=0,"🌱 Hãy tick thói quen để bắt đầu!",IF({unlocked_e}<=3,"✨ Khởi đầu tuyệt vời!","👑 Phong độ đỉnh cao!"))',
               bold=False, font_size=9.8, align="center", bg_color=t.card, font_color=t.ink)
-    cv2.merge(r_bc, 6, r_bc + 1, 8, _img_formula(E(27)), align="center", bg_color=t.card)
+    cv2.merge(r_bc, 6, r_bc + 1, 8, _img_formula(E(27), num_stages=t.num_stages), align="center", bg_color=t.card)
     cv2.vline(5, r_bc, r_bc + 1, t.line, where="right")
     cv2.box(r_bc, 1, r_bc + 1, 8, t.line)
 
@@ -957,7 +961,9 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
 
     # Card 3: 2x3 Stage 0..5 Showcase + Editable Thresholds & CFG_IMG_BASE
     cv3.row(rg, 26)
-    cv3.merge(rg, 1, rg, 6, "🎨  3. HOẠT ẢNH 6 GIAI ĐOẠN (2×3) & NGƯỠNG TĂNG TRƯỞNG",
+    is_7 = (t.num_stages == 7)
+    cv3.merge(rg, 1, rg, 6,
+              "⚡  3. TIẾN HÓA 7 GIAI ĐOẠN (DIGIVOLUTION) & NGƯỠNG" if is_7 else "🎨  3. HOẠT ẢNH 6 GIAI ĐOẠN (2×3) & NGƯỠNG TĂNG TRƯỞNG",
               bold=True, font_size=10.5, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
 
     # CFG_IMG_BASE row
@@ -971,32 +977,63 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
 
     # Centered Threshold bar
     r_th = r_url + 1
-    cv3.row(r_th, 28)
-    cv3.put(r_th, 1, "Stage 2:", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
-    cv3.put(r_th, 2, 0.25, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
-    cv3.put(r_th, 3, "Stage 3:", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
-    cv3.put(r_th, 4, 0.50, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
-    cv3.put(r_th, 5, "Đạt:", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
-    cv3.put(r_th, 6, 0.75, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
-    wb.define_name("CFG_THR_1", f"={dq}!{acell(r_th, 2)}")
-    wb.define_name("CFG_THR_2", f"={dq}!{acell(r_th, 4)}")
-    wb.define_name("CFG_THR_3", f"={dq}!{acell(r_th, 6)}")
-
-    stages_2x3 = [
-        [(0, "Stage 0 • 0%"), (1, "Stage 1 • 1–24%"), (2, "Stage 2 • 25–49%")],
-        [(3, "Stage 3 • 50–74%"), (4, "Stage 4 • 75–99%"), (5, "Stage 5 • 100% ✨")],
-    ]
-    r_cur = r_th + 1
+    if is_7:
+        cv3.row(r_th, 26)
+        cv3.row(r_th + 1, 26)
+        cv3.merge(r_th, 1, r_th, 2, "Stage 2 (Baby II):", bold=True, font_size=9.2, align="center", bg_color=t.soft, font_color=t.ink)
+        cv3.put(r_th, 3, 0.20, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+        cv3.merge(r_th, 4, r_th, 5, "Stage 3 (Rookie):", bold=True, font_size=9.2, align="center", bg_color=t.soft, font_color=t.ink)
+        cv3.put(r_th, 6, 0.40, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+        cv3.merge(r_th + 1, 1, r_th + 1, 2, "Stage 4 (Champion):", bold=True, font_size=9.2, align="center", bg_color=t.soft, font_color=t.ink)
+        cv3.put(r_th + 1, 3, 0.60, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+        cv3.merge(r_th + 1, 4, r_th + 1, 5, "Stage 5 • Đạt:", bold=True, font_size=9.2, align="center", bg_color=t.soft, font_color=t.ink)
+        cv3.put(r_th + 1, 6, 0.80, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+        wb.define_name("CFG_THR_0", f"={dq}!{acell(r_th, 3)}")
+        wb.define_name("CFG_THR_1", f"={dq}!{acell(r_th, 6)}")
+        wb.define_name("CFG_THR_2", f"={dq}!{acell(r_th + 1, 3)}")
+        wb.define_name("CFG_THR_3", f"={dq}!{acell(r_th + 1, 6)}")
+        snames = t.stage_names or ["Digi-Egg", "Baby I", "Baby II", "Rookie", "Champion", "Ultimate", "Mega"]
+        stages_2x3 = [
+            [(0, f"S0 • {snames[0]} (0%)"), (1, f"S1 • {snames[1]} (1–19%)"), (2, f"S2 • {snames[2]} (20–39%)")],
+            [(3, f"S3 • {snames[3]} (40–59%)"), (4, f"S4 • {snames[4]} (60–79%)"), (5, f"S5 • {snames[5]} (80–99%)")],
+        ]
+        r_cur = r_th + 2
+    else:
+        cv3.row(r_th, 28)
+        cv3.put(r_th, 1, "Stage 2:", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
+        cv3.put(r_th, 2, 0.25, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+        cv3.put(r_th, 3, "Stage 3:", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
+        cv3.put(r_th, 4, 0.50, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+        cv3.put(r_th, 5, "Đạt:", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
+        cv3.put(r_th, 6, 0.75, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+        wb.define_name("CFG_THR_1", f"={dq}!{acell(r_th, 2)}")
+        wb.define_name("CFG_THR_2", f"={dq}!{acell(r_th, 4)}")
+        wb.define_name("CFG_THR_3", f"={dq}!{acell(r_th, 6)}")
+        stages_2x3 = [
+            [(0, "Stage 0 • 0%"), (1, "Stage 1 • 1–24%"), (2, "Stage 2 • 25–49%")],
+            [(3, "Stage 3 • 50–74%"), (4, "Stage 4 • 75–99%"), (5, "Stage 5 • 100% ✨")],
+        ]
+        r_cur = r_th + 1
     for grp in stages_2x3:
         cv3.row(r_cur, 22)
         cv3.row(r_cur + 1, 86)
         for bi, (s_idx, s_lbl) in enumerate(grp):
             c1, c2 = 1 + bi * 2, 2 + bi * 2
-            cv3.merge(r_cur, c1, r_cur, c2, s_lbl, bold=True, font_size=9.5, align="center",
+            cv3.merge(r_cur, c1, r_cur, c2, s_lbl, bold=True, font_size=(8.6 if is_7 else 9.5), align="center",
                       bg_color=t.soft, font_color=t.ink)
             cv3.merge(r_cur + 1, c1, r_cur + 1, c2,
                       f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_{s_idx}.png")',
                       align="center", bg_color=t.card)
+        r_cur += 2
+    if is_7:
+        # Full-width Hero Mega Stage 6 showcase card!
+        snames = t.stage_names or ["Digi-Egg", "Baby I", "Baby II", "Rookie", "Champion", "Ultimate", "Mega"]
+        cv3.row(r_cur, 24)
+        cv3.row(r_cur + 1, 96)
+        cv3.merge(r_cur, 1, r_cur, 6, f"⚡ Stage 6 MEGA • {snames[6]} (100% Tối Thượng ✨)",
+                  bold=True, font_size=9.8, align="center", bg_color=t.primary, font_color=t.on_primary)
+        cv3.merge(r_cur + 1, 1, r_cur + 1, 6, '=_xlfn.IMAGE(CFG_IMG_BASE&"stage_6.png")',
+                  align="center", bg_color=t.card)
         r_cur += 2
     cv3.grid(r_url, 1, r_cur - 1, 6, t.line)
     cv3.box(rg, 1, r_cur - 1, 6, t.line)
@@ -1006,7 +1043,7 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
     cv3.row(r_cur + 1, 28)
     cv3.row(r_cur + 2, 10)
     cv3.merge(r_cur + 1, 1, r_cur + 1, 6,
-              "💛  Habit Tracker Mobile Portrait v2.3 by Dyu  •  github.com/Thitrongdan202",
+              f"💛  Habit Tracker Mobile Portrait {'v3.7' if is_7 else 'v2.3'} by Dyu  •  github.com/Thitrongdan202",
               bold=False, font_size=8.8, italic=True, align="center", text_wrap=True,
               bg_color=t.page, font_color=t.muted)
 
@@ -1100,6 +1137,7 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
         "stem": tdef.stem,
         "short_key": tdef.short_key,
         "slug": t.slug,
+        "num_stages": t.num_stages,
         "out_path": str(out_path),
         "week_sheet": MOBILE_WEEK_SHEET,
         "tasks_sheet": MOBILE_TASKS_SHEET,

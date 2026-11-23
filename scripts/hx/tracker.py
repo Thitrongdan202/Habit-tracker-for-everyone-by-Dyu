@@ -100,11 +100,22 @@ def week_days(w: int):               # w = 0..4
     return list(range(a, min(a + 6, 31) + 1))
 
 
-def stage6_formula(pct_ref: str) -> str:
-    """Consistent 6-stage formula (returns 1..6 for stage_0..stage_5):
-    0% -> 1, 1-24% -> 2, 25-49% -> 3, 50-74% -> 4, 75-99% -> 5, 100% -> 6."""
+def stage_formula(pct_ref: str, num_stages: int = 6) -> str:
+    """Consistent 6-stage or 7-stage formula:
+    - 6 stages (returns 1..6 for stage_0..stage_5):
+        0% -> 1, 1-24% -> 2, 25-49% -> 3, 50-74% -> 4, 75-99% -> 5, 100% -> 6
+    - 7 stages (returns 1..7 for stage_0..stage_6, Digimon):
+        0% -> 1, 1-19% -> 2, 20-39% -> 3, 40-59% -> 4, 60-79% -> 5, 80-99% -> 6, 100% -> 7."""
+    if num_stages == 7:
+        return (f"=1+({pct_ref}>0)+({pct_ref}>=CFG_THR_0)+({pct_ref}>=CFG_THR_1)"
+                f"+({pct_ref}>=CFG_THR_2)+({pct_ref}>=CFG_THR_3)+({pct_ref}>=0.999)")
     return (f"=1+({pct_ref}>0)+({pct_ref}>=CFG_THR_1)+({pct_ref}>=CFG_THR_2)"
             f"+({pct_ref}>=CFG_THR_3)+({pct_ref}>=0.999)")
+
+
+def stage6_formula(pct_ref: str, num_stages: int = 6) -> str:
+    """Backwards-compatible alias delegating to `stage_formula`."""
+    return stage_formula(pct_ref, num_stages=num_stages)
 
 
 def init_calc_sheet(wb, active_year: int = 2026, last_loaded_key: str = "2026-10",
@@ -178,21 +189,24 @@ def init_calc_sheet(wb, active_year: int = 2026, last_loaded_key: str = "2026-10
         ("FX_MSG_MONTH_SWITCH","📅 Đã lưu tháng cũ & mở dữ liệu tháng mới!"),              # BA13
         ("FX_MSG_DAILY_100",   "🎉 Xuất sắc 100%! Toàn bộ nhiệm vụ ngày đã xong!"),        # BA14
         ("FX_MSG_GOAL_DONE",   "🎯 Chúc mừng! Bạn vừa chinh phục thêm Mục Tiêu Năm!"),     # BA15
-        ("FX_MSG_DEMO",        "🎉 Hiệu ứng Pro v3.6 Turbo đang BẬT — Siêu tốc & sống động!"), # BA16
+        ("FX_MSG_DEMO",        "🎉 Hiệu ứng Pro v3.7 Turbo đang BẬT — Siêu tốc & sống động!" if (theme and theme.num_stages == 7) else "🎉 Hiệu ứng Pro v3.6 Turbo đang BẬT — Siêu tốc & sống động!"), # BA16
         ("FX_LBL_ON",          "✨ FX: BẬT"),                                               # BA17
         ("FX_LBL_OFF",         "💤 FX: TẮT"),                                               # BA18
         ("FX_MSG_FX_ON",       "✨ Đã BẬT hiệu ứng Pro (Nảy, Pháo hoa & Toast)!"),         # BA19
         ("FX_MSG_FX_OFF",      "💤 Đã TẮT hiệu ứng — Giữ tốc độ siêu tốc tối đa!"),         # BA20
         ("FX_MSG_DATE_SWITCH", "📝 Đã lưu ngày cũ & nạp dữ liệu ngày mới!"),               # BA21
         ("FX_MSG_ANNUAL_HALL", "🏆 Đại Sảnh Thành Tựu Năm đã được cập nhật!"),             # BA22
-        ("FX_MSG_SYNC_ASSETS", "🎨 Đã đồng bộ 6 ảnh mới từ _Assets sang toàn bộ file!"),    # BA23
+        ("FX_MSG_SYNC_ASSETS", f"🎨 Đã đồng bộ {theme.num_stages if theme else 6} ảnh mới từ _Assets sang toàn bộ file!"),    # BA23
         ("FX_MSG_UNDO_OK",     "↩ Đã hoàn tác thay đổi gần nhất!"),                        # BA24
         ("FX_MSG_UNDO_EMPTY",  "ℹ️ Chưa có thao tác nào để hoàn tác!"),                     # BA25
+        ("CFG_MAX_STAGE",      (theme.num_stages - 1) if theme else 5),                    # BA26
     ]
     for r_idx, (lbl, val) in enumerate(fx_rows):
         ws_calc.write(r_idx, CALC_FX_LBL_COL, lbl)
         if isinstance(val, bool):
             ws_calc.write_boolean(r_idx, CALC_FX_VAL_COL, val)
+        elif isinstance(val, (int, float)):
+            ws_calc.write_number(r_idx, CALC_FX_VAL_COL, val)
         else:
             ws_calc.write(r_idx, CALC_FX_VAL_COL, val)
 
@@ -201,6 +215,7 @@ def init_calc_sheet(wb, active_year: int = 2026, last_loaded_key: str = "2026-10
     wb.define_name("CFG_THEME_ACCENT_DARK", f"={cq}!{acell(2, CALC_FX_VAL_COL)}")
     wb.define_name("CFG_THEME_SOFT", f"={cq}!{acell(3, CALC_FX_VAL_COL)}")
     wb.define_name("CFG_THEME_BAR", f"={cq}!{acell(4, CALC_FX_VAL_COL)}")
+    wb.define_name("CFG_MAX_STAGE", f"={cq}!{acell(25, CALC_FX_VAL_COL)}")
     return ws_calc
 
 
@@ -382,20 +397,21 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
     # DYNAMIC Monthly Hero Stage Index (FIX 2: driven by real Overall Monthly %!)
     hero_stage_row = rb + CALC_HERO_ROW_OFF
     ws_calc.write(hero_stage_row, CALC_KPI_COL - 1, f"{spec.sheet}:HeroStageIdx")
-    ws_calc.write_formula(hero_stage_row, CALC_KPI_COL, stage6_formula(S["overall"]))
+    ws_calc.write_formula(hero_stage_row, CALC_KPI_COL, stage_formula(S["overall"], t.num_stages))
     hero_stage_cell = f"{cq}!{acell(hero_stage_row, CALC_KPI_COL)}"
 
-    # Daily Stage index row on _Calc (rb + 14, cols B..AF = Day 1..31) -> values 1..7
+    # Daily Stage index row on _Calc (rb + 14, cols B..AF = Day 1..31) -> values 1..7 (or 1..8 for 7-stage)
     stage_row = rb + CALC_STAGE_ROW
-    ws_calc.write(stage_row, 0, f"{spec.sheet}:StageIdx(1-7)")
+    ws_calc.write(stage_row, 0, f"{spec.sheet}:StageIdx(1-{t.hide_stage_val})")
     for k in range(1, 32):
         c_tr = day_col(k)
         c_ca = k  # Col B (1) .. Col AF (31)
         dc = f"{q}!{acell(R_DAY, c_tr)}"
         pc = f"{q}!{acell(R_PCT, c_tr)}"
+        st_expr = stage_formula(pc, t.num_stages)[1:]  # strip leading '='
         ws_calc.write_formula(
             stage_row, c_ca,
-            f'=IF({dc}="",7,1+({pc}>0)+({pc}>=CFG_THR_1)+({pc}>=CFG_THR_2)+({pc}>=CFG_THR_3)+({pc}>=0.999))'
+            f'=IF({dc}="",{t.hide_stage_val},{st_expr})'
         )
 
     # Overall Donut data on _Calc!E{rb+1}:E{rb+2}
@@ -593,7 +609,7 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
             cv.put(R_IMG, c, "", bg_color=t.card, align="center")
         else:
             st_ref = f"{cq}!{acell(stage_row, k)}"
-            cv.put(R_IMG, c, f'=IF({dc}="","",_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN(6,MAX(1,{st_ref}))-1)&".png"))',
+            cv.put(R_IMG, c, f'=IF({dc}="","",_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN({t.num_stages},MAX(1,{st_ref}))-1)&".png"))',
                    bg_color=t.card, align="center")
         col_rng = f"{colname(c)}${R_H0 + 1}:{colname(c)}${R_H1 + 1}"
         if spec.pro_mode:
@@ -622,7 +638,7 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
         cv.merge(*hero_box, "", align="center", bg_color=t.card)
     else:
         cv.merge(*hero_box,
-                 f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN(6,MAX(1,{hero_stage_cell}))-1)&".png")',
+                 f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN({t.num_stages},MAX(1,{hero_stage_cell}))-1)&".png")',
                  align="center", bg_color=t.card)
     cv.merge(R_DONE, C_R0, R_PCT, split, f"={S['grown']}", bold=True, font_size=26, align="center",
              bg_color=t.card, font_color=t.primary_dark, font_name=t.font_title)

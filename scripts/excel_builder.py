@@ -42,7 +42,7 @@ from hx.addons import (add_cactus_weekly_strip, add_rainbow_bottom_blocks,
                        add_royal_cat_cash_panel, add_top_habits_rank_panel,
                        add_dog_companion_panel, add_sakura_minimalist_bar,
                        add_mochi_cat_mood_suite, add_bunny_sticker_pop_panel,
-                       add_milk_mocha_donuts_panel)
+                       add_milk_mocha_donuts_panel, add_digimon_crest_panel)
 from hx.daily_tasks import build_daily_tasks_sheet, DAILY_TASKS_SHEET
 from hx.extras import (build_reflection_notes_sheet, build_rainbow_analytics_sheet,
                        build_monthly_budget_sheet, build_life_overview_sheet,
@@ -55,13 +55,13 @@ GSHEETS_DIR = ROOT / "templates" / "google_sheets_edition"
 
 
 def add_assets_placeholder(wb, styles: Styles):
-    """Hidden `_Assets` sheet holding 6 uniform pure-white sprite slots `B2:B7` (`B8` = blank)."""
+    """Hidden `_Assets` sheet holding 6 (`B2:B7` + blank `B8`) or 7 (`B2:B8` + blank `B9`) sprite slots."""
     t = styles.t
     ws = wb.add_worksheet(ASSETS_SHEET)
     ws.hide_gridlines(2)
-    ws.set_column(0, 0, 26)
+    ws.set_column(0, 0, 28)
     ws.set_column(1, 1, 12.2)
-    ws.set_column(2, 2, 52)
+    ws.set_column(2, 2, 56)
     hdr = wb.add_format({"font_name": t.font, "font_size": 10, "bold": True,
                          "bg_color": t.primary, "font_color": t.on_primary,
                          "align": "center", "valign": "vcenter"})
@@ -74,18 +74,29 @@ def add_assets_placeholder(wb, styles: Styles):
 
     ws.set_row(0, 26)
     ws.write(0, 0, "STAGE", hdr)
-    ws.write(0, 1, "SPRITE (B2:B7)", hdr)
-    ws.write(0, 2, "HƯỚNG DẪN TỰ ĐỔI ẢNH HOẠT ẢNH (v2.1)", hdr)
-
-    stage_notes = [
-        ("Stage 0 (0%)", "Chưa tick thói quen nào — Dán ảnh nền trống vào B2"),
-        ("Stage 1 (1%–24%)", "Khởi động — Dán ảnh giai đoạn 1 vào B3"),
-        ("Stage 2 (25%–49%)", "Đang phát triển — Dán ảnh giai đoạn 2 vào B4"),
-        ("Stage 3 (50%–74%)", "Ổn định — Dán ảnh giai đoạn 3 vào B5"),
-        ("Stage 4 (75%–99%)", "Sắp hoàn thành — Dán ảnh giai đoạn 4 vào B6"),
-        ("Stage 5 (100% ✨)", "Hoàn hảo 100% — Dán ảnh đỉnh cao vào B7"),
-        ("(Ô trống ngoài tháng)", "GIỮ NGUYÊN Ô TRẮNG B8 — dùng để ẩn ngày 29/30/31 ở tháng ngắn"),
-    ]
+    if t.num_stages == 7:
+        ws.write(0, 1, "SPRITE (B2:B8)", hdr)
+        ws.write(0, 2, "HƯỚNG DẪN TỰ ĐỔI 7 ẢNH TIẾN HÓA DIGIMON (v3.7)", hdr)
+        names = t.stage_names or [f"Stage {i}" for i in range(7)]
+        pcts = ["0%", "1%–19%", "20%–39%", "40%–59%", "60%–79%", "80%–99%", "100% ✨"]
+        stage_notes = [
+            (f"Stage {i} ({pcts[i]})", f"{names[i]} — Dán ảnh giai đoạn {i} vào B{2 + i}")
+            for i in range(7)
+        ] + [
+            ("(Ô trống ngoài tháng)", "GIỮ NGUYÊN Ô TRẮNG B9 — dùng để ẩn ngày 29/30/31 ở tháng ngắn"),
+        ]
+    else:
+        ws.write(0, 1, "SPRITE (B2:B7)", hdr)
+        ws.write(0, 2, "HƯỚNG DẪN TỰ ĐỔI ẢNH HOẠT ẢNH (v3.7)", hdr)
+        stage_notes = [
+            ("Stage 0 (0%)", "Chưa tick thói quen nào — Dán ảnh nền trống vào B2"),
+            ("Stage 1 (1%–24%)", "Khởi động — Dán ảnh giai đoạn 1 vào B3"),
+            ("Stage 2 (25%–49%)", "Đang phát triển — Dán ảnh giai đoạn 2 vào B4"),
+            ("Stage 3 (50%–74%)", "Ổn định — Dán ảnh giai đoạn 3 vào B5"),
+            ("Stage 4 (75%–99%)", "Sắp hoàn thành — Dán ảnh giai đoạn 4 vào B6"),
+            ("Stage 5 (100% ✨)", "Hoàn hảo 100% — Dán ảnh đỉnh cao vào B7"),
+            ("(Ô trống ngoài tháng)", "GIỮ NGUYÊN Ô TRẮNG B8 — dùng để ẩn ngày 29/30/31 ở tháng ngắn"),
+        ]
     for i, (st, note) in enumerate(stage_notes):
         r = 1 + i
         ws.set_row(r, 68)
@@ -243,6 +254,21 @@ def _addon_bunny_pop(wb, cv, tr, seed):
 
 def _addon_milk_mocha(wb, cv, tr, seed):
     add_milk_mocha_donuts_panel(wb, cv, tr)
+
+def _addon_digimon_veemon(wb, cv, tr, seed):
+    add_digimon_crest_panel(wb, cv, tr, kind="veemon")
+
+def _addon_digimon_agumon(wb, cv, tr, seed):
+    add_digimon_crest_panel(wb, cv, tr, kind="agumon")
+
+def _addon_digimon_gatomon(wb, cv, tr, seed):
+    add_digimon_crest_panel(wb, cv, tr, kind="gatomon")
+
+def _addon_digimon_gabumon(wb, cv, tr, seed):
+    add_digimon_crest_panel(wb, cv, tr, kind="gabumon")
+
+def _addon_digimon_piyomon(wb, cv, tr, seed):
+    add_digimon_crest_panel(wb, cv, tr, kind="piyomon")
 
 
 # =========================================================================== #
@@ -1386,17 +1412,206 @@ TEMPLATES: list[TemplateDef] = [
         tracker_capture_range="A1:AN51",
         addon_fn=_addon_milk_mocha,
     ),
+    # =========================================================================
+    #  BATCH 5 (v3.7): 5 DIGIMON 7-STAGE EVOLUTION TEMPLATES (#36 .. #40)
+    # =========================================================================
+    TemplateDef(
+        stem="36_Digimon_Veemon_Miracle", short_key="36_digimon_veemon",
+        theme=Theme(
+            slug="digimon_veemon", name="DIGIMON VEEMON MIRACLE", emoji="⚡",
+            tagline_vi="Huy hiệu Kỳ Tích (Crest of Miracles) 7 cấp tiến hóa: Digi-Egg → Chibomon → DemiVeemon → Veemon → Flamedramon → Paildramon → Magnamon!",
+            page="#F4F9FF", card="#FFFFFF", ink="#0F294A", muted="#5A7394", line="#D0E3FA",
+            primary="#1D6FE2", primary_dark="#0F4699", on_primary="#FFFFFF", soft="#E5F1FF",
+            chart_fill="#BAE0FF", chart_line="#1D6FE2",
+            week_head=["#1D6FE2", "#2563EB", "#E85D04", "#0D9488", "#D97706"],
+            week_tint=["#EFF6FF", "#F0F7FF", "#FFF7ED", "#F0FDFA", "#FFFBEB"],
+            week_check=["#1D4ED8", "#1E40AF", "#C2410C", "#0F766E", "#B45309"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#EFF6FF", streak_mid="#93C5FD", streak_hi="#1D4ED8",
+            bar="#1D6FE2", donut_rest="#DBEAFE",
+            chart_title="VEEMON DIGIVOLUTION ENERGY • NĂNG LƯỢNG TIẾN HÓA MỖI NGÀY",
+            num_stages=7,
+            stage_names=[
+                "Digi-Egg of Miracles", "Chibomon", "DemiVeemon",
+                "Veemon", "Flamedramon", "Paildramon", "Magnamon",
+            ],
+        ),
+        tracker_name="⚡ Veemon Digivolution",
+        habits=[
+            Habit("Thức dậy đúng giờ & đón ngày mới", goal=28, p=0.90),
+            Habit("Rèn thể lực / chạy bộ 30 phút", goal=25, p=0.86),
+            Habit("Hoàn thành 3 việc ưu tiên (Deep Work)", goal=28, p=0.89),
+            Habit("Uống đủ 2.5L nước nạp năng lượng", goal=30, p=0.92),
+            Habit("Học kỹ năng / ngoại ngữ 30 phút", goal=26, p=0.85),
+            Habit("Đọc sách phát triển tư duy 20p", goal=26, p=0.84),
+            Habit("Kiểm soát chi tiêu & không trì hoãn", goal=28, p=0.87),
+            Habit("Tổng kết Digivice & ngủ đủ 8h", goal=28, p=0.88),
+        ],
+        seed=360, label_tag="CREST OF MIRACLES", garden_label="VEEMON EVOLUTION",
+        grown_label="⚡ ULTIMATE / MEGA\nDAYS EVOLVED:",
+        tracker_capture_range="A1:AN45",
+        addon_fn=_addon_digimon_veemon,
+    ),
+    TemplateDef(
+        stem="37_Digimon_Agumon_Courage", short_key="37_digimon_agumon",
+        theme=Theme(
+            slug="digimon_agumon", name="DIGIMON AGUMON COURAGE", emoji="🔥",
+            tagline_vi="Huy hiệu Dũng Khí (Crest of Courage) 7 cấp tiến hóa: Digi-Egg → Botamon → Koromon → Agumon → Greymon → MetalGreymon → WarGreymon!",
+            page="#FFF9F4", card="#FFFFFF", ink="#431407", muted="#9A5B3E", line="#FED7AA",
+            primary="#EA580C", primary_dark="#9A3412", on_primary="#FFFFFF", soft="#FFEDD5",
+            chart_fill="#FDBA74", chart_line="#EA580C", chart_kind="column",
+            week_head=["#F59E0B", "#EA580C", "#DC2626", "#D97706", "#B45309"],
+            week_tint=["#FFFBEB", "#FFF7ED", "#FEF2F2", "#FFF8EB", "#FEF3C7"],
+            week_check=["#B45309", "#C2410C", "#B91C1C", "#9A3412", "#854D0E"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#FFF7ED", streak_mid="#FDBA74", streak_hi="#C2410C",
+            bar="#EA580C", donut_rest="#FFEDD5",
+            chart_title="AGUMON COURAGE FLAME • NGỌN LỬA DŨNG KHÍ MỖI NGÀY",
+            num_stages=7,
+            stage_names=[
+                "Digi-Egg of Courage", "Botamon", "Koromon",
+                "Agumon", "Greymon", "MetalGreymon", "WarGreymon",
+            ],
+        ),
+        tracker_name="🔥 Agumon Digivolution",
+        habits=[
+            Habit("Dậy sớm 6h00 & làm việc khó nhất", goal=28, p=0.90),
+            Habit("Tập gym / calisthenics 35 phút", goal=25, p=0.87),
+            Habit("Ăn giàu đạm, rau xanh & 2.5L nước", goal=30, p=0.91),
+            Habit("Tập trung 2 phiên Deep Work sâu", goal=26, p=0.88),
+            Habit("Đọc sách / rèn chuyên môn 25p", goal=26, p=0.85),
+            Habit("1 hành động dũng cảm vượt giới hạn", goal=26, p=0.84),
+            Habit("Dọn gọn bàn & chuẩn bị ngày mai", goal=28, p=0.87),
+            Habit("Ngủ đủ giấc phục hồi trước 23h", goal=28, p=0.86),
+        ],
+        seed=370, label_tag="CREST OF COURAGE", garden_label="AGUMON EVOLUTION",
+        grown_label="🔥 ULTIMATE / MEGA\nDAYS EVOLVED:",
+        tracker_capture_range="A1:AN45",
+        addon_fn=_addon_digimon_agumon,
+    ),
+    TemplateDef(
+        stem="38_Digimon_Gatomon_Light", short_key="38_digimon_gatomon",
+        theme=Theme(
+            slug="digimon_gatomon", name="DIGIMON GATOMON LIGHT", emoji="✨",
+            tagline_vi="Huy hiệu Ánh Sáng (Crest of Light) 7 cấp tiến hóa: Digi-Egg → YukimiBotamon → Nyaromon → Salamon → Gatomon → Angewomon → LovelyAngemon!",
+            page="#FDF7FC", card="#FFFFFF", ink="#4A1D4E", muted="#8E6794", line="#F3D4F5",
+            primary="#C056B8", primary_dark="#862B80", on_primary="#FFFFFF", soft="#FCE7F8",
+            chart_fill="#F5C2EE", chart_line="#C056B8",
+            week_head=["#D977C8", "#A78BFA", "#F472B6", "#C084FC", "#F59E0B"],
+            week_tint=["#FDF2FA", "#F5F3FF", "#FFF1F7", "#FAF5FF", "#FFFBEB"],
+            week_check=["#A21CAF", "#7C3AED", "#DB2777", "#9333EA", "#B45309"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#FDF2FA", streak_mid="#E879F9", streak_hi="#86198F",
+            bar="#C056B8", donut_rest="#FAE8FF",
+            chart_title="GATOMON HOLY LIGHT • HÀO QUANG ÁNH SÁNG MỖI NGÀY",
+            num_stages=7,
+            stage_names=[
+                "Digi-Egg of Light", "YukimiBotamon", "Nyaromon",
+                "Salamon", "Gatomon", "Angewomon", "LovelyAngemon",
+            ],
+        ),
+        tracker_name="✨ Gatomon Digivolution",
+        habits=[
+            Habit("Chăm da sáng tối & uống 2L nước", goal=30, p=0.93),
+            Habit("Pilates / Yoga giãn cơ 25 phút", goal=25, p=0.85),
+            Habit("Viết 3 điều biết ơn cuối ngày", goal=28, p=0.89),
+            Habit("Hoàn thành việc trọng tâm buổi sáng", goal=28, p=0.88),
+            Habit("Đọc sách / học ngoại ngữ 25p", goal=26, p=0.85),
+            Habit("Ăn cân bằng nhiều trái cây & rau", goal=28, p=0.86),
+            Habit("Digital Detox 45p trước khi ngủ", goal=25, p=0.82),
+            Habit("Ngủ sớm làm đẹp đủ 8h trước 23h", goal=28, p=0.87),
+        ],
+        seed=380, label_tag="CREST OF LIGHT", garden_label="GATOMON EVOLUTION",
+        grown_label="✨ ULTIMATE / MEGA\nDAYS EVOLVED:",
+        tracker_capture_range="A1:AN45",
+        addon_fn=_addon_digimon_gatomon,
+    ),
+    TemplateDef(
+        stem="39_Digimon_Gabumon_Friendship", short_key="39_digimon_gabumon",
+        theme=Theme(
+            slug="digimon_gabumon", name="DIGIMON GABUMON FRIENDSHIP", emoji="❄️",
+            tagline_vi="Huy hiệu Tình Bạn (Crest of Friendship) 7 cấp tiến hóa: Digi-Egg → Punimon → Tsunomon → Gabumon → Garurumon → WereGarurumon → MetalGarurumon!",
+            page="#F3FAFF", card="#FFFFFF", ink="#0C3559", muted="#527A9E", line="#C7E4FA",
+            primary="#0284C7", primary_dark="#075985", on_primary="#FFFFFF", soft="#E0F2FE",
+            chart_fill="#93C5FD", chart_line="#0284C7",
+            week_head=["#0284C7", "#2563EB", "#4F46E5", "#0EA5E9", "#7C3AED"],
+            week_tint=["#F0F9FF", "#EFF6FF", "#EEF2FF", "#ECFEFF", "#F5F3FF"],
+            week_check=["#0369A1", "#1D4ED8", "#4338CA", "#0E7490", "#6D28D9"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#F0F9FF", streak_mid="#7DD3FC", streak_hi="#0369A1",
+            bar="#0284C7", donut_rest="#E0F2FE",
+            chart_title="GABUMON FRIENDSHIP SPEED • BỨT TỐC KỶ LUẬT MỖI NGÀY",
+            num_stages=7,
+            stage_names=[
+                "Digi-Egg of Friendship", "Punimon", "Tsunomon",
+                "Gabumon", "Garurumon", "WereGarurumon", "MetalGarurumon",
+            ],
+        ),
+        tracker_name="❄️ Gabumon Digivolution",
+        habits=[
+            Habit("Giữ đúng lời hứa giờ giấc sáng", goal=28, p=0.90),
+            Habit("Chạy bộ / Cardio sức bền 30 phút", goal=25, p=0.86),
+            Habit("Hoàn thành 2h Deep Work tập trung", goal=28, p=0.89),
+            Habit("Uống đủ 2.5L nước & ngồi đúng tư thế", goal=30, p=0.92),
+            Habit("Kết nối / hỏi thăm gia đình & bạn bè", goal=26, p=0.85),
+            Habit("Học lập trình / kỹ năng số 30p", goal=26, p=0.86),
+            Habit("Ghi chi tiêu & tích lũy kỷ luật", goal=28, p=0.88),
+            Habit("Review mục tiêu & ngủ trước 23h", goal=28, p=0.87),
+        ],
+        seed=390, label_tag="CREST OF FRIENDSHIP", garden_label="GABUMON EVOLUTION",
+        grown_label="❄️ ULTIMATE / MEGA\nDAYS EVOLVED:",
+        tracker_capture_range="A1:AN45",
+        addon_fn=_addon_digimon_gabumon,
+    ),
+    TemplateDef(
+        stem="40_Digimon_Piyomon_Love", short_key="40_digimon_piyomon",
+        theme=Theme(
+            slug="digimon_piyomon", name="DIGIMON PIYOMON LOVE", emoji="❤️",
+            tagline_vi="Huy hiệu Tình Yêu (Crest of Love) 7 cấp tiến hóa: Digi-Egg → Nyokimon → Yokomon → Biyomon → Birdramon → Garudamon → Phoenixmon!",
+            page="#FFF6F7", card="#FFFFFF", ink="#5C162A", muted="#9E5E6F", line="#FAD4DC",
+            primary="#E11D48", primary_dark="#9F1239", on_primary="#FFFFFF", soft="#FFE4E9",
+            chart_fill="#FDA4AF", chart_line="#E11D48",
+            week_head=["#F43F5E", "#FB7185", "#EA580C", "#E11D48", "#D97706"],
+            week_tint=["#FFF1F2", "#FFF5F6", "#FFF7ED", "#FFE4E6", "#FFFBEB"],
+            week_check=["#BE123C", "#E11D48", "#C2410C", "#9F1239", "#B45309"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#FFF1F2", streak_mid="#FDA4AF", streak_hi="#BE123C",
+            bar="#E11D48", donut_rest="#FFE4E6",
+            chart_title="PIYOMON PHOENIX WINGS • ĐÔI CÁNH YÊU THƯƠNG MỖI NGÀY",
+            num_stages=7,
+            stage_names=[
+                "Digi-Egg of Love", "Nyokimon", "Yokomon",
+                "Biyomon", "Birdramon", "Garudamon", "Phoenixmon",
+            ],
+        ),
+        tracker_name="❤️ Piyomon Digivolution",
+        habits=[
+            Habit("Thức dậy tràn năng lượng & mỉm cười", goal=28, p=0.90),
+            Habit("Vận động ngoài trời / nhảy dây 25p", goal=25, p=0.85),
+            Habit("Nấu bữa ăn ấm áp & uống 2L nước", goal=28, p=0.90),
+            Habit("Hoàn thành 3 việc quan trọng nhất", goal=28, p=0.88),
+            Habit("Đọc sách / nghe podcast 20 phút", goal=26, p=0.86),
+            Habit("Gửi lời cảm ơn / 1 hành động tử tế", goal=26, p=0.87),
+            Habit("Sắp xếp góc sống gọn gàng 10 phút", goal=28, p=0.86),
+            Habit("Viết nhật ký phản tư & ngủ đủ 8h", goal=28, p=0.88),
+        ],
+        seed=400, label_tag="CREST OF LOVE", garden_label="PIYOMON EVOLUTION",
+        grown_label="❤️ ULTIMATE / MEGA\nDAYS EVOLVED:",
+        tracker_capture_range="A1:AN45",
+        addon_fn=_addon_digimon_piyomon,
+    ),
 ]
 
 
-def _month_dyn_anims(sheet_name: str, tr: TrackerRefs, prefix: str | None = None) -> list[dict]:
+def _month_dyn_anims(sheet_name: str, tr: TrackerRefs, prefix: str | None = None,
+                     assets_range: str = "$B$2:$B$8") -> list[dict]:
     """Manifest of 31 dynamic Daily Linked Pictures + 1 dynamic Monthly Hero Linked Picture."""
     items = []
     for k in range(1, 32):
         nm = f"Anim_{prefix}_D{k:02d}" if prefix else f"Anim_Day{k:02d}"
         items.append({
             "name": nm,
-            "refers_to": f"=INDEX({ASSETS_SHEET}!$B$2:$B$8,{CALC_SHEET}!${colname(k)}${tr.stage_row + 1})",
+            "refers_to": f"=INDEX({ASSETS_SHEET}!{assets_range},{CALC_SHEET}!${colname(k)}${tr.stage_row + 1})",
             "sheet": sheet_name, "r1": R_IMG, "c1": day_col(k), "r2": R_IMG, "c2": day_col(k),
             "align_bottom": True,
         })
@@ -1404,7 +1619,7 @@ def _month_dyn_anims(sheet_name: str, tr: TrackerRefs, prefix: str | None = None
     hero_nm = f"Anim_{prefix}_Hero" if prefix else "Anim_MonthlyHero"
     items.append({
         "name": hero_nm,
-        "refers_to": f"=INDEX({ASSETS_SHEET}!$B$2:$B$8,{tr.hero_stage_cell})",
+        "refers_to": f"=INDEX({ASSETS_SHEET}!{assets_range},{tr.hero_stage_cell})",
         "sheet": sheet_name, "r1": r1, "c1": c1, "r2": r2, "c2": c2,
         "align_bottom": False,
     })
@@ -1434,9 +1649,10 @@ def build_template(tdef: TemplateDef, out_path: Path, edition: str = "pro_xlsm")
     wb = xlsxwriter.Workbook(str(out_path))
     styles = Styles(wb, tdef.theme)
 
+    stg_txt = "7 giai đoạn tiến hóa Digimon" if tdef.theme.num_stages == 7 else "6 giai đoạn"
     extra_tab_docs = [
         (DAILY_TASKS_SHEET, "Quản lý nhiệm vụ đột xuất theo từng ngày (Ngày/Tháng/Năm), nhóm ưu tiên & hoạt ảnh lớn dần 0% → 100%!"),
-        (YEARLY_GOALS_SHEET, "Lập mục tiêu năm (2024–2040), chia nhỏ Tháng/Tuần/Ngày & bộ đếm hoạt ảnh động 6 giai đoạn."),
+        (YEARLY_GOALS_SHEET, f"Lập mục tiêu năm (2024–2040), chia nhỏ Tháng/Tuần/Ngày & bộ đếm hoạt ảnh động {stg_txt}."),
         (ANNUAL_SHEET, "Tổng kết 12 tháng thiết kế riêng theo chủ đề, 4 thẻ KPI, khu vườn 12 biểu tượng & 8 Huy hiệu kỷ luật!"),
     ]
     g_info = build_guide(wb, styles, tdef.tracker_name, extra_tab_docs, edition=edition)
@@ -1463,7 +1679,8 @@ def build_template(tdef: TemplateDef, out_path: Path, edition: str = "pro_xlsm")
     cv.flush()
     if universal:
         checkboxes[tdef.tracker_name] = cv.form_checkboxes
-        dyn_anims.extend(_month_dyn_anims(tdef.tracker_name, tr, prefix=None))
+        dyn_anims.extend(_month_dyn_anims(tdef.tracker_name, tr, prefix=None,
+                                          assets_range=tdef.theme.assets_range))
 
     # Tab 3 (v3.0 NEW!): Daily One-Off Tasks (`📝 Nhiệm Vụ Ngày`) right next to Monthly Tracker!
     dt_info = build_daily_tasks_sheet(
@@ -1501,12 +1718,15 @@ def build_template(tdef: TemplateDef, out_path: Path, edition: str = "pro_xlsm")
         {"sheet": tdef.tracker_name, "range": tdef.tracker_capture_range, "out": f"{tdef.short_key}_tracker.png"},
         {"sheet": ANNUAL_SHEET, "range": ann_info["capture_range"], "out": f"{tdef.short_key}_annual_achievements.png"},
     ]
-    if tdef.short_key == "01_sunflower":
-        captures.append({"sheet": GUIDE_SHEET, "range": f"A1:H{g_info['guide_last_row']}", "out": "01_sunflower_guide.png"})
+    g_col = g_info.get("guide_last_col", "H")
+    if tdef.short_key in ("01_sunflower", "36_digimon_veemon"):
+        captures.append({"sheet": GUIDE_SHEET, "range": f"A1:{g_col}{g_info['guide_last_row']}", "out": f"{tdef.short_key}_guide.png"})
     if tdef.short_key in ("01_sunflower", "20_alpaca_cream", "24_royal_cat_cash", "26_purple_cat",
-                          "30_shiba_inu", "31_akita_inu", "33_mochi_cat", "35_milk_mocha"):
+                          "30_shiba_inu", "31_akita_inu", "33_mochi_cat", "35_milk_mocha",
+                          "36_digimon_veemon", "37_digimon_agumon"):
         captures.append({"sheet": DAILY_TASKS_SHEET, "range": dt_info["capture_range"], "out": f"{tdef.short_key}_daily_tasks.png"})
-    if tdef.short_key in ("01_sunflower", "20_alpaca_cream", "30_shiba_inu", "35_milk_mocha"):
+    if tdef.short_key in ("01_sunflower", "20_alpaca_cream", "30_shiba_inu", "35_milk_mocha",
+                          "36_digimon_veemon"):
         captures.append({"sheet": YEARLY_GOALS_SHEET, "range": "A1:J26", "out": f"{tdef.short_key}_yearly_goals.png"})
 
     return {
@@ -1514,6 +1734,7 @@ def build_template(tdef: TemplateDef, out_path: Path, edition: str = "pro_xlsm")
         "stem": tdef.stem,
         "short_key": tdef.short_key,
         "slug": tdef.theme.slug,
+        "num_stages": tdef.theme.num_stages,
         "theme_primary": tdef.theme.primary,
         "theme_primary_dark": tdef.theme.primary_dark,
         "theme_soft": tdef.theme.soft,
