@@ -51,7 +51,7 @@ Private gDirtyMonthly As Boolean
 Private gDirtyDaily As Boolean
 Private gDirtyGoals As Boolean
 
-' ---- Native Sprite Stack Stage-Diff Caches (0=uninit, 1..6=S0..S5, 7=hidden) ----
+' ---- Native Sprite Stack Stage-Diff Caches (0=uninit, 1..maxSlot=S0..Smax, maxSlot+1=hidden) ----
 Private gLastDayStage(1 To 31) As Long
 Private gLastMHero As Long
 Private gLastDHero As Long
@@ -60,18 +60,20 @@ Private gLastAHero As Long
 Private gLastBHero As Long
 Private gLastAMonth(1 To 12) As Long
 
-' ---- O(1) Direct Shape Object Reference Caches (ZERO ws.Shapes(name) linear scans!) ----
+' ---- O(1) Direct Shape Object Reference Caches (supports 6-stage 0..5 & 7-stage Digimon 0..6!) ----
+Private gMaxStageCached As Boolean
+Private gMaxStageVal As Long
 Private gShpCachedM As Boolean
-Private gDayShp(1 To 31, 0 To 5) As Shape
-Private gMHeroShp(0 To 5) As Shape
+Private gDayShp(1 To 31, 0 To 6) As Shape
+Private gMHeroShp(0 To 6) As Shape
 Private gShpCachedA As Boolean
-Private gAMonthShp(1 To 12, 0 To 5) As Shape
-Private gAHeroShp(0 To 5) As Shape
-Private gBHeroShp(0 To 5) As Shape
+Private gAMonthShp(1 To 12, 0 To 6) As Shape
+Private gAHeroShp(0 To 6) As Shape
+Private gBHeroShp(0 To 6) As Shape
 Private gShpCachedD As Boolean
-Private gDHeroShp(0 To 5) As Shape
+Private gDHeroShp(0 To 6) As Shape
 Private gShpCachedG As Boolean
-Private gGHeroShp(0 To 5) As Shape
+Private gGHeroShp(0 To 6) As Shape
 
 ' ---- Non-Blocking Toast State (O(1) reuse + guaranteed zero-orphan delete on close!) ----
 Private gToastDueTime As Double
@@ -174,7 +176,34 @@ Private Function KeyToString(ByVal v As Variant) As String
     End If
 End Function
 
-Private Function StageVal(ByVal v As Variant, ByVal allowSeven As Boolean) As Long
+Private Function GetMaxStage() As Long
+    If gMaxStageCached Then
+        GetMaxStage = gMaxStageVal
+        Exit Function
+    End If
+    On Error Resume Next
+    Dim v As Variant
+    v = ThisWorkbook.Names("CFG_MAX_STAGE").RefersToRange.Value2
+    If IsNumeric(v) Then
+        Dim m As Long
+        m = CLng(v)
+        If m >= 5 And m <= 6 Then
+            gMaxStageVal = m
+            gMaxStageCached = True
+            GetMaxStage = gMaxStageVal
+            Exit Function
+        End If
+    End If
+    gMaxStageVal = 5
+    gMaxStageCached = True
+    GetMaxStage = 5
+    On Error GoTo 0
+End Function
+
+Private Function StageVal(ByVal v As Variant, ByVal allowHide As Boolean) As Long
+    Dim maxSlot As Long, hideSlot As Long
+    maxSlot = GetMaxStage() + 1
+    hideSlot = maxSlot + 1
     Dim n As Long
     If IsError(v) Or IsEmpty(v) Or Not IsNumeric(v) Then
         n = 1
@@ -182,10 +211,10 @@ Private Function StageVal(ByVal v As Variant, ByVal allowSeven As Boolean) As Lo
         n = CLng(v)
     End If
     If n < 1 Then n = 1
-    If allowSeven Then
-        If n > 7 Then n = 7
+    If allowHide Then
+        If n > hideSlot Then n = hideSlot
     Else
-        If n > 6 Then n = 6
+        If n > maxSlot Then n = maxSlot
     End If
     StageVal = n
 End Function
@@ -338,29 +367,32 @@ End Sub
 ' =============================================================================
 '  NATIVE PRE-PLACED SPRITE STACK DIFF ENGINE (ZERO CAMERA LINKED PICTURES!)
 ' =============================================================================
-Private Function GetSlotShapeName(ByVal prefix As String, ByVal stage1to6 As Long) As String
-    Dim s As Long
-    s = stage1to6
+Private Function GetSlotShapeName(ByVal prefix As String, ByVal stage1toN As Long) As String
+    Dim s As Long, maxSlot As Long
+    maxSlot = GetMaxStage() + 1
+    s = stage1toN
     If s < 1 Then s = 1
-    If s > 6 Then s = 6
+    If s > maxSlot Then s = maxSlot
     GetSlotShapeName = prefix & CStr(s - 1)
 End Function
 
 Private Sub EnsureMonthlyShapeCache(ByVal ws As Worksheet)
     If gShpCachedM Then Exit Sub
     On Error Resume Next
+    Dim maxS As Long
+    maxS = GetMaxStage()
     Dim shp As Shape, nm As String, dNum As Long, sNum As Long
     For Each shp In ws.Shapes
         nm = shp.Name
         If Left$(nm, 5) = "SPR_D" And Len(nm) = 10 Then
             dNum = CLng(Mid$(nm, 6, 2))
             sNum = CLng(Right$(nm, 1))
-            If dNum >= 1 And dNum <= 31 And sNum >= 0 And sNum <= 5 Then
+            If dNum >= 1 And dNum <= 31 And sNum >= 0 And sNum <= maxS Then
                 Set gDayShp(dNum, sNum) = shp
             End If
         ElseIf Left$(nm, 11) = "SPR_MHERO_S" And Len(nm) = 12 Then
             sNum = CLng(Right$(nm, 1))
-            If sNum >= 0 And sNum <= 5 Then Set gMHeroShp(sNum) = shp
+            If sNum >= 0 And sNum <= maxS Then Set gMHeroShp(sNum) = shp
         End If
     Next shp
     gShpCachedM = True
@@ -370,21 +402,23 @@ End Sub
 Private Sub EnsureAnnualShapeCache(ByVal ws As Worksheet)
     If gShpCachedA Then Exit Sub
     On Error Resume Next
+    Dim maxS As Long
+    maxS = GetMaxStage()
     Dim shp As Shape, nm As String, mNum As Long, sNum As Long
     For Each shp In ws.Shapes
         nm = shp.Name
         If Left$(nm, 6) = "SPR_AM" And Len(nm) = 11 Then
             mNum = CLng(Mid$(nm, 7, 2))
             sNum = CLng(Right$(nm, 1))
-            If mNum >= 1 And mNum <= 12 And sNum >= 0 And sNum <= 5 Then
+            If mNum >= 1 And mNum <= 12 And sNum >= 0 And sNum <= maxS Then
                 Set gAMonthShp(mNum, sNum) = shp
             End If
         ElseIf Left$(nm, 11) = "SPR_AHERO_S" And Len(nm) = 12 Then
             sNum = CLng(Right$(nm, 1))
-            If sNum >= 0 And sNum <= 5 Then Set gAHeroShp(sNum) = shp
+            If sNum >= 0 And sNum <= maxS Then Set gAHeroShp(sNum) = shp
         ElseIf Left$(nm, 11) = "SPR_BHERO_S" And Len(nm) = 12 Then
             sNum = CLng(Right$(nm, 1))
-            If sNum >= 0 And sNum <= 5 Then Set gBHeroShp(sNum) = shp
+            If sNum >= 0 And sNum <= maxS Then Set gBHeroShp(sNum) = shp
         End If
     Next shp
     gShpCachedA = True
@@ -394,12 +428,14 @@ End Sub
 Private Sub EnsureDailyShapeCache(ByVal ws As Worksheet)
     If gShpCachedD Then Exit Sub
     On Error Resume Next
+    Dim maxS As Long
+    maxS = GetMaxStage()
     Dim shp As Shape, nm As String, sNum As Long
     For Each shp In ws.Shapes
         nm = shp.Name
         If Left$(nm, 11) = "SPR_DHERO_S" And Len(nm) = 12 Then
             sNum = CLng(Right$(nm, 1))
-            If sNum >= 0 And sNum <= 5 Then Set gDHeroShp(sNum) = shp
+            If sNum >= 0 And sNum <= maxS Then Set gDHeroShp(sNum) = shp
         End If
     Next shp
     gShpCachedD = True
@@ -409,12 +445,14 @@ End Sub
 Private Sub EnsureGoalsShapeCache(ByVal ws As Worksheet)
     If gShpCachedG Then Exit Sub
     On Error Resume Next
+    Dim maxS As Long
+    maxS = GetMaxStage()
     Dim shp As Shape, nm As String, sNum As Long
     For Each shp In ws.Shapes
         nm = shp.Name
         If Left$(nm, 11) = "SPR_GHERO_S" And Len(nm) = 12 Then
             sNum = CLng(Right$(nm, 1))
-            If sNum >= 0 And sNum <= 5 Then Set gGHeroShp(sNum) = shp
+            If sNum >= 0 And sNum <= maxS Then Set gGHeroShp(sNum) = shp
         End If
     Next shp
     gShpCachedG = True
@@ -424,16 +462,20 @@ End Sub
 Private Sub SyncCached1D(ByRef arr() As Shape, ByRef cachedStage As Long, ByVal newStage As Long)
     If cachedStage = newStage Then Exit Sub
     On Error Resume Next
-    If cachedStage >= 1 And cachedStage <= 7 Then
-        If cachedStage <= 6 Then
+    Dim maxS As Long, maxSlot As Long, hideSlot As Long
+    maxS = GetMaxStage()
+    maxSlot = maxS + 1
+    hideSlot = maxSlot + 1
+    If cachedStage >= 1 And cachedStage <= hideSlot Then
+        If cachedStage <= maxSlot Then
             If Not arr(cachedStage - 1) Is Nothing Then arr(cachedStage - 1).Visible = MSO_FALSE
         End If
-        If newStage >= 1 And newStage <= 6 Then
+        If newStage >= 1 And newStage <= maxSlot Then
             If Not arr(newStage - 1) Is Nothing Then arr(newStage - 1).Visible = MSO_TRUE
         End If
     Else
         Dim k As Long
-        For k = 0 To 5
+        For k = 0 To maxS
             If Not arr(k) Is Nothing Then
                 arr(k).Visible = IIf(k = newStage - 1, MSO_TRUE, MSO_FALSE)
             End If
@@ -448,16 +490,20 @@ Private Sub SyncCachedDay(ByVal dayIdx As Long, ByVal newStage As Long)
     oldStage = gLastDayStage(dayIdx)
     If oldStage = newStage Then Exit Sub
     On Error Resume Next
-    If oldStage >= 1 And oldStage <= 7 Then
-        If oldStage <= 6 Then
+    Dim maxS As Long, maxSlot As Long, hideSlot As Long
+    maxS = GetMaxStage()
+    maxSlot = maxS + 1
+    hideSlot = maxSlot + 1
+    If oldStage >= 1 And oldStage <= hideSlot Then
+        If oldStage <= maxSlot Then
             If Not gDayShp(dayIdx, oldStage - 1) Is Nothing Then gDayShp(dayIdx, oldStage - 1).Visible = MSO_FALSE
         End If
-        If newStage >= 1 And newStage <= 6 Then
+        If newStage >= 1 And newStage <= maxSlot Then
             If Not gDayShp(dayIdx, newStage - 1) Is Nothing Then gDayShp(dayIdx, newStage - 1).Visible = MSO_TRUE
         End If
     Else
         Dim k As Long
-        For k = 0 To 5
+        For k = 0 To maxS
             If Not gDayShp(dayIdx, k) Is Nothing Then
                 gDayShp(dayIdx, k).Visible = IIf(k = newStage - 1, MSO_TRUE, MSO_FALSE)
             End If
@@ -472,16 +518,20 @@ Private Sub SyncCachedAMonth(ByVal mIdx As Long, ByVal newStage As Long)
     oldStage = gLastAMonth(mIdx)
     If oldStage = newStage Then Exit Sub
     On Error Resume Next
-    If oldStage >= 1 And oldStage <= 7 Then
-        If oldStage <= 6 Then
+    Dim maxS As Long, maxSlot As Long, hideSlot As Long
+    maxS = GetMaxStage()
+    maxSlot = maxS + 1
+    hideSlot = maxSlot + 1
+    If oldStage >= 1 And oldStage <= hideSlot Then
+        If oldStage <= maxSlot Then
             If Not gAMonthShp(mIdx, oldStage - 1) Is Nothing Then gAMonthShp(mIdx, oldStage - 1).Visible = MSO_FALSE
         End If
-        If newStage >= 1 And newStage <= 6 Then
+        If newStage >= 1 And newStage <= maxSlot Then
             If Not gAMonthShp(mIdx, newStage - 1) Is Nothing Then gAMonthShp(mIdx, newStage - 1).Visible = MSO_TRUE
         End If
     Else
         Dim k As Long
-        For k = 0 To 5
+        For k = 0 To maxS
             If Not gAMonthShp(mIdx, k) Is Nothing Then
                 gAMonthShp(mIdx, k).Visible = IIf(k = newStage - 1, MSO_TRUE, MSO_FALSE)
             End If
@@ -1841,8 +1891,10 @@ Public Sub BtnDemoFX()
     GetCalcSheet().Range("BA1").Value2 = True
     gFXVal = True
     gFXCached = True
-    PlayHeroBounce wsG, "Guide_Stage5"
-    PlaySparkleBurst wsG, "Guide_Stage5"
+    Dim demoShp As String
+    demoShp = "Guide_Stage" & CStr(GetMaxStage())
+    PlayHeroBounce wsG, demoShp
+    PlaySparkleBurst wsG, demoShp
     ShowToast wsG, GetFxMsg(16)
     GetCalcSheet().Range("BA1").Value2 = prevFX
     gFXVal = prevFX
@@ -1851,10 +1903,12 @@ End Sub
 
 ' =============================================================================
 '  1-CLICK CUSTOM `_Assets` SPRITE SYNC MACRO (`SyncSpritesFromAssets`)
-'  Allows users who replace custom PNGs in `_Assets!B2:B7` to refresh ALL
-'  native pre-placed sprite stacks across all 5 visible tabs in 1 click!
+'  Allows users who replace custom PNGs in `_Assets!B2:B7` (or B2:B8) to refresh
+'  ALL native pre-placed sprite stacks across all 5 visible tabs in 1 click!
 ' =============================================================================
 Private Sub ReplaceSheetSpritesFromAssets(ByVal ws As Worksheet, ByRef assetShp() As Shape)
+    Dim maxS As Long
+    maxS = GetMaxStage()
     Dim targets() As String
     Dim tStage() As Long
     Dim tL() As Single, tT() As Single, tW() As Single, tH() As Single
@@ -1868,12 +1922,12 @@ Private Sub ReplaceSheetSpritesFromAssets(ByVal ws As Worksheet, ByRef assetShp(
         stIdx = -1
         If Left$(nm, 4) = "SPR_" And InStr(nm, "_S") > 0 Then
             stChar = Right$(nm, 1)
-            If stChar >= "0" And stChar <= "5" Then stIdx = CLng(stChar)
+            If stChar >= "0" And stChar <= CStr(maxS) Then stIdx = CLng(stChar)
         ElseIf Left$(nm, 11) = "Guide_Stage" Then
             stChar = Right$(nm, 1)
-            If stChar >= "0" And stChar <= "5" Then stIdx = CLng(stChar)
+            If stChar >= "0" And stChar <= CStr(maxS) Then stIdx = CLng(stChar)
         End If
-        If stIdx >= 0 And stIdx <= 5 Then
+        If stIdx >= 0 And stIdx <= maxS Then
             If Not assetShp(stIdx) Is Nothing Then
                 cnt = cnt + 1
                 ReDim Preserve targets(1 To cnt)
@@ -1906,7 +1960,7 @@ Private Sub ReplaceSheetSpritesFromAssets(ByVal ws As Worksheet, ByRef assetShp(
 
     Dim i As Long, k As Long
     Dim newShp As Shape
-    For k = 0 To 5
+    For k = 0 To maxS
         If Not assetShp(k) Is Nothing Then
             assetShp(k).Copy
             For i = 1 To cnt
@@ -1937,6 +1991,8 @@ Public Sub SyncSpritesFromAssets()
     On Error GoTo Cleanup
     Dim wsAssets As Worksheet
     Set wsAssets = ThisWorkbook.Worksheets(ASSETS_SHEET)
+    Dim maxS As Long
+    maxS = GetMaxStage()
 
     Dim prevCalc As XlCalculation, prevAnim As Boolean, prevActive As Worksheet
     Set prevActive = ActiveSheet
@@ -1953,13 +2009,13 @@ Public Sub SyncSpritesFromAssets()
     prevAssVis = wsAssets.Visible
     wsAssets.Visible = xlSheetVisible
 
-    ' Locate the 6 user shapes in `_Assets!B2:B7` (row 2..7 -> stage 0..5)
-    Dim assetShp(0 To 5) As Shape
+    ' Locate user shapes in `_Assets!B2:B(2+maxS)` (stage 0..maxS)
+    Dim assetShp(0 To 6) As Shape
     Dim shp As Shape, rr As Long
     For Each shp In wsAssets.Shapes
         If Left$(shp.Name, 4) <> "BTN_" Then
             rr = shp.TopLeftCell.Row
-            If rr >= 2 And rr <= 7 And shp.TopLeftCell.Column <= 3 Then
+            If rr >= 2 And rr <= (2 + maxS) And shp.TopLeftCell.Column <= 3 Then
                 Set assetShp(rr - 2) = shp
             End If
         End If

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================================
-#  Habit Tracker Collection v3.6 — Interactive Zero-Install Downloader (macOS/Linux)
+#  Habit Tracker Collection v3.7 — Interactive Zero-Install Downloader (macOS/Linux)
 #  Run in 1 line:
 #    curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu/main/install.sh | bash
 # ============================================================================
@@ -52,6 +52,11 @@ STEMS=(
   "33_Peach_Mochi_Cat_Mood_Suite"
   "34_Fluffy_Bunny_Sticker_Pop"
   "35_Milk_Mocha_Bear_Sweet_Love"
+  "36_Digimon_Veemon_Miracle"
+  "37_Digimon_Agumon_Courage"
+  "38_Digimon_Gatomon_Light"
+  "39_Digimon_Gabumon_Friendship"
+  "40_Digimon_Piyomon_Love"
 )
 
 TITLES=(
@@ -91,6 +96,11 @@ TITLES=(
   "Mèo Mochi Quýt Mikan + 6 Cảm Xúc & To-Do"
   "Thỏ Bông Sticker Pop 5 Màu Pastel"
   "Gấu Milk & Mocha + 5+1 Biểu Đồ Donut"
+  "Digimon Veemon → Magnamon (7 Cấp Tiến Hóa)"
+  "Digimon Agumon → WarGreymon (7 Cấp Tiến Hóa)"
+  "Digimon Gatomon → LovelyAngemon (7 Cấp Tiến Hóa)"
+  "Digimon Gabumon → MetalGarurumon (7 Cấp Tiến Hóa)"
+  "Digimon Piyomon → Phoenixmon (7 Cấp Tiến Hóa)"
 )
 
 resolve_out_dir() {
@@ -157,15 +167,15 @@ OUT_DIR="$(resolve_out_dir)"
 mkdir -p "$OUT_DIR"
 
 printf "\n%s========================================================================%s\n" "$C_MAGENTA" "$C_RESET"
-printf "%s   HABIT TRACKER COLLECTION v3.6 — BY DYU (35 THEMES × 4 EDITIONS)%s\n" "$C_YELLOW" "$C_RESET"
-printf "%s   Turbo Native Sprite Engine • FX Suite • Ctrl+Z Undo • Formula Protect%s\n" "$C_CYAN" "$C_RESET"
+printf "%s   HABIT TRACKER COLLECTION v3.7 — BY DYU (40 THEMES × 4 EDITIONS)%s\n" "$C_YELLOW" "$C_RESET"
+printf "%s   Turbo 6/7-Stage Native Sprite Engine • FX Suite • Ctrl+Z Undo • Lock%s\n" "$C_CYAN" "$C_RESET"
 printf "%s========================================================================%s\n" "$C_MAGENTA" "$C_RESET"
 printf "  %sThư mục lưu file:%s %s\n\n" "$C_GREEN" "$C_RESET" "$OUT_DIR"
 
 printf "  %sBƯỚC 1 — CHỌN PHIÊN BẢN PHÙ HỢP (THEO THỨ TỰ ƯU TIÊN):%s\n" "$C_BOLD" "$C_RESET"
 printf "  %s----------------------------------------------------------------------%s\n" "$C_DIM" "$C_RESET"
-printf "  %s[1] Pro Interactive (.xlsm)  [⭐ KHUYÊN DÙNG SỐ 1 — TURBO v3.6]%s\n" "$C_GREEN" "$C_RESET"
-printf "      %s-> Siêu tốc ~51ms + Full FX Nảy/Pháo hoa/Toast + Ctrl+Z / Nút Undo%s\n" "$C_DIM" "$C_RESET"
+printf "  %s[1] Pro Interactive (.xlsm)  [⭐ KHUYÊN DÙNG SỐ 1 — TURBO v3.7]%s\n" "$C_GREEN" "$C_RESET"
+printf "      %s-> Siêu tốc ~31–54ms + Full FX Nảy/Pháo hoa/Toast + Ctrl+Z / Nút Undo%s\n" "$C_DIM" "$C_RESET"
 printf "         %s+ Khóa bảo vệ công thức + Tự lưu Đa Ngày/Tháng/Năm (100%% Offline)!%s\n" "$C_DIM" "$C_RESET"
 printf "  %s[2] Excel Universal Offline (.xlsx)%s\n" "$C_CYAN" "$C_RESET"
 printf "      %s-> Không Macro, Form Checkbox chuẩn mọi đời Excel 2016–365 Win/Mac!%s\n" "$C_DIM" "$C_RESET"
@@ -195,8 +205,12 @@ case "$ED_CHOICE" in
   *) ED_CHOICE="1" ;;
 esac
 
-printf "\n  %sBƯỚC 2 — CHỌN MẪU THÓI QUEN (35 CHỦ ĐỀ THẨM MỸ & LINH VẬT):%s\n" "$C_BOLD" "$C_RESET"
+printf "\n  %sBƯỚC 2 — CHỌN MẪU THÓI QUEN (40 CHỦ ĐỀ THẨM MỸ, LINH VẬT & DIGIMON):%s\n" "$C_BOLD" "$C_RESET"
 printf "  %s----------------------------------------------------------------------%s\n" "$C_DIM" "$C_RESET"
+printf "  %s--- ⚡ [MỚI v3.7] DIGIMON 7-STAGE EVOLUTION (Veemon, Agumon, Gatomon, Gabumon, Piyomon) ---%s\n" "$C_CYAN" "$C_RESET"
+for i in 36 37 38 39 40; do
+  printf "  [%-2d] %-38s — %s\n" "$i" "${STEMS[$i]}" "${TITLES[$i]}"
+done
 printf "  %s--- THÚ CƯNG SIÊU CUTE (Mochi Cat, Bunny, Milk & Mocha, Shiba, Akita, Alpaca...) ---%s\n" "$C_YELLOW" "$C_RESET"
 for i in 21 22 23 25 26 27 30 31 33 34 35; do
   printf "  [%-2d] %-38s — %s\n" "$i" "${STEMS[$i]}" "${TITLES[$i]}"
@@ -214,9 +228,9 @@ for i in 4 6 7 20 24; do
   printf "  [%-2d] %-38s — %s\n" "$i" "${STEMS[$i]}" "${TITLES[$i]}"
 done
 printf "  %s----------------------------------------------------------------------%s\n" "$C_DIM" "$C_RESET"
-printf "  %s[A]%s  Tải TOÀN BỘ 35 mẫu (Download All 35)\n" "$C_GREEN" "$C_RESET"
+printf "  %s[A]%s  Tải TOÀN BỘ 40 mẫu (Download All 40)\n" "$C_GREEN" "$C_RESET"
 printf "  %s[0]%s  Thoát\n\n" "$C_DIM" "$C_RESET"
-printf "  %sGợi ý: Nhập 1 số (vd: 35), nhiều số (vd: 32,33,34,35), dải (vd: 30-35), hoặc A%s\n" "$C_YELLOW" "$C_RESET"
+printf "  %sGợi ý: Nhập 1 số (vd: 36), nhiều số (vd: 36,37,38,39,40), dải (vd: 36-40), hoặc A%s\n" "$C_YELLOW" "$C_RESET"
 
 CHOICE=""
 if [ -n "${HABIT_CHOICE:-}" ]; then
@@ -243,12 +257,12 @@ for tok in $CLEAN; do
       if [[ "$a" =~ ^[0-9]+$ ]] && [[ "$b" =~ ^[0-9]+$ ]]; then
         [ "$a" -gt "$b" ] && { t="$a"; a="$b"; b="$t"; }
         for ((n=a; n<=b; n++)); do
-          [ "$n" -ge 1 ] && [ "$n" -le 35 ] && SEL_IDS+=("$n")
+          [ "$n" -ge 1 ] && [ "$n" -le 40 ] && SEL_IDS+=("$n")
         done
       fi
       ;;
     *)
-      if [[ "$up" =~ ^[0-9]+$ ]] && [ "$up" -ge 1 ] && [ "$up" -le 35 ]; then
+      if [[ "$up" =~ ^[0-9]+$ ]] && [ "$up" -ge 1 ] && [ "$up" -le 40 ]; then
         SEL_IDS+=("$up")
       fi
       ;;
@@ -256,7 +270,7 @@ for tok in $CLEAN; do
 done
 
 if [ "$DO_ALL" -eq 1 ]; then
-  SEL_IDS=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35)
+  SEL_IDS=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40)
 fi
 
 UNIQUE_IDS=()

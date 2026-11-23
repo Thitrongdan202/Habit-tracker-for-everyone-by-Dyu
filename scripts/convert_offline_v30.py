@@ -337,8 +337,8 @@ def _step3_validate_and_finalize_com(xl, path: Path, exp_tr: int, exp_dt: int, e
             raise RuntimeError(
                 f"{path.name}: checkbox mismatch! got tr={tr_cbs}/{exp_tr}, dt={dt_cbs}/{exp_dt}, yg={yg_cbs}/{exp_yg}"
             )
-        if pic_total != 54:
-            raise RuntimeError(f"{path.name}: linked picture mismatch! got {pic_total} (exp 54)")
+        if pic_total not in (54, 55):
+            raise RuntimeError(f"{path.name}: linked picture mismatch! got {pic_total} (exp 54 or 55)")
 
         xl.Calculation = -4105
         xl.ScreenUpdating = True

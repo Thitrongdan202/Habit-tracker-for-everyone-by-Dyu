@@ -39,7 +39,9 @@ PREVIEWS_DIR = ROOT / "previews"
 PREVIEW_KEYS = {"01_sunflower", "02_cactus", "07_sakura", "10_aurora",
                 "11_velvet_rose", "16_dream_house", "18_plum_oak",
                 "20_alpaca_cream", "24_royal_cat_cash", "30_shiba_inu", "31_akita_inu",
-                "32_sakura_min", "33_mochi_cat", "34_fluffy_bunny", "35_milk_mocha"}
+                "32_sakura_min", "33_mochi_cat", "34_fluffy_bunny", "35_milk_mocha",
+                "36_digimon_veemon", "37_digimon_agumon", "38_digimon_gatomon",
+                "39_digimon_gabumon", "40_digimon_piyomon"}
 
 
 def _com_retry(fn, retries: int = 12, delay: float = 0.25):
@@ -129,7 +131,8 @@ def _capture_mobile_previews(xl, meta: dict):
         ws_gd = wb.Worksheets(MOBILE_GUIDE_SHEET)
 
         # 1) Tab 1: Replace =IMAGE() display with exact computed stage sprite on temp copy ONLY
-        hero_stg = max(1, min(6, int(_com_retry(lambda: ws_calc.Range("E12").Value) or 1)))
+        n_stages = int(meta.get("num_stages", 6))
+        hero_stg = max(1, min(n_stages, int(_com_retry(lambda: ws_calc.Range("E12").Value) or 1)))
         _com_retry(lambda: setattr(ws_wk.Range("F9"), "Value", ""))
         _overlay_sprite(ws_wk, ws_wk.Range("F9:I12"), ASSETS_DIR / slug / f"stage_{hero_stg - 1}.png")
 
@@ -138,7 +141,7 @@ def _capture_mobile_previews(xl, meta: dict):
             day_val = _com_retry(lambda c=c_xl: ws_wk.Cells(20, c).Value)
             _com_retry(lambda c=c_xl: setattr(ws_wk.Cells(15, c), "Value", ""))
             if day_val is not None and str(day_val).strip() != "":
-                stg = max(1, min(6, int(_com_retry(lambda d=dow: ws_calc.Cells(1, 7 + d).Value) or 1)))
+                stg = max(1, min(n_stages, int(_com_retry(lambda d=dow: ws_calc.Cells(1, 7 + d).Value) or 1)))
                 _overlay_sprite(ws_wk, ws_wk.Cells(15, c_xl),
                                 ASSETS_DIR / slug / f"stage_{stg - 1}.png", align_bottom=True)
 
@@ -146,8 +149,8 @@ def _capture_mobile_previews(xl, meta: dict):
         print(f"      [PNG] mobile_{short_key}.png ({sz_top[0]}x{sz_top[1]})", flush=True)
 
         # Capture Mobile Daily Tasks tab on flagship templates
-        if short_key in ("01_sunflower", "30_shiba_inu"):
-            dt_stg = max(1, min(6, int(_com_retry(lambda: ws_calc.Range("E33").Value) or 1)))
+        if short_key in ("01_sunflower", "30_shiba_inu", "36_digimon_veemon"):
+            dt_stg = max(1, min(n_stages, int(_com_retry(lambda: ws_calc.Range("E33").Value) or 1)))
             _com_retry(lambda: setattr(ws_dt.Range("F9"), "Value", ""))
             _overlay_sprite(ws_dt, ws_dt.Range("F9:I12"), ASSETS_DIR / slug / f"stage_{dt_stg - 1}.png")
             out_dt = PREVIEWS_DIR / f"mobile_{short_key}_daily.png"

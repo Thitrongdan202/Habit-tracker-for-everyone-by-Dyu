@@ -102,7 +102,7 @@ def build_daily_tasks_sheet(
     ws_calc.write_formula(12, CALC_STATE_VAL_COL, f'=COUNTIFS({task_rng_q},"?*",{chk_rng_q},TRUE)')
     ws_calc.write_formula(13, CALC_STATE_VAL_COL, f'=COUNTIF({task_rng_q},"?*")')
     ws_calc.write_formula(14, CALC_STATE_VAL_COL, f"=IFERROR({acell(12, CALC_STATE_VAL_COL)}/{acell(13, CALC_STATE_VAL_COL)},0)")
-    ws_calc.write_formula(15, CALC_STATE_VAL_COL, stage6_formula(acell(14, CALC_STATE_VAL_COL)))
+    ws_calc.write_formula(15, CALC_STATE_VAL_COL, stage6_formula(acell(14, CALC_STATE_VAL_COL), t.num_stages))
     ws_calc.write_formula(16, CALC_STATE_VAL_COL, f"={acell(14, CALC_STATE_VAL_COL)}")
     ws_calc.write_formula(17, CALC_STATE_VAL_COL, f"=1-{acell(14, CALC_STATE_VAL_COL)}")
 
@@ -281,13 +281,13 @@ def build_daily_tasks_sheet(
         cv.merge(*hero_box, "", align="center", bg_color=t.card)
         dyn_anims.append({
             "name": "Anim_DailyTaskHero",
-            "refers_to": f"=INDEX({ASSETS_SHEET}!$B$2:$B$8,{dt_stage_ref})",
+            "refers_to": f"=INDEX({ASSETS_SHEET}!{t.assets_range},{dt_stage_ref})",
             "sheet": name, "r1": 9, "c1": 7, "r2": 16, "c2": 7,
             "align_bottom": False,
         })
     else:
         cv.merge(*hero_box,
-                 f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN(6,MAX(1,{dt_stage_ref}))-1)&".png")',
+                 f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN({t.num_stages},MAX(1,{dt_stage_ref}))-1)&".png")',
                  align="center", bg_color=t.card)
 
     cv.merge(17, 7, 18, 7,

@@ -1,50 +1,49 @@
-# 🐻 Habit Tracker Collection for Everyone — by Dyu (v3.6 Turbo — 35 Themes × 4 Editions)
+# ⚡ Habit Tracker Collection for Everyone — by Dyu (v3.7 — 40 Themes × 4 Editions)
 
-> **Bộ sưu tập 35 mẫu Habit Tracker thẩm mỹ chuẩn Digital Planner — Đủ 4 phiên bản cho Máy tính & Điện thoại (140 file hoàn chỉnh + 210 ảnh hoạt ảnh 6 giai đoạn)!**
-> **MỚI v3.6 TURBO: Tái kiến trúc hoàn toàn động cơ hiệu năng trên toàn bộ 35 file `Pro Interactive (.xlsm)` + tối ưu `google_sheets_1click_setup.gs` — thay thế 100% Camera Linked Pictures bằng Native Sprite Stacks nén 6 PNG duy nhất, chỉ mục `_Database` O(1) thuần VBA (Win & Mac), ghi mảng `.Value2` & Lazy-Flush! Đổi Tháng bằng nút 1 chạm chỉ ~51 ms (nhanh gấp 80×), đổi Ngày chỉ ~40 ms (nhanh gấp 68×), bổ sung `Ctrl+Z` / nút `↩ Undo` thực thụ, khóa bảo vệ dòng công thức `TOTAL` (`UserInterfaceOnly`) & vẽ lại 36 sprite thú cưng siêu sắc nét (Shiba, Akita, Ginger Kitten, Royal Cat, Starlight Lavender Cat, Mochi Cat)!**
+> **Bộ sưu tập 40 mẫu Habit Tracker thẩm mỹ chuẩn Digital Planner — Đủ 4 phiên bản cho Máy tính & Điện thoại (160 file hoàn chỉnh + 245 ảnh hoạt ảnh: 35 chủ đề 6 giai đoạn & 5 chủ đề Digimon 7 giai đoạn tiến hóa)!**
+> **MỚI v3.7 — BỘ SƯU TẬP DIGIMON 7 CẤP TIẾN HÓA (`#36`–`#40`):** Bổ sung **5 mẫu Digimon chuẩn canon** (*Veemon → Magnamon*, *Agumon → WarGreymon*, *Gatomon → LovelyAngemon*, *Gabumon → MetalGarurumon*, *Piyomon → Phoenixmon*) mở rộng động cơ **Turbo Native Sprite Engine** lên **7 giai đoạn tiến hóa (`0% → 1–19% → 20–39% → 40–59% → 60–79% → 80–99% → 100% Mega ✨`)** trên đủ 4 phiên bản! Đổi Tháng chỉ **~29–54 ms**, đổi Ngày **~4–5 ms**, đầy đủ **FX Suite, `Ctrl+Z` / `↩ Undo` & khóa bảo vệ công thức (`UserInterfaceOnly`)**!
 
-![Version 3.6 Turbo](https://img.shields.io/badge/Version-3.6_Turbo_35_Themes_x_4_Editions-E86A92?style=for-the-badge)
-![Pro #1 Recommended](https://img.shields.io/badge/⭐_RECOMMENDED_%231-Pro_Interactive_.XLSM_Turbo_v3.6-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white)
+![Version 3.7](https://img.shields.io/badge/Version-3.7_40_Themes_x_4_Editions-1D6FE2?style=for-the-badge)
+![Pro #1 Recommended](https://img.shields.io/badge/⭐_RECOMMENDED_%231-Pro_Interactive_.XLSM_Turbo_v3.7-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white)
 ![Zero Macro Offline](https://img.shields.io/badge/Offline_No--Macro-.XLSX_Excel_2016--365-4E9F76?style=for-the-badge)
-![Google Sheets](https://img.shields.io/badge/Google_Sheets-1--Click_Script_v3.6-34A853?style=for-the-badge&logo=googlesheets&logoColor=white)
+![Google Sheets](https://img.shields.io/badge/Google_Sheets-1--Click_Script_v3.7-34A853?style=for-the-badge&logo=googlesheets&logoColor=white)
 ![Mobile Portrait](https://img.shields.io/badge/Mobile_Portrait-iOS_%26_Android_0_Scroll-9E9AD1?style=for-the-badge)
 
 ---
 
-## ⚡ KHUYÊN DÙNG SỐ 1: Phiên Bản `Pro Interactive (.xlsm)` — Turbo Engine & FX Suite v3.6
+## ⚡ KHUYÊN DÙNG SỐ 1: Phiên Bản `Pro Interactive (.xlsm)` — Turbo Engine & FX Suite v3.7
 
 Nếu bạn dùng **Microsoft Excel trên Windows hoặc macOS**, hãy chọn ngay **`[1] Pro Interactive (.xlsm)`** trong [`templates/pro_macro/`](templates/pro_macro/) để trải nghiệm tốc độ mượt như **App Desktop gốc** hoàn toàn 100% Offline:
 
-- **🚀 Động cơ v3.6 Turbo Performance Engine (Nhanh gấp 20×–80× so với cơ chế Linked Pictures cũ!):**
-  - **Native Pre-Placed Sprite Stacks + Nén Đúng 6 PNG (`xl/media/`):** Bỏ hoàn toàn 54 Camera-Tool Linked Pictures gây giật lag GDI; thay bằng cụm ảnh PNG gốc siêu nét + bộ đệm so sánh thay đổi (`Stage-Diff Cache`) & tham chiếu Shape O(1) — dung lượng file thậm chí **nhẹ hơn ~30% (~257–380 KB)**!
+- **🚀 Động cơ v3.7 Turbo Performance Engine (Hỗ trợ cả 6 giai đoạn & 7 giai đoạn Digimon — Nhanh gấp 20×–80×!):**
+  - **Native Pre-Placed Sprite Stacks + Nén Đúng 6 hoặc 7 PNG (`xl/media/`):** Bỏ hoàn toàn Camera-Tool Linked Pictures gây giật lag GDI; thay bằng cụm ảnh PNG gốc siêu nét + bộ đệm so sánh thay đổi (`Stage-Diff Cache`) & tham chiếu Shape O(1)!
   - **Chỉ mục `_Database` O(1) thuần VBA (`Collection`, tương thích cả Windows & macOS Excel) + `.Value2` + Lazy-Flush:** Tick ô Checkbox **KHÔNG ghi `_Database`** (tự động flush khi đổi Tháng/Ngày/Năm, mở tab Tổng Kết Năm, hoặc Lưu/Đóng file!).
   - **🛡️ Hoàn tác `Ctrl+Z` Thực Thụ & Khóa Bảo Vệ Công Thức (`UserInterfaceOnly:=True`):** Giữ snapshot trước mỗi thao tác tick/kéo-fill để bấm **`Ctrl+Z`** hoặc nút **`↩ Undo`** khôi phục tức thì cả dữ liệu lẫn sprite; đồng thời khóa an toàn dòng `TOTAL • TỔNG KẾT` (Row 37) & toàn bộ ô công thức để kéo thả checkbox không bao giờ ghi đè hỏng công thức!
-  - **Giữ nguyên tính năng tự đổi ảnh trong `_Assets`:** Chỉ cần dán 6 ảnh mới vào `_Assets!B2:B7` rồi bấm nút **`🔄 Đồng bộ 6 ảnh mới (SyncSprites)`** 1 chạm!
+  - **Giữ nguyên tính năng tự đổi ảnh trong `_Assets`:** Chỉ cần dán 6 ảnh mới vào `_Assets!B2:B7` (hoặc 7 ảnh vào `_Assets!B2:B8` cho Digimon) rồi bấm nút **`🔄 Đồng bộ 6/7 ảnh mới (SyncSprites)`** 1 chạm!
 - **🎉 Giữ nguyên 100% Bộ Hiệu Ứng Sống Động Pro (Bật/Tắt 1 chạm ngay trên sheet!):**
-  1. **Hero Mascot Bounce (`PlayHeroBounce`):** Linh vật nảy nhẹ đầy hứng khởi mỗi khi đạt **100% Ngày**, hoàn thành **100% Nhiệm Vụ Ngày**, hoặc tick xong **Mục Tiêu Năm**!
+  1. **Hero Mascot Bounce (`PlayHeroBounce`):** Linh vật / Digimon nảy nhẹ đầy hứng khởi mỗi khi đạt **100% Ngày**, hoàn thành **100% Nhiệm Vụ Ngày**, hoặc tick xong **Mục Tiêu Năm**!
   2. **Pastel Sparkle / Heart / Star Burst (`PlaySparkleBurst`):** Pháo hoa sao & trái tim phối đúng màu chủ đề bùng nổ quanh Hero khi chạm mốc **100% Perfect Day** hoặc chuỗi **7 / 14 / 21 / 30 ngày** (tự dọn 100% hình thừa — 0 rác!).
   3. **Floating Toast Banner (`ShowToast`):** Thông báo tiếng Việt góc trên-phải tái sử dụng O(1) & tự ẩn sau 2 giây (tuyệt đối không bật `MsgBox` chắn tay!).
-  4. **Nút Quick-Action Pastel 1 Chạm:** **`◀ Tháng` · `Tháng ▶` · `✨ FX: BẬT/TẮT` · `↩ Undo`** ngay góc trái bảng Tracker, **`◀ Hôm qua` · `📅 Hôm nay` · `Ngày mai ▶`** trên `📝 Nhiệm Vụ Ngày`, nút **`🎉 Thử Hiệu Ứng Pro`** trên `📖 Hướng Dẫn`, và **`🔄 Đồng bộ 6 ảnh mới`** trên `_Assets`!
+  4. **Nút Quick-Action Pastel 1 Chạm:** **`◀ Tháng` · `Tháng ▶` · `✨ FX: BẬT/TẮT` · `↩ Undo`** ngay góc trái bảng Tracker, **`◀ Hôm qua` · `📅 Hôm nay` · `Ngày mai ▶`** trên `📝 Nhiệm Vụ Ngày`, nút **`🎉 Thử Hiệu Ứng Pro`** trên `📖 Hướng Dẫn`, và **`🔄 Đồng bộ ảnh mới`** trên `_Assets`!
 
-### 📊 Benchmark Tốc Độ Thực Tế Excel COM (`Linked Pictures cũ` vs `v3.6 Turbo`)
+### 📊 Benchmark Tốc Độ Thực Tế Excel COM (`Linked Pictures cũ` vs `v3.7 Turbo`)
 
-Đo thực tế trên Microsoft Excel (`EnableEvents = True`, `Calculation = Automatic`) bằng [`scripts/benchmark_pro_speed.py`](scripts/benchmark_pro_speed.py):
+Đo thực tế trên Microsoft Excel (`EnableEvents = True`, `Calculation = Automatic`):
 
-| Thao tác thực tế | `01_Sunflower` (Trước) | `01_Sunflower` **v3.6 Turbo** | `35_Milk_Mocha` (Trước) | `35_Milk_Mocha` **v3.6 Turbo** | Tăng tốc |
-|---|---:|---:|---:|---:|---:|
-| **1. Tick 1 ô Checkbox (`Monthly Tracker`)** | 347.3 ms | **42.7 ms** | 333.7 ms | **42.6 ms** | **~8× nhanh hơn** |
-| **2a. Đổi Tháng bằng Dropdown (`B3`)** | 4,137.1 ms | **141.6 ms** | 3,764.8 ms | **154.7 ms** | **~24–29× nhanh hơn** |
-| **2b. Đổi Tháng bằng Nút 1 chạm (`◀ / ▶`)** | 4,137.1 ms | **51.3 ms** | 3,764.8 ms | **55.7 ms** | **~68–81× nhanh hơn!** |
-| **3. Đổi Năm (`2026 ↔ 2025`)** | 3,787.4 ms | **157.5 ms** | 3,739.6 ms | **192.2 ms** | **~20–24× nhanh hơn** |
-| **4. Đổi Ngày `📝 Nhiệm Vụ Ngày` (`21 ↔ 22`)** | 2,918.2 ms | **46.5 ms** | 2,754.6 ms | **40.1 ms** | **~63–69× nhanh hơn!** |
-| **5. Mở tab `🏆 Tổng Kết Năm` / Đổi Năm** | 577.5 / 317.2 ms | **21.4 / 74.9 ms** | 589.2 / 302.1 ms | **19.8 / 76.9 ms** | **~27–30× mở tab!** |
-| **Dung lượng file & số ảnh trong `xl/media/`** | 463.8 KB | **316.8 KB (6 PNG)** | 439.8 KB | **316.9 KB (6 PNG)** | **Nhẹ hơn ~30%!** |
+| Thao tác thực tế | Linked Pictures cũ | `01_Sunflower` **Turbo** | `36_Digimon_Veemon` **v3.7 (7-Stage)** | Tăng tốc |
+|---|---:|---:|---:|---:|
+| **1. Tick 1 ô Checkbox (`Monthly Tracker`)** | 347.3 ms | **42.7 ms** | **< 40 ms** | **~8–10× nhanh hơn** |
+| **2a. Đổi Tháng bằng Dropdown (`B3`)** | 4,137.1 ms | **141.6 ms** | **29 – 54 ms** | **~75–140× nhanh hơn!** |
+| **2b. Đổi Tháng bằng Nút 1 chạm (`◀ / ▶`)** | 4,137.1 ms | **51.3 ms** | **21 – 41 ms** | **~80–190× nhanh hơn!** |
+| **3. Đổi Ngày `📝 Nhiệm Vụ Ngày` (`21 ↔ 22`)** | 2,918.2 ms | **46.5 ms** | **4 – 5 ms** | **~60–580× nhanh hơn!** |
+| **4. Đổi Năm `🏆 Tổng Kết Năm` (`2026 ↔ 2027`)** | 317.2 ms | **74.9 ms** | **13 – 15 ms** | **~21× nhanh hơn!** |
+| **Số ảnh nén trong `xl/media/`** | 54 bản sao | **6 PNG duy nhất** | **7 PNG duy nhất** | **Siêu gọn nhẹ!** |
 
 ---
 
-## ⚡ Cài Đặt & Tải Nhanh Bằng 1 Dòng Lệnh (Interactive Installer v3.6)
+## ⚡ Cài Đặt & Tải Nhanh Bằng 1 Dòng Lệnh (Interactive Installer v3.7)
 
-Chạy **1 dòng lệnh duy nhất** — trình cài đặt dẫn bạn chọn đúng phiên bản theo thứ tự ưu tiên (`[1] Pro #1`, `[2] Excel Offline`, `[3] Google Sheets Desktop`, `[4] Mobile Portrait`) và chọn **35 mẫu phân nhóm sẵn** (`35`, `32-35`, `30,33,34,35`, hoặc `A` tải toàn bộ **35 mẫu**) vào thư mục `template/`:
+Chạy **1 dòng lệnh duy nhất** — trình cài đặt dẫn bạn chọn đúng phiên bản theo thứ tự ưu tiên (`[1] Pro #1`, `[2] Excel Offline`, `[3] Google Sheets Desktop`, `[4] Mobile Portrait`) và chọn **40 mẫu phân nhóm sẵn** (`36`, `36-40`, `32,33,35,36`, hoặc `A` tải toàn bộ **40 mẫu**) vào thư mục `template/`:
 
 ### 🪟 Windows (PowerShell)
 ```powershell
@@ -60,14 +59,66 @@ curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-ev
 
 ---
 
-## 🧭 Chọn Đúng Phiên Bản Phù Hợp (Theo Thứ Tự Ưu Tiên — 140 File)
+## 🧭 Chọn Đúng Phiên Bản Phù Hợp (Theo Thứ Tự Ưu Tiên — 160 File)
 
 | Thứ tự | Phiên bản | Thư mục | Số tab | Điểm nổi bật | Phù hợp với |
 |---|---|---|---|---|---|
-| **#1 ⭐** | **⚡ Pro Interactive (`.xlsm`)** *(Khuyên dùng #1)* | [`templates/pro_macro/`](templates/pro_macro/) | **5 tab** | **Turbo Engine & FX Suite v3.6** (Native Sprite Stacks 6 PNG siêu tốc ~51ms + Bounce + Sparkle Burst + Toast + `Ctrl+Z` / `↩ Undo` + Khóa bảo vệ dòng công thức + O(1) Lazy-Flush `_Database`) — 100% Offline! | **Excel Desktop (Windows & Mac)** — trải nghiệm đẹp, nhanh và mượt nhất! |
-| **#2** | **✨ Excel Universal Offline (`.xlsx`)** | [`templates/excel_universal_offline/`](templates/excel_universal_offline/) | **5 tab** | **KHÔNG Macro / 0 cảnh báo bảo mật**, dùng **Form Control Checkboxes** ẩn sạch `TRUE/FALSE` (`;;;`), chạy mọi đời **Excel 2016–365 Win/Mac** + đủ 54 hoạt ảnh offline! | Máy công ty chặn Macro hoặc dùng Excel 2016/2019/2021 không cần VBA |
-| **#3** | **☁️ Google Sheets Desktop (`.xlsx` + `.gs`)** | [`templates/google_sheets_edition/`](templates/google_sheets_edition/) | **5 tab** | Gọn 5 tab + `_Database` + hoạt ảnh `=IMAGE()` động. Chạy [`google_sheets_1click_setup.gs`](scripts/google_sheets_1click_setup.gs) 1 lần → **Checkbox Pastel & tự lưu từng Ngày + 12 Tháng** trên Cloud! | Dùng online trên trình duyệt & đồng bộ Google Drive |
+| **#1 ⭐** | **⚡ Pro Interactive (`.xlsm`)** *(Khuyên dùng #1)* | [`templates/pro_macro/`](templates/pro_macro/) | **5 tab** | **Turbo Engine & FX Suite v3.7** (Native Sprite Stacks 6/7 PNG siêu tốc ~29–54ms + Bounce + Sparkle Burst + Toast + `Ctrl+Z` / `↩ Undo` + Khóa bảo vệ dòng công thức + O(1) Lazy-Flush `_Database`) — 100% Offline! | **Excel Desktop (Windows & Mac)** — trải nghiệm đẹp, nhanh và mượt nhất! |
+| **#2** | **✨ Excel Universal Offline (`.xlsx`)** | [`templates/excel_universal_offline/`](templates/excel_universal_offline/) | **5 tab** | **KHÔNG Macro / 0 cảnh báo bảo mật**, dùng **Form Control Checkboxes** ẩn sạch `TRUE/FALSE` (`;;;`), chạy mọi đời **Excel 2016–365 Win/Mac** + đủ 54–55 hoạt ảnh offline! | Máy công ty chặn Macro hoặc dùng Excel 2016/2019/2021 không cần VBA |
+| **#3** | **☁️ Google Sheets Desktop (`.xlsx` + `.gs`)** | [`templates/google_sheets_edition/`](templates/google_sheets_edition/) | **5 tab** | Gọn 5 tab + `_Database` + hoạt ảnh `=IMAGE()` động 6/7 giai đoạn. Chạy [`google_sheets_1click_setup.gs`](scripts/google_sheets_1click_setup.gs) 1 lần → **Checkbox Pastel & tự lưu từng Ngày + 12 Tháng** trên Cloud! | Dùng online trên trình duyệt & đồng bộ Google Drive |
 | **#4** | **📱 Mobile Portrait (`.xlsx` + `.gs`)** | [`templates/mobile_portrait_sheets/`](templates/mobile_portrait_sheets/) | **4 tab** | **Khổ dọc 8 cột `B:I` riêng cho iPhone/Android (0 cuộn ngang!)**, gồm tab **`📝 Việc Hôm Nay`**, ô tick lớn `38pt` dễ chạm ngón cái & tự lưu từng Tuần/Ngày! | Check-in thói quen & việc đột xuất 1 chạm ngay trên điện thoại |
+
+---
+
+## ⚡ MỚI v3.7 — Bộ Sưu Tập Digimon 7-Stage Evolution (`#36` – `#40`)
+
+Mỗi ngày tick thói quen sẽ tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn đầy đủ**: `0% Digi-Egg` → `1–19% Baby I` → `20–39% Baby II` → `40–59% Rookie` → `60–79% Champion / Armor` → `80–99% Ultimate` → **`100% Mega ✨`** — kèm bảng **Crest Digivice Breakdown** thống kê số ngày đạt từng dạng & thẻ **Current Form Power Meter**!
+
+### 36. ⚡ Digimon Veemon Miracle — `Digi-Egg → Chibomon → DemiVeemon → Veemon → Flamedramon → Paildramon → Magnamon`
+![Digimon Veemon Miracle Tracker](previews/36_digimon_veemon_tracker.png)
+<details>
+<summary>📸 Xem thêm: Hướng Dẫn Tiến Hóa 7 Giai Đoạn, Đại Sảnh Kỳ Tích Veemon, Nhiệm Vụ Ngày & Yearly Goals</summary>
+
+![Veemon 7-Stage Guide](previews/36_digimon_veemon_guide.png)
+![Veemon Annual Achievements](previews/36_digimon_veemon_annual_achievements.png)
+![Veemon Daily Tasks](previews/36_digimon_veemon_daily_tasks.png)
+![Veemon Yearly Goals](previews/36_digimon_veemon_yearly_goals.png)
+
+</details>
+
+### 37. 🔥 Digimon Agumon Courage — `Digi-Egg → Botamon → Koromon → Agumon → Greymon → MetalGreymon → WarGreymon`
+![Digimon Agumon Courage Tracker](previews/37_digimon_agumon_tracker.png)
+<details>
+<summary>📸 Xem thêm: Đại Sảnh Dũng Khí Agumon & Nhiệm Vụ Ngày</summary>
+
+![Agumon Annual Achievements](previews/37_digimon_agumon_annual_achievements.png)
+![Agumon Daily Tasks](previews/37_digimon_agumon_daily_tasks.png)
+
+</details>
+
+### 38. ✨ Digimon Gatomon Light — `Digi-Egg → YukimiBotamon → Nyaromon → Salamon → Gatomon → Angewomon → LovelyAngemon`
+![Digimon Gatomon Light Tracker](previews/38_digimon_gatomon_tracker.png)
+
+### 39. ❄️ Digimon Gabumon Friendship — `Digi-Egg → Punimon → Tsunomon → Gabumon → Garurumon → WereGarurumon → MetalGarurumon`
+![Digimon Gabumon Friendship Tracker](previews/39_digimon_gabumon_tracker.png)
+
+### 40. ❤️ Digimon Piyomon Love — `Digi-Egg → Nyokimon → Yokomon → Biyomon → Birdramon → Garudamon → Phoenixmon`
+![Digimon Piyomon Love Tracker](previews/40_digimon_piyomon_tracker.png)
+
+<details>
+<summary>📱 Xem 5 Màn Hình Điện Thoại Khổ Dọc Digimon (`#36`–`#40` — 0 Cuộn Ngang!)</summary>
+
+<table>
+  <tr>
+    <td align="center"><img src="previews/mobile_36_digimon_veemon.png" width="165" alt="Mobile Veemon"/><br/><sub><b>⚡ Veemon Miracle</b></sub></td>
+    <td align="center"><img src="previews/mobile_37_digimon_agumon.png" width="165" alt="Mobile Agumon"/><br/><sub><b>🔥 Agumon Courage</b></sub></td>
+    <td align="center"><img src="previews/mobile_38_digimon_gatomon.png" width="165" alt="Mobile Gatomon"/><br/><sub><b>✨ Gatomon Light</b></sub></td>
+    <td align="center"><img src="previews/mobile_39_digimon_gabumon.png" width="165" alt="Mobile Gabumon"/><br/><sub><b>❄️ Gabumon Friend</b></sub></td>
+    <td align="center"><img src="previews/mobile_40_digimon_piyomon.png" width="165" alt="Mobile Piyomon"/><br/><sub><b>❤️ Piyomon Love</b></sub></td>
+  </tr>
+</table>
+
+</details>
 
 ---
 
@@ -141,9 +192,9 @@ curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-ev
 
 ---
 
-## 📋 Bảng Tải Trực Tiếp Toàn Bộ 35 Mẫu Template (Đủ 4 Phiên Bản — 140 Tệp)
+## 📋 Bảng Tải Trực Tiếp Toàn Bộ 40 Mẫu Template (Đủ 4 Phiên Bản — 160 Tệp)
 
-| # | Tên Mẫu & Chủ Đề | ⚡ Pro #1 (Turbo v3.6) | ✨ Excel Offline | ☁️ GSheets Desktop | 📱 Mobile Portrait |
+| # | Tên Mẫu & Chủ Đề | ⚡ Pro #1 (Turbo v3.7) | ✨ Excel Offline | ☁️ GSheets Desktop | 📱 Mobile Portrait |
 |---|---|---|---|---|---|
 | **01** | 🌻 **Sunflower Garden Blush** | [`_Pro.xlsm`](templates/pro_macro/01_Sunflower_Garden_Blush_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/01_Sunflower_Garden_Blush.xlsx) | [Desktop](templates/google_sheets_edition/01_Sunflower_Garden_Blush.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/01_Sunflower_Garden_Blush_Mobile.xlsx) |
 | **02** | 🌵 **Cactus Bloom Pastel Weeks** | [`_Pro.xlsm`](templates/pro_macro/02_Cactus_Bloom_Pastel_Weeks_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/02_Cactus_Bloom_Pastel_Weeks.xlsx) | [Desktop](templates/google_sheets_edition/02_Cactus_Bloom_Pastel_Weeks.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/02_Cactus_Bloom_Pastel_Weeks_Mobile.xlsx) |
@@ -180,13 +231,18 @@ curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-ev
 | **33** | 🐱 **Peach Mochi Cat Mood Suite** *(Bánh Nếp, Quýt Mikan & Taiyaki)* | [`_Pro.xlsm`](templates/pro_macro/33_Peach_Mochi_Cat_Mood_Suite_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/33_Peach_Mochi_Cat_Mood_Suite.xlsx) | [Desktop](templates/google_sheets_edition/33_Peach_Mochi_Cat_Mood_Suite.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/33_Peach_Mochi_Cat_Mood_Suite_Mobile.xlsx) |
 | **34** | 🐰 **Fluffy Bunny Sticker Pop** *(Signature)* | [`_Pro.xlsm`](templates/pro_macro/34_Fluffy_Bunny_Sticker_Pop_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/34_Fluffy_Bunny_Sticker_Pop.xlsx) | [Desktop](templates/google_sheets_edition/34_Fluffy_Bunny_Sticker_Pop.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/34_Fluffy_Bunny_Sticker_Pop_Mobile.xlsx) |
 | **35** | 🐻 **Milk & Mocha Bear Sweet Love** *(Signature)* | [`_Pro.xlsm`](templates/pro_macro/35_Milk_Mocha_Bear_Sweet_Love_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/35_Milk_Mocha_Bear_Sweet_Love.xlsx) | [Desktop](templates/google_sheets_edition/35_Milk_Mocha_Bear_Sweet_Love.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/35_Milk_Mocha_Bear_Sweet_Love_Mobile.xlsx) |
+| **36** | ⚡ **Digimon Veemon Miracle** *(7-Stage: Veemon → Magnamon)* | [`_Pro.xlsm`](templates/pro_macro/36_Digimon_Veemon_Miracle_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/36_Digimon_Veemon_Miracle.xlsx) | [Desktop](templates/google_sheets_edition/36_Digimon_Veemon_Miracle.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/36_Digimon_Veemon_Miracle_Mobile.xlsx) |
+| **37** | 🔥 **Digimon Agumon Courage** *(7-Stage: Agumon → WarGreymon)* | [`_Pro.xlsm`](templates/pro_macro/37_Digimon_Agumon_Courage_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/37_Digimon_Agumon_Courage.xlsx) | [Desktop](templates/google_sheets_edition/37_Digimon_Agumon_Courage.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/37_Digimon_Agumon_Courage_Mobile.xlsx) |
+| **38** | ✨ **Digimon Gatomon Light** *(7-Stage: Gatomon → LovelyAngemon)* | [`_Pro.xlsm`](templates/pro_macro/38_Digimon_Gatomon_Light_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/38_Digimon_Gatomon_Light.xlsx) | [Desktop](templates/google_sheets_edition/38_Digimon_Gatomon_Light.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/38_Digimon_Gatomon_Light_Mobile.xlsx) |
+| **39** | ❄️ **Digimon Gabumon Friendship** *(7-Stage: Gabumon → MetalGarurumon)* | [`_Pro.xlsm`](templates/pro_macro/39_Digimon_Gabumon_Friendship_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/39_Digimon_Gabumon_Friendship.xlsx) | [Desktop](templates/google_sheets_edition/39_Digimon_Gabumon_Friendship.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/39_Digimon_Gabumon_Friendship_Mobile.xlsx) |
+| **40** | ❤️ **Digimon Piyomon Love** *(7-Stage: Biyomon → Phoenixmon)* | [`_Pro.xlsm`](templates/pro_macro/40_Digimon_Piyomon_Love_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/40_Digimon_Piyomon_Love.xlsx) | [Desktop](templates/google_sheets_edition/40_Digimon_Piyomon_Love.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/40_Digimon_Piyomon_Love_Mobile.xlsx) |
 
 ---
 
-## 🎨 Giao Diện Pro v3.6 Thực Tế (`01_Sunflower` + Bộ Sưu Tập `#01`–`#31`)
+## 🎨 Giao Diện Pro v3.7 Thực Tế (`01_Sunflower` + Bộ Sưu Tập `#01`–`#31`)
 
-![Sunflower Pro v3.6 Tracker](previews/01_sunflower_tracker.png)
-![Sunflower Pro v3.6 Guide](previews/01_sunflower_guide.png)
+![Sunflower Pro v3.7 Tracker](previews/01_sunflower_tracker.png)
+![Sunflower Pro v3.7 Guide](previews/01_sunflower_guide.png)
 
 <details>
 <summary>🌻 Mở rộng xem ảnh chụp 31 mẫu cổ điển & linh vật (#02 – #31)</summary>
@@ -228,7 +284,10 @@ curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-ev
 
 ---
 
-## 🎭 Bộ 210 Ảnh Hoạt Ảnh 6 Giai Đoạn (`assets/` — 35 Chủ Đề, v3.6 Vector Kawaii)
+## 🎭 Bộ 245 Ảnh Hoạt Ảnh 6 & 7 Giai Đoạn (`assets/` — 40 Chủ Đề, v3.7)
+
+### ⚡ Batch 5 (Mới v3.7 — Bộ 5 Chủ Đề Digimon 7 Cấp Tiến Hóa `#36`–`#40` — 35 Sprites Chuẩn Canon)
+![35 Digimon 7-Stage Evolution Sprites Contact Sheet](previews/assets_contact_sheet_digimon.png)
 
 ### Bộ 4 Alpaca & Gấu Trúc Mochi Vẽ Lại Độc Bản (`#20`, `#21`, `#22`, `#23` — 24 Sprites)
 ![24 Overhauled Alpaca & Panda Sprites](previews/assets_contact_sheet_alpaca_panda_fix.png)
@@ -250,7 +309,7 @@ curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-ev
 
 ---
 
-## ☁️ Kích Hoạt Google Sheets Trong 10 Giây (1-Click Setup v3.6)
+## ☁️ Kích Hoạt Google Sheets Trong 10 Giây (1-Click Setup v3.7)
 
 1. Tải mẫu từ [`templates/google_sheets_edition/`](templates/google_sheets_edition/) hoặc [`templates/mobile_portrait_sheets/`](templates/mobile_portrait_sheets/) lên Google Drive → **Mở bằng Google Sheets** → **Tệp → Lưu dưới dạng Google Trang tính**.
 2. Chọn **Tiện ích mở rộng (Extensions) → Apps Script** → dán toàn bộ code trong [`scripts/google_sheets_1click_setup.gs`](scripts/google_sheets_1click_setup.gs) → **Lưu (`Ctrl+S`)** → bấm **Run `setupHabitTracker`**.
@@ -259,17 +318,17 @@ Xem thêm hướng dẫn tại [`docs/GOOGLE_SHEETS_GUIDE.md`](docs/GOOGLE_SHEET
 
 ---
 
-## 🛠️ Dành Cho Developer (Build & QA v3.6)
+## 🛠️ Dành Cho Developer (Build & QA v3.7)
 
 ```powershell
-# Build Pro Interactive (.xlsm) theo lô với Turbo Engine v3.6 (tự recycle Excel COM mỗi 5 file):
-python scripts/excel_com_enhancer.py pro --start 1 --end 5
+# Trích xuất bộ 35 sprite Digimon chuẩn canon & xuất contact sheet:
+python scripts/extract_digimon_assets.py
 
-# Đo benchmark tốc độ thực tế Excel COM trên bản Pro v3.6:
-python scripts/benchmark_pro_speed.py
+# Build Pro Interactive (.xlsm) theo lô với Turbo Engine v3.7 (tự recycle Excel COM mỗi 5 file):
+python scripts/excel_com_enhancer.py pro 36_Digimon_Veemon_Miracle 37_Digimon_Agumon_Courage 38_Digimon_Gatomon_Light 39_Digimon_Gabumon_Friendship 40_Digimon_Piyomon_Love
 
-# Chạy bộ QA tự động v3.6 trên toàn bộ 35 file Pro (tĩnh + live COM + Ctrl+Z Undo & Protection):
-python scripts/qa_verify_v36.py
+# Build Mobile Portrait (.xlsx) hỗ trợ 6 & 7 giai đoạn:
+python scripts/build_mobile_templates.py 36_digimon_veemon 37_digimon_agumon 38_digimon_gatomon 39_digimon_gabumon 40_digimon_piyomon
 ```
 
 ---

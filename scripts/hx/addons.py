@@ -1499,3 +1499,186 @@ def add_milk_mocha_donuts_panel(wb, cv: Canvas, tr: TrackerRefs):
     cv.grid(r0 + 1, C_R0, r0 + 10, C_RE, t.line)
     cv.box(r0, C_R0, r0 + 10, C_RE, t.line)
 
+
+# --------------------------------------------------------------------------- #
+#  Templates 36..40 (DIGIMON 7-STAGE EVOLUTION COLLECTION): Crest Digivice Panel!
+# --------------------------------------------------------------------------- #
+def add_digimon_crest_panel(wb, cv: Canvas, tr: TrackerRefs, kind: str = "veemon"):
+    """Bespoke 7-Stage Digivolution Breakdown + Crest Power Meter + Digivice Mission Log."""
+    t = cv.t
+    ws = cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 24)
+    cv.row(r0 + 1, 21)
+    cv.row(r0 + 2, 23)
+    cv.row(r0 + 3, 20)
+    cv.row(r0 + 4, 24)
+    cv.row(r0 + 5, 24)
+
+    cfg = {
+        "veemon": {
+            "banner": "⚡  DIGIVICE D-3  •  CREST OF MIRACLES  •  THỐNG KÊ 7 CẤP TIẾN HÓA VEEMON → MAGNAMON",
+            "right_hdr": "👑  MIRACLE CREST POWER",
+            "stages": [
+                ("🥚 Digi-Egg",    "0%",      "#F3F4F6", "#64748B"),
+                ("💧 Chibomon",    "1–19%",   "#E0F2FE", "#0369A1"),
+                ("🐾 DemiVeemon",  "20–39%",  "#DBEAFE", "#1D4ED8"),
+                ("⚡ Veemon",      "40–59%",  "#BFDBFE", "#1E40AF"),
+                ("🔥 Flamedramon", "60–79%",  "#FEE2E2", "#B91C1C"),
+                ("🛡️ Paildramon",  "80–99%",  "#CCFBF1", "#0F766E"),
+                ("👑 Magnamon",    "100% ✨", "#FEF3C7", "#B45309"),
+            ],
+            "mission_lbl": "⚡  NHIỆM VỤ DIGIVICE D-3 (GHI CHÚ THÁNG):",
+            "mission_txt": "Kích hoạt Golden Armor Evolution! Hoàn thành đều đặn 8 thói quen cốt lõi để mở khóa Magnamon 100% mỗi ngày!",
+            "crest_accent": "#D97706",
+            "mega_name": "Magnamon",
+            "ult_name": "Paildramon",
+            "champ_name": "Flamedramon",
+            "rookie_name": "Veemon",
+        },
+        "agumon": {
+            "banner": "🔥  CREST OF COURAGE  •  LÒ RÈN DŨNG KHÍ  •  THỐNG KÊ 7 CẤP TIẾN HÓA AGUMON → WARGREYMON",
+            "right_hdr": "🛡️  COURAGE FLAME METER",
+            "stages": [
+                ("🥚 Digi-Egg",    "0%",      "#FFF7ED", "#9A3412"),
+                ("⚫ Botamon",     "1–19%",   "#F3F4F6", "#4B5563"),
+                ("🩷 Koromon",     "20–39%",  "#FCE7F3", "#BE185D"),
+                ("🦖 Agumon",      "40–59%",  "#FEF3C7", "#B45309"),
+                ("🔥 Greymon",     "60–79%",  "#FFEDD5", "#C2410C"),
+                ("⚙️ MetalGreymon","80–99%",  "#FEE2E2", "#991B1B"),
+                ("⚔️ WarGreymon",  "100% ✨", "#FEF08A", "#854D0E"),
+            ],
+            "mission_lbl": "🔥  NHIỆM VỤ DŨNG KHÍ (COURAGE LOG):",
+            "mission_txt": "Không lùi bước trước thói quen khó! Tích lũy chuỗi ngày rèn thể lực & học tập để hóa thân WarGreymon!",
+            "crest_accent": "#EA580C",
+            "mega_name": "WarGreymon",
+            "ult_name": "MetalGreymon",
+            "champ_name": "Greymon",
+            "rookie_name": "Agumon",
+        },
+        "gatomon": {
+            "banner": "✨  CREST OF LIGHT  •  VÒNG THÁNH ÁNH SÁNG  •  THỐNG KÊ 7 CẤP TIẾN HÓA GATOMON → LOVELYANGEMON",
+            "right_hdr": "🌟  HOLY RING RADIANCE",
+            "stages": [
+                ("🥚 Digi-Egg",      "0%",      "#FDF4FF", "#86198F"),
+                ("❄️ YukimiBotamon", "1–19%",   "#F0F9FF", "#0369A1"),
+                ("🐱 Nyaromon",      "20–39%",  "#FEF9C3", "#A16207"),
+                ("🐶 Salamon",       "40–59%",  "#FAF5FF", "#7E22CE"),
+                ("🐾 Gatomon",       "60–79%",  "#F3E8FF", "#6B21A8"),
+                ("🪽 Angewomon",     "80–99%",  "#FCE7F3", "#BE185D"),
+                ("💖 LovelyAngemon", "100% ✨", "#FEF3C7", "#B45309"),
+            ],
+            "mission_lbl": "✨  NHẬT KÝ ÁNH SÁNG & BIẾT ƠN (CREST OF LIGHT):",
+            "mission_txt": "Giữ tâm thế dịu dàng, chăm sóc bản thân và lan tỏa năng lượng tích cực để rực sáng cùng LovelyAngemon!",
+            "crest_accent": "#EC4899",
+            "mega_name": "LovelyAngemon",
+            "ult_name": "Angewomon",
+            "champ_name": "Gatomon",
+            "rookie_name": "Salamon",
+        },
+        "gabumon": {
+            "banner": "❄️  CREST OF FRIENDSHIP  •  SÓI BĂNG TRUNG THÀNH  •  THỐNG KÊ 7 CẤP GABUMON → METALGARURUMON",
+            "right_hdr": "🐺  FRIENDSHIP BOND POWER",
+            "stages": [
+                ("🥚 Digi-Egg",       "0%",      "#F0F9FF", "#0369A1"),
+                ("🔴 Punimon",        "1–19%",   "#FFE4E6", "#BE123C"),
+                ("🦊 Tsunomon",       "20–39%",  "#FEF3C7", "#B45309"),
+                ("🐾 Gabumon",        "40–59%",  "#E0F2FE", "#0284C7"),
+                ("🐺 Garurumon",      "60–79%",  "#DBEAFE", "#1D4ED8"),
+                ("⚡ WereGarurumon",  "80–99%",  "#E0E7FF", "#4338CA"),
+                ("🚀 MetalGarurumon", "100% ✨", "#EDE9FE", "#6D28D9"),
+            ],
+            "mission_lbl": "❄️  CAM KẾT TRUNG THÀNH (FRIENDSHIP STREAK):",
+            "mission_txt": "Giữ lời hứa với chính mình như Sói Băng trung thành — duy trì chuỗi không đứt quãng để đạt dạng MetalGarurumon!",
+            "crest_accent": "#0284C7",
+            "mega_name": "MetalGarurumon",
+            "ult_name": "WereGarurumon",
+            "champ_name": "Garurumon",
+            "rookie_name": "Gabumon",
+        },
+        "piyomon": {
+            "banner": "🔥  CREST OF LOVE  •  ĐÔI CÁNH PHƯỢNG HOÀNG  •  THỐNG KÊ 7 CẤP BIYOMON → PHOENIXMON",
+            "right_hdr": "🕊️  PHOENIX LOVE FLAME",
+            "stages": [
+                ("🥚 Digi-Egg",   "0%",      "#FFF1F2", "#9F1239"),
+                ("🌱 Nyokimon",   "1–19%",   "#ECFDF5", "#047857"),
+                ("🌷 Yokomon",    "20–39%",  "#FCE7F3", "#BE185D"),
+                ("🐦 Biyomon",    "40–59%",  "#FFE4E6", "#E11D48"),
+                ("🔥 Birdramon",  "60–79%",  "#FFEDD5", "#C2410C"),
+                ("🦅 Garudamon",  "80–99%",  "#FEE2E2", "#B91C1C"),
+                ("👑 Phoenixmon", "100% ✨", "#FEF3C7", "#B45309"),
+            ],
+            "mission_lbl": "❤️  NHẬT KÝ YÊU THƯƠNG & PHẢN TƯ (CREST OF LOVE):",
+            "mission_txt": "Mỗi ngày biết ơn và nỗ lực là một ngọn lửa ấm áp nâng đôi cánh rực rỡ hóa thân thành Phượng Hoàng Phoenixmon!",
+            "crest_accent": "#E11D48",
+            "mega_name": "Phoenixmon",
+            "ult_name": "Garudamon",
+            "champ_name": "Birdramon",
+            "rookie_name": "Biyomon",
+        },
+    }[kind]
+
+    cv.merge(r0, C_NAME, r0, C_D31, cfg["banner"], bold=True, font_size=9.4,
+             align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_R0, r0, C_RE, cfg["right_hdr"], bold=True, font_size=9,
+             align="center", bg_color=t.primary_dark, font_color=t.on_primary)
+
+    # Left 7-stage distribution across C_NAME..C_D31 (cols 1..32 -> 7 spans of width 4,4,4,5,5,5,5 = 32 cols!)
+    stage_spans = [
+        (1, 4),    # Stage 0 (Digi-Egg)
+        (5, 8),    # Stage 1 (Baby I)
+        (9, 12),   # Stage 2 (Baby II)
+        (13, 17),  # Stage 3 (Rookie)
+        (18, 22),  # Stage 4 (Champion)
+        (23, 27),  # Stage 5 (Ultimate)
+        (28, 32),  # Stage 6 (Mega 100%)
+    ]
+    stg_rng = f"{tr.calc_q}!{rng(tr.stage_row, 1, tr.stage_row, 31)}"
+    for idx, ((c1, c2), (st_lbl, pct_lbl, bg_s, fg_s)) in enumerate(zip(stage_spans, cfg["stages"])):
+        stg_num = idx + 1
+        cv.merge(r0 + 1, c1, r0 + 1, c2, st_lbl, bold=True, font_size=8.6,
+                 align="center", bg_color=bg_s, font_color=fg_s)
+        cv.merge(r0 + 2, c1, r0 + 2, c2, f'=COUNTIF({stg_rng},{stg_num})&" ngày"',
+                 bold=True, font_size=10.5, align="center", bg_color=t.card, font_color=fg_s,
+                 font_name=t.font_title)
+        cv.merge(r0 + 3, c1, r0 + 3, c2, pct_lbl, italic=True, font_size=7.8,
+                 align="center", bg_color=t.page, font_color=t.muted)
+
+    # Mission / Digivice Log strip (r0+4..r0+5)
+    cv.merge(r0 + 4, C_NAME, r0 + 4, C_D31, cfg["mission_lbl"], bold=True, font_size=8.6,
+             align="left", indent=1, bg_color=t.soft, font_color=t.primary_dark)
+    cv.merge(r0 + 5, C_NAME, r0 + 5, C_D31, cfg["mission_txt"], font_size=9.2,
+             align="left", indent=1, text_wrap=True, bg_color=t.card, font_color=t.ink)
+    cv.unlock(r0 + 5, C_NAME, r0 + 5, C_D31)
+    cv.grid(r0 + 1, C_NAME, r0 + 5, C_D31, t.line)
+    cv.box(r0, C_NAME, r0 + 5, C_D31, t.line)
+
+    # Right Crest Evolution Rank Card (C_R0..C_RE, r0+1..r0+5)
+    ov = tr.s["overall"]
+    rank_f = (
+        f'=IF({ov}>=0.999,"👑 MEGA: {cfg["mega_name"]}",'
+        f'IF({ov}>=CFG_THR_3,"⚡ ULTIMATE: {cfg["ult_name"]}",'
+        f'IF({ov}>=CFG_THR_2,"🔥 CHAMPION: {cfg["champ_name"]}",'
+        f'IF({ov}>=CFG_THR_1,"✨ ROOKIE: {cfg["rookie_name"]}","🥚 DIGI-EGG / TRAINING"))))'
+    )
+    cv.merge(r0 + 1, C_R0, r0 + 1, C_RE, "CURRENT FORM  •  CẤP HIỆN TẠI", bold=True, font_size=7.8,
+             align="center", bg_color=t.soft, font_color=t.muted)
+    cv.merge(r0 + 2, C_R0, r0 + 2, C_RE, rank_f, bold=True, font_size=9.6,
+             align="center", bg_color=t.card, font_color=t.primary_dark, font_name=t.font_title)
+    cv.merge(r0 + 3, C_R0, r0 + 3, C_RE, f"={ov}", bold=True, font_size=9.5,
+             align="center", num_format="0%", bg_color=t.card, font_color=t.ink)
+    ws.conditional_format(rng(r0 + 3, C_R0, r0 + 3, C_RE), {
+        "type": "data_bar", "bar_color": cfg["crest_accent"], "bar_solid": True,
+        "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1,
+    })
+    cv.merge(r0 + 4, C_R0, r0 + 4, C_RE,
+             f'="👑 Mega 100%: "&{tr.s["perfect"]}&" ngày   •   ⚡ ≥80%: "&{tr.s["grown"]}&"d"',
+             bold=True, font_size=8.4, align="center", bg_color=t.soft, font_color=t.ink)
+    cv.merge(r0 + 5, C_R0, r0 + 5, C_RE,
+             f'="🔥 Chuỗi kỷ lục: "&{tr.s["best"]}&" ngày liên tiếp"',
+             bold=True, font_size=8.6, align="center", bg_color=t.card, font_color=cfg["crest_accent"])
+    cv.grid(r0 + 1, C_R0, r0 + 5, C_RE, t.line)
+    cv.box(r0, C_R0, r0 + 5, C_RE, t.line)
+
+

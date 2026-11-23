@@ -202,14 +202,17 @@ def add_pro_pill_buttons(wb, meta: dict):
     _add_pill_button(ws_dt, "BTN_NEXT_DAY", "Ngày mai ▶", dx0 + 2 * (dw + d_gap), dt_top, dw, dh,
                      bgr_sft, bgr_pri, bgr_ink, "BtnNextDay", font_size=8.2)
 
-    # 3. Guide (Section 5 left-aligned header bar, right CTA pill directly above Guide_Stage5 — ZERO overlap!)
+    # 3. Guide (Section 5 left-aligned header bar, right CTA pill directly above last stage — ZERO overlap!)
+    n_stages = int(meta.get("num_stages", 6))
     ws_g = wb.Worksheets(GUIDE_SHEET)
     r_sec5 = 23
-    for rr_g in range(18, 34):
-        if "5. HOẠT ẢNH" in str(ws_g.Cells(rr_g, 2).Value or ""):
+    for rr_g in range(18, 36):
+        val_g = str(ws_g.Cells(rr_g, 2).Value or "")
+        if "5. HOẠT ẢNH" in val_g:
             r_sec5 = rr_g
             break
-    sec5_bar = ws_g.Range(ws_g.Cells(r_sec5, 2), ws_g.Cells(r_sec5, 7))
+    last_g_col = 8 if n_stages == 7 else 7  # Col H (8) for 7-stage, Col G (7) for 6-stage
+    sec5_bar = ws_g.Range(ws_g.Cells(r_sec5, 2), ws_g.Cells(r_sec5, last_g_col))
     gw = 148.0
     gh = min(21.0, max(17.0, sec5_bar.Height - 4.0))
     gl = sec5_bar.Left + sec5_bar.Width - gw - 6.0
@@ -217,11 +220,11 @@ def add_pro_pill_buttons(wb, meta: dict):
     _add_pill_button(ws_g, "BTN_DEMO_FX", "🎉 Thử Hiệu Ứng Pro", gl, gt, gw, gh,
                      bgr_wht, bgr_sft, bgr_dk, "BtnDemoFX", font_size=8.2)
 
-    # 4. `_Assets` 1-Click Custom Sprite Sync button (`D2:F2` right beside B2:B7 & C2)
+    # 4. `_Assets` 1-Click Custom Sprite Sync button (`D2:F2` right beside B2:B7/B8 & C2)
     ws_a = wb.Worksheets(ASSETS_SHEET)
     d2 = ws_a.Range("D2")
-    _add_pill_button(ws_a, "BTN_SYNC_ASSETS", "🔄 Đồng bộ 6 ảnh mới (SyncSprites)",
-                     d2.Left + 8.0, d2.Top + 12.0, 220.0, 32.0,
+    _add_pill_button(ws_a, "BTN_SYNC_ASSETS", f"🔄 Đồng bộ {n_stages} ảnh mới (SyncSprites)",
+                     d2.Left + 8.0, d2.Top + 12.0, 224.0, 32.0,
                      bgr_pri, bgr_dk, bgr_onp, "SyncSpritesFromAssets", font_size=9.0)
 
 
@@ -248,13 +251,14 @@ def _map_anim_to_stack_info(anim_name: str) -> tuple[str, str, bool]:
 
 
 def add_pro_native_sprite_stacks(wb, meta: dict, slug: str) -> tuple[int, list[dict]]:
-    """v3.6 Turbo: Place crisp Native Pre-Placed PNG Sprite Stacks (`SPR_*_S0..S5` + `Guide_Stage0..5`).
-    Eliminates 100% of slow Camera-Tool Linked Pictures & `Anim_*` Named Ranges!"""
-    img_paths = [str((ASSETS_DIR / slug / f"stage_{k}.png").resolve()) for k in range(6)]
+    """v3.6/v3.7 Turbo: Place crisp Native Pre-Placed PNG Sprite Stacks (`SPR_*_S0..S<N-1>` + `Guide_Stage0..<N-1>`).
+    Supports both 6-stage (#01-#35) and 7-stage Digimon (#36-#40) seamlessly!"""
+    n_stages = int(meta.get("num_stages", 6))
+    img_paths = [str((ASSETS_DIR / slug / f"stage_{k}.png").resolve()) for k in range(n_stages)]
     pic_count = 0
     stack_slots: list[dict] = []
 
-    # 1. Dynamic 6-stage sprite stacks grouped by worksheet
+    # 1. Dynamic sprite stacks grouped by worksheet
     dyn_groups = defaultdict(list)
     for item in meta["dyn_anims"]:
         dyn_groups[item["sheet"]].append(item)
@@ -263,7 +267,7 @@ def add_pro_native_sprite_stacks(wb, meta: dict, slug: str) -> tuple[int, list[d
         ws_dst = wb.Worksheets(sheet_name)
         ws_dst.Activate()
         for it in items:
-            prefix, calc_cell, allow_seven = _map_anim_to_stack_info(it["name"])
+            prefix, calc_cell, allow_hide = _map_anim_to_stack_info(it["name"])
             dst = ws_dst.Range(ws_dst.Cells(it["r1"] + 1, it["c1"] + 1),
                                ws_dst.Cells(it["r2"] + 1, it["c2"] + 1))
             align_bottom = it.get("align_bottom", False)
@@ -275,7 +279,7 @@ def add_pro_native_sprite_stacks(wb, meta: dict, slug: str) -> tuple[int, list[d
             left = dst.Left + (dst.Width - side) / 2.0
             top = (dst.Top + dst.Height - side - 2.0) if align_bottom else (dst.Top + (dst.Height - side) / 2.0)
 
-            for k in range(6):
+            for k in range(n_stages):
                 shp = ws_dst.Shapes.AddPicture(
                     Filename=img_paths[k], LinkToFile=False, SaveWithDocument=True,
                     Left=left, Top=top, Width=side, Height=side,
@@ -291,7 +295,7 @@ def add_pro_native_sprite_stacks(wb, meta: dict, slug: str) -> tuple[int, list[d
                 "sheet": sheet_name,
                 "prefix": prefix,
                 "calc_cell": calc_cell,
-                "allow_seven": allow_seven,
+                "allow_hide": allow_hide,
             })
 
     # 2. Static Guide Stage 0..5 previews (`Guide_Stage0`..`Guide_Stage5`, native PNGs!)
@@ -372,10 +376,10 @@ def apply_pro_sheet_protection(wb, meta: dict):
     ws_ann.Cells.Locked = True
     ws_ann.Range("B3").Locked = False
 
-    # 5. Guide — ONLY the 3 threshold config cells unlocked!
+    # 5. Guide — ONLY the threshold config cells unlocked!
     ws_g = wb.Worksheets(GUIDE_SHEET)
     ws_g.Cells.Locked = True
-    for thr_nm in ("CFG_THR_1", "CFG_THR_2", "CFG_THR_3"):
+    for thr_nm in ("CFG_THR_0", "CFG_THR_1", "CFG_THR_2", "CFG_THR_3"):
         try:
             wb.Names(thr_nm).RefersToRange.Locked = False
         except Exception:
@@ -392,9 +396,10 @@ def apply_pro_sheet_protection(wb, meta: dict):
         )
 
 
-def sync_initial_pro_sprite_visibility(wb, stack_slots: list[dict]):
-    """Set initial `.Visible` on every `SPR_*_S0..S5` stack to match live `_Calc` stage indices."""
+def sync_initial_pro_sprite_visibility(wb, stack_slots: list[dict], n_stages: int = 6):
+    """Set initial `.Visible` on every `SPR_*_S0..S<N-1>` stack to match live `_Calc` stage indices."""
     ws_calc = wb.Worksheets(CALC_SHEET)
+    hide_slot = n_stages + 1
     by_sheet = defaultdict(list)
     for slot in stack_slots:
         by_sheet[slot["sheet"]].append(slot)
@@ -406,22 +411,21 @@ def sync_initial_pro_sprite_visibility(wb, stack_slots: list[dict]):
                 st = int(round(float(raw)))
             except Exception:
                 st = 1
-            st = max(1, min(7 if slot["allow_seven"] else 6, st))
+            st = max(1, min(hide_slot if slot.get("allow_hide") else n_stages, st))
             prefix = slot["prefix"]
-            for k in range(6):
-                want = -1 if (k == st - 1 and st <= 6) else 0
+            for k in range(n_stages):
+                want = -1 if (k == st - 1 and st <= n_stages) else 0
                 ws.Shapes(f"{prefix}{k}").Visible = want
 
 
-def deduplicate_xlsm_media(xlsm_path: Path, slug: str) -> tuple[int, int]:
+def deduplicate_xlsm_media(xlsm_path: Path, slug: str, n_stages: int = 6) -> tuple[int, int]:
     """Post-COM OOXML Sprite-Aware Media Deduplication:
     Maps every `SPR_*_S<k>`, `Guide_Stage<k>`, and `ASSET_S<k>` shape across ALL drawings
-    directly to the 6 canonical high-DPI `xl/media/image1.png..image6.png` (`stage_0..5.png`),
-    eliminating 100% of Excel's per-size re-encoded duplicates!
-    Preserves `vbaProject.bin`, drawings, charts, and XMLs 100% cleanly."""
+    directly to the N canonical high-DPI `xl/media/image1.png..imageN.png` (`stage_0..N-1.png`),
+    eliminating 100% of Excel's per-size re-encoded duplicates!"""
     import xml.etree.ElementTree as ET
 
-    stage_bytes = [(ASSETS_DIR / slug / f"stage_{k}.png").read_bytes() for k in range(6)]
+    stage_bytes = [(ASSETS_DIR / slug / f"stage_{k}.png").read_bytes() for k in range(n_stages)]
 
     with zipfile.ZipFile(xlsm_path, "r") as zin:
         infos = zin.infolist()
@@ -454,8 +458,8 @@ def deduplicate_xlsm_media(xlsm_path: Path, slug: str) -> tuple[int, int]:
                                 rid = av
                                 break
                 if rid and shp_name:
-                    m_st = re.search(r"(?:_S|Guide_Stage|ASSET_S)([0-5])$", shp_name)
-                    if m_st:
+                    m_st = re.search(r"(?:_S|Guide_Stage|ASSET_S)([0-6])$", shp_name)
+                    if m_st and int(m_st.group(1)) < n_stages:
                         rid_map[rid] = int(m_st.group(1))
         except Exception:
             pass
@@ -491,7 +495,7 @@ def deduplicate_xlsm_media(xlsm_path: Path, slug: str) -> tuple[int, int]:
             new_txt = rel_tag_pat.sub(_fix_rel, txt)
             updated_blobs[fname] = new_txt.encode("utf-8")
 
-    canon_media = {f"xl/media/image{k + 1}.png": stage_bytes[k] for k in range(6)}
+    canon_media = {f"xl/media/image{k + 1}.png": stage_bytes[k] for k in range(n_stages)}
 
     tmp_path = xlsm_path.with_suffix(".dedup.tmp")
     with zipfile.ZipFile(tmp_path, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=6) as zout:
@@ -643,12 +647,13 @@ def enhance_one(xl, meta: dict, capture_previews: bool = True):
         xl.EnableEvents = False
         xl.Calculation = -4135  # xlCalculationManual
 
-        # 1. Populate `_Assets!B2:B7` with 300x300px high-DPI PNG sprites
+        # 1. Populate `_Assets!B2:B<1+N>` with 300x300px high-DPI PNG sprites
+        n_stages = int(meta.get("num_stages", 6))
         ws_a = wb.Worksheets(ASSETS_SHEET)
         ws_a.Visible = -1
         ws_a.Activate()
         xl.ActiveWindow.DisplayGridlines = False
-        for idx in range(6):
+        for idx in range(n_stages):
             cell_obj = ws_a.Cells(2 + idx, 2)
             pad = 2.5
             side = min(cell_obj.Width, cell_obj.Height) - 2 * pad
@@ -774,7 +779,7 @@ def enhance_one(xl, meta: dict, capture_previews: bool = True):
         xl.CalculateFullRebuild()
         if edition == "pro_xlsm":
             if stack_slots:
-                sync_initial_pro_sprite_visibility(wb, stack_slots)
+                sync_initial_pro_sprite_visibility(wb, stack_slots, n_stages=n_stages)
             clamp_pro_top_chart(wb, meta)
             apply_pro_sheet_protection(wb, meta)
         xl.ScreenUpdating = True
@@ -812,10 +817,10 @@ def enhance_one(xl, meta: dict, capture_previews: bool = True):
         xl.EnableEvents = True
         wb.Close(SaveChanges=False)
 
-    # 8. Post-COM OOXML SHA-256 Media Deduplication -> ONLY 6 unique PNGs inside `xl/media/`!
+    # 8. Post-COM OOXML SHA-256 Media Deduplication -> ONLY N unique PNGs inside `xl/media/`!
     media_info = ""
     if edition == "pro_xlsm":
-        raw_m, uniq_m = deduplicate_xlsm_media(final_path, slug)
+        raw_m, uniq_m = deduplicate_xlsm_media(final_path, slug, n_stages=n_stages)
         media_info = f", media={uniq_m}/{raw_m}"
     dt = time.perf_counter() - t0
     print(f"  ✓ [{edition}] {final_path.name} ({final_path.stat().st_size:,} B, cbs={cb_count}, pics={pic_count}{media_info}, {dt:.1f}s)",
