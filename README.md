@@ -1,78 +1,111 @@
 # ⚡ Habit Tracker Collection for Everyone — by Dyu (v3.7 — 40 Themes × 4 Editions)
 
-> **Bộ sưu tập 40 mẫu Habit Tracker thẩm mỹ chuẩn Digital Planner — Đủ 4 phiên bản cho Máy tính & Điện thoại (160 file hoàn chỉnh + 245 ảnh hoạt ảnh: 35 chủ đề 6 giai đoạn & 5 chủ đề Digimon 7 giai đoạn tiến hóa)!**
-> **MỚI v3.7 — BỘ SƯU TẬP DIGIMON 7 CẤP TIẾN HÓA (`#36`–`#40`):** Bổ sung **5 mẫu Digimon chuẩn canon** (*Veemon → Magnamon*, *Agumon → WarGreymon*, *Gatomon → LovelyAngemon*, *Gabumon → MetalGarurumon*, *Piyomon → Phoenixmon*) mở rộng động cơ **Turbo Native Sprite Engine** lên **7 giai đoạn tiến hóa (`0% → 1–19% → 20–39% → 40–59% → 60–79% → 80–99% → 100% Mega ✨`)** trên đủ 4 phiên bản! Đổi Tháng chỉ **~29–54 ms**, đổi Ngày **~4–5 ms**, đầy đủ **FX Suite, `Ctrl+Z` / `↩ Undo` & khóa bảo vệ công thức (`UserInterfaceOnly`)**!
+> **Bộ sưu tập 40 mẫu Habit Tracker hoàn toàn miễn phí chuẩn Digital Planner — tích hợp 245 ảnh hoạt ảnh tự lớn lên theo % thói quen mỗi ngày (Hoa lá, Thú cưng Kawaii, Alpaca, Gấu trúc, Shiba/Akita & 5 mẫu Digimon 7 cấp tiến hóa)!**
+> **Dùng mượt 100% Offline trên Microsoft Excel (Windows & Mac) — có kèm bản thử nghiệm cho Google Sheets & Điện thoại.**
 
-![Version 3.7](https://img.shields.io/badge/Version-3.7_40_Themes_x_4_Editions-1D6FE2?style=for-the-badge)
-![Pro #1 Recommended](https://img.shields.io/badge/⭐_RECOMMENDED_%231-Pro_Interactive_.XLSM_Turbo_v3.7-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white)
-![Zero Macro Offline](https://img.shields.io/badge/Offline_No--Macro-.XLSX_Excel_2016--365-4E9F76?style=for-the-badge)
-![Google Sheets](https://img.shields.io/badge/Google_Sheets-1--Click_Script_v3.7-34A853?style=for-the-badge&logo=googlesheets&logoColor=white)
-![Mobile Portrait](https://img.shields.io/badge/Mobile_Portrait-iOS_%26_Android_0_Scroll-9E9AD1?style=for-the-badge)
-
----
-
-## ⚡ KHUYÊN DÙNG SỐ 1: Phiên Bản `Pro Interactive (.xlsm)` — Turbo Engine & FX Suite v3.7
-
-Nếu bạn dùng **Microsoft Excel trên Windows hoặc macOS**, hãy chọn ngay **`[1] Pro Interactive (.xlsm)`** trong [`templates/pro_macro/`](templates/pro_macro/) để trải nghiệm tốc độ mượt như **App Desktop gốc** hoàn toàn 100% Offline:
-
-- **🚀 Động cơ v3.7 Turbo Performance Engine (Hỗ trợ cả 6 giai đoạn & 7 giai đoạn Digimon — Nhanh gấp 20×–80×!):**
-  - **Native Pre-Placed Sprite Stacks + Nén Đúng 6 hoặc 7 PNG (`xl/media/`):** Bỏ hoàn toàn Camera-Tool Linked Pictures gây giật lag GDI; thay bằng cụm ảnh PNG gốc siêu nét + bộ đệm so sánh thay đổi (`Stage-Diff Cache`) & tham chiếu Shape O(1)!
-  - **Chỉ mục `_Database` O(1) thuần VBA (`Collection`, tương thích cả Windows & macOS Excel) + `.Value2` + Lazy-Flush:** Tick ô Checkbox **KHÔNG ghi `_Database`** (tự động flush khi đổi Tháng/Ngày/Năm, mở tab Tổng Kết Năm, hoặc Lưu/Đóng file!).
-  - **🛡️ Hoàn tác `Ctrl+Z` Thực Thụ & Khóa Bảo Vệ Công Thức (`UserInterfaceOnly:=True`):** Giữ snapshot trước mỗi thao tác tick/kéo-fill để bấm **`Ctrl+Z`** hoặc nút **`↩ Undo`** khôi phục tức thì cả dữ liệu lẫn sprite; đồng thời khóa an toàn dòng `TOTAL • TỔNG KẾT` (Row 37) & toàn bộ ô công thức để kéo thả checkbox không bao giờ ghi đè hỏng công thức!
-  - **Giữ nguyên tính năng tự đổi ảnh trong `_Assets`:** Chỉ cần dán 6 ảnh mới vào `_Assets!B2:B7` (hoặc 7 ảnh vào `_Assets!B2:B8` cho Digimon) rồi bấm nút **`🔄 Đồng bộ 6/7 ảnh mới (SyncSprites)`** 1 chạm!
-- **🎉 Giữ nguyên 100% Bộ Hiệu Ứng Sống Động Pro (Bật/Tắt 1 chạm ngay trên sheet!):**
-  1. **Hero Mascot Bounce (`PlayHeroBounce`):** Linh vật / Digimon nảy nhẹ đầy hứng khởi mỗi khi đạt **100% Ngày**, hoàn thành **100% Nhiệm Vụ Ngày**, hoặc tick xong **Mục Tiêu Năm**!
-  2. **Pastel Sparkle / Heart / Star Burst (`PlaySparkleBurst`):** Pháo hoa sao & trái tim phối đúng màu chủ đề bùng nổ quanh Hero khi chạm mốc **100% Perfect Day** hoặc chuỗi **7 / 14 / 21 / 30 ngày** (tự dọn 100% hình thừa — 0 rác!).
-  3. **Floating Toast Banner (`ShowToast`):** Thông báo tiếng Việt góc trên-phải tái sử dụng O(1) & tự ẩn sau 2 giây (tuyệt đối không bật `MsgBox` chắn tay!).
-  4. **Nút Quick-Action Pastel 1 Chạm:** **`◀ Tháng` · `Tháng ▶` · `✨ FX: BẬT/TẮT` · `↩ Undo`** ngay góc trái bảng Tracker, **`◀ Hôm qua` · `📅 Hôm nay` · `Ngày mai ▶`** trên `📝 Nhiệm Vụ Ngày`, nút **`🎉 Thử Hiệu Ứng Pro`** trên `📖 Hướng Dẫn`, và **`🔄 Đồng bộ ảnh mới`** trên `_Assets`!
-
-### 📊 Benchmark Tốc Độ Thực Tế Excel COM (`Linked Pictures cũ` vs `v3.7 Turbo`)
-
-Đo thực tế trên Microsoft Excel (`EnableEvents = True`, `Calculation = Automatic`):
-
-| Thao tác thực tế | Linked Pictures cũ | `01_Sunflower` **Turbo** | `36_Digimon_Veemon` **v3.7 (7-Stage)** | Tăng tốc |
-|---|---:|---:|---:|---:|
-| **1. Tick 1 ô Checkbox (`Monthly Tracker`)** | 347.3 ms | **42.7 ms** | **< 40 ms** | **~8–10× nhanh hơn** |
-| **2a. Đổi Tháng bằng Dropdown (`B3`)** | 4,137.1 ms | **141.6 ms** | **29 – 54 ms** | **~75–140× nhanh hơn!** |
-| **2b. Đổi Tháng bằng Nút 1 chạm (`◀ / ▶`)** | 4,137.1 ms | **51.3 ms** | **21 – 41 ms** | **~80–190× nhanh hơn!** |
-| **3. Đổi Ngày `📝 Nhiệm Vụ Ngày` (`21 ↔ 22`)** | 2,918.2 ms | **46.5 ms** | **4 – 5 ms** | **~60–580× nhanh hơn!** |
-| **4. Đổi Năm `🏆 Tổng Kết Năm` (`2026 ↔ 2027`)** | 317.2 ms | **74.9 ms** | **13 – 15 ms** | **~21× nhanh hơn!** |
-| **Số ảnh nén trong `xl/media/`** | 54 bản sao | **6 PNG duy nhất** | **7 PNG duy nhất** | **Siêu gọn nhẹ!** |
+![Version 3.7](https://img.shields.io/badge/Version-3.7_40_Themes-1D6FE2?style=for-the-badge)
+![Pro #1 Recommended](https://img.shields.io/badge/⭐_KHUYÊN_DÙNG_%231-Pro_.XLSM_(Excel_365)-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white)
+![Zero Macro Offline](https://img.shields.io/badge/%232_Offline_No--Macro-.XLSX_(Excel_2016--365)-4E9F76?style=for-the-badge)
+![Google Sheets Beta](https://img.shields.io/badge/%233_Google_Sheets-Beta_(Đang_thử_nghiệm)-F59E0B?style=for-the-badge&logo=googlesheets&logoColor=white)
+![Mobile Early Beta](https://img.shields.io/badge/%234_Mobile_Portrait-Early_Beta_(Còn_lỗi)-9E9AD1?style=for-the-badge)
 
 ---
 
-## ⚡ Cài Đặt & Tải Nhanh Bằng 1 Dòng Lệnh (Interactive Installer v3.7)
+## 🧭 CHỌN ĐÚNG BẢN CHO MÁY CỦA BẠN (ĐỌC TRƯỚC KHI TẢI!)
 
-Chạy **1 dòng lệnh duy nhất** — trình cài đặt dẫn bạn chọn đúng phiên bản theo thứ tự ưu tiên (`[1] Pro #1`, `[2] Excel Offline`, `[3] Google Sheets Desktop`, `[4] Mobile Portrait`) và chọn **40 mẫu phân nhóm sẵn** (`36`, `36-40`, `32,33,35,36`, hoặc `A` tải toàn bộ **40 mẫu**) vào thư mục `template/`:
+Không cần biết kỹ thuật — chỉ cần xem máy tính của bạn đang cài **Excel đời nào** rồi chọn đúng 1 trong 4 bản dưới đây trong **10 giây**:
 
-### 🪟 Windows (PowerShell)
+| Máy bạn đang dùng gì? | Chọn ngay phiên bản này | Trạng thái | Tóm tắt ngắn gọn |
+|---|---|---|---|
+| **Microsoft 365 (Excel 365 bản mới trên Windows & Mac)** | **⚡ `#1` Pro Interactive (`.xlsm`)** *(Khuyên dùng #1)* | **⭐ Ổn định & Xịn nhất** | Đẹp nhất, siêu mượt (`<150ms`), pháo hoa/nảy Hero, tự lưu nhiều Tháng/Ngày/Năm, có `Ctrl+Z` Undo & khóa công thức! |
+| **Excel 2016 / 2019 / 2021** hoặc **máy công ty/trường học chặn Macro** | **✨ `#2` Excel Universal Offline (`.xlsx`)** | **✅ Ổn định mọi đời Excel** | 100% Offline, **KHÔNG Macro**, không cảnh báo bảo mật, không bao giờ lỗi chữ `TRUE`/`FALSE`, đủ hoạt ảnh nở hoa! |
+| **Muốn dùng Online trên trình duyệt (Google Drive)** | **☁️ `#3` Google Sheets Desktop (`.xlsx` + `.gs`)** | **🧪 Đang thử nghiệm (Beta)** | Dùng trên web sau khi lưu sang Google Trang tính; có độ trễ 1–2 giây khi đổi tháng & vài chi tiết có thể lệch nhẹ. |
+| **Muốn tick nhanh trên Điện thoại (App Google Trang tính)** | **📱 `#4` Mobile Portrait (`.xlsx` + `.gs`)** | **🚧 Early Beta (Còn thô sơ & còn lỗi)** | Khổ dọc 8 cột đang thử nghiệm sơ khai; **không mở bằng app Excel điện thoại** (chỉ mở thử bằng app Google Trang tính). |
+
+### Chi tiết từng phiên bản & Lưu ý quan trọng cho người mới
+
+#### ⚡ `#1` Pro Interactive (`.xlsm`) — ⭐ KHUYÊN DÙNG SỐ 1 (Đẹp nhất • Siêu mượt • Full Hiệu Ứng)
+- **Phù hợp với:** **Microsoft 365 (Excel 365 bản mới trên Windows & Mac)**.
+- **Có gì xịn nhất:**
+  - Hoạt ảnh 6–7 giai đoạn siêu mượt (**29–54 ms** khi đổi tháng, **4–5 ms** khi đổi ngày), không giật lag!
+  - Đầy đủ hiệu ứng **Hero Bounce** (linh vật nảy vui), **Sparkle/Heart Burst** (bắn pháo hoa khi đạt 100% hoặc chuỗi 7/14/21/30 ngày), **Toast Banner** (thông báo nổi tiếng Việt góc phải, bật/tắt 1 chạm).
+  - Nút **`◀ Tháng` / `Tháng ▶`**, **`◀ Hôm qua` / `Hôm nay` / `Ngày mai ▶`** 1 chạm — **tự động lưu lịch sử từng Tháng / Năm / Ngày** ngay trong file (100% Offline!).
+  - Hỗ trợ **`Ctrl+Z` / nút `↩ Undo`** thực thụ & tự động khóa bảo vệ dòng công thức `TOTAL` chống kéo đè, dấu tick ô vuông màu pastel chuẩn từng theme!
+- **⚠️ Lưu ý quan trọng cho người mới tải `.xlsm`:**
+  - Nếu bạn mở bản Pro này trên **Excel 2016 / 2019 / 2021**: hiệu ứng & tự lưu vẫn chạy, **NHƯNG ô tick có thể hiện chữ `TRUE`/`FALSE`** (vì Checkbox màu là tính năng mới của Excel 365) → **hãy tải bản `#2` Excel Universal Offline bên dưới để dùng đẹp chuẩn 100%!**
+  - **2 bước bật Macro an toàn (chỉ làm 1 lần đầu duy nhất):**
+    1. **Nếu Excel hiện thanh đỏ** (*"SECURITY RISK: Microsoft has blocked macros from running"*): **Đóng file lại** → Chuột phải vào file `.xlsm` → chọn **Properties (Thuộc tính)** → ở dòng cuối cùng tick ô **☑ Unblock (Bỏ chặn)** → bấm **OK** → Mở lại file!
+    2. **Nếu Excel hiện thanh vàng** (*"Security Warning: Macros have been disabled"*): Bấm nút **Enable Content (Bật nội dung)** 1 lần duy nhất là dùng mượt mãi mãi!
+
+#### ✨ `#2` Excel Universal Offline (`.xlsx`) — Ổn Định Cho Mọi Đời Excel Cũ & Mới
+- **Phù hợp với:** **Excel 2016, 2019, 2021, 365 (Windows & Mac)**, hoặc máy công ty/trường học chặn chạy Macro.
+- **Có gì:** Chạy **100% Offline**, không có Macro nên **0 cảnh báo bảo mật**, **không bao giờ hiện chữ `TRUE`/`FALSE`** trên Excel đời cũ, vẫn có đủ **54–55 hoạt ảnh** cây/thú cưng/Digimon lớn lên theo `%` hoàn thành thực tế!
+- **Hạn chế nhỏ:** Vì không có VBA nên không tự lưu nhiều tháng trên cùng 1 trang — sang tháng mới bạn chỉ cần **nhân bản (Copy) file** hoặc sao chép sheet là dùng tiếp trong 2 giây.
+
+#### ☁️ `#3` Google Sheets Desktop (`.xlsx` + `.gs`) — 🧪 ĐANG THỬ NGHIỆM (BETA • CÒN MỘT SỐ LỖI NHỎ)
+- **Trạng thái:** **`🧪 Đang thử nghiệm (Beta)`** — phù hợp nếu bạn muốn dùng thử trên trình duyệt web.
+- **Lưu ý trung thực:** Cần tải file `.xlsx` lên **Google Drive** → mở bằng Google Trang tính → chọn **Tệp (File) → Lưu dưới dạng Google Trang tính (Save as Google Sheets)**, sau đó bật Checkbox (bôi đen lưới → `Chèn → Hộp kiểm`) hoặc dán script [`google_sheets_1click_setup.gs`](scripts/google_sheets_1click_setup.gs). Tốc độ chuyển tháng trên Cloud có độ trễ **1–2 giây** và một số định dạng/biểu đồ có thể hơi lệch nhẹ so với bản Excel gốc.
+
+#### 📱 `#4` Mobile Portrait (`.xlsx` + `.gs`) — 🚧 ĐANG THỬ NGHIỆM (EARLY BETA • CÒN THÔ SƠ & CÒN LỖI)
+- **Trạng thái:** **`🚧 Đang thử nghiệm (Early Beta • Còn thô sơ & còn lỗi)`**.
+- **Lưu ý trung thực:** Giao diện khổ dọc 8 cột hiện đang ở giai đoạn thử nghiệm ban đầu nên bố cục vẫn còn khá thô sơ và có thể phát sinh lỗi hiển thị/lưu dữ liệu trên một vài dòng máy. **⛔ Tuyệt đối không mở bằng app Microsoft Excel trên điện thoại** (app Excel di động sẽ chặn kết nối ảnh ngoài) — chỉ nên dùng thử qua ứng dụng **Google Trang tính (Google Sheets App)** sau khi đã lưu sang định dạng Google Sheets.
+
+---
+
+## 📥 Cách Tải Về Cho Người Không Rành GitHub (2 Cách Siêu Dễ)
+
+> **Người dùng KHÔNG cần cài Python, KHÔNG cần đăng nhập GitHub!** Bạn chọn 1 trong 2 cách dưới đây:
+
+### Cách 1 (Khuyên dùng — Tải tự động 1 dòng lệnh, chọn theo số `1–40` hoặc tải hết)
+Trình tải tương tác sẽ hỏi bạn muốn bản nào (`[1]`–`[4]`) và mẫu số mấy (`36`, `36-40`, `30,33,35`, hoặc `A` tải toàn bộ 40 mẫu), rồi tự tải sạch đẹp vào thư mục `template/` trên máy bạn:
+
+- **🪟 Windows:** Nhấn phím **Windows** → gõ **`PowerShell`** → mở *Windows PowerShell* → dán dòng lệnh dưới đây → nhấn **Enter**:
 ```powershell
 irm https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu/main/install.ps1 | iex
 ```
-
-### 🍎 macOS / 🐧 Linux (Terminal)
+- **🍎 macOS / 🐧 Linux:** Mở ứng dụng **Terminal** → dán dòng lệnh dưới đây → nhấn **Enter**:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu/main/install.sh | bash
 ```
 
-> **Người dùng cuối KHÔNG cần cài Python!** Tải xong chỉ cần nhấp đúp mở file bằng Microsoft Excel (bấm **Enable Content** 1 lần cho bản Pro) hoặc tải lên Google Sheets và bắt đầu tick ngay!
+### Cách 2 (Tải thủ công trực tiếp trên web GitHub — Không cần gõ lệnh!)
+Nếu bạn không quen mở PowerShell/Terminal, tải trực tiếp ngay trên trình duyệt chỉ với **3 bước**:
+1. Kéo xuống **[Bảng Tải Trực Tiếp 40 Mẫu Template](#-bảng-tải-trực-tiếp-toàn-bộ-40-mẫu-template-đủ-4-phiên-bản--160-tệp)** bên dưới và **bấm vào link phiên bản bạn muốn** (vd: `_Pro.xlsm` cho Excel 365 hoặc `.xlsx` cho Excel 2016–2021).
+2. Ở trang file vừa mở ra, bấm nút **Download raw file** *(biểu tượng **mũi tên tải xuống `⬇`** ở góc trên bên phải khung xem file)*.
+3. Mở file vừa tải về bằng Microsoft Excel *(nếu là bản Pro `.xlsm`, nhớ làm theo **2 bước Unblock + Enable Content** ở mục trên)* và bắt đầu tick ngay!
 
 ---
 
-## 🧭 Chọn Đúng Phiên Bản Phù Hợp (Theo Thứ Tự Ưu Tiên — 160 File)
+## 🎭 Xem Trước 245 Hoạt Ảnh Tiến Hóa (Cây Cối • Thú Cưng • Alpaca • Panda • Digimon 7 Cấp!)
 
-| Thứ tự | Phiên bản | Thư mục | Số tab | Điểm nổi bật | Phù hợp với |
-|---|---|---|---|---|---|
-| **#1 ⭐** | **⚡ Pro Interactive (`.xlsm`)** *(Khuyên dùng #1)* | [`templates/pro_macro/`](templates/pro_macro/) | **5 tab** | **Turbo Engine & FX Suite v3.7** (Native Sprite Stacks 6/7 PNG siêu tốc ~29–54ms + Bounce + Sparkle Burst + Toast + `Ctrl+Z` / `↩ Undo` + Khóa bảo vệ dòng công thức + O(1) Lazy-Flush `_Database`) — 100% Offline! | **Excel Desktop (Windows & Mac)** — trải nghiệm đẹp, nhanh và mượt nhất! |
-| **#2** | **✨ Excel Universal Offline (`.xlsx`)** | [`templates/excel_universal_offline/`](templates/excel_universal_offline/) | **5 tab** | **KHÔNG Macro / 0 cảnh báo bảo mật**, dùng **Form Control Checkboxes** ẩn sạch `TRUE/FALSE` (`;;;`), chạy mọi đời **Excel 2016–365 Win/Mac** + đủ 54–55 hoạt ảnh offline! | Máy công ty chặn Macro hoặc dùng Excel 2016/2019/2021 không cần VBA |
-| **#3** | **☁️ Google Sheets Desktop (`.xlsx` + `.gs`)** | [`templates/google_sheets_edition/`](templates/google_sheets_edition/) | **5 tab** | Gọn 5 tab + `_Database` + hoạt ảnh `=IMAGE()` động 6/7 giai đoạn. Chạy [`google_sheets_1click_setup.gs`](scripts/google_sheets_1click_setup.gs) 1 lần → **Checkbox Pastel & tự lưu từng Ngày + 12 Tháng** trên Cloud! | Dùng online trên trình duyệt & đồng bộ Google Drive |
-| **#4** | **📱 Mobile Portrait (`.xlsx` + `.gs`)** | [`templates/mobile_portrait_sheets/`](templates/mobile_portrait_sheets/) | **4 tab** | **Khổ dọc 8 cột `B:I` riêng cho iPhone/Android (0 cuộn ngang!)**, gồm tab **`📝 Việc Hôm Nay`**, ô tick lớn `38pt` dễ chạm ngón cái & tự lưu từng Tuần/Ngày! | Check-in thói quen & việc đột xuất 1 chạm ngay trên điện thoại |
+Mỗi ngày bạn tick hoàn thành thói quen từ `0% → 100%`, linh vật / cây hoa / Digimon của ngày đó sẽ tự động lớn lên hoặc tiến hóa ngay trước mắt bạn!
+
+### ⚡ MỚI v3.7 — Bộ 5 Chủ Đề Digimon 7 Cấp Tiến Hóa (`#36`–`#40` — 35 Sprites Chuẩn Canon)
+![35 Digimon 7-Stage Evolution Sprites Contact Sheet](previews/assets_contact_sheet_digimon.png)
+
+### 🦙🐼 Bộ 4 Alpaca & Gấu Trúc Mochi Vẽ Độc Bản (`#20`, `#21`, `#22`, `#23` — 24 Sprites)
+![24 Overhauled Alpaca & Panda Sprites](previews/assets_contact_sheet_alpaca_panda_fix.png)
+
+### 🐕🐱 Bộ 6 Thú Cưng Kawaii Vector Bézier (`#24`, `#25`, `#26`, `#30`, `#31`, `#33` — 36 Sprites)
+![36 Overhauled Pet Sprites Contact Sheet](previews/assets_contact_sheet_pets_overhaul.png)
+
+### 🐻🐰🌸 Batch 4 — 4 Chủ Đề Signature (`#32`–`#35` — 24 Sprites)
+![24 Sprites Contact Sheet Batch 4](previews/assets_contact_sheet_batch4.png)
+
+<details>
+<summary>🎨 Mở rộng xem thêm 186 Sprites của Batch 1 (#01–#10), Batch 2 (#11–#19) & Batch 3 (#20–#31)</summary>
+
+![72 Sprites Contact Sheet Batch 3](previews/assets_contact_sheet_batch3.png)
+![60 Sprites Contact Sheet Batch 1](previews/assets_contact_sheet.png)
+![54 Sprites Contact Sheet Batch 2](previews/assets_contact_sheet_batch2.png)
+
+</details>
 
 ---
 
-## ⚡ MỚI v3.7 — Bộ Sưu Tập Digimon 7-Stage Evolution (`#36` – `#40`)
+## ⚡ Showcase Bộ Sưu Tập Digimon 7-Stage Evolution (`#36` – `#40`)
 
-Mỗi ngày tick thói quen sẽ tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn đầy đủ**: `0% Digi-Egg` → `1–19% Baby I` → `20–39% Baby II` → `40–59% Rookie` → `60–79% Champion / Armor` → `80–99% Ultimate` → **`100% Mega ✨`** — kèm bảng **Crest Digivice Breakdown** thống kê số ngày đạt từng dạng & thẻ **Current Form Power Meter**!
+Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn đầy đủ**: `0% Digi-Egg` → `1–19% Baby I` → `20–39% Baby II` → `40–59% Rookie` → `60–79% Champion / Armor` → `80–99% Ultimate` → **`100% Mega ✨`** — kèm bảng **Crest Digivice Breakdown** thống kê số ngày đạt từng dạng & thẻ **Current Form Power Meter**!
 
 ### 36. ⚡ Digimon Veemon Miracle — `Digi-Egg → Chibomon → DemiVeemon → Veemon → Flamedramon → Paildramon → Magnamon`
 ![Digimon Veemon Miracle Tracker](previews/36_digimon_veemon_tracker.png)
@@ -106,7 +139,7 @@ Mỗi ngày tick thói quen sẽ tiến hóa nhân vật Digimon chuẩn canon q
 ![Digimon Piyomon Love Tracker](previews/40_digimon_piyomon_tracker.png)
 
 <details>
-<summary>📱 Xem 5 Màn Hình Điện Thoại Khổ Dọc Digimon (`#36`–`#40` — 0 Cuộn Ngang!)</summary>
+<summary>📱 Xem 5 màn hình thử nghiệm Mobile Portrait Digimon (`#36`–`#40` — Early Beta)</summary>
 
 <table>
   <tr>
@@ -165,7 +198,54 @@ Mỗi ngày tick thói quen sẽ tiến hóa nhân vật Digimon chuẩn canon q
 
 ---
 
-## 📱 Xem Nhanh Bản Điện Thoại Khổ Dọc (Mobile Portrait — 0 Cuộn Ngang!)
+## 🎨 Giao Diện Thực Tế `01_Sunflower` & Bộ Sưu Tập Cổ Điển + Linh Vật (`#01` – `#31`)
+
+![Sunflower Pro v3.7 Tracker](previews/01_sunflower_tracker.png)
+![Sunflower Pro v3.7 Guide](previews/01_sunflower_guide.png)
+
+<details>
+<summary>🌻 Mở rộng xem toàn bộ ảnh chụp 30 mẫu cổ điển & thú cưng (#02 – #31)</summary>
+
+| Mẫu | Preview |
+|---|---|
+| **02. 🌵 Cactus Bloom Pastel Weeks** | ![Cactus](previews/02_cactus_tracker.png) |
+| **03. 🌈 Rainbow Executive Donuts** | ![Rainbow](previews/03_rainbow_tracker.png) |
+| **04. 🌿 Sage Botanical Living** | ![Botanical](previews/04_botanical_tracker.png) |
+| **05. 🌙 Lavender Dream Wellness** | ![Lavender](previews/05_lavender_tracker.png) |
+| **06. 🚀 Midnight Navy Focus XP** | ![Navy](previews/06_navy_tracker.png) |
+| **07. 🌸 Sakura Zen Study Planner** | ![Sakura](previews/07_sakura_tracker.png) |
+| **08. 🪸 Ocean Coral Fitness** | ![Ocean](previews/08_ocean_tracker.png) |
+| **09. 🍵 Matcha Cafe Routine** | ![Matcha](previews/09_matcha_tracker.png) |
+| **10. 🌌 Aurora Glow RPG Quest** | ![Aurora](previews/10_aurora_tracker.png) |
+| **11. 🌹 Velvet Rose Garden** | ![Velvet Rose](previews/11_velvet_rose_tracker.png) |
+| **12. 🌷 Blue Tulip Mint Breeze** | ![Blue Tulip](previews/12_blue_tulip_tracker.png) |
+| **13. 🌸 Buttercream Blossom Bars** | ![Buttercream](previews/13_buttercream_blossom_tracker.png) |
+| **14. 🌳 Emerald Forest Gold Stars** | ![Emerald Forest](previews/14_emerald_forest_tracker.png) |
+| **15. 🌻 Mocha Rose Terracotta** | ![Mocha Sunflower](previews/15_mocha_sunflower_tracker.png) |
+| **16. 🏡 Dream Home Architect** | ![Dream Home](previews/16_dream_house_tracker.png) |
+| **17. 🌺 Wildflower Bloom & Mood** | ![Wildflower](previews/17_wildflower_mood_tracker.png) |
+| **18. 🌳 Plum Oak Master Suite** | ![Plum Oak](previews/18_plum_oak_tracker.png) |
+| **19. 🌻 Meadow Emerald Sunflower** | ![Meadow Sunflower](previews/19_meadow_sunflower_tracker.png) |
+| **20. 🦙 Cream Alpaca Cozy Cafe & Budget** | ![Cream Alpaca](previews/20_alpaca_cream_tracker.png) |
+| **21. 🌸 Blush Alpaca Fairy Flower Crown** | ![Blush Alpaca](previews/21_alpaca_blush_tracker.png) |
+| **22. 🍵 Matcha Alpaca Picnic Explorer** | ![Matcha Alpaca](previews/22_alpaca_matcha_tracker.png) |
+| **23. 🐼 Bamboo Panda Round Zen Garden** | ![Bamboo Panda](previews/23_bamboo_panda_tracker.png) |
+| **24. 👑 Royal Cat Saving Cash** | ![Royal Cat](previews/24_royal_cat_cash_tracker.png) |
+| **25. 🐱 Ginger Kitten Basket** | ![Ginger Kitten](previews/25_ginger_kitten_tracker.png) |
+| **26. 🌙 Pastel Purple Starlight Cat** | ![Starlight Lavender Cat](previews/26_purple_cat_tracker.png) |
+| **27. 🐣 Hatching Chick Studio** | ![Hatching Chick](previews/27_hatching_chick_tracker.png) |
+| **28. 🍬 Cotton Candy Jar Sweet** | ![Candy Jar](previews/28_candy_jar_tracker.png) |
+| **29. 🌹 Watercolor Rose Bouquet** | ![Rose Bouquet](previews/29_rose_bouquet_tracker.png) |
+| **30. 🐕 Shiba Inu Happy Bork** | ![Shiba Inu](previews/30_shiba_inu_tracker.png) |
+| **31. ❄️ Akita Inu Snow Loyal** | ![Akita Inu](previews/31_akita_inu_tracker.png) |
+
+</details>
+
+---
+
+## 📱 Xem Nhanh Bản Điện Thoại Khổ Dọc (`🚧 Early Beta` — Đang Thử Nghiệm)
+
+> **Lưu ý:** Bản Mobile Portrait vẫn đang ở giai đoạn thử nghiệm sớm (**Early Beta**, còn thô sơ & còn lỗi nhỏ trên một số dòng máy). Chỉ mở thử bằng ứng dụng **Google Trang tính** sau khi lưu sang định dạng Google Sheets — không mở bằng app Excel trên điện thoại.
 
 <table>
   <tr>
@@ -177,7 +257,7 @@ Mỗi ngày tick thói quen sẽ tiến hóa nhân vật Digimon chuẩn canon q
 </table>
 
 <details>
-<summary>📸 Xem thêm màn hình Mobile Portrait (Shiba, Akita, Alpaca, Royal Cat, Sunflower, Daily Tasks)</summary>
+<summary>📸 Xem thêm màn hình Mobile Portrait (Shiba, Akita, Alpaca, Royal Cat, Việc Hôm Nay)</summary>
 
 <table>
   <tr>
@@ -194,7 +274,9 @@ Mỗi ngày tick thói quen sẽ tiến hóa nhân vật Digimon chuẩn canon q
 
 ## 📋 Bảng Tải Trực Tiếp Toàn Bộ 40 Mẫu Template (Đủ 4 Phiên Bản — 160 Tệp)
 
-| # | Tên Mẫu & Chủ Đề | ⚡ Pro #1 (Turbo v3.7) | ✨ Excel Offline | ☁️ GSheets Desktop | 📱 Mobile Portrait |
+> 💡 **Mẹo tải nhanh không cần gõ lệnh:** Bấm vào link bạn chọn bên dưới → bấm biểu tượng **mũi tên tải xuống (`⬇ Download raw file`)** ở góc trên bên phải!
+
+| # | Tên Mẫu & Chủ Đề | ⚡ `#1` Pro *(Excel 365)* | ✨ `#2` Offline *(Excel 2016–365)* | ☁️ `#3` GSheets *(Beta)* | 📱 `#4` Mobile *(Early Beta)* |
 |---|---|---|---|---|---|
 | **01** | 🌻 **Sunflower Garden Blush** | [`_Pro.xlsm`](templates/pro_macro/01_Sunflower_Garden_Blush_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/01_Sunflower_Garden_Blush.xlsx) | [Desktop](templates/google_sheets_edition/01_Sunflower_Garden_Blush.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/01_Sunflower_Garden_Blush_Mobile.xlsx) |
 | **02** | 🌵 **Cactus Bloom Pastel Weeks** | [`_Pro.xlsm`](templates/pro_macro/02_Cactus_Bloom_Pastel_Weeks_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/02_Cactus_Bloom_Pastel_Weeks.xlsx) | [Desktop](templates/google_sheets_edition/02_Cactus_Bloom_Pastel_Weeks.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/02_Cactus_Bloom_Pastel_Weeks_Mobile.xlsx) |
@@ -239,86 +321,31 @@ Mỗi ngày tick thói quen sẽ tiến hóa nhân vật Digimon chuẩn canon q
 
 ---
 
-## 🎨 Giao Diện Pro v3.7 Thực Tế (`01_Sunflower` + Bộ Sưu Tập `#01`–`#31`)
+## ❓ Hỏi Đáp Nhanh & Xử Lý Lỗi Thường Gặp (FAQ)
 
-![Sunflower Pro v3.7 Tracker](previews/01_sunflower_tracker.png)
-![Sunflower Pro v3.7 Guide](previews/01_sunflower_guide.png)
+- **1. Mở file Pro `.xlsm` thấy thanh đỏ *"Microsoft has blocked macros from running"* thì làm sao?**
+  → Đây là cơ chế bảo vệ mặc định của Windows với mọi file tải từ Internet. Bạn chỉ cần **đóng Excel** → chuột phải vào file `.xlsm` → chọn **Properties** → tick **☑ Unblock (Bỏ chặn)** ở góc dưới cùng → **OK** → mở lại và bấm **Enable Content** 1 lần là xong!
+- **2. Mở file Pro `.xlsm` thấy ô tick hiện chữ `TRUE` / `FALSE` thay vì ô vuông màu?**
+  → Máy bạn đang cài **Excel 2016 / 2019 / 2021** (chưa có tính năng Checkbox mới của Excel 365). Bạn chỉ cần tải bản **`#2` Excel Universal Offline (`.xlsx`)** trong bảng trên — chạy đẹp 100%, không Macro, không hiện `TRUE`/`FALSE`!
+- **3. Làm sao xóa nhanh dữ liệu mẫu để bắt đầu dùng cho tháng của mình?**
+  → Trên bản **Pro `.xlsm`**: chỉ cần đổi dropdown **Tháng (`B3`)** sang tháng bạn muốn (hoặc chọn vùng `C17:AG36` rồi nhấn phím **`Delete`** — Mac: `fn + Backspace`), toàn bộ công thức & màu sắc giữ nguyên 100%!
+- **4. Dùng bản Google Sheets (`#3` Beta) & Mobile (`#4` Early Beta) như thế nào?**
+  → Tải file lên Google Drive → Mở bằng Google Trang tính → **Tệp → Lưu dưới dạng Google Trang tính**. Sau đó vào **Tiện ích mở rộng (Extensions) → Apps Script**, dán code từ [`scripts/google_sheets_1click_setup.gs`](scripts/google_sheets_1click_setup.gs) → Lưu → bấm **Run `setupHabitTracker`**. Xem thêm tại [`docs/GOOGLE_SHEETS_GUIDE.md`](docs/GOOGLE_SHEETS_GUIDE.md) và [`docs/CUSTOMIZATION_GUIDE.md`](docs/CUSTOMIZATION_GUIDE.md).
+
+---
 
 <details>
-<summary>🌻 Mở rộng xem ảnh chụp 31 mẫu cổ điển & linh vật (#02 – #31)</summary>
+<summary>🛠️ Dành Cho Người Yêu Kỹ Thuật & Developer (Benchmark v3.7 Turbo & Lệnh Build)</summary>
 
-| Mẫu | Preview |
-|---|---|
-| **02. 🌵 Cactus Bloom Pastel Weeks** | ![Cactus](previews/02_cactus_tracker.png) |
-| **03. 🌈 Rainbow Executive Donuts** | ![Rainbow](previews/03_rainbow_tracker.png) |
-| **04. 🌿 Sage Botanical Living** | ![Botanical](previews/04_botanical_tracker.png) |
-| **05. 🌙 Lavender Dream Wellness** | ![Lavender](previews/05_lavender_tracker.png) |
-| **06. 🚀 Midnight Navy Focus XP** | ![Navy](previews/06_navy_tracker.png) |
-| **07. 🌸 Sakura Zen Study Planner** | ![Sakura](previews/07_sakura_tracker.png) |
-| **08. 🪸 Ocean Coral Fitness** | ![Ocean](previews/08_ocean_tracker.png) |
-| **09. 🍵 Matcha Cafe Routine** | ![Matcha](previews/09_matcha_tracker.png) |
-| **10. 🌌 Aurora Glow RPG Quest** | ![Aurora](previews/10_aurora_tracker.png) |
-| **11. 🌹 Velvet Rose Garden** | ![Velvet Rose](previews/11_velvet_rose_tracker.png) |
-| **12. 🌷 Blue Tulip Mint Breeze** | ![Blue Tulip](previews/12_blue_tulip_tracker.png) |
-| **13. 🌸 Buttercream Blossom Bars** | ![Buttercream](previews/13_buttercream_blossom_tracker.png) |
-| **14. 🌳 Emerald Forest Gold Stars** | ![Emerald Forest](previews/14_emerald_forest_tracker.png) |
-| **15. 🌻 Mocha Rose Terracotta** | ![Mocha Sunflower](previews/15_mocha_sunflower_tracker.png) |
-| **16. 🏡 Dream Home Architect** | ![Dream Home](previews/16_dream_house_tracker.png) |
-| **17. 🌺 Wildflower Bloom & Mood** | ![Wildflower](previews/17_wildflower_mood_tracker.png) |
-| **18. 🌳 Plum Oak Master Suite** | ![Plum Oak](previews/18_plum_oak_tracker.png) |
-| **19. 🌻 Meadow Emerald Sunflower** | ![Meadow Sunflower](previews/19_meadow_sunflower_tracker.png) |
-| **20. 🦙 Cream Alpaca Cozy Cafe & Budget** | ![Cream Alpaca](previews/20_alpaca_cream_tracker.png) |
-| **21. 🌸 Blush Alpaca Fairy Flower Crown** | ![Blush Alpaca](previews/21_alpaca_blush_tracker.png) |
-| **22. 🍵 Matcha Alpaca Picnic Explorer** | ![Matcha Alpaca](previews/22_alpaca_matcha_tracker.png) |
-| **23. 🐼 Bamboo Panda Round Zen Garden** | ![Bamboo Panda](previews/23_bamboo_panda_tracker.png) |
-| **24. 👑 Royal Cat Saving Cash** | ![Royal Cat](previews/24_royal_cat_cash_tracker.png) |
-| **25. 🐱 Ginger Kitten Basket** | ![Ginger Kitten](previews/25_ginger_kitten_tracker.png) |
-| **26. 🌙 Pastel Purple Starlight Cat** | ![Starlight Lavender Cat](previews/26_purple_cat_tracker.png) |
-| **27. 🐣 Hatching Chick Studio** | ![Hatching Chick](previews/27_hatching_chick_tracker.png) |
-| **28. 🍬 Cotton Candy Jar Sweet** | ![Candy Jar](previews/28_candy_jar_tracker.png) |
-| **29. 🌹 Watercolor Rose Bouquet** | ![Rose Bouquet](previews/29_rose_bouquet_tracker.png) |
-| **30. 🐕 Shiba Inu Happy Bork** | ![Shiba Inu](previews/30_shiba_inu_tracker.png) |
-| **31. ❄️ Akita Inu Snow Loyal** | ![Akita Inu](previews/31_akita_inu_tracker.png) |
-
-</details>
-
----
-
-## 🎭 Bộ 245 Ảnh Hoạt Ảnh 6 & 7 Giai Đoạn (`assets/` — 40 Chủ Đề, v3.7)
-
-### ⚡ Batch 5 (Mới v3.7 — Bộ 5 Chủ Đề Digimon 7 Cấp Tiến Hóa `#36`–`#40` — 35 Sprites Chuẩn Canon)
-![35 Digimon 7-Stage Evolution Sprites Contact Sheet](previews/assets_contact_sheet_digimon.png)
-
-### Bộ 4 Alpaca & Gấu Trúc Mochi Vẽ Lại Độc Bản (`#20`, `#21`, `#22`, `#23` — 24 Sprites)
-![24 Overhauled Alpaca & Panda Sprites](previews/assets_contact_sheet_alpaca_panda_fix.png)
-
-### Bộ 6 Thú Cưng Vẽ Lại Chuẩn Kawaii Vector Bézier (`#24`, `#25`, `#26`, `#30`, `#31`, `#33` — 36 Sprites)
-![36 Overhauled Pet Sprites Contact Sheet](previews/assets_contact_sheet_pets_overhaul.png)
-
-### Batch 4 (Chủ đề `#32`–`#35` — 24 Sprites Signature)
-![24 Sprites Contact Sheet Batch 4](previews/assets_contact_sheet_batch4.png)
-
-<details>
-<summary>🎨 Xem Batch 1 (#01–#10), Batch 2 (#11–#19) & Batch 3 (#20–#31) Sprites</summary>
-
-![72 Sprites Contact Sheet Batch 3](previews/assets_contact_sheet_batch3.png)
-![60 Sprites Contact Sheet Batch 1](previews/assets_contact_sheet.png)
-![54 Sprites Contact Sheet Batch 2](previews/assets_contact_sheet_batch2.png)
-
-</details>
-
----
-
-## ☁️ Kích Hoạt Google Sheets Trong 10 Giây (1-Click Setup v3.7)
-
-1. Tải mẫu từ [`templates/google_sheets_edition/`](templates/google_sheets_edition/) hoặc [`templates/mobile_portrait_sheets/`](templates/mobile_portrait_sheets/) lên Google Drive → **Mở bằng Google Sheets** → **Tệp → Lưu dưới dạng Google Trang tính**.
-2. Chọn **Tiện ích mở rộng (Extensions) → Apps Script** → dán toàn bộ code trong [`scripts/google_sheets_1click_setup.gs`](scripts/google_sheets_1click_setup.gs) → **Lưu (`Ctrl+S`)** → bấm **Run `setupHabitTracker`**.
-
-Xem thêm hướng dẫn tại [`docs/GOOGLE_SHEETS_GUIDE.md`](docs/GOOGLE_SHEETS_GUIDE.md) và [`docs/CUSTOMIZATION_GUIDE.md`](docs/CUSTOMIZATION_GUIDE.md).
-
----
-
-## 🛠️ Dành Cho Developer (Build & QA v3.7)
+### 📊 Benchmark Tốc Độ Thực Tế Excel COM (`Linked Pictures cũ` vs `v3.7 Turbo`)
+| Thao tác thực tế | Linked Pictures cũ | `01_Sunflower` **Turbo** | `36_Digimon_Veemon` **v3.7 (7-Stage)** | Tăng tốc |
+|---|---:|---:|---:|---:|
+| **1. Tick 1 ô Checkbox (`Monthly Tracker`)** | 347.3 ms | **42.7 ms** | **< 40 ms** | **~8–10× nhanh hơn** |
+| **2a. Đổi Tháng bằng Dropdown (`B3`)** | 4,137.1 ms | **141.6 ms** | **29 – 54 ms** | **~75–140× nhanh hơn!** |
+| **2b. Đổi Tháng bằng Nút 1 chạm (`◀ / ▶`)** | 4,137.1 ms | **51.3 ms** | **21 – 41 ms** | **~80–190× nhanh hơn!** |
+| **3. Đổi Ngày `📝 Nhiệm Vụ Ngày` (`21 ↔ 22`)** | 2,918.2 ms | **46.5 ms** | **4 – 5 ms** | **~60–580× nhanh hơn!** |
+| **4. Đổi Năm `🏆 Tổng Kết Năm` (`2026 ↔ 2027`)** | 317.2 ms | **74.9 ms** | **13 – 15 ms** | **~21× nhanh hơn!** |
+| **Số ảnh nén trong `xl/media/`** | 54 bản sao | **6 PNG duy nhất** | **7 PNG duy nhất** | **Siêu gọn nhẹ!** |
 
 ```powershell
 # Trích xuất bộ 35 sprite Digimon chuẩn canon & xuất contact sheet:
@@ -331,6 +358,9 @@ python scripts/excel_com_enhancer.py pro 36_Digimon_Veemon_Miracle 37_Digimon_Ag
 python scripts/build_mobile_templates.py 36_digimon_veemon 37_digimon_agumon 38_digimon_gatomon 39_digimon_gabumon 40_digimon_piyomon
 ```
 
+</details>
+
 ---
 
-💛 **Created with care by Dyu** · *Chúc bạn gieo từng thói quen nhỏ, tận hưởng niềm vui pháo hoa mỗi ngày 100% và gặt hái cả khu vườn kỷ luật rực rỡ!*
+💛 **Cảm ơn bạn đã ghé thăm & tải bộ Habit Tracker miễn phí này của Dyu!**
+Nếu các mẫu này giúp bạn duy trì thói quen vui hơn mỗi ngày, đừng ngại bấm tặng mình một nút **⭐ Star** ở góc trên bên phải để ủng hộ mình tiếp tục ra thêm nhiều chủ đề siêu dễ thương nữa nhé! ✨
