@@ -157,15 +157,15 @@ Write-Host "  Thu muc luu file: $OutDir" -ForegroundColor Green
 Write-Host ""
 Write-Host "  BUOC 1 - CHON PHIEN BAN PHU HOP (THEO THU TU UU TIEN):" -ForegroundColor White
 Write-Host "  ----------------------------------------------------------------------" -ForegroundColor DarkGray
-Write-Host "  [1] Pro Interactive (.xlsm)  [* KHUYEN DUNG SO 1 - TURBO v3.7 *]" -ForegroundColor Green
-Write-Host "      -> Sieu toc ~31-54ms + Full FX Nay/Phao hoa/Toast + Ctrl+Z / Nut Undo" -ForegroundColor DarkGray
+Write-Host "  [1] Pro Interactive (.xlsm)  [* KHUYEN DUNG SO 1 - EXCEL 365 TURBO v3.7 *]" -ForegroundColor Green
+Write-Host "      -> Sieu toc ~29-54ms + Full FX Nay/Phao hoa/Toast + Ctrl+Z / Nut Undo" -ForegroundColor DarkGray
 Write-Host "         + Khoa bao ve cong thuc + Tu luu Da Ngay/Thang/Nam (100% Offline)!" -ForegroundColor DarkGray
-Write-Host "  [2] Excel Universal Offline (.xlsx)" -ForegroundColor Cyan
-Write-Host "      -> Khong Macro, Form Checkbox chuan moi doi Excel 2016-365 Win/Mac!" -ForegroundColor DarkGray
-Write-Host "  [3] Google Sheets Desktop (.xlsx + 1-Click Script)" -ForegroundColor Cyan
-Write-Host "      -> Dung online tren trinh duyet + tu luu 12 thang & tung ngay tren Cloud!" -ForegroundColor DarkGray
-Write-Host "  [4] Mobile Portrait (.xlsx + .gs)" -ForegroundColor Magenta
-Write-Host "      -> Kho doc 8 cot rieng cho dien thoai (Google Sheets App, 0 cuon ngang)!" -ForegroundColor DarkGray
+Write-Host "  [2] Excel Universal Offline (.xlsx)  [Excel 2016/2019/2021/365]" -ForegroundColor Cyan
+Write-Host "      -> Khong Macro, 0 loi TRUE/FALSE tren Excel cu, du hoat anh offline!" -ForegroundColor DarkGray
+Write-Host "  [3] Google Sheets Desktop (.xlsx + .gs)  [Beta - Dang thu nghiem]" -ForegroundColor Yellow
+Write-Host "      -> Dung online qua Google Drive (con mot so loi nho / tre 1-2s)!" -ForegroundColor DarkGray
+Write-Host "  [4] Mobile Portrait (.xlsx + .gs)  [Early Beta - Con tho so & con loi]" -ForegroundColor Magenta
+Write-Host "      -> Kho doc 8 cot dang thu nghiem (chi mo bang App Google Sheets)!" -ForegroundColor DarkGray
 Write-Host "  [0] Thoat" -ForegroundColor DarkGray
 Write-Host ""
 
