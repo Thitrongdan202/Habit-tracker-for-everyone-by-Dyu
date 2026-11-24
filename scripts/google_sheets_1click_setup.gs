@@ -1,13 +1,13 @@
 /**
  * ============================================================================
- *  HABIT TRACKER v3.8 TURBO — 1-CLICK GOOGLE SHEETS CHECKBOX + FAST AUTO-SAVE
+ *  HABIT TRACKER v3.9 TURBO — 1-CLICK GOOGLE SHEETS CHECKBOX + FAST AUTO-SAVE
  *  AUTO-DETECTS BOTH:
  *    - Desktop 5-Tab Google Sheets Edition (`templates/google_sheets_edition/`)
  *    - Mobile Portrait Edition (`templates/mobile_portrait_sheets/`)
  *  Repo: https://github.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu
  * ============================================================================
  *
- *  v3.8 TURBO PERFORMANCE UPGRADES (6, 7 & 8-Stage Digimon Compatible):
+ *  v3.9 TURBO PERFORMANCE UPGRADES (60 Themes: 6-Stage Capybara/Pets/Plants + 7/8-Stage Digimon):
  *    - Single-pass O(1) index map (`buildColIndex_`) -> 1 RPC instead of 4-6 scans!
  *    - Batched multi-column `getValues()` / `setValues()` (B17:AI36, B3:B5, D5:F5, B21:I35)
  *    - RangeList bulk checkbox insertion in `convertBooleanCellsInRange_`
@@ -85,8 +85,8 @@ function setupMobilePortrait_(ss) {
   hideIfExists_(ss, HT_DB_SHEET);
   SpreadsheetApp.flush();
   ss.toast(
-    "Bản Điện Thoại (Mobile Portrait v3.8 Turbo): Đã bật Checkbox Pastel cho " + converted + " bảng & tối ưu tốc độ lưu Tuần/Ngày/Năm!",
-    "Habit Tracker Mobile v3.8 — Sẵn sàng 📱⚡",
+    "Bản Điện Thoại (Mobile Portrait v3.9 Turbo): Đã bật Checkbox Pastel cho " + converted + " bảng & tối ưu tốc độ lưu Tuần/Ngày/Năm!",
+    "Habit Tracker Mobile v3.9 — Sẵn sàng 📱⚡",
     8
   );
 }
@@ -131,8 +131,8 @@ function setupDesktopEdition_(ss) {
   hideIfExists_(ss, HT_DB_SHEET);
   SpreadsheetApp.flush();
   ss.toast(
-    "Bản Desktop v3.8 Turbo: Đã bật Checkbox Pastel cho " + converted + " bảng & kích hoạt bộ máy lưu O(1) siêu tốc!",
-    "Habit Tracker v3.8 Turbo — Sẵn sàng ⚡✨",
+    "Bản Desktop v3.9 Turbo: Đã bật Checkbox Pastel cho " + converted + " bảng & kích hoạt bộ máy lưu O(1) siêu tốc!",
+    "Habit Tracker v3.9 Turbo — Sẵn sàng ⚡✨",
     8
   );
 }
@@ -794,7 +794,7 @@ function convertBooleanCellsInRange_(sheet, a1Range, accent) {
 
 function onOpen() {
   SpreadsheetApp.getUi()
-    .createMenu("⚡ Habit Tracker v3.8 Turbo")
+    .createMenu("⚡ Habit Tracker v3.9 Turbo")
     .addItem("☑️ Bật Checkbox & Tự Lưu _Database (1-Click)", "setupHabitTracker")
     .addToUi();
 }

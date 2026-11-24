@@ -41,7 +41,13 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     cv.row(1, 38)
     cv.row(2, 24)
     cv.row(3, 24)
-    ver_tag = "v3.8 Turbo" if (is_digi and edition == "pro_xlsm") else ("v3.8" if is_digi else ("v3.6 Turbo" if edition == "pro_xlsm" else "v3.5"))
+    is_capy = t.slug.startswith("capybara_")
+    if is_capy:
+        ver_tag = "v3.9 Turbo" if edition == "pro_xlsm" else "v3.9"
+    elif is_digi:
+        ver_tag = "v3.8 Turbo" if edition == "pro_xlsm" else "v3.8"
+    else:
+        ver_tag = "v3.6 Turbo" if edition == "pro_xlsm" else "v3.5"
     cv.merge(1, 1, 1, last_c, f"{t.emoji}  {t.name}  —  HƯỚNG DẪN SỬ DỤNG ({ver_tag})",
              font_name=t.font_title, font_size=15.5, bold=True, align="center",
              bg_color=t.primary, font_color=t.on_primary)

@@ -1,7 +1,7 @@
-# Habit Tracker Collection v3.8 Installer (PowerShell 5.1+ / 7+)
+# Habit Tracker Collection v3.9 Installer (PowerShell 5.1+ / 7+)
 <#
 .SYNOPSIS
-    Habit Tracker Collection v3.8 - Interactive Zero-Install Downloader (Windows PowerShell)
+    Habit Tracker Collection v3.9 - Interactive Zero-Install Downloader (Windows PowerShell)
 .DESCRIPTION
     Run in 1 line:
         irm https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu/main/install.ps1 | iex
@@ -67,7 +67,20 @@ $Templates = @(
     @{ Id = 44; Cat = "DIGIMON"; Stem = "44_Digimon_Guilmon_Crimson";         Title = "Digimon Guilmon -> Gallantmon Crimson (8 Cap)" }
     @{ Id = 45; Cat = "DIGIMON"; Stem = "45_Digimon_Terriermon_Mint";         Title = "Digimon Terriermon -> MegaGargomon (7 Cap)" }
     @{ Id = 46; Cat = "DIGIMON"; Stem = "46_Digimon_Renamon_Kuzuhamon";       Title = "Digimon Renamon -> Kuzuhamon Miko (8 Cap)" }
-    @{ Id = 47; Cat = "DIGIMON"; Stem = "47_Digimon_Tentomon_Electro";        Title = "Digimon Tentomon -> HerakleKabuterimon (7 Cap)" }
+    @{ Id = 47; Cat = "DIGIMON";  Stem = "47_Digimon_Tentomon_Electro";        Title = "Digimon Tentomon -> HerakleKabuterimon (7 Cap)" }
+    @{ Id = 48; Cat = "CAPYBARA"; Stem = "48_Capybara_Avocado_Zen";            Title = "Capybara Bo Xanh Ve Tay (Nuoc & Bua Bo Zen)" }
+    @{ Id = 49; Cat = "CAPYBARA"; Stem = "49_Capybara_Yuzu_Onsen_Spa";         Title = "Capybara Suoi Nong Yuzu (5 Donut & Thu Gian Toi)" }
+    @{ Id = 50; Cat = "CAPYBARA"; Stem = "50_Capybara_Pip_Puddle_Besties";     Title = "Doi Ban Pip & Puddle (Hong-Tim Bestie Bond)" }
+    @{ Id = 51; Cat = "CAPYBARA"; Stem = "51_Capybara_Boba_Lily_Pond";         Title = "Capybara Ho Sen Tra Sua (Dem Ly Boba Tuan)" }
+    @{ Id = 52; Cat = "CAPYBARA"; Stem = "52_Capybara_Bookworm_Study";         Title = "Capy & Chaptered (Gio Hoc & Trang Sach)" }
+    @{ Id = 53; Cat = "CAPYBARA"; Stem = "53_Capybara_Lofi_Picnic_Beats";      Title = "Capybara Lofi Picnic (Dem Phut Flow & Playlist)" }
+    @{ Id = 54; Cat = "CAPYBARA"; Stem = "54_Capybara_Foodie_Snack_Club";      Title = "Capybara Foodie Club (6 Moc Mo Khoa Mon Ngon)" }
+    @{ Id = 55; Cat = "CAPYBARA"; Stem = "55_Capybara_Dino_Hoodie_Play";       Title = "Capybara Ao Dino Xanh (Diem Vui & 5 Thanh Pastel)" }
+    @{ Id = 56; Cat = "CAPYBARA"; Stem = "56_Capybara_Apple_Orchard_Sweet";    Title = "Capybara Vuon Tao Do (Dem Tao & Biet On)" }
+    @{ Id = 57; Cat = "CAPYBARA"; Stem = "57_Capybara_Pink_Cloud_Chill";       Title = "Capybara May Hong Toi Gian (Minimalist Chill)" }
+    @{ Id = 58; Cat = "CAPYBARA"; Stem = "58_Capybara_Fairy_Party_Wish";       Title = "Capybara Tiec Tien (5 Dieu Uoc Sao Tu Thap Sang)" }
+    @{ Id = 59; Cat = "CAPYBARA"; Stem = "59_Capybara_SelfCare_GlowUp";        Title = "Capybara Self-Care GlowUp (3 The Sang-Chieu-Toi)" }
+    @{ Id = 60; Cat = "CAPYBARA"; Stem = "60_Capybara_Snapshot_Traveler";      Title = "Capybara Lu Hanh (Nhat Ky Anh Polaroid & Dau Ho Chieu)" }
 )
 
 function Resolve-TargetFolder {
@@ -138,16 +151,16 @@ function Parse-TemplateIds([string]$Raw) {
             $a = [int]$Matches[1]; $b = [int]$Matches[2]
             if ($a -gt $b) { $tmp = $a; $a = $b; $b = $tmp }
             for ($n = $a; $n -le $b; $n++) {
-                if ($n -ge 1 -and $n -le 47 -and -not $selectedIds.Contains($n)) { $selectedIds.Add($n) }
+                if ($n -ge 1 -and $n -le 60 -and -not $selectedIds.Contains($n)) { $selectedIds.Add($n) }
             }
         } elseif ($u -match '^\d+$') {
             $n = [int]$u
-            if ($n -ge 1 -and $n -le 47 -and -not $selectedIds.Contains($n)) { $selectedIds.Add($n) }
+            if ($n -ge 1 -and $n -le 60 -and -not $selectedIds.Contains($n)) { $selectedIds.Add($n) }
         }
     }
     if ($all) {
         $selectedIds.Clear()
-        1..47 | ForEach-Object { $selectedIds.Add($_) }
+        1..60 | ForEach-Object { $selectedIds.Add($_) }
     }
     return @{ Ids = @($selectedIds); Quit = $quit }
 }
@@ -157,14 +170,14 @@ New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 
 Write-Host ""
 Write-Host "========================================================================" -ForegroundColor Magenta
-Write-Host "   HABIT TRACKER COLLECTION v3.8 - BY DYU (47 THEMES x 4 EDITIONS)" -ForegroundColor Yellow
+Write-Host "   HABIT TRACKER COLLECTION v3.9 - BY DYU (60 THEMES x 4 EDITIONS)" -ForegroundColor Yellow
 Write-Host "   Turbo 6/7/8-Stage Native Sprite Engine | FX Suite | Ctrl+Z Undo" -ForegroundColor Cyan
 Write-Host "========================================================================" -ForegroundColor Magenta
 Write-Host "  Thu muc luu file: $OutDir" -ForegroundColor Green
 Write-Host ""
 Write-Host "  BUOC 1 - CHON PHIEN BAN PHU HOP (THEO THU TU UU TIEN):" -ForegroundColor White
 Write-Host "  ----------------------------------------------------------------------" -ForegroundColor DarkGray
-Write-Host "  [1] Pro Interactive (.xlsm)  [* KHUYEN DUNG SO 1 - EXCEL 365 TURBO v3.8 *]" -ForegroundColor Green
+Write-Host "  [1] Pro Interactive (.xlsm)  [* KHUYEN DUNG SO 1 - EXCEL 365 TURBO v3.9 *]" -ForegroundColor Green
 Write-Host "      -> Sieu toc ~25-54ms + Full FX Nay/Phao hoa/Toast + Ctrl+Z / Nut Undo" -ForegroundColor DarkGray
 Write-Host "         + Khoa bao ve cong thuc + Tu luu Da Ngay/Thang/Nam (100% Offline)!" -ForegroundColor DarkGray
 Write-Host "  [2] Excel Universal Offline (.xlsx)  [Excel 2016/2019/2021/365]" -ForegroundColor Cyan
@@ -192,14 +205,15 @@ if ($edChoice -eq "M" -or $edChoice -eq "MOBILE") { $edChoice = "4" }
 if ($edChoice -notin @("1", "2", "3", "4")) { $edChoice = "1" }
 
 Write-Host ""
-Write-Host "  BUOC 2 - CHON MAU THOI QUEN (47 CHU DE THAM MY, LINH VAT & DIGIMON):" -ForegroundColor White
+Write-Host "  BUOC 2 - CHON MAU THOI QUEN (60 CHU DE CAPYBARA, DIGIMON, LINH VAT & HOA LA):" -ForegroundColor White
 Write-Host "  ----------------------------------------------------------------------" -ForegroundColor DarkGray
 $CatBlocks = @(
-    @{ Key = "DIGIMON"; Label = "--- [MOI v3.8] 12 BO DIGIMON 7 & 8 CAP TIEN HOA (#36-#47) ---"; Color = "Cyan" }
-    @{ Key = "PETS";   Label = "--- THU CUNG SIEU CUTE (Mochi Cat, Bunny, Milk & Mocha, Shiba, Akita, Alpaca...) ---"; Color = "Yellow" }
-    @{ Key = "NATURE"; Label = "--- HOA & THIEN NHIEN (Sakura Minimalist, Huong Duong, Xuong Rong, Hong Nhung...) ---"; Color = "Green" }
-    @{ Key = "STYLE";  Label = "--- PHONG CACH & MUC TIEU (Dream Home, Candy Jar, Rainbow, Aurora RPG, Matcha...) ---"; Color = "Cyan" }
-    @{ Key = "FOCUS";  Label = "--- TAI CHINH & TAP TRUNG (Royal Cat Cash, Alpaca Budget, Sage Budget, Deep Work...) ---"; Color = "Magenta" }
+    @{ Key = "CAPYBARA"; Label = "--- [MOI v3.9] 13 BO CAPYBARA CHILL COLLECTION DOC BAN (#48-#60) ---"; Color = "Green" }
+    @{ Key = "DIGIMON";  Label = "--- 12 BO DIGIMON 7 & 8 CAP TIEN HOA (#36-#47) ---"; Color = "Cyan" }
+    @{ Key = "PETS";     Label = "--- THU CUNG SIEU CUTE (Mochi Cat, Bunny, Milk & Mocha, Shiba, Akita, Alpaca...) ---"; Color = "Yellow" }
+    @{ Key = "NATURE";   Label = "--- HOA & THIEN NHIEN (Sakura Minimalist, Huong Duong, Xuong Rong, Hong Nhung...) ---"; Color = "Green" }
+    @{ Key = "STYLE";    Label = "--- PHONG CACH & MUC TIEU (Dream Home, Candy Jar, Rainbow, Aurora RPG, Matcha...) ---"; Color = "Cyan" }
+    @{ Key = "FOCUS";    Label = "--- TAI CHINH & TAP TRUNG (Royal Cat Cash, Alpaca Budget, Sage Budget, Deep Work...) ---"; Color = "Magenta" }
 )
 foreach ($blk in $CatBlocks) {
     Write-Host ("  " + $blk.Label) -ForegroundColor $blk.Color
@@ -209,10 +223,10 @@ foreach ($blk in $CatBlocks) {
     }
 }
 Write-Host "  ----------------------------------------------------------------------" -ForegroundColor DarkGray
-Write-Host "  [A]   Tai TOAN BO 47 mau (Download All 47)" -ForegroundColor Green
+Write-Host "  [A]   Tai TOAN BO 60 mau (Download All 60)" -ForegroundColor Green
 Write-Host "  [0]   Thoat" -ForegroundColor DarkGray
 Write-Host ""
-Write-Host "  Goi y: Nhap 1 so (vd: 44), nhieu so (vd: 41,44,46), dai (vd: 41-47), hoac A" -ForegroundColor Yellow
+Write-Host "  Goi y: Nhap 1 so (vd: 48), nhieu so (vd: 48,50,52), dai (vd: 48-60), hoac A" -ForegroundColor Yellow
 
 if ($env:HABIT_CHOICE) {
     $choice = $env:HABIT_CHOICE
