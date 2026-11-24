@@ -26,8 +26,10 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     q = qs(GUIDE_SHEET)
 
     is_7 = (t.num_stages == 7)
-    last_c = 7 if is_7 else 6  # 6 cols (B:G) for 6-stage, 7 cols (B:H) for 7-stage Digimon!
-    col_w = 19.2 if is_7 else 22.0
+    is_8 = (t.num_stages == 8)
+    is_digi = (t.num_stages >= 7)
+    last_c = 8 if is_8 else (7 if is_7 else 6)  # 6 cols (B:G), 7 cols (B:H), or 8 cols (B:I for 2x4 8-stage!)
+    col_w = 17.5 if is_8 else (19.2 if is_7 else 22.0)
 
     cv.col(0, 3.0)
     for c in range(1, last_c + 1):
@@ -39,7 +41,7 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     cv.row(1, 38)
     cv.row(2, 24)
     cv.row(3, 24)
-    ver_tag = "v3.7 Turbo" if (is_7 and edition == "pro_xlsm") else ("v3.7" if is_7 else ("v3.6 Turbo" if edition == "pro_xlsm" else "v3.5"))
+    ver_tag = "v3.8 Turbo" if (is_digi and edition == "pro_xlsm") else ("v3.8" if is_digi else ("v3.6 Turbo" if edition == "pro_xlsm" else "v3.5"))
     cv.merge(1, 1, 1, last_c, f"{t.emoji}  {t.name}  —  HƯỚNG DẪN SỬ DỤNG ({ver_tag})",
              font_name=t.font_title, font_size=15.5, bold=True, align="center",
              bg_color=t.primary, font_color=t.on_primary)
@@ -161,8 +163,9 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
             "✨  Hoạt ảnh =IMAGE() động 6 giai đoạn tự cập nhật cho cả 31 ngày, Monthly Hero, Nhiệm Vụ Ngày, Yearly Goals & Thành Tựu Năm!",
         ]
 
-    end1 = info_card(r, 1, 3, "📌  1. CÁCH SỬ DỤNG & TICK HẰNG NGÀY", sec1)
-    end2 = info_card(r, 4, last_c, "⚡  2. DỮ LIỆU MẪU, RESET & SANG THÁNG MỚI", sec2)
+    split_c = 4 if is_8 else 3
+    end1 = info_card(r, 1, split_c, "📌  1. CÁCH SỬ DỤNG & TICK HẰNG NGÀY", sec1)
+    end2 = info_card(r, split_c + 1, last_c, "⚡  2. DỮ LIỆU MẪU, RESET & SANG THÁNG MỚI", sec2)
     r = max(end1, end2) + 1
     cv.row(r - 1, 12)
 
@@ -191,8 +194,8 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
             "🗓️  Chọn năm chưa có dữ liệu (vd: 2028) ở ô B3 tab Tổng Kết → toàn bộ biểu đồ, 12 ô tháng & huy hiệu hiển thị 0% / Stage 0 sạch sẽ!",
         ]
 
-    end3 = info_card(r, 1, 3, "🧩  3. TÙY BIẾN THÓI QUEN & MỤC TIÊU NĂM", sec3)
-    end4 = info_card(r, 4, last_c, "🏆  4. LỊCH ĐỘNG, ĐA THÁNG/NĂM & THÀNH TỰU", sec4)
+    end3 = info_card(r, 1, split_c, "🧩  3. TÙY BIẾN THÓI QUEN & MỤC TIÊU NĂM", sec3)
+    end4 = info_card(r, split_c + 1, last_c, "🏆  4. LỊCH ĐỘNG, ĐA THÁNG/NĂM & THÀNH TỰU", sec4)
     r = max(end3, end4) + 1
     cv.row(r - 1, 12)
 
@@ -200,9 +203,12 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     r_cfg = r
     cv.row(r_cfg, 26)
     sec5_title = (
-        "⚡  5. HOẠT ẢNH TIẾN HÓA 7 GIAI ĐOẠN (DIGIVOLUTION 0% → 100%) & TÙY CHỈNH NGƯỠNG"
-        if is_7 else
-        "🎨  5. HOẠT ẢNH 6 GIAI ĐOẠN (LIVE GROWTH ANIMATION) & TÙY CHỈNH NGƯỠNG"
+        "⚡  5. HOẠT ẢNH TIẾN HÓA 8 GIAI ĐOẠN (ULTRA DIGIVOLUTION 0% → 100%) & TÙY CHỈNH NGƯỠNG"
+        if is_8 else (
+            "⚡  5. HOẠT ẢNH TIẾN HÓA 7 GIAI ĐOẠN (DIGIVOLUTION 0% → 100%) & TÙY CHỈNH NGƯỠNG"
+            if is_7 else
+            "🎨  5. HOẠT ẢNH 6 GIAI ĐOẠN (LIVE GROWTH ANIMATION) & TÙY CHỈNH NGƯỠNG"
+        )
     )
     cv.merge(r_cfg, 1, r_cfg, last_c, sec5_title,
              bold=True, font_size=10.5, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
@@ -218,89 +224,151 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
         cv.hline(cur_r, 1, last_c, t.line)
         cur_r += 1
 
-    # Threshold bar — 3 thresholds for 6-stage, 4 thresholds (2 neat rows) for 7-stage Digimon!
+    # Threshold bar — 3 thresholds (6-stage), 4 thresholds (7-stage), or 5 thresholds (8-stage Ultra!)
     r_thr = cur_r
-    if is_7:
+    guide_sprite_slots = []
+    if is_8:
         cv.row(r_thr, 26)
         cv.row(r_thr + 1, 26)
-        # Row 1: Stage 2 (20%) & Stage 3 (40%)
-        cv.merge(r_thr, 1, r_thr, 2, "Ngưỡng Stage 2 (Baby II):", bold=True, font_size=9.2, align="center", bg_color=t.soft, font_color=t.ink)
-        cv.put(r_thr, 3, 0.20, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
-        cv.merge(r_thr, 4, r_thr, 6, "Ngưỡng Stage 3 (Rookie):", bold=True, font_size=9.2, align="center", bg_color=t.soft, font_color=t.ink)
-        cv.put(r_thr, 7, 0.40, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
-        # Row 2: Stage 4 (60%) & Stage 5 / Grown Ultimate (80%)
-        cv.merge(r_thr + 1, 1, r_thr + 1, 2, "Ngưỡng Stage 4 (Champion):", bold=True, font_size=9.2, align="center", bg_color=t.soft, font_color=t.ink)
-        cv.put(r_thr + 1, 3, 0.60, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
-        cv.merge(r_thr + 1, 4, r_thr + 1, 6, "Ngưỡng Stage 5 • Đạt (Ultimate):", bold=True, font_size=9.2, align="center", bg_color=t.soft, font_color=t.ink)
-        cv.put(r_thr + 1, 7, 0.80, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
-        wb.define_name("CFG_THR_0", f"={q}!{acell(r_thr, 3)}")
-        wb.define_name("CFG_THR_1", f"={q}!{acell(r_thr, 7)}")
-        wb.define_name("CFG_THR_2", f"={q}!{acell(r_thr + 1, 3)}")
-        wb.define_name("CFG_THR_3", f"={q}!{acell(r_thr + 1, 7)}")
-        cv.grid(r_thr, 1, r_thr + 1, last_c, t.line)
-        r_shead = r_thr + 2
-    else:
-        cv.row(r_thr, 28)
-        cv.put(r_thr, 1, "Ngưỡng Stage 2:", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
-        cv.put(r_thr, 2, 0.25, bold=True, font_size=10, align="center", num_format="0%",
-               bg_color=t.warn_fill, font_color=t.primary_dark)
-        cv.put(r_thr, 3, "Ngưỡng Stage 3:", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
-        cv.put(r_thr, 4, 0.50, bold=True, font_size=10, align="center", num_format="0%",
-               bg_color=t.warn_fill, font_color=t.primary_dark)
-        cv.put(r_thr, 5, "Ngưỡng Đạt (Grown):", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
-        cv.put(r_thr, 6, 0.75, bold=True, font_size=10, align="center", num_format="0%",
-               bg_color=t.warn_fill, font_color=t.primary_dark)
-        wb.define_name("CFG_THR_1", f"={q}!{acell(r_thr, 2)}")
-        wb.define_name("CFG_THR_2", f"={q}!{acell(r_thr, 4)}")
-        wb.define_name("CFG_THR_3", f"={q}!{acell(r_thr, 6)}")
-        cv.hline(r_thr, 1, 6, t.line)
-        r_shead = r_thr + 1
+        # Row 1 (3 thresholds across B:I -> 2+1, 2+1, 1+1? Better: clean 2-col pairs across 8 cols -> 3 pairs + final!)
+        # Actually: Row 1: Stage 2 (15%) [1..2, 3] | Stage 3 (30%) [4..5, 6] | Stage 4 (50%) [7, 8] -> clean!
+        cv.merge(r_thr, 1, r_thr, 2, "Ngưỡng Stage 2 (Baby II):", bold=True, font_size=9.0, align="center", bg_color=t.soft, font_color=t.ink)
+        cv.put(r_thr, 3, 0.15, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+        cv.merge(r_thr, 4, r_thr, 5, "Ngưỡng Stage 3 (Rookie):", bold=True, font_size=9.0, align="center", bg_color=t.soft, font_color=t.ink)
+        cv.put(r_thr, 6, 0.30, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+        cv.put(r_thr, 7, "Stage 4 (Champion):", bold=True, font_size=8.8, align="center", bg_color=t.soft, font_color=t.ink)
+        cv.put(r_thr, 8, 0.50, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+        # Row 2: Stage 5 (70%) [1..2, 3] | Stage 6 Mega / Grown (85%) [4..5, 6] | Stage 7 Ultra/Burst [7..8]
+        cv.merge(r_thr + 1, 1, r_thr + 1, 2, "Ngưỡng Stage 5 (Ultimate):", bold=True, font_size=9.0, align="center", bg_color=t.soft, font_color=t.ink)
+        cv.put(r_thr + 1, 3, 0.70, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+        cv.merge(r_thr + 1, 4, r_thr + 1, 5, "Ngưỡng Stage 6 • Đạt (Mega):", bold=True, font_size=9.0, align="center", bg_color=t.soft, font_color=t.ink)
+        cv.put(r_thr + 1, 6, 0.85, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+        cv.merge(r_thr + 1, 7, r_thr + 1, 8, "Stage 7 Ultra / Burst: 100% ✨", bold=True, font_size=9.0, align="center", bg_color=t.primary, font_color=t.on_primary)
 
-    # Stage headers, airy 94pt sprite row, descriptions (6 stages OR 7 Digimon stages!)
-    r_simg = r_shead + 1
-    r_sdesc = r_shead + 2
-    cv.row(r_shead, 26 if is_7 else 24)
-    cv.row(r_simg, 96 if is_7 else 94)
-    cv.row(r_sdesc, 34 if is_7 else 24)
-    if is_7:
-        snames = t.stage_names or ["Digi-Egg", "Baby I", "Baby II", "Rookie", "Champion", "Ultimate", "Mega"]
+        wb.define_name("CFG_THR_M1", f"={q}!{acell(r_thr, 3)}")
+        wb.define_name("CFG_THR_0", f"={q}!{acell(r_thr, 6)}")
+        wb.define_name("CFG_THR_1", f"={q}!{acell(r_thr, 8)}")
+        wb.define_name("CFG_THR_2", f"={q}!{acell(r_thr + 1, 3)}")
+        wb.define_name("CFG_THR_3", f"={q}!{acell(r_thr + 1, 6)}")
+        cv.grid(r_thr, 1, r_thr + 1, last_c, t.line)
+
+        # Clean 2-Row x 4-Card Evolution Gallery (ZERO squished text or sprites!)
+        snames = t.stage_names or ["Digi-Egg", "Baby I", "Baby II", "Rookie", "Champion", "Ultimate", "Mega", "Ultra"]
         pct_subs = [
-            "0%\n(Chờ nở)",
-            "1% – 19%\n(Baby I)",
-            "20% – 39%\n(Baby II)",
-            "40% – 59%\n(Rookie)",
-            "60% – 79%\n(Champion)",
-            "80% – 99%\n(Ultimate)",
-            "100% MEGA ✨\n(Tối thượng!)",
+            "0% (Chờ nở)",
+            "1% – 14% (Baby I)",
+            "15% – 29% (Baby II)",
+            "30% – 49% (Rookie)",
+            "50% – 69% (Champion)",
+            "70% – 84% (Ultimate)",
+            "85% – 99% (Mega • Đạt)",
+            "100% ULTRA / BURST ✨",
         ]
-        stage_meta = [(f"S{i} • {snames[i]}", pct_subs[i]) for i in range(7)]
+        r_cur = r_thr + 2
+        for row_grp in (range(0, 4), range(4, 8)):
+            r_sh, r_si, r_sd = r_cur, r_cur + 1, r_cur + 2
+            cv.row(r_sh, 26)
+            cv.row(r_si, 94)
+            cv.row(r_sd, 24)
+            for pos, idx in enumerate(row_grp):
+                c1, c2 = 1 + pos * 2, 2 + pos * 2
+                is_final = (idx == 7)
+                cv.merge(r_sh, c1, r_sh, c2, f"S{idx} • {snames[idx]}", bold=True, font_size=9.4, align="center",
+                         bg_color=(t.primary if is_final else t.soft),
+                         font_color=(t.on_primary if is_final else t.ink))
+                if universal:
+                    cv.merge(r_si, c1, r_si, c2, "", align="center", bg_color=t.card)
+                    guide_sprite_slots.append({"name": f"Guide_Stage{idx}", "sheet": GUIDE_SHEET,
+                                               "r1": r_si, "c1": c1, "r2": r_si, "c2": c2,
+                                               "formula": f"=_Assets!$B${2 + idx}"})
+                else:
+                    cv.merge(r_si, c1, r_si, c2, f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_{idx}.png")',
+                             align="center", bg_color=t.card)
+                cv.merge(r_sd, c1, r_sd, c2, pct_subs[idx], bold=is_final, font_size=8.8, align="center",
+                         bg_color=(t.soft if is_final else t.card),
+                         font_color=(t.primary_dark if is_final else t.muted))
+            r_cur += 3
+        r_sdesc = r_cur - 1
+        cv.grid(r_thr + 2, 1, r_sdesc, last_c, t.line)
     else:
-        stage_meta = [
-            ("Stage 0", "0% (Chưa bắt đầu)"),
-            ("Stage 1", "1% – 24% (Khởi động)"),
-            ("Stage 2", "25% – 49% (Đang lớn)"),
-            ("Stage 3", "50% – 74% (Ổn định)"),
-            ("Stage 4", "75% – 99% (Sắp trọn vẹn)"),
-            ("Stage 5", "100% (Hoàn hảo ✨)"),
-        ]
-    guide_sprite_slots = []
-    for idx, (st_title, st_sub) in enumerate(stage_meta):
-        c = 1 + idx
-        is_mega = is_7 and (idx == 6)
-        cv.put(r_shead, c, st_title, bold=True, font_size=(9.0 if is_7 else 9.5), align="center",
-               bg_color=(t.primary if is_mega else t.soft),
-               font_color=(t.on_primary if is_mega else t.ink))
-        if universal:
-            cv.put(r_simg, c, "", align="center", bg_color=t.card)
-            guide_sprite_slots.append({"name": f"Guide_Stage{idx}", "sheet": GUIDE_SHEET,
-                                       "r1": r_simg, "c1": c, "r2": r_simg, "c2": c,
-                                       "formula": f"=_Assets!$B${2 + idx}"})
+        if is_7:
+            cv.row(r_thr, 26)
+            cv.row(r_thr + 1, 26)
+            cv.merge(r_thr, 1, r_thr, 2, "Ngưỡng Stage 2 (Baby II):", bold=True, font_size=9.2, align="center", bg_color=t.soft, font_color=t.ink)
+            cv.put(r_thr, 3, 0.20, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+            cv.merge(r_thr, 4, r_thr, 6, "Ngưỡng Stage 3 (Rookie):", bold=True, font_size=9.2, align="center", bg_color=t.soft, font_color=t.ink)
+            cv.put(r_thr, 7, 0.40, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+            cv.merge(r_thr + 1, 1, r_thr + 1, 2, "Ngưỡng Stage 4 (Champion):", bold=True, font_size=9.2, align="center", bg_color=t.soft, font_color=t.ink)
+            cv.put(r_thr + 1, 3, 0.60, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+            cv.merge(r_thr + 1, 4, r_thr + 1, 6, "Ngưỡng Stage 5 • Đạt (Ultimate):", bold=True, font_size=9.2, align="center", bg_color=t.soft, font_color=t.ink)
+            cv.put(r_thr + 1, 7, 0.80, bold=True, font_size=10, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+            wb.define_name("CFG_THR_0", f"={q}!{acell(r_thr, 3)}")
+            wb.define_name("CFG_THR_1", f"={q}!{acell(r_thr, 7)}")
+            wb.define_name("CFG_THR_2", f"={q}!{acell(r_thr + 1, 3)}")
+            wb.define_name("CFG_THR_3", f"={q}!{acell(r_thr + 1, 7)}")
+            cv.grid(r_thr, 1, r_thr + 1, last_c, t.line)
+            r_shead = r_thr + 2
         else:
-            cv.put(r_simg, c, f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_{idx}.png")', align="center", bg_color=t.card)
-        cv.put(r_sdesc, c, st_sub, bold=is_mega, font_size=8.6, align="center", text_wrap=True,
-               bg_color=(t.soft if is_mega else t.card),
-               font_color=(t.primary_dark if is_mega else t.muted))
-    cv.grid(r_shead, 1, r_sdesc, last_c, t.line)
+            cv.row(r_thr, 28)
+            cv.put(r_thr, 1, "Ngưỡng Stage 2:", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
+            cv.put(r_thr, 2, 0.25, bold=True, font_size=10, align="center", num_format="0%",
+                   bg_color=t.warn_fill, font_color=t.primary_dark)
+            cv.put(r_thr, 3, "Ngưỡng Stage 3:", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
+            cv.put(r_thr, 4, 0.50, bold=True, font_size=10, align="center", num_format="0%",
+                   bg_color=t.warn_fill, font_color=t.primary_dark)
+            cv.put(r_thr, 5, "Ngưỡng Đạt (Grown):", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
+            cv.put(r_thr, 6, 0.75, bold=True, font_size=10, align="center", num_format="0%",
+                   bg_color=t.warn_fill, font_color=t.primary_dark)
+            wb.define_name("CFG_THR_1", f"={q}!{acell(r_thr, 2)}")
+            wb.define_name("CFG_THR_2", f"={q}!{acell(r_thr, 4)}")
+            wb.define_name("CFG_THR_3", f"={q}!{acell(r_thr, 6)}")
+            cv.hline(r_thr, 1, 6, t.line)
+            r_shead = r_thr + 1
+
+        # Stage headers, airy 94pt sprite row, descriptions (6 stages OR 7 Digimon stages!)
+        r_simg = r_shead + 1
+        r_sdesc = r_shead + 2
+        cv.row(r_shead, 26 if is_7 else 24)
+        cv.row(r_simg, 96 if is_7 else 94)
+        cv.row(r_sdesc, 34 if is_7 else 24)
+        if is_7:
+            snames = t.stage_names or ["Digi-Egg", "Baby I", "Baby II", "Rookie", "Champion", "Ultimate", "Mega"]
+            pct_subs = [
+                "0%\n(Chờ nở)",
+                "1% – 19%\n(Baby I)",
+                "20% – 39%\n(Baby II)",
+                "40% – 59%\n(Rookie)",
+                "60% – 79%\n(Champion)",
+                "80% – 99%\n(Ultimate)",
+                "100% MEGA ✨\n(Tối thượng!)",
+            ]
+            stage_meta = [(f"S{i} • {snames[i]}", pct_subs[i]) for i in range(7)]
+        else:
+            stage_meta = [
+                ("Stage 0", "0% (Chưa bắt đầu)"),
+                ("Stage 1", "1% – 24% (Khởi động)"),
+                ("Stage 2", "25% – 49% (Đang lớn)"),
+                ("Stage 3", "50% – 74% (Ổn định)"),
+                ("Stage 4", "75% – 99% (Sắp trọn vẹn)"),
+                ("Stage 5", "100% (Hoàn hảo ✨)"),
+            ]
+        for idx, (st_title, st_sub) in enumerate(stage_meta):
+            c = 1 + idx
+            is_mega = is_7 and (idx == 6)
+            cv.put(r_shead, c, st_title, bold=True, font_size=(8.8 if is_7 else 9.5), align="center",
+                   bg_color=(t.primary if is_mega else t.soft),
+                   font_color=(t.on_primary if is_mega else t.ink))
+            if universal:
+                cv.put(r_simg, c, "", align="center", bg_color=t.card)
+                guide_sprite_slots.append({"name": f"Guide_Stage{idx}", "sheet": GUIDE_SHEET,
+                                           "r1": r_simg, "c1": c, "r2": r_simg, "c2": c,
+                                           "formula": f"=_Assets!$B${2 + idx}"})
+            else:
+                cv.put(r_simg, c, f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_{idx}.png")', align="center", bg_color=t.card)
+            cv.put(r_sdesc, c, st_sub, bold=is_mega, font_size=8.6, align="center", text_wrap=True,
+                   bg_color=(t.soft if is_mega else t.card),
+                   font_color=(t.primary_dark if is_mega else t.muted))
+        cv.grid(r_shead, 1, r_sdesc, last_c, t.line)
 
     # Tip Box — ZERO markdown backticks, generous height + indent=1!
     r_tip = r_sdesc + 1
@@ -360,5 +428,5 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     return {
         "linked_pictures": guide_sprite_slots,
         "guide_last_row": r_foot + 2,
-        "guide_last_col": "I" if is_7 else "H",
+        "guide_last_col": "J" if is_8 else ("I" if is_7 else "H"),
     }

@@ -1,7 +1,7 @@
-# Habit Tracker Collection v3.7 Installer (PowerShell 5.1+ / 7+)
+# Habit Tracker Collection v3.8 Installer (PowerShell 5.1+ / 7+)
 <#
 .SYNOPSIS
-    Habit Tracker Collection v3.7 - Interactive Zero-Install Downloader (Windows PowerShell)
+    Habit Tracker Collection v3.8 - Interactive Zero-Install Downloader (Windows PowerShell)
 .DESCRIPTION
     Run in 1 line:
         irm https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu/main/install.ps1 | iex
@@ -61,6 +61,13 @@ $Templates = @(
     @{ Id = 38; Cat = "DIGIMON"; Stem = "38_Digimon_Gatomon_Light";           Title = "Digimon Gatomon -> LovelyAngemon (7 Cap Tien Hoa)" }
     @{ Id = 39; Cat = "DIGIMON"; Stem = "39_Digimon_Gabumon_Friendship";      Title = "Digimon Gabumon -> MetalGarurumon (7 Cap Tien Hoa)" }
     @{ Id = 40; Cat = "DIGIMON"; Stem = "40_Digimon_Piyomon_Love";            Title = "Digimon Piyomon -> Phoenixmon (7 Cap Tien Hoa)" }
+    @{ Id = 41; Cat = "DIGIMON"; Stem = "41_Digimon_Patamon_Mythical";        Title = "Digimon Patamon -> Griffomon (7 Cap Than Thoai)" }
+    @{ Id = 42; Cat = "DIGIMON"; Stem = "42_Digimon_Palmon_Rose";             Title = "Digimon Palmon -> Rosemon (7 Cap Tien Hoa)" }
+    @{ Id = 43; Cat = "DIGIMON"; Stem = "43_Digimon_Gomamon_Arctic";          Title = "Digimon Gomamon -> AncientMegatheriummon (8 Cap)" }
+    @{ Id = 44; Cat = "DIGIMON"; Stem = "44_Digimon_Guilmon_Crimson";         Title = "Digimon Guilmon -> Gallantmon Crimson (8 Cap)" }
+    @{ Id = 45; Cat = "DIGIMON"; Stem = "45_Digimon_Terriermon_Mint";         Title = "Digimon Terriermon -> MegaGargomon (7 Cap)" }
+    @{ Id = 46; Cat = "DIGIMON"; Stem = "46_Digimon_Renamon_Kuzuhamon";       Title = "Digimon Renamon -> Kuzuhamon Miko (8 Cap)" }
+    @{ Id = 47; Cat = "DIGIMON"; Stem = "47_Digimon_Tentomon_Electro";        Title = "Digimon Tentomon -> HerakleKabuterimon (7 Cap)" }
 )
 
 function Resolve-TargetFolder {
@@ -131,16 +138,16 @@ function Parse-TemplateIds([string]$Raw) {
             $a = [int]$Matches[1]; $b = [int]$Matches[2]
             if ($a -gt $b) { $tmp = $a; $a = $b; $b = $tmp }
             for ($n = $a; $n -le $b; $n++) {
-                if ($n -ge 1 -and $n -le 40 -and -not $selectedIds.Contains($n)) { $selectedIds.Add($n) }
+                if ($n -ge 1 -and $n -le 47 -and -not $selectedIds.Contains($n)) { $selectedIds.Add($n) }
             }
         } elseif ($u -match '^\d+$') {
             $n = [int]$u
-            if ($n -ge 1 -and $n -le 40 -and -not $selectedIds.Contains($n)) { $selectedIds.Add($n) }
+            if ($n -ge 1 -and $n -le 47 -and -not $selectedIds.Contains($n)) { $selectedIds.Add($n) }
         }
     }
     if ($all) {
         $selectedIds.Clear()
-        1..40 | ForEach-Object { $selectedIds.Add($_) }
+        1..47 | ForEach-Object { $selectedIds.Add($_) }
     }
     return @{ Ids = @($selectedIds); Quit = $quit }
 }
@@ -150,15 +157,15 @@ New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 
 Write-Host ""
 Write-Host "========================================================================" -ForegroundColor Magenta
-Write-Host "   HABIT TRACKER COLLECTION v3.7 - BY DYU (40 THEMES x 4 EDITIONS)" -ForegroundColor Yellow
-Write-Host "   Turbo 6/7-Stage Native Sprite Engine | FX Suite | Ctrl+Z Undo | Lock" -ForegroundColor Cyan
+Write-Host "   HABIT TRACKER COLLECTION v3.8 - BY DYU (47 THEMES x 4 EDITIONS)" -ForegroundColor Yellow
+Write-Host "   Turbo 6/7/8-Stage Native Sprite Engine | FX Suite | Ctrl+Z Undo" -ForegroundColor Cyan
 Write-Host "========================================================================" -ForegroundColor Magenta
 Write-Host "  Thu muc luu file: $OutDir" -ForegroundColor Green
 Write-Host ""
 Write-Host "  BUOC 1 - CHON PHIEN BAN PHU HOP (THEO THU TU UU TIEN):" -ForegroundColor White
 Write-Host "  ----------------------------------------------------------------------" -ForegroundColor DarkGray
-Write-Host "  [1] Pro Interactive (.xlsm)  [* KHUYEN DUNG SO 1 - EXCEL 365 TURBO v3.7 *]" -ForegroundColor Green
-Write-Host "      -> Sieu toc ~29-54ms + Full FX Nay/Phao hoa/Toast + Ctrl+Z / Nut Undo" -ForegroundColor DarkGray
+Write-Host "  [1] Pro Interactive (.xlsm)  [* KHUYEN DUNG SO 1 - EXCEL 365 TURBO v3.8 *]" -ForegroundColor Green
+Write-Host "      -> Sieu toc ~25-54ms + Full FX Nay/Phao hoa/Toast + Ctrl+Z / Nut Undo" -ForegroundColor DarkGray
 Write-Host "         + Khoa bao ve cong thuc + Tu luu Da Ngay/Thang/Nam (100% Offline)!" -ForegroundColor DarkGray
 Write-Host "  [2] Excel Universal Offline (.xlsx)  [Excel 2016/2019/2021/365]" -ForegroundColor Cyan
 Write-Host "      -> Khong Macro, 0 loi TRUE/FALSE tren Excel cu, du hoat anh offline!" -ForegroundColor DarkGray
@@ -185,10 +192,10 @@ if ($edChoice -eq "M" -or $edChoice -eq "MOBILE") { $edChoice = "4" }
 if ($edChoice -notin @("1", "2", "3", "4")) { $edChoice = "1" }
 
 Write-Host ""
-Write-Host "  BUOC 2 - CHON MAU THOI QUEN (40 CHU DE THAM MY, LINH VAT & DIGIMON):" -ForegroundColor White
+Write-Host "  BUOC 2 - CHON MAU THOI QUEN (47 CHU DE THAM MY, LINH VAT & DIGIMON):" -ForegroundColor White
 Write-Host "  ----------------------------------------------------------------------" -ForegroundColor DarkGray
 $CatBlocks = @(
-    @{ Key = "DIGIMON"; Label = "--- [MOI v3.7] DIGIMON 7-STAGE EVOLUTION (Veemon, Agumon, Gatomon, Gabumon, Piyomon) ---"; Color = "Cyan" }
+    @{ Key = "DIGIMON"; Label = "--- [MOI v3.8] 12 BO DIGIMON 7 & 8 CAP TIEN HOA (#36-#47) ---"; Color = "Cyan" }
     @{ Key = "PETS";   Label = "--- THU CUNG SIEU CUTE (Mochi Cat, Bunny, Milk & Mocha, Shiba, Akita, Alpaca...) ---"; Color = "Yellow" }
     @{ Key = "NATURE"; Label = "--- HOA & THIEN NHIEN (Sakura Minimalist, Huong Duong, Xuong Rong, Hong Nhung...) ---"; Color = "Green" }
     @{ Key = "STYLE";  Label = "--- PHONG CACH & MUC TIEU (Dream Home, Candy Jar, Rainbow, Aurora RPG, Matcha...) ---"; Color = "Cyan" }
@@ -202,10 +209,10 @@ foreach ($blk in $CatBlocks) {
     }
 }
 Write-Host "  ----------------------------------------------------------------------" -ForegroundColor DarkGray
-Write-Host "  [A]   Tai TOAN BO 40 mau (Download All 40)" -ForegroundColor Green
+Write-Host "  [A]   Tai TOAN BO 47 mau (Download All 47)" -ForegroundColor Green
 Write-Host "  [0]   Thoat" -ForegroundColor DarkGray
 Write-Host ""
-Write-Host "  Goi y: Nhap 1 so (vd: 36), nhieu so (vd: 36,37,38,39,40), dai (vd: 36-40), hoac A" -ForegroundColor Yellow
+Write-Host "  Goi y: Nhap 1 so (vd: 44), nhieu so (vd: 41,44,46), dai (vd: 41-47), hoac A" -ForegroundColor Yellow
 
 if ($env:HABIT_CHOICE) {
     $choice = $env:HABIT_CHOICE

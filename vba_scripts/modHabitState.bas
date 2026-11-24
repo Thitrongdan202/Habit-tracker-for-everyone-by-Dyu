@@ -60,20 +60,20 @@ Private gLastAHero As Long
 Private gLastBHero As Long
 Private gLastAMonth(1 To 12) As Long
 
-' ---- O(1) Direct Shape Object Reference Caches (supports 6-stage 0..5 & 7-stage Digimon 0..6!) ----
+' ---- O(1) Direct Shape Object Reference Caches (supports 6-stage 0..5, 7-stage 0..6, 8-stage 0..7!) ----
 Private gMaxStageCached As Boolean
 Private gMaxStageVal As Long
 Private gShpCachedM As Boolean
-Private gDayShp(1 To 31, 0 To 6) As Shape
-Private gMHeroShp(0 To 6) As Shape
+Private gDayShp(1 To 31, 0 To 7) As Shape
+Private gMHeroShp(0 To 7) As Shape
 Private gShpCachedA As Boolean
-Private gAMonthShp(1 To 12, 0 To 6) As Shape
-Private gAHeroShp(0 To 6) As Shape
-Private gBHeroShp(0 To 6) As Shape
+Private gAMonthShp(1 To 12, 0 To 7) As Shape
+Private gAHeroShp(0 To 7) As Shape
+Private gBHeroShp(0 To 7) As Shape
 Private gShpCachedD As Boolean
-Private gDHeroShp(0 To 6) As Shape
+Private gDHeroShp(0 To 7) As Shape
 Private gShpCachedG As Boolean
-Private gGHeroShp(0 To 6) As Shape
+Private gGHeroShp(0 To 7) As Shape
 
 ' ---- Non-Blocking Toast State (O(1) reuse + guaranteed zero-orphan delete on close!) ----
 Private gToastDueTime As Double
@@ -187,7 +187,7 @@ Private Function GetMaxStage() As Long
     If IsNumeric(v) Then
         Dim m As Long
         m = CLng(v)
-        If m >= 5 And m <= 6 Then
+        If m >= 5 And m <= 7 Then
             gMaxStageVal = m
             gMaxStageCached = True
             GetMaxStage = gMaxStageVal
@@ -2010,7 +2010,7 @@ Public Sub SyncSpritesFromAssets()
     wsAssets.Visible = xlSheetVisible
 
     ' Locate user shapes in `_Assets!B2:B(2+maxS)` (stage 0..maxS)
-    Dim assetShp(0 To 6) As Shape
+    Dim assetShp(0 To 7) As Shape
     Dim shp As Shape, rr As Long
     For Each shp In wsAssets.Shapes
         If Left$(shp.Name, 4) <> "BTN_" Then
