@@ -1836,3 +1836,851 @@ def add_digimon_crest_panel(wb, cv: Canvas, tr: TrackerRefs, kind: str = "veemon
     cv.box(r0, C_R0, r0 + 5, C_RE, t.line)
 
 
+# =========================================================================== #
+#  BATCH 7 — 13 BESPOKE CAPYBARA CHILL COLLECTION ADDONS (#48–#60, v3.9)
+#  ANTI-CLONE DESIGN: Every single one of the 13 themes has its own distinct
+#  dashboard structure, metrics, interactivity, and visual silhouette!
+# =========================================================================== #
+
+# 48. Avocado Zen: Hydration + Healthy Meal Score + Avocado Chill Rituals & Meal Note
+def add_capybara_avocado_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 480):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23); cv.row(r0 + 1, 22); cv.row(r0 + 2, 22); cv.row(r0 + 3, 10)
+    for rr in range(r0 + 4, r0 + 8):
+        cv.row(rr, 22)
+
+    cv.put(r0, C_NAME, "🥑  AVOCADO ZEN WELLNESS LOG", bold=True, font_size=9.3, align="left", indent=1,
+           bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_D0, r0, C_D31, "NƯỚC UỐNG MỖI NGÀY (LÍT)  •  ĐIỂM BỮA ĂN LÀNH MẠNH (1–5)",
+             bold=True, font_size=8.4, align="center", bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_R0, r0, C_RE, "🥑  ZEN BALANCE", bold=True, font_size=8.5, align="center",
+             bg_color=t.primary_dark, font_color=t.on_primary)
+
+    r_w, r_m = r0 + 1, r0 + 2
+    cv.put(r_w, C_NAME, "💧  Nước lọc / Trà xanh (Lít)", bold=True, font_size=8.8, align="left", indent=1,
+           bg_color=t.soft, font_color=t.ink)
+    cv.put(r_m, C_NAME, "🥗  Bữa ăn lành mạnh (1–5)", bold=True, font_size=8.8, align="left", indent=1,
+           bg_color=t.card, font_color=t.ink)
+
+    rnd = random.Random(seed)
+    for k in range(1, 32):
+        c = day_col(k)
+        if k > 22:
+            cv.put(r_w, c, "", align="center", font_size=8.3, bg_color=t.card, num_format="0.0")
+            cv.put(r_m, c, "", align="center", font_size=8.5, bg_color=t.card, num_format="0")
+        else:
+            cv.put(r_w, c, rnd.choice([1.8, 2.0, 2.2, 2.5, 2.5, 2.8, 2.0, 2.4]),
+                   align="center", font_size=8.3, bg_color=t.card, font_color=t.ink, num_format="0.0")
+            cv.put(r_m, c, rnd.choice([4, 4, 5, 4, 5, 3, 5, 4]),
+                   align="center", font_size=8.8, bold=True, bg_color=t.card, font_color=t.ink, num_format="0")
+
+    w_rng = rng(r_w, C_D0, r_w, C_D31)
+    m_rng = rng(r_m, C_D0, r_m, C_D31)
+    cv.unlock(r_w, C_D0, r_m, C_D31)
+    cv.grid(r_w, C_NAME, r_m, C_D31, t.line)
+    cv.box(r0, C_NAME, r_m, C_D31, t.line)
+    ws.conditional_format(w_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 1.0,
+                                  "mid_type": "num", "mid_value": 2.0, "max_type": "num", "max_value": 3.0,
+                                  "min_color": "#FFFDF7", "mid_color": "#ECFCCB", "max_color": "#A3E635"})
+    ws.conditional_format(m_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 1,
+                                  "mid_type": "num", "mid_value": 3, "max_type": "num", "max_value": 5,
+                                  "min_color": "#FEFCE8", "mid_color": "#D9F99D", "max_color": "#65A30D"})
+
+    cv.merge(r_w, C_R0, r_w, C_R0 + 2, "Nước TB / ngày:", font_size=8.8, align="left", indent=1,
+             bg_color=t.card, font_color=t.muted)
+    cv.merge(r_w, C_R0 + 3, r_w, C_RE, f"=IFERROR(AVERAGE({w_rng}),0)", bold=True, font_size=10,
+             align="center", num_format='0.0" L"', bg_color=t.soft, font_color=t.primary_dark)
+    cv.merge(r_m, C_R0, r_m, C_R0 + 2, "Bữa lành mạnh TB:", font_size=8.8, align="left", indent=1,
+             bg_color=t.card, font_color=t.muted)
+    cv.merge(r_m, C_R0 + 3, r_m, C_RE, f"=IFERROR(AVERAGE({m_rng}),0)", bold=True, font_size=10,
+             align="center", num_format='0.0" / 5"', bg_color=t.card, font_color="#854D0E")
+    cv.hline(r_w, C_R0, C_RE, t.line)
+    cv.box(r0, C_R0, r_m, C_RE, t.line)
+
+    # Bottom 2-column Avocado Chill Rituals & Meal Quick Note + Avocado King Rank Card
+    rb0 = r0 + 4
+    c_mid = 16
+    cv.merge(rb0, C_NAME, rb0, c_mid, "🥑  AVOCADO MEAL & HYDRATION QUICK NOTE", bold=True, font_size=9,
+             align="left", indent=1, bg_color="#65A30D", font_color="#FFFFFF")
+    notes_l = [
+        "• Sáng: Bánh mì bơ nghiền trứng luộc + 1 ly nước ấm chanh tươi.",
+        "• Trưa: Cơm gạo lứt, ức gà áp chảo, salad rau xanh dầu ô-liu.",
+        "• Tối: Ăn nhẹ trước 19h30, uống trà hoa cúc thả lỏng trước khi ngủ.",
+    ]
+    for i, txt in enumerate(notes_l):
+        cv.merge(rb0 + 1 + i, C_NAME, rb0 + 1 + i, c_mid, txt, font_size=9, align="left", indent=1,
+                 bg_color=t.card, font_color=t.ink)
+        cv.hline(rb0 + 1 + i, C_NAME, c_mid, t.line)
+    cv.unlock(rb0 + 1, C_NAME, rb0 + 3, c_mid)
+    cv.box(rb0, C_NAME, rb0 + 3, c_mid, t.line)
+
+    cv.merge(rb0, c_mid + 2, rb0, C_D31, "🌿  CHILL CAPYBARA ZEN RITUALS", bold=True, font_size=9,
+             align="left", indent=1, bg_color="#854D0E", font_color="#FFFFFF")
+    notes_r = [
+        "• Không vội vàng: Hít thở sâu 4-7-8 mỗi khi thấy căng thẳng.",
+        "• Chăm chút từng bước nhỏ như Capybara nằm thuyền bơ bình thản.",
+        "• Cuối tuần tự thưởng 1 ly sinh tố bơ hoặc đi dạo công viên xanh.",
+    ]
+    for i, txt in enumerate(notes_r):
+        cv.merge(rb0 + 1 + i, c_mid + 2, rb0 + 1 + i, C_D31, txt, font_size=9, align="left", indent=1,
+                 bg_color=t.card, font_color=t.ink)
+        cv.hline(rb0 + 1 + i, c_mid + 2, C_D31, t.line)
+    cv.unlock(rb0 + 1, c_mid + 2, rb0 + 3, C_D31)
+    cv.box(rb0, c_mid + 2, rb0 + 3, C_D31, t.line)
+
+    ov = tr.s["overall"]
+    cv.merge(rb0, C_R0, rb0, C_RE, "👑  AVOCADO KING RANK", bold=True, font_size=8.8, align="center",
+             bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(rb0 + 1, C_R0, rb0 + 2, C_RE,
+             f'=IF({ov}>=0.999,"👑 Vua Bơ Tối Thượng!",IF({ov}>=0.75,"🥑 Áo Choàng Bơ Xanh",'
+             f'IF({ov}>=0.5,"💚 Ôm Bơ Hạnh Phúc","🌱 Đang Nằm Thuyền Bơ")))',
+             bold=True, font_size=10, align="center", bg_color=t.soft, font_color=t.primary_dark,
+             font_name=t.font_title)
+    cv.merge(rb0 + 3, C_R0, rb0 + 3, C_RE,
+             f'="🥑 Ngày Bơ Chín: "&{tr.s["grown"]}&"d  •  🔥 Best: "&{tr.s["best"]}&"d"',
+             bold=True, font_size=8.5, align="center", bg_color=t.card, font_color="#854D0E")
+    cv.box(rb0, C_R0, rb0 + 3, C_RE, t.line)
+
+
+# 49. Yuzu Onsen Spa: Evening Wind-Down Log + 5 Weekly Onsen Calm Donut Gauges
+def add_capybara_onsen_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 490):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23); cv.row(r0 + 1, 22); cv.row(r0 + 2, 10)
+    for rr in range(r0 + 3, r0 + 8):
+        cv.row(rr, 22)
+
+    cv.put(r0, C_NAME, "🍊  YUZU ONSEN CALM METER", bold=True, font_size=9.3, align="left", indent=1,
+           bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_D0, r0, C_D31, "ĐỘ THƯ GIÃN & BÌNH AN BUỔI TỐI MỖI NGÀY (THANG 1 – 5)",
+             bold=True, font_size=8.4, align="center", bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_R0, r0, C_RE, "♨️  SPA CALM AVG", bold=True, font_size=8.5, align="center",
+             bg_color=t.primary_dark, font_color=t.on_primary)
+
+    r_clm = r0 + 1
+    cv.put(r_clm, C_NAME, "♨️  Độ thư giãn cuối ngày (1–5)", bold=True, font_size=8.8, align="left", indent=1,
+           bg_color=t.soft, font_color=t.ink)
+    rnd = random.Random(seed)
+    for k in range(1, 32):
+        c = day_col(k)
+        val = "" if k > 22 else rnd.choice([4, 4, 5, 5, 3, 4, 5, 4])
+        cv.put(r_clm, c, val, align="center", font_size=9, bold=True, bg_color=t.card,
+               font_color=t.ink, num_format="0")
+    clm_rng = rng(r_clm, C_D0, r_clm, C_D31)
+    cv.unlock(r_clm, C_D0, r_clm, C_D31)
+    cv.grid(r_clm, C_NAME, r_clm, C_D31, t.line)
+    cv.box(r0, C_NAME, r_clm, C_D31, t.line)
+    ws.conditional_format(clm_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 1,
+                                    "mid_type": "num", "mid_value": 3, "max_type": "num", "max_value": 5,
+                                    "min_color": "#FFFBF2", "mid_color": "#FED7AA", "max_color": "#FB923C"})
+    cv.merge(r_clm, C_R0, r_clm, C_RE, f"=IFERROR(AVERAGE({clm_rng}),0)", bold=True, font_size=11.5,
+             align="center", num_format='0.0" / 5 🍊"', bg_color=t.soft, font_color=t.primary_dark)
+    cv.box(r0, C_R0, r_clm, C_RE, t.line)
+
+    # 5 Weekly Onsen Calm Donut Gauges + Evening Wind-Down Card!
+    rd = r0 + 3
+    cv.merge(rd, C_NAME, rd + 4, C_NAME, "♨️  ONSEN WEEKLY GAUGES\nNhịp thư giãn 5 tuần", bold=True,
+             font_size=10, align="center", text_wrap=True, bg_color=t.card, font_color=t.primary_dark,
+             font_name=t.font_title)
+    rb = tr.calc_row_base
+    spans = [(2, 7), (8, 13), (14, 19), (20, 25), (26, 32)]
+    dcols = ["#F97316", "#EA580C", "#38BDF8", "#D97706", "#C2410C"]
+    for w, (c1, c2) in enumerate(spans):
+        hc = CALC_WK_COL0 + w
+        cv.merge(rd, c1, rd, c2, f"WEEK {w + 1}", bold=True, font_size=8.4, align="center",
+                 bg_color=t.week_head[w], font_color=t.week_on[w])
+        cv.merge(rd + 1, c1, rd + 4, c2, f"={tr.calc_q}!{acell(rb + 2, hc)}", bold=True, font_size=13,
+                 align="center", num_format="0%", bg_color=t.card, font_color=dcols[w], font_name=t.font_title)
+        dch = donut(wb, f"={tr.calc_q}!{rng(rb + 2, hc, rb + 3, hc)}", [dcols[w], t.donut_rest], hole=70)
+        place_chart(cv, dch, rd + 1, c1, rd + 4, c2, pad_x=10, pad_y=2)
+        cv.vline(c2, rd, rd + 4, t.line, where="right")
+    cv.box(rd, C_NAME, rd + 4, C_D31, t.line)
+
+    cv.merge(rd, C_R0, rd, C_RE, "🌙  EVENING WIND-DOWN NOTE", bold=True, font_size=8.6, align="center",
+             bg_color="#9A5B2C", font_color="#FFFFFF")
+    cv.merge(rd + 1, C_R0, rd + 3, C_RE,
+             "• Tắm nước ấm 10p + ngửi tinh dầu cam Yuzu.\n• Buông điện thoại 30p trước giờ đi ngủ.\n• Ghi 1 điều nhẹ lòng trong ngày.",
+             font_size=8.7, align="left", indent=1, text_wrap=True, bg_color=t.card, font_color=t.ink)
+    cv.unlock(rd + 1, C_R0, rd + 3, C_RE)
+    cv.merge(rd + 4, C_R0, rd + 4, C_RE,
+             f'="♨️ Ngày Suối Nóng: "&{tr.s["grown"]}&"d  •  ✨ 100%: "&{tr.s["perfect"]}&"d"',
+             bold=True, font_size=8.5, align="center", bg_color=t.soft, font_color=t.primary_dark)
+    cv.box(rd, C_R0, rd + 4, C_RE, t.line)
+
+
+# 50. Pip & Puddle Besties: Dual-Tone Pink/Lavender Bestie Bond & 5-Week Milestone Strip
+def add_capybara_pip_puddle_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 500):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23)
+    for rr in range(r0 + 1, r0 + 7):
+        cv.row(rr, 22)
+
+    cv.merge(r0, C_NAME, r0, C_D31, "💕  PIP & PUDDLE BESTIE BOND  •  TIẾN ĐỘ GẮN KẾT 5 TUẦN (DUAL-TONE PINK & LAVENDER)",
+             bold=True, font_size=9.2, align="left", indent=1, bg_color="#F472B6", font_color="#FFFFFF")
+    cv.merge(r0, C_R0, r0, C_RE, "🎀  DUO BOND LEVEL", bold=True, font_size=8.8, align="center",
+             bg_color="#7C3AED", font_color="#FFFFFF")
+
+    rb = tr.calc_row_base
+    spans = [(1, 6), (7, 13), (14, 19), (20, 26), (27, 32)]
+    w_bgs = ["#FCE7F3", "#EDE9FE", "#FCE7F3", "#EDE9FE", "#FDF2F8"]
+    w_fgs = ["#BE185D", "#6D28D9", "#BE185D", "#6D28D9", "#9D174D"]
+    w_bars = ["#F472B6", "#A78BFA", "#EC4899", "#8B5CF6", "#DB2777"]
+    for w, ((c1, c2), bg, fg, barc) in enumerate(zip(spans, w_bgs, w_fgs, w_bars)):
+        hc = CALC_WK_COL0 + w
+        pct_ref = f"{tr.calc_q}!{acell(rb + 2, hc)}"
+        cv.merge(r0 + 1, c1, r0 + 1, c2, f"💖 WEEK {w + 1}", bold=True, font_size=8.6,
+                 align="center", bg_color=bg, font_color=fg)
+        cv.merge(r0 + 2, c1, r0 + 2, c2, f"={pct_ref}", bold=True, font_size=11,
+                 align="center", num_format="0%", bg_color=t.card, font_color=fg, font_name=t.font_title)
+        ws.conditional_format(rng(r0 + 2, c1, r0 + 2, c2), {
+            "type": "data_bar", "bar_color": barc, "bar_solid": True,
+            "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1,
+        })
+        cv.merge(r0 + 3, c1, r0 + 3, c2,
+                 f'=IF({pct_ref}>=0.8,"💕 Besties Forever!",IF({pct_ref}>=0.5,"🧣 Chung Khăn Ấm","💤 Đang Ngủ Chung"))',
+                 italic=True, font_size=8.0, align="center", bg_color=t.page, font_color=fg)
+
+    # Bottom Shared Wins & Kindness Log (r0+4..r0+6)
+    cv.merge(r0 + 4, C_NAME, r0 + 4, C_D31, "💌  BESTIE KINDNESS & SHARED WINS • GÓC CHIA SẺ NIỀM VUI CÙNG PIP & PUDDLE",
+             bold=True, font_size=8.8, align="left", indent=1, bg_color="#EDE9FE", font_color="#5B21B6")
+    cv.merge(r0 + 5, C_NAME, r0 + 5, C_D31,
+             "• Điều ngọt ngào nhất tuần này: Gửi lời hỏi thăm / cảm ơn 1 người bạn thân thiết & cùng nhau giữ kỷ luật!",
+             font_size=9.0, align="left", indent=1, bg_color=t.card, font_color=t.ink)
+    cv.merge(r0 + 6, C_NAME, r0 + 6, C_D31,
+             "• Phần thưởng chung của đôi bạn thân: Cùng đi uống trà sữa / ăn snack ngon khi cả tuần đạt ≥ 80%!",
+             font_size=9.0, align="left", indent=1, bg_color=t.card, font_color=t.ink)
+    cv.unlock(r0 + 5, C_NAME, r0 + 6, C_D31)
+    cv.grid(r0 + 1, C_NAME, r0 + 6, C_D31, t.line)
+    cv.box(r0, C_NAME, r0 + 6, C_D31, t.line)
+
+    ov = tr.s["overall"]
+    cv.merge(r0 + 1, C_R0, r0 + 1, C_RE, "PIP & PUDDLE STATUS", bold=True, font_size=7.8,
+             align="center", bg_color="#FCE7F3", font_color="#BE185D")
+    cv.merge(r0 + 2, C_R0, r0 + 3, C_RE,
+             f'=IF({ov}>=0.999,"💖 Sending Love 100%!",IF({ov}>=0.75,"🧣 Besties Chung Khăn",'
+             f'IF({ov}>=0.5,"🍪 Snack Attack Duo","💤 Nap Buddies")))',
+             bold=True, font_size=10, align="center", bg_color=t.card, font_color="#7C3AED",
+             font_name=t.font_title)
+    cv.merge(r0 + 4, C_R0, r0 + 4, C_RE,
+             f'="💕 Tổng tim tích lũy: "&{tr.s["tdone"]}&" lượt"',
+             bold=True, font_size=8.8, align="center", bg_color="#F5F3FF", font_color="#6D28D9")
+    cv.merge(r0 + 5, C_R0, r0 + 6, C_RE,
+             f'="🎀 Ngày gắn kết ≥75%: "&{tr.s["grown"]}&"d"&CHAR(10)&"🔥 Chuỗi Bestie: "&{tr.s["best"]}&" ngày"',
+             bold=True, font_size=8.6, align="center", text_wrap=True, bg_color=t.card, font_color="#BE185D")
+    cv.grid(r0 + 1, C_R0, r0 + 6, C_RE, t.line)
+    cv.box(r0, C_R0, r0 + 6, C_RE, t.line)
+
+
+# 51. Boba Lily Pond: Weekly Boba Cups Earned Counter + Pond Balance Note
+def add_capybara_boba_pond_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 510):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23)
+    for rr in range(r0 + 1, r0 + 6):
+        cv.row(rr, 22)
+
+    cv.merge(r0, C_NAME, r0, C_D31, "🧋  BOBA LILY POND REWARD COUNTER  •  TÍCH LY TRÀ SỮA DÂU THEO TỪNG TUẦN (MỖI 2 NGÀY ≥75% = 1 LY!)",
+             bold=True, font_size=9.0, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_R0, r0, C_RE, "🧋  TOTAL BOBA CUPS", bold=True, font_size=8.8, align="center",
+             bg_color="#DB2777", font_color="#FFFFFF")
+
+    stg_row = tr.stage_row
+    wk_day_spans = [(1, 7), (8, 14), (15, 21), (22, 28), (29, 31)]
+    col_spans = [(1, 6), (7, 13), (14, 19), (20, 26), (27, 32)]
+    for w, ((d1, d2), (c1, c2)) in enumerate(zip(wk_day_spans, col_spans)):
+        st_rng = f"{tr.calc_q}!{rng(stg_row, d1, stg_row, d2)}"
+        cups_expr = f'INT(COUNTIF({st_rng},">=5")/2)'
+        cv.merge(r0 + 1, c1, r0 + 1, c2, f"🪷 WEEK {w + 1} (Ngày {d1}–{d2})", bold=True, font_size=8.4,
+                 align="center", bg_color=t.week_head[w], font_color=t.week_on[w])
+        cv.merge(r0 + 2, c1, r0 + 2, c2, f'={cups_expr}&" ly 🧋"', bold=True, font_size=11.5,
+                 align="center", bg_color=t.card, font_color="#DB2777", font_name=t.font_title)
+        cv.merge(r0 + 3, c1, r0 + 3, c2, f'=COUNTIF({st_rng},">=5")&" ngày đạt ≥75%"', italic=True,
+                 font_size=8.0, align="center", bg_color=t.soft, font_color=t.primary_dark)
+
+    cv.merge(r0 + 4, C_NAME, r0 + 4, C_D31, "🪷  BOBA & HYDRATION BALANCE NOTE  •  GHI CHÚ THƯỞNG TRÀ SỮA LÀNH MẠNH",
+             bold=True, font_size=8.6, align="left", indent=1, bg_color="#DCFCE7", font_color="#166534")
+    cv.merge(r0 + 5, C_NAME, r0 + 5, C_D31,
+             "• Quy tắc hồ sen: Uống đủ 2L nước lọc mỗi ngày & chỉ thưởng 1 ly trà sữa ít đường (30% đường) khi đạt đủ mốc tuần!",
+             font_size=9.0, align="left", indent=1, bg_color=t.card, font_color=t.ink)
+    cv.unlock(r0 + 5, C_NAME, r0 + 5, C_D31)
+    cv.grid(r0 + 1, C_NAME, r0 + 5, C_D31, t.line)
+    cv.box(r0, C_NAME, r0 + 5, C_D31, t.line)
+
+    cv.merge(r0 + 1, C_R0, r0 + 2, C_RE, f'=INT({tr.s["grown"]}/2)&" LY 🧋"', bold=True, font_size=16,
+             align="center", bg_color="#FCE7F3", font_color="#BE185D", font_name=t.font_title)
+    cv.merge(r0 + 3, C_R0, r0 + 3, C_RE, f'="🪷 Ngày hồ sen ≥75%: "&{tr.s["grown"]}&" ngày"',
+             bold=True, font_size=8.6, align="center", bg_color=t.soft, font_color=t.primary_dark)
+    cv.merge(r0 + 4, C_R0, r0 + 5, C_RE,
+             f'="✨ Ngày 100% Boba King: "&{tr.s["perfect"]}&"d"&CHAR(10)&"🔥 Best Streak: "&{tr.s["best"]}&"d"',
+             bold=True, font_size=8.6, align="center", text_wrap=True, bg_color=t.card, font_color=t.ink)
+    cv.grid(r0 + 1, C_R0, r0 + 5, C_RE, t.line)
+    cv.box(r0, C_R0, r0 + 5, C_RE, t.line)
+
+
+# 52. Bookworm Study: Daily Focus Hours + Pages Read + Study Focus Column Chart + Chapter Notes
+def add_capybara_bookworm_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 520):
+    t, ws, q = cv.t, cv.ws, tr.q
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23); cv.row(r0 + 1, 22); cv.row(r0 + 2, 22); cv.row(r0 + 3, 10)
+    for rr in range(r0 + 4, r0 + 10):
+        cv.row(rr, 20)
+
+    cv.put(r0, C_NAME, "📚  CAPY & CHAPTERED STUDY LOG", bold=True, font_size=9.2, align="left", indent=1,
+           bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_D0, r0, C_D31, "GIỜ TẬP TRUNG HỌC (HOURS)  •  SỐ TRANG SÁCH ĐỌC MỖI NGÀY (PAGES)",
+             bold=True, font_size=8.4, align="center", bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_R0, r0, C_RE, "📖  STUDY TOTALS", bold=True, font_size=8.5, align="center",
+             bg_color=t.primary_dark, font_color=t.on_primary)
+
+    r_h, r_p = r0 + 1, r0 + 2
+    cv.put(r_h, C_NAME, "⏱️  Giờ tập trung (Focus Hours)", bold=True, font_size=8.8, align="left", indent=1,
+           bg_color=t.soft, font_color=t.ink)
+    cv.put(r_p, C_NAME, "📖  Số trang sách đọc (Pages)", bold=True, font_size=8.8, align="left", indent=1,
+           bg_color=t.card, font_color=t.ink)
+    rnd = random.Random(seed)
+    for k in range(1, 32):
+        c = day_col(k)
+        if k > 22:
+            cv.put(r_h, c, "", align="center", font_size=8.3, bg_color=t.card, num_format="0.0")
+            cv.put(r_p, c, "", align="center", font_size=8.3, bg_color=t.card, num_format="0")
+        else:
+            cv.put(r_h, c, rnd.choice([2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 3.0, 5.0]),
+                   align="center", font_size=8.3, bold=True, bg_color=t.card, font_color=t.ink, num_format="0.0")
+            cv.put(r_p, c, rnd.choice([12, 15, 20, 25, 30, 18, 22, 35]),
+                   align="center", font_size=8.3, bg_color=t.card, font_color=t.ink, num_format="0")
+
+    h_rng = rng(r_h, C_D0, r_h, C_D31)
+    p_rng = rng(r_p, C_D0, r_p, C_D31)
+    cv.unlock(r_h, C_D0, r_p, C_D31)
+    cv.grid(r_h, C_NAME, r_p, C_D31, t.line)
+    cv.box(r0, C_NAME, r_p, C_D31, t.line)
+    ws.conditional_format(h_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 0,
+                                  "mid_type": "num", "mid_value": 3, "max_type": "num", "max_value": 6,
+                                  "min_color": "#FFFDF5", "mid_color": "#FEF08A", "max_color": "#EAB308"})
+    ws.conditional_format(p_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 0,
+                                  "mid_type": "num", "mid_value": 20, "max_type": "num", "max_value": 40,
+                                  "min_color": "#FFFDF5", "mid_color": "#BAE6FD", "max_color": "#0284C7"})
+
+    cv.merge(r_h, C_R0, r_h, C_R0 + 2, "Tổng giờ học:", font_size=8.8, align="left", indent=1, bg_color=t.card, font_color=t.muted)
+    cv.merge(r_h, C_R0 + 3, r_h, C_RE, f"=SUM({h_rng})", bold=True, font_size=10.5, align="center",
+             num_format='0.0" h"', bg_color=t.soft, font_color=t.primary_dark)
+    cv.merge(r_p, C_R0, r_p, C_R0 + 2, "Tổng trang sách:", font_size=8.8, align="left", indent=1, bg_color=t.card, font_color=t.muted)
+    cv.merge(r_p, C_R0 + 3, r_p, C_RE, f"=SUM({p_rng})", bold=True, font_size=10.5, align="center",
+             num_format='#,##0" tr"', bg_color="#E0F2FE", font_color="#0369A1")
+    cv.hline(r_h, C_R0, C_RE, t.line)
+    cv.box(r0, C_R0, r_p, C_RE, t.line)
+
+    # Focus Hours Column Chart + Bookworm Chapter Notes
+    rc0, rc1 = r0 + 4, r0 + 9
+    ch = wb.add_chart({"type": "column"})
+    ch.add_series({
+        "name": "Focus Hours",
+        "categories": f"={q}!{rng(R_DAY, C_D0, R_DAY, C_D31)}",
+        "values": f"={q}!{h_rng}",
+        "fill": {"color": "#EAB308"},
+        "border": {"none": True},
+        "gap": 55,
+    })
+    ch.set_title({"name": "DAILY STUDY HOURS • GIỜ HỌC TẬP TRUNG MỖI NGÀY",
+                  "name_font": {"name": t.font, "size": 9.2, "bold": True, "color": t.ink}})
+    ch.set_y_axis({"min": 0, "max": 6, "major_unit": 2, "num_format": '0"h"',
+                   "num_font": axis_font(t), "line": {"none": True},
+                   "major_gridlines": {"visible": True, "line": {"color": t.line, "dash_type": "dash"}}})
+    ch.set_x_axis({"num_font": axis_font(t, 7.5), "line": {"color": t.line}})
+    ch.set_legend({"none": True})
+    ch.set_chartarea({"border": {"color": t.line, "width": 0.75}, "fill": {"color": t.card}})
+    place_chart(cv, ch, rc0, C_NAME, rc1, C_D31)
+
+    cv.merge(rc0, C_R0, rc0, C_RE, "📚  CURRENT BOOK & NOTES", bold=True, font_size=8.6, align="center",
+             bg_color="#0284C7", font_color="#FFFFFF")
+    cv.merge(rc0 + 1, C_R0, rc0 + 3, C_RE,
+             "• Sách đang đọc: Atomic Habits\n• Mục tiêu tháng: 500 trang + 80h học\n• Ghi chú: Tóm tắt 3 ý chính mỗi chương!",
+             font_size=8.6, align="left", indent=1, text_wrap=True, bg_color=t.card, font_color=t.ink)
+    cv.unlock(rc0 + 1, C_R0, rc0 + 3, C_RE)
+    cv.merge(rc0 + 4, C_R0, rc1, C_RE,
+             f'="📖 TB: "&TEXT(IFERROR(AVERAGE({p_rng}),0),"0")&" trang/ngày"&CHAR(10)&"🏆 Ngày Mọt Sách: "&{tr.s["grown"]}&"d"',
+             bold=True, font_size=8.8, align="center", text_wrap=True, bg_color=t.soft, font_color=t.primary_dark)
+    cv.box(rc0, C_R0, rc1, C_RE, t.line)
+
+
+# 53. Lofi Picnic Beats: Deep Flow Minutes + Lofi Playlist & Picnic Vibe Board
+def add_capybara_lofi_picnic_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 530):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23); cv.row(r0 + 1, 22); cv.row(r0 + 2, 10)
+    for rr in range(r0 + 3, r0 + 7):
+        cv.row(rr, 22)
+
+    cv.put(r0, C_NAME, "🎧  LOFI DEEP FLOW MINUTES", bold=True, font_size=9.2, align="left", indent=1,
+           bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_D0, r0, C_D31, "SỐ PHÚT DEEP WORK / HỌC CÙNG NHẠC LOFI MỖI NGÀY (PHÚT)",
+             bold=True, font_size=8.4, align="center", bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_R0, r0, C_RE, "🎵  FLOW TOTAL", bold=True, font_size=8.5, align="center",
+             bg_color="#DC2626", font_color="#FFFFFF")
+
+    r_fl = r0 + 1
+    cv.put(r_fl, C_NAME, "🎵  Phút tập trung Lofi (mins)", bold=True, font_size=8.8, align="left", indent=1,
+           bg_color=t.soft, font_color=t.ink)
+    rnd = random.Random(seed)
+    for k in range(1, 32):
+        c = day_col(k)
+        val = "" if k > 22 else rnd.choice([45, 60, 90, 120, 75, 90, 60, 105])
+        cv.put(r_fl, c, val, align="center", font_size=8.3, bold=True, bg_color=t.card,
+               font_color=t.ink, num_format="0")
+    fl_rng = rng(r_fl, C_D0, r_fl, C_D31)
+    cv.unlock(r_fl, C_D0, r_fl, C_D31)
+    cv.grid(r_fl, C_NAME, r_fl, C_D31, t.line)
+    cv.box(r0, C_NAME, r_fl, C_D31, t.line)
+    ws.conditional_format(fl_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 0,
+                                   "mid_type": "num", "mid_value": 60, "max_type": "num", "max_value": 120,
+                                   "min_color": "#F0F7FF", "mid_color": "#BFDBFE", "max_color": "#3B82F6"})
+    cv.merge(r_fl, C_R0, r_fl, C_RE, f"=SUM({fl_rng})/60", bold=True, font_size=11, align="center",
+             num_format='0.0" giờ 🎧"', bg_color="#FEE2E2", font_color="#B91C1C")
+    cv.box(r0, C_R0, r_fl, C_RE, t.line)
+
+    rb0 = r0 + 3
+    c_mid = 16
+    cv.merge(rb0, C_NAME, rb0, c_mid, "📻  NOW PLAYING • PLAYLIST LOFI YÊU THÍCH", bold=True, font_size=9,
+             align="left", indent=1, bg_color="#2563EB", font_color="#FFFFFF")
+    tracks = [
+        "♫  Track 01: Cozy Rainy Day Capybara Beats (Study & Chill 90 BPM)",
+        "♫  Track 02: Sunday Gingham Picnic Acoustic Guitar & Birds",
+        "♫  Track 03: Midnight Tea & Soft Piano Deep Focus Mix",
+    ]
+    for i, trk in enumerate(tracks):
+        cv.merge(rb0 + 1 + i, C_NAME, rb0 + 1 + i, c_mid, trk, font_size=8.9, align="left", indent=1,
+                 bg_color=t.card, font_color=t.ink)
+        cv.hline(rb0 + 1 + i, C_NAME, c_mid, t.line)
+    cv.unlock(rb0 + 1, C_NAME, rb0 + 3, c_mid)
+    cv.box(rb0, C_NAME, rb0 + 3, c_mid, t.line)
+
+    cv.merge(rb0, c_mid + 2, rb0, C_D31, "🧺  PICNIC VIBE & RECHARGE NOTES", bold=True, font_size=9,
+             align="left", indent=1, bg_color="#EF4444", font_color="#FFFFFF")
+    vibes = [
+        "• Đeo tai nghe, tắt thông báo 45 phút để vào trạng thái Flow êm ái.",
+        "• Nghỉ giữa giờ: Vươn vai, nhìn cây xanh & nhâm nhi trái cây tươi.",
+        "• Cuối tuần trải khăn caro đọc sách ngoài công viên sạc lại năng lượng!",
+    ]
+    for i, vb in enumerate(vibes):
+        cv.merge(rb0 + 1 + i, c_mid + 2, rb0 + 1 + i, C_D31, vb, font_size=8.9, align="left", indent=1,
+                 bg_color=t.card, font_color=t.ink)
+        cv.hline(rb0 + 1 + i, c_mid + 2, C_D31, t.line)
+    cv.unlock(rb0 + 1, c_mid + 2, rb0 + 3, C_D31)
+    cv.box(rb0, c_mid + 2, rb0 + 3, C_D31, t.line)
+
+    cv.merge(rb0, C_R0, rb0, C_RE, "🎶  LOFI FLOW STATS", bold=True, font_size=8.8, align="center",
+             bg_color=t.primary_dark, font_color="#FFFFFF")
+    cv.merge(rb0 + 1, C_R0, rb0 + 2, C_RE,
+             f'="🎧 TB: "&TEXT(IFERROR(AVERAGE({fl_rng}),0),"0")&" phút/ngày"',
+             bold=True, font_size=10.5, align="center", bg_color=t.soft, font_color=t.primary_dark,
+             font_name=t.font_title)
+    cv.merge(rb0 + 3, C_R0, rb0 + 3, C_RE,
+             f'="🧺 Ngày Chill: "&{tr.s["grown"]}&"d  •  🔥 Best: "&{tr.s["best"]}&"d"',
+             bold=True, font_size=8.5, align="center", bg_color=t.card, font_color="#DC2626")
+    cv.box(rb0, C_R0, rb0 + 3, C_RE, t.line)
+
+
+# 54. Foodie Snack Club: 6-Tier Snack Reward Unlock Strip + Weekly Treat Menu
+def add_capybara_foodie_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 540):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23)
+    for rr in range(r0 + 1, r0 + 6):
+        cv.row(rr, 22)
+
+    cv.merge(r0, C_NAME, r0, C_D31, "🍔  FOODIE SNACK CLUB  •  THỐNG KÊ 6 MÓN ĂN MỞ KHÓA TRONG THÁNG",
+             bold=True, font_size=9.2, align="left", indent=1, bg_color="#EF4444", font_color="#FFFFFF")
+    cv.merge(r0, C_R0, r0, C_RE, "🍟  FOODIE RANK", bold=True, font_size=8.8, align="center",
+             bg_color="#D97706", font_color="#FFFFFF")
+
+    stg_rng = f"{tr.calc_q}!{rng(tr.stage_row, 1, tr.stage_row, 31)}"
+    tiers = [
+        ("🥛 Milk", "0%", "#FEF2F2", "#B91C1C"),
+        ("🍓 Sip Milk", "1–24%", "#FFFBEB", "#B45309"),
+        ("🍉 Melon", "25–49%", "#ECFDF5", "#047857"),
+        ("🍿 Popcorn", "50–74%", "#FEF3C7", "#D97706"),
+        ("🍕 Pizza", "75–99%", "#FFEDD5", "#C2410C"),
+        ("🍔 Burger!", "100% ✨", "#FEE2E2", "#991B1B"),
+    ]
+    spans = [(1, 5), (6, 10), (11, 15), (16, 21), (22, 26), (27, 32)]
+    for i, ((c1, c2), (lbl, pct, bg, fg)) in enumerate(zip(spans, tiers)):
+        cv.merge(r0 + 1, c1, r0 + 1, c2, lbl, bold=True, font_size=8.8, align="center", bg_color=bg, font_color=fg)
+        cv.merge(r0 + 2, c1, r0 + 2, c2, f'=COUNTIF({stg_rng},{i + 1})&" ngày"', bold=True, font_size=10.5,
+                 align="center", bg_color=t.card, font_color=fg, font_name=t.font_title)
+        cv.merge(r0 + 3, c1, r0 + 3, c2, pct, italic=True, font_size=7.8, align="center", bg_color=t.page, font_color=t.muted)
+
+    cv.merge(r0 + 4, C_NAME, r0 + 4, C_D31, "🍕  WEEKLY TREAT REWARD MENU  •  PHẦN THƯỞNG MÓN NGON KHI ĐẠT MỤC TIÊU TUẦN",
+             bold=True, font_size=8.6, align="left", indent=1, bg_color="#FEF3C7", font_color="#92400E")
+    cv.merge(r0 + 5, C_NAME, r0 + 5, C_D31,
+             "• Tuần ≥80%: Thưởng 1 bữa ăn yêu thích không áy náy!  • Mục tiêu tháng: Ăn đủ chất, nấu ở nhà ≥5 ngày/tuần & uống đủ nước.",
+             font_size=9.0, align="left", indent=1, bg_color=t.card, font_color=t.ink)
+    cv.unlock(r0 + 5, C_NAME, r0 + 5, C_D31)
+    cv.grid(r0 + 1, C_NAME, r0 + 5, C_D31, t.line)
+    cv.box(r0, C_NAME, r0 + 5, C_D31, t.line)
+
+    ov = tr.s["overall"]
+    cv.merge(r0 + 1, C_R0, r0 + 2, C_RE,
+             f'=IF({ov}>=0.999,"👑 BURGER KING!",IF({ov}>=0.75,"🍕 PIZZA CHEF",'
+             f'IF({ov}>=0.5,"🍿 POPCORN FAN","🍉 FRESH FOODIE")))',
+             bold=True, font_size=10.5, align="center", bg_color="#FEF3C7", font_color="#B91C1C",
+             font_name=t.font_title)
+    cv.merge(r0 + 3, C_R0, r0 + 3, C_RE, f"={ov}", bold=True, font_size=9.5, align="center",
+             num_format="0%", bg_color=t.card, font_color=t.ink)
+    ws.conditional_format(rng(r0 + 3, C_R0, r0 + 3, C_RE), {
+        "type": "data_bar", "bar_color": "#F59E0B", "bar_solid": True,
+        "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1,
+    })
+    cv.merge(r0 + 4, C_R0, r0 + 5, C_RE,
+             f'="🍔 Ngày 100%: "&{tr.s["perfect"]}&" ngày"&CHAR(10)&"🔥 Streak: "&{tr.s["best"]}&" ngày"',
+             bold=True, font_size=8.6, align="center", text_wrap=True, bg_color=t.card, font_color="#B45309")
+    cv.grid(r0 + 1, C_R0, r0 + 5, C_RE, t.line)
+    cv.box(r0, C_R0, r0 + 5, C_RE, t.line)
+
+
+# 55. Dino Hoodie Play: Daily Playful Joy Row + 5-Week Pastel Dino Progress Bars
+def add_capybara_dino_hoodie_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 550):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23); cv.row(r0 + 1, 22); cv.row(r0 + 2, 10)
+    for rr in range(r0 + 3, r0 + 7):
+        cv.row(rr, 22)
+
+    cv.put(r0, C_NAME, "🦕  DAILY JOY & PLAYFULNESS", bold=True, font_size=9.2, align="left", indent=1,
+           bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_D0, r0, C_D31, "MỨC ĐỘ VUI VẺ & HỨNG KHỞI MỖI NGÀY CÙNG DINO HOODIE (1 – 5)",
+             bold=True, font_size=8.4, align="center", bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_R0, r0, C_RE, "🐤  JOY SCORE", bold=True, font_size=8.5, align="center",
+             bg_color="#EAB308", font_color="#422006")
+
+    r_joy = r0 + 1
+    cv.put(r_joy, C_NAME, "🌼  Điểm niềm vui trong ngày (1–5)", bold=True, font_size=8.8, align="left", indent=1,
+           bg_color=t.soft, font_color=t.ink)
+    rnd = random.Random(seed)
+    for k in range(1, 32):
+        c = day_col(k)
+        val = "" if k > 22 else rnd.choice([4, 5, 4, 5, 3, 5, 4, 5])
+        cv.put(r_joy, c, val, align="center", font_size=9, bold=True, bg_color=t.card, font_color=t.ink, num_format="0")
+    j_rng = rng(r_joy, C_D0, r_joy, C_D31)
+    cv.unlock(r_joy, C_D0, r_joy, C_D31)
+    cv.grid(r_joy, C_NAME, r_joy, C_D31, t.line)
+    cv.box(r0, C_NAME, r_joy, C_D31, t.line)
+    ws.conditional_format(j_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 1,
+                                  "mid_type": "num", "mid_value": 3, "max_type": "num", "max_value": 5,
+                                  "min_color": "#FEF9C3", "mid_color": "#BBF7D0", "max_color": "#22C55E"})
+    cv.merge(r_joy, C_R0, r_joy, C_RE, f"=IFERROR(AVERAGE({j_rng}),0)", bold=True, font_size=11,
+             align="center", num_format='0.0" / 5 🦕"', bg_color="#FEF9C3", font_color="#854D0E")
+    cv.box(r0, C_R0, r_joy, C_RE, t.line)
+
+    # 5-Week Playful Pastel Progress Bars!
+    rb0 = r0 + 3
+    rb = tr.calc_row_base
+    cv.merge(rb0, C_NAME, rb0, C_D31, "🦖  PLAYFUL DINO WEEKLY BARS  •  THANH TIẾN ĐỘ PASTEL 5 TUẦN",
+             bold=True, font_size=9, align="left", indent=1, bg_color="#16A34A", font_color="#FFFFFF")
+    spans = [(1, 6), (7, 13), (14, 19), (20, 26), (27, 32)]
+    p_cols = ["#4ADE80", "#FACC15", "#FB923C", "#34D399", "#A3E635"]
+    p_bgs = ["#DCFCE7", "#FEF9C3", "#FFEDD5", "#D1FAE5", "#ECFCCB"]
+    p_fgs = ["#166534", "#854D0E", "#9A3412", "#065F46", "#3F6212"]
+    for w, ((c1, c2), bc, bg, fg) in enumerate(zip(spans, p_cols, p_bgs, p_fgs)):
+        hc = CALC_WK_COL0 + w
+        pct_ref = f"{tr.calc_q}!{acell(rb + 2, hc)}"
+        cv.merge(rb0 + 1, c1, rb0 + 1, c2, f"🦖 WEEK {w + 1}", bold=True, font_size=8.5, align="center",
+                 bg_color=bg, font_color=fg)
+        cv.merge(rb0 + 2, c1, rb0 + 2, c2, f"={pct_ref}", bold=True, font_size=11, align="center",
+                 num_format="0%", bg_color=t.card, font_color=fg, font_name=t.font_title)
+        ws.conditional_format(rng(rb0 + 2, c1, rb0 + 2, c2), {
+            "type": "data_bar", "bar_color": bc, "bar_solid": True,
+            "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1,
+        })
+        cv.merge(rb0 + 3, c1, rb0 + 3, c2,
+                 f'=IF({pct_ref}>=0.8,"🦖 Dino Siêu Quậy!",IF({pct_ref}>=0.5,"🌸 Vòng Hoa Vui","🐤 Vịt Con Ngủ"))',
+                 italic=True, font_size=8.0, align="center", bg_color=t.page, font_color=fg)
+    cv.grid(rb0 + 1, C_NAME, rb0 + 3, C_D31, t.line)
+    cv.box(rb0, C_NAME, rb0 + 3, C_D31, t.line)
+
+    cv.merge(rb0, C_R0, rb0, C_RE, "🌼  DINO PLAYTIME NOTE", bold=True, font_size=8.6, align="center",
+             bg_color="#FB923C", font_color="#FFFFFF")
+    cv.merge(rb0 + 1, C_R0, rb0 + 2, C_RE,
+             "• Mỗi ngày dành 20p cho sở thích cá nhân (vẽ, chơi game nhẹ, đi dạo)!",
+             font_size=8.6, align="left", indent=1, text_wrap=True, bg_color=t.card, font_color=t.ink)
+    cv.unlock(rb0 + 1, C_R0, rb0 + 2, C_RE)
+    cv.merge(rb0 + 3, C_R0, rb0 + 3, C_RE,
+             f'="🦖 Dino Days: "&{tr.s["grown"]}&"d  •  🔥 Best: "&{tr.s["best"]}&"d"',
+             bold=True, font_size=8.5, align="center", bg_color=t.soft, font_color=t.primary_dark)
+    cv.box(rb0, C_R0, rb0 + 3, C_RE, t.line)
+
+
+# 56. Apple Orchard Sweet: Live Orchard Apple Harvest Counter + 3-Line Gratitude Box
+def add_capybara_apple_orchard_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 560):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23)
+    for rr in range(r0 + 1, r0 + 6):
+        cv.row(rr, 22)
+
+    # Left: Orchard Harvest Basket Breakdown (Col B..N)
+    c_mid = 13
+    cv.merge(r0, C_NAME, r0, c_mid, "🍎  APPLE ORCHARD HARVEST COUNTER  •  GIỎ TÁO THU HOẠCH THÁNG",
+             bold=True, font_size=9.1, align="left", indent=1, bg_color="#E11D48", font_color="#FFFFFF")
+    cv.merge(r0 + 1, C_NAME, r0 + 3, 5,
+             f'="🍎 "&{tr.s["tdone"]}&CHAR(10)&"QUẢ TÁO ĐÃ HÁI"',
+             bold=True, font_size=14, align="center", text_wrap=True, bg_color="#FFE4E6", font_color="#BE123C",
+             font_name=t.font_title)
+    cv.merge(r0 + 1, 6, r0 + 1, c_mid, f'="🌿 Giỏ Táo Đầy (ngày ≥75%):  "&{tr.s["grown"]}&" giỏ"',
+             bold=True, font_size=9.2, align="left", indent=1, bg_color=t.card, font_color="#166534")
+    cv.merge(r0 + 2, 6, r0 + 2, c_mid, f'="❤️ Ngày Ôm Táo 100%:  "&{tr.s["perfect"]}&" ngày trọn vẹn"',
+             bold=True, font_size=9.2, align="left", indent=1, bg_color="#FFF6ED", font_color="#BE123C")
+    cv.merge(r0 + 3, 6, r0 + 3, c_mid, f'="🎯 Tỷ lệ thu hoạch mục tiêu:  "&TEXT({tr.s["overall"]},"0%")',
+             bold=True, font_size=9.2, align="left", indent=1, bg_color=t.card, font_color=t.ink)
+    cv.merge(r0 + 4, C_NAME, r0 + 5, c_mid,
+             f'=IF({tr.s["tdone"]}>=200,"🏆 Mùa Vụ Táo Đỏ Bội Thu (>200 quả)!",IF({tr.s["tdone"]}>=100,"🍎 Vườn Táo Đang Chín Đỏ (>100 quả)!","🌱 Bắt đầu hái những quả táo ngọt đầu tiên!"))',
+             bold=True, font_size=9.3, align="center", bg_color="#DCFCE7", font_color="#166534")
+    cv.grid(r0 + 1, C_NAME, r0 + 5, c_mid, t.line)
+    cv.box(r0, C_NAME, r0 + 5, c_mid, "#E11D48")
+
+    # Right-Mid: 3-Line Sweet Orchard Gratitude Box (Col P..AG)
+    c_g0 = c_mid + 2
+    cv.merge(r0, c_g0, r0, C_D31, "💌  SWEET ORCHARD GRATITUDE  •  3 ĐIỀU NGỌT NGÀO BIẾT ƠN THÁNG NÀY",
+             bold=True, font_size=9.1, align="left", indent=1, bg_color="#16A34A", font_color="#FFFFFF")
+    grats = [
+        "1. Biết ơn cơ thể khỏe mạnh giúp mình hoàn thành đều đặn những thói quen nhỏ mỗi ngày.",
+        "2. Biết ơn những bữa ăn ngon, trái cây ngọt lành & giấc ngủ trọn vẹn.",
+        "3. Biết ơn bản thân đã kiên trì và dịu dàng với chính mình suốt cả tháng!",
+        "",
+        "",
+    ]
+    for i, g in enumerate(grats):
+        cv.merge(r0 + 1 + i, c_g0, r0 + 1 + i, C_D31, g, font_size=9.0, align="left", indent=1,
+                 bg_color=t.card, font_color=t.ink)
+        cv.hline(r0 + 1 + i, c_g0, C_D31, t.line)
+    cv.unlock(r0 + 1, c_g0, r0 + 5, C_D31)
+    cv.box(r0, c_g0, r0 + 5, C_D31, "#16A34A")
+
+    # Far Right: Sweet Apple Harvest Gauge Card
+    cv.merge(r0, C_R0, r0, C_RE, "🍏  HARVEST GOAL", bold=True, font_size=8.8, align="center",
+             bg_color=t.primary_dark, font_color="#FFFFFF")
+    cv.merge(r0 + 1, C_R0, r0 + 2, C_RE, f"=MIN(1,{tr.s['tdone']}/220)", bold=True, font_size=14,
+             align="center", num_format="0%", bg_color="#FFE4E6", font_color="#BE123C", font_name=t.font_title)
+    ws.conditional_format(rng(r0 + 1, C_R0, r0 + 2, C_RE), {
+        "type": "data_bar", "bar_color": "#E11D48", "bar_solid": True,
+        "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1,
+    })
+    cv.merge(r0 + 3, C_R0, r0 + 3, C_RE, "Mốc vụ mùa: 220 táo", italic=True, font_size=8.2,
+             align="center", bg_color=t.card, font_color=t.muted)
+    cv.merge(r0 + 4, C_R0, r0 + 5, C_RE,
+             f'="🔥 Chuỗi Vườn Táo:"&CHAR(10)&{tr.s["best"]}&" ngày liên tiếp"',
+             bold=True, font_size=8.8, align="center", text_wrap=True, bg_color="#DCFCE7", font_color="#166534")
+    cv.grid(r0 + 1, C_R0, r0 + 5, C_RE, t.line)
+    cv.box(r0, C_R0, r0 + 5, C_RE, t.line)
+
+
+# 57. Pink Cloud Chill: Intentionally Ultra-Clean Minimalist 4-Row Pink Cloud Chill Bar!
+def add_capybara_pink_chill_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 570):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23); cv.row(r0 + 1, 24); cv.row(r0 + 2, 24)
+
+    cv.merge(r0, C_NAME, r0, C_D31, "☁️  PINK CLOUD MINIMALIST CHILL BAR  •  NHỊP SỐNG CHẬM & ÊM ÁI TRÊN MÂY HỒNG",
+             bold=True, font_size=9.2, align="left", indent=1, bg_color="#DB2777", font_color="#FFFFFF")
+    cv.merge(r0, C_R0, r0, C_RE, "🌸  PEACE SCORE", bold=True, font_size=8.8, align="center",
+             bg_color="#9D174D", font_color="#FFFFFF")
+
+    ov = tr.s["overall"]
+    cv.put(r0 + 1, C_NAME, "☁️  Mức độ êm ái tháng này:", bold=True, font_size=9.2, align="left", indent=1,
+           bg_color="#FCE7F3", font_color="#9D174D")
+    cv.merge(r0 + 1, C_D0, r0 + 1, C_D31, f"={ov}", bold=True, font_size=11, align="center",
+             num_format='0%"  ☁️ Pink Cloud Chill Progress"', bg_color=t.card, font_color="#DB2777")
+    ws.conditional_format(rng(r0 + 1, C_D0, r0 + 1, C_D31), {
+        "type": "data_bar", "bar_color": "#F472B6", "bar_solid": True,
+        "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1,
+    })
+
+    cv.put(r0 + 2, C_NAME, "🌸  Lời nhắn dịu dàng hôm nay:", bold=True, font_size=9.0, align="left", indent=1,
+           bg_color=t.card, font_color=t.muted)
+    cv.merge(r0 + 2, C_D0, r0 + 2, C_D31,
+             "Không cần hoàn hảo ngay lập tức — cứ trôi nhẹ nhàng như Capybara trên mây hồng, mỗi ngày tốt hơn 1% là tuyệt vời rồi!",
+             italic=True, font_size=9.2, align="left", indent=1, bg_color="#FFF7FB", font_color=t.ink)
+    cv.unlock(r0 + 2, C_D0, r0 + 2, C_D31)
+    cv.grid(r0 + 1, C_NAME, r0 + 2, C_D31, t.line)
+    cv.box(r0, C_NAME, r0 + 2, C_D31, t.line)
+
+    cv.merge(r0 + 1, C_R0, r0 + 2, C_RE,
+             f'="☁️ "&{tr.s["grown"]}&" ngày êm dịu"&CHAR(10)&"🔥 Chuỗi: "&{tr.s["best"]}&" ngày"',
+             bold=True, font_size=9.2, align="center", text_wrap=True, bg_color="#FCE7F3", font_color="#9D174D")
+    cv.box(r0, C_R0, r0 + 2, C_RE, t.line)
+
+
+# 58. Fairy Party Wish: 5 Interactive Star Wishes Tracker + Fairy Magic Progress Card
+def add_capybara_fairy_party_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 580):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23)
+    for rr in range(r0 + 1, r0 + 6):
+        cv.row(rr, 22)
+
+    cv.merge(r0, C_NAME, r0, C_D31, "🧚  FAIRY PARTY STAR WISHES  •  5 ĐIỀU ƯỚC NGÔI SAO THÁNG NÀY (TỰ ĐỘNG THẮP SÁNG KHI ĐẠT MỐC!)",
+             bold=True, font_size=9.1, align="left", indent=1, bg_color="#9333EA", font_color="#FFFFFF")
+    cv.merge(r0, C_R0, r0, C_RE, "✨  FAIRY MAGIC", bold=True, font_size=8.8, align="center",
+             bg_color="#DB2777", font_color="#FFFFFF")
+
+    wishes = [
+        ("⭐ Điều ước 1: Hoàn thành tuần đầu tiên ≥ 75% đều đặn", f'=IF({tr.s["grown"]}>=5,"✨ ĐÃ THẮP SÁNG!","☆ Đang tích sao...")'),
+        ("🌟 Điều ước 2: Chạm mốc chuỗi kỷ luật 7 ngày liên tiếp", f'=IF({tr.s["best"]}>=7,"✨ ĐÃ THẮP SÁNG!","☆ Còn "&MAX(0,7-{tr.s["best"]})&" ngày")'),
+        ("💖 Điều ước 3: Có ít nhất 5 ngày hoàn hảo 100% Fairy Wish", f'=IF({tr.s["perfect"]}>=5,"✨ ĐÃ THẮP SÁNG!","☆ Còn "&MAX(0,5-{tr.s["perfect"]})&" ngày")'),
+        ("🎁 Điều ước 4: Tích lũy ≥ 150 lượt tick thói quen trong tháng", f'=IF({tr.s["tdone"]}>=150,"✨ ĐÃ THẮP SÁNG!","☆ Còn "&MAX(0,150-{tr.s["tdone"]})&" lượt")'),
+        ("👑 Điều ước 5: Đạt hiệu suất tổng tháng ≥ 80% Tiệc Tiên!", f'=IF({tr.s["overall"]}>=0.8,"✨ ĐÃ THẮP SÁNG!","☆ Đạt "&TEXT({tr.s["overall"]},"0%")&"/80%")'),
+    ]
+    c_stat0 = 23
+    for i, (wtxt, wf) in enumerate(wishes):
+        rr = r0 + 1 + i
+        bg = "#FAF5FF" if i % 2 == 0 else "#FFFFFF"
+        cv.merge(rr, C_NAME, rr, c_stat0 - 1, wtxt, font_size=9.0, align="left", indent=1,
+                 bg_color=bg, font_color=t.ink)
+        cv.merge(rr, c_stat0, rr, C_D31, wf, bold=True, font_size=8.8, align="center",
+                 bg_color="#FEF9C3" if i % 2 == 0 else "#FCE7F3", font_color="#7E22CE")
+        ws.conditional_format(rng(rr, c_stat0, rr, C_D31), {
+            "type": "text", "criteria": "containing", "value": "ĐÃ THẮP SÁNG",
+            "format": wb.add_format({"bg_color": "#DCFCE7", "font_color": "#15803D", "bold": True}),
+        })
+    cv.unlock(r0 + 1, C_NAME, r0 + 5, c_stat0 - 1)
+    cv.grid(r0 + 1, C_NAME, r0 + 5, C_D31, t.line)
+    cv.box(r0, C_NAME, r0 + 5, C_D31, "#9333EA")
+
+    st_col_rng = rng(r0 + 1, c_stat0, r0 + 5, c_stat0)
+    cv.merge(r0 + 1, C_R0, r0 + 2, C_RE,
+             f'=COUNTIF({st_col_rng},"*ĐÃ THẮP SÁNG*")&" / 5 ⭐"',
+             bold=True, font_size=15, align="center", bg_color="#FAF5FF", font_color="#7E22CE",
+             font_name=t.font_title)
+    cv.merge(r0 + 3, C_R0, r0 + 3, C_RE, f'=COUNTIF({st_col_rng},"*ĐÃ THẮP SÁNG*")/5',
+             bold=True, font_size=9.2, align="center", num_format="0%", bg_color=t.card, font_color="#DB2777")
+    ws.conditional_format(rng(r0 + 3, C_R0, r0 + 3, C_RE), {
+        "type": "data_bar", "bar_color": "#EAB308", "bar_solid": True,
+        "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1,
+    })
+    cv.merge(r0 + 4, C_R0, r0 + 5, C_RE,
+             f'="🧚 Ngày Tiên 100%: "&{tr.s["perfect"]}&"d"&CHAR(10)&"🔥 Best: "&{tr.s["best"]}&"d"',
+             bold=True, font_size=8.6, align="center", text_wrap=True, bg_color="#FCE7F3", font_color="#9D174D")
+    cv.grid(r0 + 1, C_R0, r0 + 5, C_RE, t.line)
+    cv.box(r0, C_R0, r0 + 5, C_RE, t.line)
+
+
+# 59. SelfCare GlowUp: Morning / Afternoon / Evening 3-Card Glow Grouping + Affirmation Journal
+def add_capybara_selfcare_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 590):
+    from .tracker import R_H0, CALC_DONEN_COL, CALC_GOALN_COL
+    t, ws, cq = cv.t, cv.ws, tr.calc_q
+    C_RE = tr.c_right_end
+    rb = tr.calc_row_base
+    r0 = R_EXTRA
+    cv.row(r0, 23)
+    for rr in range(r0 + 1, r0 + 6):
+        cv.row(rr, 22)
+
+    # 3 Live Routine Grouping Cards: Morning (habits 0..2), Afternoon (3..5), Evening (6..8)
+    groups = [
+        ("☀️  MORNING GLOW (SÁNG)", 0, 2, (1, 10), "#F43F5E", "#FFF1F2", "#BE123C"),
+        ("🌤️  AFTERNOON CARE (CHIỀU)", 3, 5, (12, 21), "#D97706", "#FFFBEB", "#B45309"),
+        ("🌙  EVENING WIND-DOWN (TỐI)", 6, 8, (23, 32), "#9333EA", "#FAF5FF", "#6B21A8"),
+    ]
+    for title, h_a, h_b, (c1, c2), hdr_bg, card_bg, fg in groups:
+        d_rng = f"{cq}!{rng(rb + R_H0 + h_a, CALC_DONEN_COL, rb + R_H0 + h_b, CALC_DONEN_COL)}"
+        g_rng = f"{cq}!{rng(rb + R_H0 + h_a, CALC_GOALN_COL, rb + R_H0 + h_b, CALC_GOALN_COL)}"
+        cv.merge(r0, c1, r0, c2, title, bold=True, font_size=8.8, align="center",
+                 bg_color=hdr_bg, font_color="#FFFFFF")
+        cv.merge(r0 + 1, c1, r0 + 2, c2, f"=IFERROR(SUM({d_rng})/SUM({g_rng}),0)", bold=True, font_size=18,
+                 align="center", num_format="0%", bg_color=t.card, font_color=fg, font_name=t.font_title)
+        cv.merge(r0 + 3, c1, r0 + 3, c2, f'=SUM({d_rng})&" / "&SUM({g_rng})&" lượt hoàn thành"',
+                 bold=True, font_size=8.5, align="center", bg_color=card_bg, font_color=fg)
+        cv.box(r0, c1, r0 + 3, c2, hdr_bg)
+
+    # Bottom Affirmation Strip across C_NAME..C_D31
+    cv.merge(r0 + 4, C_NAME, r0 + 4, C_D31, "🪞  DAILY SELF-CARE AFFIRMATION  •  LỜI KHẲNG ĐỊNH YÊU THƯƠNG BẢN THÂN",
+             bold=True, font_size=8.6, align="left", indent=1, bg_color="#FFE4E6", font_color="#BE123C")
+    cv.merge(r0 + 5, C_NAME, r0 + 5, C_D31,
+             "• Mình xứng đáng được chăm sóc dịu dàng từ bên trong lẫn bên ngoài — ngủ đủ, uống đủ nước và mỉm cười trước gương mỗi sáng!",
+             italic=True, font_size=9.0, align="left", indent=1, bg_color=t.card, font_color=t.ink)
+    cv.unlock(r0 + 5, C_NAME, r0 + 5, C_D31)
+    cv.box(r0 + 4, C_NAME, r0 + 5, C_D31, t.line)
+
+    # Right GlowUp Score Card
+    cv.merge(r0, C_R0, r0, C_RE, "💐  GLOW-UP METER", bold=True, font_size=8.8, align="center",
+             bg_color=t.primary, font_color="#FFFFFF")
+    cv.merge(r0 + 1, C_R0, r0 + 2, C_RE,
+             f'=IF({tr.s["overall"]}>=0.85,"💐 Radiant Glow!",IF({tr.s["overall"]}>=0.6,"🕶️ Stylish Self-Care","🪞 Starting Fresh"))',
+             bold=True, font_size=10.5, align="center", bg_color="#FFF1F2", font_color="#BE123C",
+             font_name=t.font_title)
+    cv.merge(r0 + 3, C_R0, r0 + 3, C_RE, f'="✨ Ngày tỏa sáng: "&{tr.s["grown"]}&" ngày"',
+             bold=True, font_size=8.6, align="center", bg_color=t.card, font_color=t.ink)
+    cv.merge(r0 + 4, C_R0, r0 + 5, C_RE,
+             f'="💖 Ngày 100%: "&{tr.s["perfect"]}&"d"&CHAR(10)&"🔥 Best: "&{tr.s["best"]}&"d"',
+             bold=True, font_size=8.6, align="center", text_wrap=True, bg_color="#FEF3C7", font_color="#B45309")
+    cv.grid(r0 + 1, C_R0, r0 + 5, C_RE, t.line)
+    cv.box(r0, C_R0, r0 + 5, C_RE, t.line)
+
+
+# 60. Snapshot Traveler: Polaroid Memory Highlight Diary + Travel Stamp Counter
+def add_capybara_traveler_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 600):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23)
+    for rr in range(r0 + 1, r0 + 6):
+        cv.row(rr, 22)
+
+    cv.merge(r0, C_NAME, r0, C_D31, "📸  SNAPSHOT TRAVELER MEMORY DIARY  •  NHẬT KÝ KHOẢNH KHẮC & KỶ NIỆM ĐÁNG NHỚ TRONG THÁNG",
+             bold=True, font_size=9.1, align="left", indent=1, bg_color="#0D9488", font_color="#FFFFFF")
+    cv.merge(r0, C_R0, r0, C_RE, "🛂  PASSPORT STAMPS", bold=True, font_size=8.6, align="center",
+             bg_color="#EA580C", font_color="#FFFFFF")
+
+    # Polaroid Diary Table Header + 4 Editable Memory Rows
+    cv.put(r0 + 1, C_NAME, "📅  TUẦN / NGÀY", bold=True, font_size=8.5, align="center",
+           bg_color="#CCFBF1", font_color="#115E59")
+    cv.merge(r0 + 1, C_D0, r0 + 1, 14, "📍  ĐỊA ĐIỂM / TRẢI NGHIỆM MỚI", bold=True, font_size=8.5,
+             align="center", bg_color="#CCFBF1", font_color="#115E59")
+    cv.merge(r0 + 1, 15, r0 + 1, C_D31, "🎞️  KHOẢNH KHẮC ĐÁNG NHỚ (POLAROID CAPTION)", bold=True, font_size=8.5,
+             align="center", bg_color="#FFEDD5", font_color="#9A3412")
+
+    memories = [
+        ("Tuần 1 • Khởi hành", "Quán cafe yên tĩnh góc phố mới", "Chụp 1 bức ảnh nắng sớm & viết kế hoạch tháng mới thật hào hứng!"),
+        ("Tuần 2 • Khám phá", "Đi bộ công viên / cung đường mới", "Ngắm hoàng hôn cam rực rỡ & nghe podcast du lịch nhẹ nhàng."),
+        ("Tuần 3 • Kết nối", "Gặp gỡ bạn thân & thưởng trà chiều", "Lưu lại tấm ảnh kỷ niệm hai chiếc mũ pastel cùng nụ cười thật tươi!"),
+        ("Tuần 4 • Nhìn lại", "Góc bàn học ấm áp cuối tháng", "Tổng kết hành trình, đóng dấu hộ chiếu kỷ luật & chuẩn bị chuyến đi mới!"),
+    ]
+    for i, (dt_s, loc_s, cap_s) in enumerate(memories):
+        rr = r0 + 2 + i
+        bg = "#FFFFFF" if i % 2 == 0 else "#FAF7F2"
+        cv.put(rr, C_NAME, dt_s, bold=True, font_size=8.7, align="left", indent=1, bg_color=bg, font_color="#0F766E")
+        cv.merge(rr, C_D0, rr, 14, loc_s, font_size=8.8, align="left", indent=1, bg_color=bg, font_color=t.ink)
+        cv.merge(rr, 15, rr, C_D31, cap_s, font_size=8.8, align="left", indent=1, bg_color=bg, font_color=t.ink)
+    cv.unlock(r0 + 2, C_NAME, r0 + 5, C_D31)
+    cv.grid(r0 + 1, C_NAME, r0 + 5, C_D31, t.line)
+    cv.box(r0, C_NAME, r0 + 5, C_D31, "#0D9488")
+
+    # Right Passport Stamp Counter Card
+    cv.merge(r0 + 1, C_R0, r0 + 2, C_RE, f'="🛂 "&{tr.s["grown"]}&" DẤU"', bold=True, font_size=15,
+             align="center", bg_color="#CCFBF1", font_color="#115E59", font_name=t.font_title)
+    cv.merge(r0 + 3, C_R0, r0 + 3, C_RE, f"=MIN(1,{tr.s['grown']}/20)", bold=True, font_size=9.2,
+             align="center", num_format='0%" (Mốc 20 dấu)"', bg_color=t.card, font_color="#0F766E")
+    ws.conditional_format(rng(r0 + 3, C_R0, r0 + 3, C_RE), {
+        "type": "data_bar", "bar_color": "#0D9488", "bar_solid": True,
+        "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1,
+    })
+    cv.merge(r0 + 4, C_R0, r0 + 5, C_RE,
+             f'="📸 Snapshot 100%: "&{tr.s["perfect"]}&" tấm"&CHAR(10)&"🔥 Best: "&{tr.s["best"]}&" ngày"',
+             bold=True, font_size=8.6, align="center", text_wrap=True, bg_color="#FFEDD5", font_color="#9A3412")
+    cv.grid(r0 + 1, C_R0, r0 + 5, C_RE, t.line)
+    cv.box(r0, C_R0, r0 + 5, C_RE, t.line)
+
+
+

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================================
-#  Habit Tracker Collection v3.8 — Interactive Zero-Install Downloader (macOS/Linux)
+#  Habit Tracker Collection v3.9 — Interactive Zero-Install Downloader (macOS/Linux)
 #  Run in 1 line:
 #    curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu/main/install.sh | bash
 # ============================================================================
@@ -64,6 +64,19 @@ STEMS=(
   "45_Digimon_Terriermon_Mint"
   "46_Digimon_Renamon_Kuzuhamon"
   "47_Digimon_Tentomon_Electro"
+  "48_Capybara_Avocado_Zen"
+  "49_Capybara_Yuzu_Onsen_Spa"
+  "50_Capybara_Pip_Puddle_Besties"
+  "51_Capybara_Boba_Lily_Pond"
+  "52_Capybara_Bookworm_Study"
+  "53_Capybara_Lofi_Picnic_Beats"
+  "54_Capybara_Foodie_Snack_Club"
+  "55_Capybara_Dino_Hoodie_Play"
+  "56_Capybara_Apple_Orchard_Sweet"
+  "57_Capybara_Pink_Cloud_Chill"
+  "58_Capybara_Fairy_Party_Wish"
+  "59_Capybara_SelfCare_GlowUp"
+  "60_Capybara_Snapshot_Traveler"
 )
 
 TITLES=(
@@ -115,6 +128,19 @@ TITLES=(
   "Digimon Terriermon → MegaGargomon (7 Cấp)"
   "Digimon Renamon → Kuzuhamon Miko (8 Cấp)"
   "Digimon Tentomon → HerakleKabuterimon (7 Cấp)"
+  "Capybara Bơ Xanh Vẽ Tay (Nước & Bữa Bơ Zen)"
+  "Capybara Suối Nóng Yuzu (5 Donut & Thư Giãn Tối)"
+  "Đôi Bạn Pip & Puddle (Hồng-Tím Bestie Bond)"
+  "Capybara Hồ Sen Trà Sữa (Đếm Ly Boba Tuần)"
+  "Capy & Chaptered (Giờ Học & Trang Sách)"
+  "Capybara Lofi Picnic (Đếm Phút Flow & Playlist)"
+  "Capybara Foodie Club (6 Mốc Mở Khóa Món Ngon)"
+  "Capybara Áo Dino Xanh (Điểm Vui & 5 Thanh Pastel)"
+  "Capybara Vườn Táo Đỏ (Đếm Táo & Biết Ơn)"
+  "Capybara Mây Hồng Tối Giản (Minimalist Chill)"
+  "Capybara Tiệc Tiên (5 Điều Ước Sao Tự Thắp Sáng)"
+  "Capybara Self-Care GlowUp (3 Thẻ Sáng-Chiều-Tối)"
+  "Capybara Lữ Hành (Nhật Ký Polaroid & Dấu Hộ Chiếu)"
 )
 
 resolve_out_dir() {
@@ -181,14 +207,14 @@ OUT_DIR="$(resolve_out_dir)"
 mkdir -p "$OUT_DIR"
 
 printf "\n%s========================================================================%s\n" "$C_MAGENTA" "$C_RESET"
-printf "%s   HABIT TRACKER COLLECTION v3.8 — BY DYU (47 THEMES × 4 EDITIONS)%s\n" "$C_YELLOW" "$C_RESET"
+printf "%s   HABIT TRACKER COLLECTION v3.9 — BY DYU (60 THEMES × 4 EDITIONS)%s\n" "$C_YELLOW" "$C_RESET"
 printf "%s   Turbo 6/7/8-Stage Native Sprite Engine • FX Suite • Ctrl+Z Undo%s\n" "$C_CYAN" "$C_RESET"
 printf "%s========================================================================%s\n" "$C_MAGENTA" "$C_RESET"
 printf "  %sThư mục lưu file:%s %s\n\n" "$C_GREEN" "$C_RESET" "$OUT_DIR"
 
 printf "  %sBƯỚC 1 — CHỌN PHIÊN BẢN PHÙ HỢP (THEO THỨ TỰ ƯU TIÊN):%s\n" "$C_BOLD" "$C_RESET"
 printf "  %s----------------------------------------------------------------------%s\n" "$C_DIM" "$C_RESET"
-printf "  %s[1] Pro Interactive (.xlsm)  [⭐ KHUYÊN DÙNG SỐ 1 — EXCEL 365 TURBO v3.8]%s\n" "$C_GREEN" "$C_RESET"
+printf "  %s[1] Pro Interactive (.xlsm)  [⭐ KHUYÊN DÙNG SỐ 1 — EXCEL 365 TURBO v3.9]%s\n" "$C_GREEN" "$C_RESET"
 printf "      %s-> Siêu tốc ~25–54ms + Full FX Nảy/Pháo hoa/Toast + Ctrl+Z / Nút Undo%s\n" "$C_DIM" "$C_RESET"
 printf "         %s+ Khóa bảo vệ công thức + Tự lưu Đa Ngày/Tháng/Năm (100%% Offline)!%s\n" "$C_DIM" "$C_RESET"
 printf "  %s[2] Excel Universal Offline (.xlsx)  [Excel 2016/2019/2021/365]%s\n" "$C_CYAN" "$C_RESET"
@@ -219,9 +245,13 @@ case "$ED_CHOICE" in
   *) ED_CHOICE="1" ;;
 esac
 
-printf "\n  %sBƯỚC 2 — CHỌN MẪU THÓI QUEN (47 CHỦ ĐỀ THẨM MỸ, LINH VẬT & DIGIMON):%s\n" "$C_BOLD" "$C_RESET"
+printf "\n  %sBƯỚC 2 — CHỌN MẪU THÓI QUEN (60 CHỦ ĐỀ CAPYBARA, DIGIMON, LINH VẬT & HOA LÁ):%s\n" "$C_BOLD" "$C_RESET"
 printf "  %s----------------------------------------------------------------------%s\n" "$C_DIM" "$C_RESET"
-printf "  %s--- ⚡ [MỚI v3.8] 12 BỘ DIGIMON 7 & 8 CẤP TIẾN HÓA (#36–#47) ---%s\n" "$C_CYAN" "$C_RESET"
+printf "  %s--- 🥑 [MỚI v3.9] 13 BỘ CAPYBARA CHILL COLLECTION ĐỘC BẢN (#48–#60) ---%s\n" "$C_GREEN" "$C_RESET"
+for i in 48 49 50 51 52 53 54 55 56 57 58 59 60; do
+  printf "  [%-2d] %-38s — %s\n" "$i" "${STEMS[$i]}" "${TITLES[$i]}"
+done
+printf "  %s--- ⚡ 12 BỘ DIGIMON 7 & 8 CẤP TIẾN HÓA (#36–#47) ---%s\n" "$C_CYAN" "$C_RESET"
 for i in 36 37 38 39 40 41 42 43 44 45 46 47; do
   printf "  [%-2d] %-38s — %s\n" "$i" "${STEMS[$i]}" "${TITLES[$i]}"
 done
@@ -242,9 +272,9 @@ for i in 4 6 7 20 24; do
   printf "  [%-2d] %-38s — %s\n" "$i" "${STEMS[$i]}" "${TITLES[$i]}"
 done
 printf "  %s----------------------------------------------------------------------%s\n" "$C_DIM" "$C_RESET"
-printf "  %s[A]%s  Tải TOÀN BỘ 47 mẫu (Download All 47)\n" "$C_GREEN" "$C_RESET"
+printf "  %s[A]%s  Tải TOÀN BỘ 60 mẫu (Download All 60)\n" "$C_GREEN" "$C_RESET"
 printf "  %s[0]%s  Thoát\n\n" "$C_DIM" "$C_RESET"
-printf "  %sGợi ý: Nhập 1 số (vd: 44), nhiều số (vd: 41,44,46), dải (vd: 41-47), hoặc A%s\n" "$C_YELLOW" "$C_RESET"
+printf "  %sGợi ý: Nhập 1 số (vd: 48), nhiều số (vd: 48,50,52), dải (vd: 48-60), hoặc A%s\n" "$C_YELLOW" "$C_RESET"
 
 CHOICE=""
 if [ -n "${HABIT_CHOICE:-}" ]; then
@@ -271,12 +301,12 @@ for tok in $CLEAN; do
       if [[ "$a" =~ ^[0-9]+$ ]] && [[ "$b" =~ ^[0-9]+$ ]]; then
         [ "$a" -gt "$b" ] && { t="$a"; a="$b"; b="$t"; }
         for ((n=a; n<=b; n++)); do
-          [ "$n" -ge 1 ] && [ "$n" -le 47 ] && SEL_IDS+=("$n")
+          [ "$n" -ge 1 ] && [ "$n" -le 60 ] && SEL_IDS+=("$n")
         done
       fi
       ;;
     *)
-      if [[ "$up" =~ ^[0-9]+$ ]] && [ "$up" -ge 1 ] && [ "$up" -le 47 ]; then
+      if [[ "$up" =~ ^[0-9]+$ ]] && [ "$up" -ge 1 ] && [ "$up" -le 60 ]; then
         SEL_IDS+=("$up")
       fi
       ;;
@@ -284,7 +314,7 @@ for tok in $CLEAN; do
 done
 
 if [ "$DO_ALL" -eq 1 ]; then
-  SEL_IDS=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47)
+  SEL_IDS=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60)
 fi
 
 UNIQUE_IDS=()

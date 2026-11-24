@@ -42,7 +42,14 @@ from hx.addons import (add_cactus_weekly_strip, add_rainbow_bottom_blocks,
                        add_royal_cat_cash_panel, add_top_habits_rank_panel,
                        add_dog_companion_panel, add_sakura_minimalist_bar,
                        add_mochi_cat_mood_suite, add_bunny_sticker_pop_panel,
-                       add_milk_mocha_donuts_panel, add_digimon_crest_panel)
+                       add_milk_mocha_donuts_panel, add_digimon_crest_panel,
+                       add_capybara_avocado_block, add_capybara_onsen_block,
+                       add_capybara_pip_puddle_block, add_capybara_boba_pond_block,
+                       add_capybara_bookworm_block, add_capybara_lofi_picnic_block,
+                       add_capybara_foodie_block, add_capybara_dino_hoodie_block,
+                       add_capybara_apple_orchard_block, add_capybara_pink_chill_block,
+                       add_capybara_fairy_party_block, add_capybara_selfcare_block,
+                       add_capybara_traveler_block)
 from hx.daily_tasks import build_daily_tasks_sheet, DAILY_TASKS_SHEET
 from hx.extras import (build_reflection_notes_sheet, build_rainbow_analytics_sheet,
                        build_monthly_budget_sheet, build_life_overview_sheet,
@@ -301,6 +308,45 @@ def _addon_digimon_renamon(wb, cv, tr, seed):
 
 def _addon_digimon_tentomon(wb, cv, tr, seed):
     add_digimon_crest_panel(wb, cv, tr, kind="tentomon")
+
+def _addon_capy_avocado(wb, cv, tr, seed):
+    add_capybara_avocado_block(wb, cv, tr, seed=seed)
+
+def _addon_capy_onsen(wb, cv, tr, seed):
+    add_capybara_onsen_block(wb, cv, tr, seed=seed)
+
+def _addon_capy_pip_puddle(wb, cv, tr, seed):
+    add_capybara_pip_puddle_block(wb, cv, tr, seed=seed)
+
+def _addon_capy_boba_pond(wb, cv, tr, seed):
+    add_capybara_boba_pond_block(wb, cv, tr, seed=seed)
+
+def _addon_capy_bookworm(wb, cv, tr, seed):
+    add_capybara_bookworm_block(wb, cv, tr, seed=seed)
+
+def _addon_capy_lofi_picnic(wb, cv, tr, seed):
+    add_capybara_lofi_picnic_block(wb, cv, tr, seed=seed)
+
+def _addon_capy_foodie(wb, cv, tr, seed):
+    add_capybara_foodie_block(wb, cv, tr, seed=seed)
+
+def _addon_capy_dino_hoodie(wb, cv, tr, seed):
+    add_capybara_dino_hoodie_block(wb, cv, tr, seed=seed)
+
+def _addon_capy_apple_orchard(wb, cv, tr, seed):
+    add_capybara_apple_orchard_block(wb, cv, tr, seed=seed)
+
+def _addon_capy_pink_chill(wb, cv, tr, seed):
+    add_capybara_pink_chill_block(wb, cv, tr, seed=seed)
+
+def _addon_capy_fairy_party(wb, cv, tr, seed):
+    add_capybara_fairy_party_block(wb, cv, tr, seed=seed)
+
+def _addon_capy_selfcare(wb, cv, tr, seed):
+    add_capybara_selfcare_block(wb, cv, tr, seed=seed)
+
+def _addon_capy_traveler(wb, cv, tr, seed):
+    add_capybara_traveler_block(wb, cv, tr, seed=seed)
 
 
 # =========================================================================== #
@@ -1894,6 +1940,494 @@ TEMPLATES: list[TemplateDef] = [
         tracker_capture_range="A1:AN45",
         addon_fn=_addon_digimon_tentomon,
     ),
+    # ----------------------------------------------------------------------- #
+    #  BATCH 7 — 13 BESPOKE CAPYBARA CHILL COLLECTION TEMPLATES (#48..#60, v3.9)
+    # ----------------------------------------------------------------------- #
+    TemplateDef(
+        stem="48_Capybara_Avocado_Zen", short_key="48_capybara_avocado",
+        theme=Theme(
+            slug="capybara_avocado", name="CAPYBARA AVOCADO ZEN", emoji="🥑",
+            tagline_vi="Phiên bản đặc biệt Capybara Bơ Xanh vẽ tay độc quyền: Gối bơ → Thuyền bơ ngủ trưa → Đội bơ → Ôm bơ → Áo choàng bơ → Vua Bơ Zen!",
+            page="#F6FAEE", card="#FFFFFF", ink="#2F3B1F", muted="#6E7F54", line="#DCE8C5",
+            primary="#65A30D", primary_dark="#3F6212", on_primary="#FFFFFF", soft="#ECFCCB",
+            chart_fill="#BEF264", chart_line="#4D7C0F", chart_kind="area",
+            week_head=["#65A30D", "#84CC16", "#4D7C0F", "#854D0E", "#A3E635"],
+            week_tint=["#F4FCE6", "#F7FEE7", "#EFF8DE", "#FDF8EE", "#F7FEE7"],
+            week_check=["#3F6212", "#4D7C0F", "#365314", "#854D0E", "#4D7C0F"],
+            week_on=["#FFFFFF", "#2F3B1F", "#FFFFFF", "#FFFFFF", "#2F3B1F"],
+            streak_lo="#F7FEE7", streak_mid="#BEF264", streak_hi="#3F6212",
+            bar="#65A30D", donut_rest="#E4F2CE",
+            chart_title="AVOCADO ZEN WELLNESS • NHỊP SỐNG LÀNH MẠNH MỖI NGÀY",
+            num_stages=6,
+            stage_names=[
+                "Gối Bơ Xanh", "Thuyền Bơ Ngủ", "Đội Bơ Mini",
+                "Ôm Bơ Cười", "Áo Choàng Bơ", "Vua Bơ Zen!",
+            ],
+        ),
+        tracker_name="🥑 Avocado Capybara",
+        habits=[
+            Habit("Uống 500ml nước ấm sáng sớm", goal=30, p=0.92),
+            Habit("Ăn sáng healthy / giàu chất xơ", goal=28, p=0.88),
+            Habit("Uống đủ 2.2L nước lọc mỗi ngày", goal=30, p=0.91),
+            Habit("Đi bộ / giãn cơ 25 phút thư thái", goal=26, p=0.86),
+            Habit("Ăn rau xanh & hạn chế đồ chiên", goal=26, p=0.85),
+            Habit("Hít thở chánh niệm 10 phút chiều", goal=28, p=0.87),
+            Habit("Đọc sách / nghe podcast 20 phút", goal=26, p=0.84),
+            Habit("Tắt màn hình sớm & ngủ trước 23h", goal=28, p=0.86),
+        ],
+        seed=480, label_tag="AVOCADO ZEN SPECIAL", garden_label="AVOCADO CAPYBARA",
+        grown_label="🥑 AVOCADO ZEN\nDAYS (≥75%):",
+        tracker_capture_range="A1:AN48",
+        addon_fn=_addon_capy_avocado,
+    ),
+    TemplateDef(
+        stem="49_Capybara_Yuzu_Onsen_Spa", short_key="49_capybara_onsen",
+        theme=Theme(
+            slug="capybara_onsen", name="CAPYBARA YUZU ONSEN SPA", emoji="🍊",
+            tagline_vi="Thư giãn chuẩn Nhật cùng Capybara ngâm suối khoáng nóng & cam Yuzu ấm áp + 5 đồng hồ Donut bình an mỗi tuần!",
+            page="#FFFBF2", card="#FFFFFF", ink="#432818", muted="#8D6E59", line="#F1DEC6",
+            primary="#F97316", primary_dark="#9A5B2C", on_primary="#FFFFFF", soft="#FFEDD5",
+            chart_fill="#FDBA74", chart_line="#EA580C", chart_kind="column",
+            week_head=["#F97316", "#FB923C", "#38BDF8", "#D97706", "#C2410C"],
+            week_tint=["#FFF7ED", "#FFF9F0", "#F0F9FF", "#FFFBEB", "#FFF5EB"],
+            week_check=["#C2410C", "#EA580C", "#0284C7", "#B45309", "#9A3412"],
+            week_on=["#FFFFFF", "#432818", "#0C4A6E", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#FFF7ED", streak_mid="#FDBA74", streak_hi="#C2410C",
+            bar="#F97316", donut_rest="#FDE6C9",
+            chart_title="YUZU ONSEN SPA FLOW • NĂNG LƯỢNG THƯ THÁI MỖI NGÀY",
+            num_stages=6,
+            stage_names=[
+                "Bồn Gỗ Hinoki", "Duỗi Người Spa", "Chibi Cam Yuzu",
+                "Chill Cam Vàng", "Chăn Ấm Trà Nóng", "Suối Nóng Yuzu!",
+            ],
+        ),
+        tracker_name="🍊 Yuzu Onsen Capy",
+        habits=[
+            Habit("Thức dậy nhẹ nhàng không bấm snooze", goal=28, p=0.88),
+            Habit("Uống trà ấm / nước chanh buổi sáng", goal=30, p=0.92),
+            Habit("Giãn cổ vai gáy 10 phút giữa giờ", goal=28, p=0.87),
+            Habit("Đi bộ hít thở khí trời 20 phút", goal=25, p=0.85),
+            Habit("Ăn tối nhẹ nhàng trước 19h30", goal=26, p=0.84),
+            Habit("Tắm nước ấm thư giãn cuối ngày", goal=30, p=0.93),
+            Habit("Ghi 3 điều bình yên trong ngày", goal=28, p=0.88),
+            Habit("Ngủ sâu đủ 7.5–8 tiếng mỗi đêm", goal=28, p=0.86),
+        ],
+        seed=490, label_tag="YUZU ONSEN SPA", garden_label="YUZU ONSEN",
+        grown_label="♨️ ONSEN CALM\nDAYS (≥75%):",
+        tracker_capture_range="A1:AN48",
+        addon_fn=_addon_capy_onsen,
+    ),
+    TemplateDef(
+        stem="50_Capybara_Pip_Puddle_Besties", short_key="50_capybara_pip_puddle",
+        theme=Theme(
+            slug="capybara_pip_puddle", name="CAPYBARA PIP & PUDDLE BESTIES", emoji="💕",
+            tagline_vi="Bộ đôi bạn thân Pip & Puddle tông Hồng Phấn & Tím Lavender đáng yêu — cùng nhau tích điểm gắn kết suốt 5 tuần!",
+            page="#FFF9FA", card="#FFFFFF", ink="#4A2545", muted="#936B8E", line="#F1D5E6",
+            primary="#F472B6", primary_dark="#7C3AED", on_primary="#FFFFFF", soft="#FCE7F3",
+            chart_fill="#DDD6FE", chart_line="#EC4899", chart_kind="line", chart_markers=True,
+            week_head=["#F472B6", "#A78BFA", "#EC4899", "#8B5CF6", "#F9A8D4"],
+            week_tint=["#FFF5F8", "#F7F4FF", "#FFF3F7", "#F5F3FF", "#FFF7FA"],
+            week_check=["#DB2777", "#7C3AED", "#BE185D", "#6D28D9", "#EC4899"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#4A2545"],
+            streak_lo="#FDF2F8", streak_mid="#F9A8D4", streak_hi="#7C3AED",
+            bar="#A78BFA", donut_rest="#F3E2F4",
+            chart_title="PIP & PUDDLE BOND CURVE • ĐƯỜNG CONG GẮN KẾT MỖI NGÀY",
+            num_stages=6,
+            stage_names=[
+                "Ngủ Gối Đôi", "Đôi Bạn Tò Mò", "Chào Ngày Mới!",
+                "Tiệc Bánh Quy", "Chung Khăn Ấm", "Gửi Yêu Thương!",
+            ],
+        ),
+        tracker_name="💕 Pip & Puddle Capy",
+        habits=[
+            Habit("Mỉm cười & uống ly nước buổi sáng", goal=30, p=0.92),
+            Habit("Nhắn hỏi thăm gia đình / bạn thân", goal=26, p=0.87),
+            Habit("Hoàn thành 3 việc ưu tiên trong ngày", goal=28, p=0.89),
+            Habit("Vận động / nhảy nhẹ vui vẻ 20 phút", goal=25, p=0.84),
+            Habit("Nói lời cảm ơn / khen ngợi 1 người", goal=28, p=0.88),
+            Habit("Đọc sách / học điều mới 20 phút", goal=26, p=0.85),
+            Habit("Dọn gọn góc bàn xinh trước khi nghỉ", goal=28, p=0.87),
+            Habit("Đi ngủ đúng giờ & chúc ngủ ngon", goal=28, p=0.86),
+        ],
+        seed=500, label_tag="PIP & PUDDLE DUO", garden_label="BESTIE DUO",
+        grown_label="💕 BESTIE BOND\nDAYS (≥75%):",
+        tracker_capture_range="A1:AN47",
+        addon_fn=_addon_capy_pip_puddle,
+    ),
+    TemplateDef(
+        stem="51_Capybara_Boba_Lily_Pond", short_key="51_capybara_boba_pond",
+        theme=Theme(
+            slug="capybara_boba_pond", name="CAPYBARA BOBA LILY POND", emoji="🧋",
+            tagline_vi="Capybara ngồi lá sen uống trà sữa dâu trên hồ xanh trong vắt + bộ đếm tự động tích ly Boba thưởng mỗi tuần!",
+            page="#EFF8FF", card="#FFFFFF", ink="#1E3A5F", muted="#5F82A6", line="#CBE5FB",
+            primary="#0EA5E9", primary_dark="#0369A1", on_primary="#FFFFFF", soft="#E0F2FE",
+            chart_fill="#7DD3FC", chart_line="#0284C7", chart_kind="column",
+            week_head=["#0EA5E9", "#22C55E", "#F472B6", "#38BDF8", "#10B981"],
+            week_tint=["#F0F9FF", "#F0FDF4", "#FDF2F8", "#F0F9FF", "#ECFDF5"],
+            week_check=["#0284C7", "#15803D", "#DB2777", "#0369A1", "#047857"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#0C4A6E", "#FFFFFF"],
+            streak_lo="#E0F2FE", streak_mid="#7DD3FC", streak_hi="#0369A1",
+            bar="#F472B6", donut_rest="#D6ECFA",
+            chart_title="BOBA LILY POND • TÍCH ĐIỂM TRÀ SỮA HỒ SEN MỖI NGÀY",
+            num_stages=6,
+            stage_names=[
+                "Ly Boba Lá Sen", "Trà Sữa Đá", "Bơi Hồ Lau Sậy",
+                "Đội Lá Sen Xanh", "Boba Đường Đen", "Vua Boba Hồ Sen!",
+            ],
+        ),
+        tracker_name="🧋 Boba Lily Capy",
+        habits=[
+            Habit("Uống 2L nước lọc trước khi uống ngọt", goal=30, p=0.92),
+            Habit("Không uống nước ngọt có ga trong ngày", goal=26, p=0.84),
+            Habit("Hoàn thành Deep Work 90 phút sáng", goal=26, p=0.87),
+            Habit("Đi bộ 6.000 bước giữ dáng khỏe", goal=26, p=0.85),
+            Habit("Ăn trái cây tươi / sữa chua ít đường", goal=28, p=0.88),
+            Habit("Ghi chép chi tiêu đồ uống & ăn vặt", goal=28, p=0.89),
+            Habit("Đọc sách / học kỹ năng 20 phút", goal=26, p=0.86),
+            Habit("Ngủ sớm trước 23h00 phục hồi da", goal=28, p=0.85),
+        ],
+        seed=510, label_tag="BOBA LILY POND", garden_label="BOBA POND",
+        grown_label="🧋 BOBA POND\nDAYS (≥75%):",
+        tracker_capture_range="A1:AN46",
+        addon_fn=_addon_capy_boba_pond,
+    ),
+    TemplateDef(
+        stem="52_Capybara_Bookworm_Study", short_key="52_capybara_bookworm",
+        theme=Theme(
+            slug="capybara_bookworm", name="CAPYBARA BOOKWORM STUDY", emoji="📚",
+            tagline_vi="Góc học tập Capy & Chaptered tông giấy kem cổ điển, kèm bảng Giờ Học + Số Trang Sách & biểu đồ cột tập trung!",
+            page="#FFFDF5", card="#FFFFFF", ink="#3B2414", muted="#8C735B", line="#EFE1BE",
+            primary="#CA8A04", primary_dark="#854D0E", on_primary="#FFFFFF", soft="#FEF9C3",
+            chart_fill="#FDE047", chart_line="#CA8A04", chart_kind="area",
+            week_head=["#CA8A04", "#0284C7", "#EC4899", "#D97706", "#0D9488"],
+            week_tint=["#FFFDF0", "#F0F9FF", "#FDF2F8", "#FFFBEB", "#F0FDFA"],
+            week_check=["#854D0E", "#0369A1", "#BE185D", "#B45309", "#0F766E"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#FEFCE8", streak_mid="#FDE047", streak_hi="#854D0E",
+            bar="#CA8A04", donut_rest="#F5ECCE",
+            chart_title="CAPY & CHAPTERED • ĐƯỜNG CONG HỌC TẬP MỖI NGÀY",
+            num_stages=6,
+            stage_names=[
+                "Chồng Sách Màu", "Ghi Chép Bút Chì", "Học Trên Laptop",
+                "Bảng Chữ ABC", "Ngồi Chồng Sách", "Capy & Chaptered!",
+            ],
+        ),
+        tracker_name="📚 Bookworm Capy",
+        habits=[
+            Habit("Đọc tối thiểu 15 trang sách mỗi ngày", goal=28, p=0.90),
+            Habit("Hoàn thành 2 phiên Pomodoro tập trung", goal=28, p=0.89),
+            Habit("Học ngoại ngữ / từ vựng mới 20 phút", goal=26, p=0.86),
+            Habit("Ghi chú tóm tắt bài học vào sổ tay", goal=26, p=0.85),
+            Habit("Không lướt mạng xã hội khi đang học", goal=26, p=0.83),
+            Habit("Uống đủ nước & nghỉ mắt mỗi 45 phút", goal=30, p=0.91),
+            Habit("Ôn lại Flashcards / kiến thức cũ", goal=26, p=0.87),
+            Habit("Chuẩn bị lịch học cho ngày hôm sau", goal=28, p=0.88),
+        ],
+        seed=520, label_tag="CAPY & CHAPTERED", garden_label="STUDY LIBRARY",
+        grown_label="📚 BOOKWORM\nDAYS (≥75%):",
+        tracker_capture_range="A1:AN50",
+        addon_fn=_addon_capy_bookworm,
+    ),
+    TemplateDef(
+        stem="53_Capybara_Lofi_Picnic_Beats", short_key="53_capybara_lofi_picnic",
+        theme=Theme(
+            slug="capybara_lofi_picnic", name="CAPYBARA LOFI PICNIC BEATS", emoji="🎧",
+            tagline_vi="Đeo tai nghe xanh nghe nhạc Lofi trên thảm picnic caro đỏ — theo dõi số phút Deep Flow & playlist yêu thích mỗi ngày!",
+            page="#F0F7FF", card="#FFFFFF", ink="#1E293B", muted="#64748B", line="#D0E3FA",
+            primary="#2563EB", primary_dark="#1D4ED8", on_primary="#FFFFFF", soft="#DBEAFE",
+            chart_fill="#93C5FD", chart_line="#2563EB", chart_kind="line", chart_markers=True,
+            week_head=["#2563EB", "#EF4444", "#3B82F6", "#F87171", "#1D4ED8"],
+            week_tint=["#EFF6FF", "#FEF2F2", "#F0F7FF", "#FFF5F5", "#EEF2FF"],
+            week_check=["#1D4ED8", "#DC2626", "#2563EB", "#B91C1C", "#1E40AF"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#EFF6FF", streak_mid="#93C5FD", streak_hi="#1D4ED8",
+            bar="#EF4444", donut_rest="#DBEAFE",
+            chart_title="LOFI PICNIC BEATS • NHỊP ĐIỆU DEEP FLOW MỖI NGÀY",
+            num_stages=6,
+            stage_names=[
+                "Giỏ Picnic Caro", "Dạo Bước Chill", "Guitar Trái Tim",
+                "Đôi Bạn Phiêu", "Bánh Mì Picnic", "Lofi Picnic King!",
+            ],
+        ),
+        tracker_name="🎧 Lofi Picnic Capy",
+        habits=[
+            Habit("Bật Lofi & vào phiên Deep Flow 60p", goal=28, p=0.90),
+            Habit("Tắt thông báo điện thoại khi làm việc", goal=26, p=0.85),
+            Habit("Viết 3 đầu việc quan trọng nhất sáng", goal=28, p=0.89),
+            Habit("Nghỉ trưa nghe nhạc thư giãn 15 phút", goal=26, p=0.87),
+            Habit("Ra ngoài hít thở & đi dạo buổi chiều", goal=25, p=0.84),
+            Habit("Uống đủ 2L nước & ăn trái cây tươi", goal=30, p=0.92),
+            Habit("Đọc sách / sáng tạo không áp lực 20p", goal=26, p=0.86),
+            Habit("Nghe nhạc nhẹ & ngủ đúng giờ 23h00", goal=28, p=0.86),
+        ],
+        seed=530, label_tag="LOFI PICNIC BEATS", garden_label="LOFI PICNIC",
+        grown_label="🎧 LOFI FLOW\nDAYS (≥75%):",
+        tracker_capture_range="A1:AN47",
+        addon_fn=_addon_capy_lofi_picnic,
+    ),
+    TemplateDef(
+        stem="54_Capybara_Foodie_Snack_Club", short_key="54_capybara_foodie",
+        theme=Theme(
+            slug="capybara_foodie", name="CAPYBARA FOODIE SNACK CLUB", emoji="🍔",
+            tagline_vi="Câu lạc bộ ẩm thực Capybara vui nhộn: Sữa dâu → Dưa hấu → Bắp rang → Pizza → Burger King + bảng Mở Khóa Món Ngon!",
+            page="#FFFBEB", card="#FFFFFF", ink="#451A03", muted="#926C48", line="#FDE68A",
+            primary="#EF4444", primary_dark="#B91C1C", on_primary="#FFFFFF", soft="#FEF3C7",
+            chart_fill="#FCD34D", chart_line="#EF4444", chart_kind="column",
+            week_head=["#EF4444", "#F59E0B", "#10B981", "#F97316", "#DC2626"],
+            week_tint=["#FEF2F2", "#FFFBEB", "#ECFDF5", "#FFF7ED", "#FEF2F2"],
+            week_check=["#B91C1C", "#B45309", "#047857", "#C2410C", "#991B1B"],
+            week_on=["#FFFFFF", "#451A03", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#FFFBEB", streak_mid="#FCD34D", streak_hi="#DC2626",
+            bar="#F59E0B", donut_rest="#FDE8B0",
+            chart_title="FOODIE SNACK CLUB • TIẾN ĐỘ MỞ KHÓA THỰC ĐƠN",
+            num_stages=6,
+            stage_names=[
+                "Hộp Sữa Dâu", "Uống Sữa Ngon", "Dưa Hấu Mát",
+                "Bắp Rang Bơ", "Lát Pizza Phô Mai", "Vua Burger!",
+            ],
+        ),
+        tracker_name="🍔 Foodie Capybara",
+        habits=[
+            Habit("Ăn sáng đủ chất không bỏ bữa sáng", goal=28, p=0.90),
+            Habit("Tự nấu ăn / mang cơm trưa ngon sạch", goal=24, p=0.84),
+            Habit("Ăn đủ 2 phần rau xanh & trái cây", goal=28, p=0.88),
+            Habit("Uống đủ 2L nước lọc thanh lọc cơ thể", goal=30, p=0.92),
+            Habit("Không ăn vặt khuya sau 21h00", goal=26, p=0.82),
+            Habit("Ghi chép chi tiêu ăn uống trong ngày", goal=28, p=0.89),
+            Habit("Đi bộ tiêu hóa 20 phút sau ăn", goal=26, p=0.85),
+            Habit("Dọn rửa bếp gọn gàng trước khi ngủ", goal=28, p=0.87),
+        ],
+        seed=540, label_tag="FOODIE SNACK CLUB", garden_label="FOODIE CLUB",
+        grown_label="🍔 FOODIE TREAT\nDAYS (≥75%):",
+        tracker_capture_range="A1:AN46",
+        addon_fn=_addon_capy_foodie,
+    ),
+    TemplateDef(
+        stem="55_Capybara_Dino_Hoodie_Play", short_key="55_capybara_dino_hoodie",
+        theme=Theme(
+            slug="capybara_dino_hoodie", name="CAPYBARA DINO HOODIE PLAY", emoji="🦕",
+            tagline_vi="Capybara diện áo khoác Khủng Long Xanh siêu cưng cùng bạn Vịt Vàng, thanh tiến độ 5 tuần pastel & điểm niềm vui mỗi ngày!",
+            page="#F4FBF6", card="#FFFFFF", ink="#14532D", muted="#5B866B", line="#D0EED8",
+            primary="#16A34A", primary_dark="#15803D", on_primary="#FFFFFF", soft="#DCFCE7",
+            chart_fill="#86EFAC", chart_line="#16A34A", chart_kind="area",
+            week_head=["#16A34A", "#EAB308", "#FB923C", "#22C55E", "#84CC16"],
+            week_tint=["#F0FDF4", "#FEFCE8", "#FFF7ED", "#ECFDF5", "#F7FEE7"],
+            week_check=["#15803D", "#A16207", "#C2410C", "#047857", "#4D7C0F"],
+            week_on=["#FFFFFF", "#422006", "#FFFFFF", "#FFFFFF", "#14532D"],
+            streak_lo="#F0FDF4", streak_mid="#86EFAC", streak_hi="#15803D",
+            bar="#EAB308", donut_rest="#D6F5DF",
+            chart_title="DINO HOODIE PLAYLAND • NĂNG LƯỢNG VUI VẺ MỖI NGÀY",
+            num_stages=6,
+            stage_names=[
+                "Vịt Vàng Bé Xíu", "Ngủ Cùng Vịt", "Vịt Con Thức Dậy",
+                "Đội Vòng Hoa", "Cầm Bó Hoa Dại", "Dino Hoodie!",
+            ],
+        ),
+        tracker_name="🦕 Dino Hoodie Capy",
+        habits=[
+            Habit("Dậy sớm vươn vai đón nắng mai", goal=28, p=0.89),
+            Habit("Vận động vui vẻ / thể thao 30 phút", goal=25, p=0.86),
+            Habit("Uống đủ nước & ăn trái cây tươi", goal=30, p=0.92),
+            Habit("Dành 20 phút cho sở thích yêu thích", goal=26, p=0.88),
+            Habit("Hoàn thành công việc đúng hạn", goal=28, p=0.87),
+            Habit("Học thêm 1 điều thú vị mỗi ngày", goal=26, p=0.85),
+            Habit("Cười thật tươi & ghi 1 niềm vui nhỏ", goal=28, p=0.90),
+            Habit("Ngủ sớm đủ giấc trước 23h00", goal=28, p=0.86),
+        ],
+        seed=550, label_tag="DINO HOODIE PLAY", garden_label="DINO PLAYLAND",
+        grown_label="🦕 DINO PLAY\nDAYS (≥75%):",
+        tracker_capture_range="A1:AN47",
+        addon_fn=_addon_capy_dino_hoodie,
+    ),
+    TemplateDef(
+        stem="56_Capybara_Apple_Orchard_Sweet", short_key="56_capybara_apple_orchard",
+        theme=Theme(
+            slug="capybara_apple_orchard", name="CAPYBARA APPLE ORCHARD SWEET", emoji="🍎",
+            tagline_vi="Vườn táo đỏ ngọt lành tông Cam Đào & Đỏ Táo giòn rụm — đếm từng quả táo thu hoạch & lưu giữ 3 điều biết ơn mỗi tháng!",
+            page="#FFF6ED", card="#FFFFFF", ink="#4C1D24", muted="#95656C", line="#F9D5C5",
+            primary="#E11D48", primary_dark="#9F1239", on_primary="#FFFFFF", soft="#FFE4E6",
+            chart_fill="#FDA4AF", chart_line="#E11D48", chart_kind="column",
+            week_head=["#E11D48", "#16A34A", "#F43F5E", "#22C55E", "#FB7185"],
+            week_tint=["#FFF1F2", "#F0FDF4", "#FFF5F6", "#ECFDF5", "#FFF7F7"],
+            week_check=["#BE123C", "#15803D", "#E11D48", "#047857", "#9F1239"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#FFF1F2", streak_mid="#FDA4AF", streak_hi="#BE123C",
+            bar="#16A34A", donut_rest="#FADCE0",
+            chart_title="APPLE ORCHARD HARVEST • SẢN LƯỢNG TÁO ĐỎ MỖI NGÀY",
+            num_stages=6,
+            stage_names=[
+                "Quả Táo Đỏ Tươi", "Capy Ngủ Ngoan", "Ngước Nhìn Vườn",
+                "Lon Ton Hái Táo", "Ôm Trái Tim Hồng", "Ôm Táo Khổng Lồ!",
+            ],
+        ),
+        tracker_name="🍎 Apple Orchard Capy",
+        habits=[
+            Habit("Ăn 1 quả táo / trái cây tươi mỗi ngày", goal=28, p=0.90),
+            Habit("Uống đủ 2L nước lọc tinh khiết", goal=30, p=0.92),
+            Habit("Tập thể dục / chạy bộ nhẹ 25 phút", goal=25, p=0.85),
+            Habit("Hoàn thành 3 việc quan trọng sáng", goal=28, p=0.89),
+            Habit("Ghi lại 1 điều ngọt ngào biết ơn", goal=28, p=0.88),
+            Habit("Đọc sách / trau dồi bản thân 20 phút", goal=26, p=0.86),
+            Habit("Ghi chi tiêu & tiết kiệm mỗi ngày", goal=28, p=0.87),
+            Habit("Đi ngủ sớm & nghỉ ngơi trọn vẹn", goal=28, p=0.86),
+        ],
+        seed=560, label_tag="APPLE ORCHARD SWEET", garden_label="APPLE ORCHARD",
+        grown_label="🍎 APPLE HARVEST\nBASKETS (≥75%):",
+        tracker_capture_range="A1:AN46",
+        addon_fn=_addon_capy_apple_orchard,
+    ),
+    TemplateDef(
+        stem="57_Capybara_Pink_Cloud_Chill", short_key="57_capybara_pink_chill",
+        theme=Theme(
+            slug="capybara_pink_chill", name="CAPYBARA PINK CLOUD CHILL", emoji="☁️",
+            tagline_vi="Thiết kế Pastel Hồng Mây tối giản & êm dịu tuyệt đối — không rối mắt, thanh chill gọn gàng giúp bạn sống chậm nhẹ nhàng!",
+            page="#FDF2F8", card="#FFFFFF", ink="#500724", muted="#9D5C79", line="#F5CFE2",
+            primary="#DB2777", primary_dark="#9D174D", on_primary="#FFFFFF", soft="#FCE7F3",
+            chart_fill="#F9A8D4", chart_line="#DB2777", chart_kind="area",
+            week_head=["#F472B6", "#F9A8D4", "#EC4899", "#E879F9", "#DB2777"],
+            week_tint=["#FFF5F9", "#FFF7FB", "#FFF2F8", "#FDF4FF", "#FFF4F9"],
+            week_check=["#BE185D", "#DB2777", "#9D174D", "#A21CAF", "#BE185D"],
+            week_on=["#FFFFFF", "#500724", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#FDF2F8", streak_mid="#F9A8D4", streak_hi="#9D174D",
+            bar="#F472B6", donut_rest="#F8DCEB",
+            chart_title="PINK CLOUD CHILL • NHỊP SỐNG ÊM ÁI TỐI GIẢN",
+            num_stages=6,
+            stage_names=[
+                "Gối Mây Hồng", "Que Kem Dâu", "Lăn Tròn Thư Thái",
+                "Nụ Cười Dịu Dàng", "Bước Đi Vui Vẻ", "Ngâm Hồ Mây Hồng!",
+            ],
+        ),
+        tracker_name="☁️ Pink Cloud Capy",
+        habits=[
+            Habit("Thức dậy chậm rãi & uống nước ấm", goal=28, p=0.90),
+            Habit("Dưỡng da sáng & thoa chống nắng", goal=30, p=0.93),
+            Habit("Uống đủ 2L nước & trà thảo mộc", goal=30, p=0.91),
+            Habit("Giãn cơ nhẹ nhàng 15 phút mỗi ngày", goal=26, p=0.86),
+            Habit("Tập trung hoàn thành việc chính", goal=28, p=0.88),
+            Habit("Tránh tin tức tiêu cực & sống chậm", goal=26, p=0.85),
+            Habit("Đọc 10 trang sách nhẹ nhàng buổi tối", goal=26, p=0.84),
+            Habit("Ngủ sớm trước 23h trong bình yên", goal=28, p=0.87),
+        ],
+        seed=570, label_tag="PINK CLOUD MINIMAL", garden_label="PINK CLOUD",
+        grown_label="☁️ PEACEFUL CHILL\nDAYS (≥75%):",
+        tracker_capture_range="A1:AN43",
+        addon_fn=_addon_capy_pink_chill,
+    ),
+    TemplateDef(
+        stem="58_Capybara_Fairy_Party_Wish", short_key="58_capybara_fairy_party",
+        theme=Theme(
+            slug="capybara_fairy_party", name="CAPYBARA FAIRY PARTY WISH", emoji="🧚",
+            tagline_vi="Tiệc Tiên Phép Màu tông Tím Lavender & Sao Vàng — tự động thắp sáng 5 Điều Ước Ngôi Sao khi bạn chinh phục từng cột mốc!",
+            page="#F8F5FF", card="#FFFFFF", ink="#3B0764", muted="#7E5E99", line="#E3D5FA",
+            primary="#9333EA", primary_dark="#6B21A8", on_primary="#FFFFFF", soft="#F3E8FF",
+            chart_fill="#D8B4FE", chart_line="#9333EA", chart_kind="line", chart_markers=True,
+            week_head=["#9333EA", "#EC4899", "#EAB308", "#A855F7", "#DB2777"],
+            week_tint=["#FAF5FF", "#FDF2F8", "#FEFCE8", "#F5F3FF", "#FFF1F2"],
+            week_check=["#7E22CE", "#DB2777", "#B45309", "#6B21A8", "#BE185D"],
+            week_on=["#FFFFFF", "#FFFFFF", "#422006", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#FAF5FF", streak_mid="#D8B4FE", streak_hi="#6B21A8",
+            bar="#EAB308", donut_rest="#EDE0FC",
+            chart_title="FAIRY PARTY WISH • HÀNH TRÌNH THẮP SÁNG ĐIỀU ƯỚC",
+            num_stages=6,
+            stage_names=[
+                "Hộp Quà Hồng", "Ôm Ngôi Sao", "Ôm Trái Tim",
+                "Đeo Kính Sao", "Vương Miện Quà", "Tiên Cánh Sao!",
+            ],
+        ),
+        tracker_name="🧚 Fairy Party Capy",
+        habits=[
+            Habit("Viết 1 điều ước / mục tiêu nhỏ sáng", goal=28, p=0.90),
+            Habit("Uống đủ nước & chăm sóc cơ thể", goal=30, p=0.92),
+            Habit("Tập thể dục / nhảy theo nhạc 20p", goal=25, p=0.85),
+            Habit("Hoàn thành công việc ưu tiên số 1", goal=28, p=0.89),
+            Habit("Học kỹ năng sáng tạo / vẽ / viết", goal=26, p=0.86),
+            Habit("Gửi năng lượng tích cực đến mọi người", goal=28, p=0.88),
+            Habit("Tự thưởng niềm vui nhỏ cuối ngày", goal=28, p=0.87),
+            Habit("Ngủ đủ giấc mơ đẹp trước 23h00", goal=28, p=0.86),
+        ],
+        seed=580, label_tag="FAIRY PARTY WISH", garden_label="FAIRY WISH",
+        grown_label="⭐ STAR WISH\nDAYS (≥75%):",
+        tracker_capture_range="A1:AN46",
+        addon_fn=_addon_capy_fairy_party,
+    ),
+    TemplateDef(
+        stem="59_Capybara_SelfCare_GlowUp", short_key="59_capybara_selfcare",
+        theme=Theme(
+            slug="capybara_selfcare", name="CAPYBARA SELFCARE GLOW-UP", emoji="🪞",
+            tagline_vi="Lịch trình Glow-Up phân nhóm tự động ☀️ Sáng · 🌤️ Chiều · 🌙 Tối giúp bạn chăm da, giữ dáng & yêu thương bản thân trọn vẹn!",
+            page="#FFF9FA", card="#FFFFFF", ink="#4C1D2A", muted="#9A6876", line="#F6D6DE",
+            primary="#F43F5E", primary_dark="#BE123C", on_primary="#FFFFFF", soft="#FFE4E6",
+            chart_fill="#FDA4AF", chart_line="#F43F5E", chart_kind="area",
+            week_head=["#F43F5E", "#D97706", "#FB7185", "#9333EA", "#E11D48"],
+            week_tint=["#FFF1F2", "#FFFBEB", "#FFF5F6", "#FAF5FF", "#FFF1F2"],
+            week_check=["#BE123C", "#B45309", "#E11D48", "#7E22CE", "#9F1239"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#FFF1F2", streak_mid="#FDA4AF", streak_hi="#BE123C",
+            bar="#F43F5E", donut_rest="#FADCE2",
+            chart_title="SELFCARE GLOW-UP • HÀNH TRÌNH TỎA SÁNG MỖI NGÀY",
+            num_stages=6,
+            stage_names=[
+                "Gương Bàn Phấn", "Giường Ngủ Êm", "Sáng Tươi Tắn",
+                "Soi Gương Glow", "Kính Tim Sành", "Bó Hoa Tỏa Sáng!",
+            ],
+        ),
+        tracker_name="🪞 SelfCare Glow Capy",
+        habits=[
+            # Morning (0..2)
+            Habit("☀️ Skincare sáng & kem chống nắng", goal=30, p=0.94),
+            Habit("☀️ Uống nước ấm & vận động 20 phút", goal=28, p=0.89),
+            Habit("☀️ Ăn sáng giàu dinh dưỡng & vitamin", goal=28, p=0.88),
+            # Afternoon (3..5)
+            Habit("🌤️ Uống đủ 2.2L nước giữ ẩm da", goal=30, p=0.92),
+            Habit("🌤️ Giữ tư thế thẳng & nghỉ mắt 10p", goal=28, p=0.86),
+            Habit("🌤️ Ăn rau xanh, hạn chế đường ngọt", goal=26, p=0.84),
+            # Evening (6..8)
+            Habit("🌙 Tẩy trang & dưỡng da tối đầy đủ", goal=30, p=0.93),
+            Habit("🌙 Đọc sách / viết nhật ký biết ơn", goal=26, p=0.86),
+            Habit("🌙 Ngủ đẹp trước 23h đủ 8 tiếng", goal=28, p=0.87),
+        ],
+        seed=590, label_tag="SELFCARE GLOW-UP", garden_label="GLOW-UP STUDIO",
+        grown_label="💐 RADIANT GLOW\nDAYS (≥75%):",
+        tracker_capture_range="A1:AN46",
+        addon_fn=_addon_capy_selfcare,
+    ),
+    TemplateDef(
+        stem="60_Capybara_Snapshot_Traveler", short_key="60_capybara_traveler",
+        theme=Theme(
+            slug="capybara_traveler", name="CAPYBARA SNAPSHOT TRAVELER", emoji="📸",
+            tagline_vi="Tông Cát Ấm & Xanh Cổ Điển Vintage Teal — đóng dấu hộ chiếu kỷ luật & lưu giữ Nhật Ký Ảnh Polaroid đáng nhớ mỗi tuần!",
+            page="#FAF7F2", card="#FFFFFF", ink="#134E4A", muted="#63807C", line="#D9E6E2",
+            primary="#0D9488", primary_dark="#115E59", on_primary="#FFFFFF", soft="#CCFBF1",
+            chart_fill="#5EEAD4", chart_line="#0D9488", chart_kind="column",
+            week_head=["#0D9488", "#EA580C", "#14B8A6", "#F97316", "#0F766E"],
+            week_tint=["#F0FDFA", "#FFF7ED", "#F0FDFA", "#FFF7ED", "#ECFEFF"],
+            week_check=["#0F766E", "#C2410C", "#0D9488", "#EA580C", "#115E59"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#F0FDFA", streak_mid="#5EEAD4", streak_hi="#115E59",
+            bar="#EA580C", donut_rest="#D5EFEA",
+            chart_title="SNAPSHOT TRAVELER • HÀNH TRÌNH KHÁM PHÁ MỖI NGÀY",
+            num_stages=6,
+            stage_names=[
+                "Máy Ảnh Phim", "Quả Địa Cầu", "Trà Chiều Bạn",
+                "Khám Phá Lá Sen", "Khăn Lữ Khách", "Chụp Khoảnh Khắc!",
+            ],
+        ),
+        tracker_name="📸 Traveler Capy",
+        habits=[
+            Habit("Đi bộ khám phá 7.000 bước mỗi ngày", goal=26, p=0.87),
+            Habit("Chụp 1 bức ảnh khoảnh khắc đẹp", goal=28, p=0.90),
+            Habit("Học ngoại ngữ giao tiếp 20 phút", goal=26, p=0.86),
+            Habit("Trích quỹ du lịch & ghi chép chi tiêu", goal=28, p=0.89),
+            Habit("Uống đủ 2L nước giữ năng lượng bền", goal=30, p=0.92),
+            Habit("Đọc sách / xem tư liệu vùng đất mới", goal=26, p=0.85),
+            Habit("Viết 2 dòng nhật ký hành trình ngày", goal=28, p=0.88),
+            Habit("Ngủ đủ giấc sạc pin cho ngày mai", goal=28, p=0.86),
+        ],
+        seed=600, label_tag="SNAPSHOT TRAVELER", garden_label="TRAVEL PASSPORT",
+        grown_label="🛂 PASSPORT\nSTAMPS (≥75%):",
+        tracker_capture_range="A1:AN46",
+        addon_fn=_addon_capy_traveler,
+    ),
 ]
 
 
@@ -2016,14 +2550,15 @@ def build_template(tdef: TemplateDef, out_path: Path, edition: str = "pro_xlsm")
         {"sheet": ANNUAL_SHEET, "range": ann_info["capture_range"], "out": f"{tdef.short_key}_annual_achievements.png"},
     ]
     g_col = g_info.get("guide_last_col", "H")
-    if tdef.short_key in ("01_sunflower", "36_digimon_veemon", "41_digimon_patamon", "44_digimon_guilmon"):
+    if tdef.short_key in ("01_sunflower", "36_digimon_veemon", "41_digimon_patamon", "44_digimon_guilmon", "48_capybara_avocado", "50_capybara_pip_puddle"):
         captures.append({"sheet": GUIDE_SHEET, "range": f"A1:{g_col}{g_info['guide_last_row']}", "out": f"{tdef.short_key}_guide.png"})
     if tdef.short_key in ("01_sunflower", "20_alpaca_cream", "24_royal_cat_cash", "26_purple_cat",
                           "30_shiba_inu", "31_akita_inu", "33_mochi_cat", "35_milk_mocha",
-                          "36_digimon_veemon", "37_digimon_agumon", "44_digimon_guilmon", "46_digimon_renamon"):
+                          "36_digimon_veemon", "37_digimon_agumon", "44_digimon_guilmon", "46_digimon_renamon",
+                          "48_capybara_avocado", "50_capybara_pip_puddle"):
         captures.append({"sheet": DAILY_TASKS_SHEET, "range": dt_info["capture_range"], "out": f"{tdef.short_key}_daily_tasks.png"})
     if tdef.short_key in ("01_sunflower", "20_alpaca_cream", "30_shiba_inu", "35_milk_mocha",
-                          "36_digimon_veemon", "44_digimon_guilmon"):
+                          "36_digimon_veemon", "44_digimon_guilmon", "48_capybara_avocado"):
         captures.append({"sheet": YEARLY_GOALS_SHEET, "range": "A1:J26", "out": f"{tdef.short_key}_yearly_goals.png"})
 
     return {

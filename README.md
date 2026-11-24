@@ -1,9 +1,9 @@
-# ⚡ Habit Tracker Collection for Everyone — by Dyu (v3.8 — 47 Themes × 4 Editions)
+# 🥑 Habit Tracker Collection for Everyone — by Dyu (v3.9 — 60 Themes × 4 Editions)
 
-> **Bộ sưu tập 47 mẫu Habit Tracker hoàn toàn miễn phí chuẩn Digital Planner — tích hợp 297 ảnh hoạt ảnh tự lớn lên theo % thói quen mỗi ngày (Hoa lá, Thú cưng Kawaii, Alpaca, Gấu trúc, Shiba/Akita & 12 mẫu Digimon 7–8 cấp tiến hóa chuẩn canon)!**
+> **Bộ sưu tập 60 mẫu Habit Tracker hoàn toàn miễn phí chuẩn Digital Planner — tích hợp 375 ảnh hoạt ảnh tự lớn lên theo % thói quen mỗi ngày (13 chủ đề Capybara Chill độc bản gồm Capybara Bơ Xanh vẽ tay, 12 bộ Digimon 7–8 cấp tiến hóa chuẩn canon, Thú cưng Kawaii, Alpaca, Gấu trúc, Shiba/Akita & Hoa lá)!**
 > **Dùng mượt 100% Offline trên Microsoft Excel (Windows & Mac) — có kèm bản thử nghiệm cho Google Sheets & Điện thoại.**
 
-![Version 3.8](https://img.shields.io/badge/Version-3.8_47_Themes-1D6FE2?style=for-the-badge)
+![Version 3.9](https://img.shields.io/badge/Version-3.9_60_Themes-65A30D?style=for-the-badge)
 ![Pro #1 Recommended](https://img.shields.io/badge/⭐_KHUYÊN_DÙNG_%231-Pro_.XLSM_(Excel_365)-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white)
 ![Zero Macro Offline](https://img.shields.io/badge/%232_Offline_No--Macro-.XLSX_(Excel_2016--365)-4E9F76?style=for-the-badge)
 ![Google Sheets Beta](https://img.shields.io/badge/%233_Google_Sheets-Beta_(Đang_thử_nghiệm)-F59E0B?style=for-the-badge&logo=googlesheets&logoColor=white)
@@ -56,8 +56,8 @@ Không cần biết kỹ thuật — chỉ cần xem máy tính của bạn đan
 
 > **Người dùng KHÔNG cần cài Python, KHÔNG cần đăng nhập GitHub!** Bạn chọn 1 trong 2 cách dưới đây:
 
-### Cách 1 (Khuyên dùng — Tải tự động 1 dòng lệnh, chọn theo số `1–47` hoặc tải hết)
-Trình tải tương tác sẽ hỏi bạn muốn bản nào (`[1]`–`[4]`) và mẫu số mấy (`44`, `41-47`, `36-47`, hoặc `A` tải toàn bộ 47 mẫu), rồi tự tải sạch đẹp vào thư mục `template/` trên máy bạn:
+### Cách 1 (Khuyên dùng — Tải tự động 1 dòng lệnh, chọn theo số `1–60` hoặc tải hết)
+Trình tải tương tác sẽ hỏi bạn muốn bản nào (`[1]`–`[4]`) và mẫu số mấy (`48`, `48-60`, `36-47`, hoặc `A` tải toàn bộ 60 mẫu), rồi tự tải sạch đẹp vào thư mục `template/` trên máy bạn:
 
 - **🪟 Windows:** Nhấn phím **Windows** → gõ **`PowerShell`** → mở *Windows PowerShell* → dán dòng lệnh dưới đây → nhấn **Enter**:
 ```powershell
@@ -70,17 +70,20 @@ curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-ev
 
 ### Cách 2 (Tải thủ công trực tiếp trên web GitHub — Không cần gõ lệnh!)
 Nếu bạn không quen mở PowerShell/Terminal, tải trực tiếp ngay trên trình duyệt chỉ với **3 bước**:
-1. Kéo xuống **[Bảng Tải Trực Tiếp 47 Mẫu Template](#-bảng-tải-trực-tiếp-toàn-bộ-47-mẫu-template-đủ-4-phiên-bản--188-tệp)** bên dưới và **bấm vào link phiên bản bạn muốn** (vd: `_Pro.xlsm` cho Excel 365 hoặc `.xlsx` cho Excel 2016–2021).
+1. Kéo xuống **[Bảng Tải Trực Tiếp 60 Mẫu Template](#-bảng-tải-trực-tiếp-toàn-bộ-60-mẫu-template-đủ-4-phiên-bản--240-tệp)** bên dưới và **bấm vào link phiên bản bạn muốn** (vd: `_Pro.xlsm` cho Excel 365 hoặc `.xlsx` cho Excel 2016–2021).
 2. Ở trang file vừa mở ra, bấm nút **Download raw file** *(biểu tượng **mũi tên tải xuống `⬇`** ở góc trên bên phải khung xem file)*.
 3. Mở file vừa tải về bằng Microsoft Excel *(nếu là bản Pro `.xlsm`, nhớ làm theo **2 bước Unblock + Enable Content** ở mục trên)* và bắt đầu tick ngay!
 
 ---
 
-## 🎭 Xem Trước 297 Hoạt Ảnh Tiến Hóa (Cây Cối • Thú Cưng • Alpaca • Panda • 12 Bộ Digimon 7–8 Cấp!)
+## 🎭 Xem Trước 375 Hoạt Ảnh Tiến Hóa (13 Bộ Capybara Chill • 12 Bộ Digimon 7–8 Cấp • Thú Cưng • Hoa Lá!)
 
-Mỗi ngày bạn tick hoàn thành thói quen từ `0% → 100%`, linh vật / cây hoa / Digimon của ngày đó sẽ tự động lớn lên hoặc tiến hóa ngay trước mắt bạn!
+Mỗi ngày bạn tick hoàn thành thói quen từ `0% → 100%`, linh vật / Capybara / cây hoa / Digimon của ngày đó sẽ tự động lớn lên hoặc tiến hóa ngay trước mắt bạn!
 
-### ⚡ MỚI v3.8 — Batch 6: 7 Chủ Đề Digimon 7 & 8 Cấp Tiến Hóa (`#41`–`#47` — 52 Sprites Chuẩn Canon)
+### 🥑🍊 MỚI v3.9 — Batch 7: 13 Chủ Đề Capybara Chill Collection (`#48`–`#60` — 78 Sprites, gồm Capybara Bơ Xanh Vẽ Tay!)
+![78 Capybara Chill Collection Sprites Contact Sheet](previews/assets_contact_sheet_capybara.png)
+
+### ⚡ Batch 6 — 7 Chủ Đề Digimon 7 & 8 Cấp Tiến Hóa (`#41`–`#47` — 52 Sprites Chuẩn Canon)
 ![52 Digimon Batch 2 Evolution Sprites Contact Sheet](previews/assets_contact_sheet_digimon_batch2.png)
 
 ### ⚡ Batch 5 — 5 Chủ Đề Digimon 7 Cấp Tiến Hóa (`#36`–`#40` — 35 Sprites Chuẩn Canon)
@@ -106,11 +109,91 @@ Mỗi ngày bạn tick hoàn thành thói quen từ `0% → 100%`, linh vật / 
 
 ---
 
+## 🥑🍊 MỚI v3.9 — Showcase Bộ Sưu Tập 13 Chủ Đề Capybara Chill Collection (`#48` – `#60`)
+
+Mỗi một trong **13 mẫu Capybara** đều được thiết kế **độc bản hoàn toàn (Zero Clones!)** — khác biệt từ bảng màu, kiểu biểu đồ (`Area` / `Column` / `Line`), bảng tính năng phụ riêng biệt bên dưới (Nhật ký Nước & Bữa Bơ, 5 Donut Suối Nóng, Bộ đếm Ly Boba, Giờ Học & Trang Sách, Playlist Lofi, Bảng Mở Khóa Món Ngon, Đếm Táo Thu Hoạch, 5 Điều Ước Sao, Phân Nhóm Sáng/Chiều/Tối Glow-Up, Nhật Ký Ảnh Polaroid…) cho đến **13 bộ Huy Hiệu Thành Tựu Năm** riêng biệt!
+
+### 48. 🥑 Capybara Avocado Zen *(User Special — Vẽ Tay Độc Quyền!)* — `Gối Bơ → Thuyền Bơ Ngủ → Đội Bơ → Ôm Bơ → Áo Choàng Bơ → Vua Bơ Zen!`
+![Capybara Avocado Zen Tracker](previews/48_capybara_avocado_tracker.png)
+<details>
+<summary>📸 Xem thêm: Hướng Dẫn 6 Cấp Capybara Bơ Xanh, Thung Lũng Bơ Xanh Cả Năm, Nhiệm Vụ Ngày & Yearly Goals</summary>
+
+![Capybara Avocado Guide](previews/48_capybara_avocado_guide.png)
+![Capybara Avocado Annual Achievements](previews/48_capybara_avocado_annual_achievements.png)
+![Capybara Avocado Daily Tasks](previews/48_capybara_avocado_daily_tasks.png)
+![Capybara Avocado Yearly Goals](previews/48_capybara_avocado_yearly_goals.png)
+
+</details>
+
+### 50. 💕 Capybara Pip & Puddle Besties *(Dual-Tone Pink & Lavender)* — `Ngủ Gối Đôi → Đôi Bạn Tò Mò → Chào Ngày Mới → Tiệc Bánh Quy → Chung Khăn Ấm → Gửi Yêu Thương!`
+![Capybara Pip & Puddle Besties Tracker](previews/50_capybara_pip_puddle_tracker.png)
+<details>
+<summary>📸 Xem thêm: Hướng Dẫn Pip & Puddle, Đại Sảnh Đôi Bạn Thân & Nhiệm Vụ Ngày</summary>
+
+![Pip & Puddle Guide](previews/50_capybara_pip_puddle_guide.png)
+![Pip & Puddle Annual Achievements](previews/50_capybara_pip_puddle_annual_achievements.png)
+![Pip & Puddle Daily Tasks](previews/50_capybara_pip_puddle_daily_tasks.png)
+
+</details>
+
+### 49. 🍊 Capybara Yuzu Onsen Spa — 5 Đồng Hồ Donut Thư Giãn & Góc Wind-Down Buổi Tối
+![Capybara Yuzu Onsen Spa Tracker](previews/49_capybara_onsen_tracker.png)
+
+### 51. 🧋 Capybara Boba Lily Pond — Bộ Đếm Tự Động Tích Ly Trà Sữa Dâu Theo Tuần
+![Capybara Boba Lily Pond Tracker](previews/51_capybara_boba_pond_tracker.png)
+
+### 52. 📚 Capybara Bookworm Study *(Capy & Chaptered)* — Giờ Học, Số Trang Sách & Biểu Đồ Cột Tập Trung
+![Capybara Bookworm Study Tracker](previews/52_capybara_bookworm_tracker.png)
+
+### 53. 🎧 Capybara Lofi Picnic Beats — Đếm Phút Deep Flow & Bảng Playlist Lofi Yêu Thích
+![Capybara Lofi Picnic Beats Tracker](previews/53_capybara_lofi_picnic_tracker.png)
+
+<details>
+<summary>🍊 Mở rộng xem thêm 7 mẫu Capybara Chill cực xinh (#54 – #60: Foodie, Dino Hoodie, Apple Orchard, Pink Cloud, Fairy Party, SelfCare GlowUp, Snapshot Traveler)</summary>
+
+| Mẫu Capybara | Preview |
+|---|---|
+| **54. 🍔 Capybara Foodie Snack Club** *(6 Mốc Mở Khóa Món Ngon)* | ![Foodie Capy](previews/54_capybara_foodie_tracker.png) |
+| **55. 🦕 Capybara Dino Hoodie Play** *(Điểm Niềm Vui & 5 Thanh Pastel)* | ![Dino Hoodie Capy](previews/55_capybara_dino_hoodie_tracker.png) |
+| **56. 🍎 Capybara Apple Orchard Sweet** *(Đếm Táo Thu Hoạch & Biết Ơn)* | ![Apple Orchard Capy](previews/56_capybara_apple_orchard_tracker.png) |
+| **57. ☁️ Capybara Pink Cloud Chill** *(Tối Giản Mây Hồng Êm Ái)* | ![Pink Cloud Capy](previews/57_capybara_pink_chill_tracker.png) |
+| **58. 🧚 Capybara Fairy Party Wish** *(5 Điều Ước Ngôi Sao Tự Thắp Sáng)* | ![Fairy Party Capy](previews/58_capybara_fairy_party_tracker.png) |
+| **59. 🪞 Capybara SelfCare GlowUp** *(3 Thẻ Sáng · Chiều · Tối Glow-Up)* | ![SelfCare Capy](previews/59_capybara_selfcare_tracker.png) |
+| **60. 📸 Capybara Snapshot Traveler** *(Nhật Ký Polaroid & Dấu Hộ Chiếu)* | ![Traveler Capy](previews/60_capybara_traveler_tracker.png) |
+
+</details>
+
+<details>
+<summary>📱 Xem màn hình thử nghiệm Mobile Portrait Capybara (`#48`–`#60` — Early Beta)</summary>
+
+<table>
+  <tr>
+    <td align="center"><img src="previews/mobile_48_capybara_avocado.png" width="150" alt="Mobile Avocado Capy"/><br/><sub><b>🥑 Avocado Zen</b></sub></td>
+    <td align="center"><img src="previews/mobile_49_capybara_onsen.png" width="150" alt="Mobile Onsen Capy"/><br/><sub><b>🍊 Yuzu Onsen</b></sub></td>
+    <td align="center"><img src="previews/mobile_50_capybara_pip_puddle.png" width="150" alt="Mobile Pip & Puddle"/><br/><sub><b>💕 Pip & Puddle</b></sub></td>
+    <td align="center"><img src="previews/mobile_51_capybara_boba_pond.png" width="150" alt="Mobile Boba Pond"/><br/><sub><b>🧋 Boba Pond</b></sub></td>
+    <td align="center"><img src="previews/mobile_52_capybara_bookworm.png" width="150" alt="Mobile Bookworm"/><br/><sub><b>📚 Bookworm</b></sub></td>
+    <td align="center"><img src="previews/mobile_53_capybara_lofi_picnic.png" width="150" alt="Mobile Lofi Picnic"/><br/><sub><b>🎧 Lofi Picnic</b></sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="previews/mobile_54_capybara_foodie.png" width="150" alt="Mobile Foodie"/><br/><sub><b>🍔 Foodie Club</b></sub></td>
+    <td align="center"><img src="previews/mobile_55_capybara_dino_hoodie.png" width="150" alt="Mobile Dino Hoodie"/><br/><sub><b>🦕 Dino Hoodie</b></sub></td>
+    <td align="center"><img src="previews/mobile_56_capybara_apple_orchard.png" width="150" alt="Mobile Apple Orchard"/><br/><sub><b>🍎 Apple Orchard</b></sub></td>
+    <td align="center"><img src="previews/mobile_58_capybara_fairy_party.png" width="150" alt="Mobile Fairy Party"/><br/><sub><b>🧚 Fairy Party</b></sub></td>
+    <td align="center"><img src="previews/mobile_59_capybara_selfcare.png" width="150" alt="Mobile SelfCare"/><br/><sub><b>🪞 SelfCare Glow</b></sub></td>
+    <td align="center"><img src="previews/mobile_60_capybara_traveler.png" width="150" alt="Mobile Traveler"/><br/><sub><b>📸 Traveler</b></sub></td>
+  </tr>
+</table>
+
+</details>
+
+---
+
 ## ⚡ Showcase Bộ Sưu Tập 12 Chủ Đề Digimon 7–8 Cấp Tiến Hóa (`#36` – `#47`)
 
 Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn** (`0% Digi-Egg → 1–19% → 20–39% → 40–59% → 60–79% → 80–99% → 100% Mega ✨`) hoặc **8 giai đoạn Ultra/Burst** (`0% Digi-Egg → 1–14% → 15–29% → 30–49% → 50–69% → 70–84% → 85–99% Mega → 100% Ultra/Burst ✨`) — kèm bảng **Crest Digivice Breakdown** thống kê số ngày đạt từng dạng & thẻ **Current Form Power Meter**!
 
-### 44. ⚔️ Digimon Guilmon Crimson *(MỚI v3.8 — 8 Cấp Ultra)* — `Digi-Egg → Jyarimon → Gigimon → Guilmon → Growlmon → WarGrowlmon → Gallantmon → Gallantmon Crimson`
+### 44. ⚔️ Digimon Guilmon Crimson *(8 Cấp Ultra)* — `Digi-Egg → Jyarimon → Gigimon → Guilmon → Growlmon → WarGrowlmon → Gallantmon → Gallantmon Crimson`
 ![Digimon Guilmon Crimson Tracker](previews/44_digimon_guilmon_tracker.png)
 <details>
 <summary>📸 Xem thêm: Hướng Dẫn 8 Cấp Tiến Hóa (2×4 Gallery), Đại Sảnh Royal Knight, Nhiệm Vụ Ngày & Yearly Goals</summary>
@@ -122,7 +205,7 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn** (`0% Digi-E
 
 </details>
 
-### 46. ⛩️ Digimon Renamon Kuzuhamon *(MỚI v3.8 — 8 Cấp Ultra)* — `Digi-Egg → Relemon → Viximon → Renamon → Youkomon → Doumon → Kuzuhamon → Kuzuhamon Miko`
+### 46. ⛩️ Digimon Renamon Kuzuhamon *(8 Cấp Ultra)* — `Digi-Egg → Relemon → Viximon → Renamon → Youkomon → Doumon → Kuzuhamon → Kuzuhamon Miko`
 ![Digimon Renamon Kuzuhamon Tracker](previews/46_digimon_renamon_tracker.png)
 <details>
 <summary>📸 Xem thêm: Đại Sảnh Đền Thờ Hồ Ly & Nhiệm Vụ Ngày</summary>
@@ -132,7 +215,7 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn** (`0% Digi-E
 
 </details>
 
-### 41. 🪽 Digimon Patamon Mythical *(MỚI v3.8 — 7 Cấp)* — `Digi-Egg → Poyomon → Tokomon → Patamon → Unimon → Hippogriffomon → Griffomon`
+### 41. 🪽 Digimon Patamon Mythical *(7 Cấp)* — `Digi-Egg → Poyomon → Tokomon → Patamon → Unimon → Hippogriffomon → Griffomon`
 ![Digimon Patamon Mythical Tracker](previews/41_digimon_patamon_tracker.png)
 <details>
 <summary>📸 Xem thêm: Hướng Dẫn 7 Cấp Patamon & Đại Sảnh Bầu Trời Thần Thoại</summary>
@@ -142,16 +225,16 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn** (`0% Digi-E
 
 </details>
 
-### 42. 🌹 Digimon Palmon Rose *(MỚI v3.8 — 7 Cấp)* — `Digi-Egg → Yuramon → Tanemon → Palmon → Togemon → Lilimon → Rosemon`
+### 42. 🌹 Digimon Palmon Rose *(7 Cấp)* — `Digi-Egg → Yuramon → Tanemon → Palmon → Togemon → Lilimon → Rosemon`
 ![Digimon Palmon Rose Tracker](previews/42_digimon_palmon_tracker.png)
 
-### 43. 🧊 Digimon Gomamon Arctic *(MỚI v3.8 — 8 Cấp Ultra)* — `Digi-Egg → Pichimon → Bukamon → Gomamon → Ikkakumon → Zudomon → Vikemon → AncientMegatheriummon`
+### 43. 🧊 Digimon Gomamon Arctic *(8 Cấp Ultra)* — `Digi-Egg → Pichimon → Bukamon → Gomamon → Ikkakumon → Zudomon → Vikemon → AncientMegatheriummon`
 ![Digimon Gomamon Arctic Tracker](previews/43_digimon_gomamon_tracker.png)
 
-### 45. 🌿 Digimon Terriermon Mint *(MỚI v3.8 — 7 Cấp)* — `Digi-Egg → Zerimon → Gummymon → Terriermon → Gargomon → Rapidmon → MegaGargomon`
+### 45. 🌿 Digimon Terriermon Mint *(7 Cấp)* — `Digi-Egg → Zerimon → Gummymon → Terriermon → Gargomon → Rapidmon → MegaGargomon`
 ![Digimon Terriermon Mint Tracker](previews/45_digimon_terriermon_tracker.png)
 
-### 47. ⚡ Digimon Tentomon Electro *(MỚI v3.8 — 7 Cấp)* — `Digi-Egg → Bubbmon → Mochimon → Tentomon → Kabuterimon → MegaKabuterimon → HerakleKabuterimon`
+### 47. ⚡ Digimon Tentomon Electro *(7 Cấp)* — `Digi-Egg → Bubbmon → Mochimon → Tentomon → Kabuterimon → MegaKabuterimon → HerakleKabuterimon`
 ![Digimon Tentomon Electro Tracker](previews/47_digimon_tentomon_tracker.png)
 
 ### 36. ⚡ Digimon Veemon Miracle — `Digi-Egg → Chibomon → DemiVeemon → Veemon → Flamedramon → Paildramon → Magnamon`
@@ -256,8 +339,8 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn** (`0% Digi-E
 
 ## 🎨 Giao Diện Thực Tế `01_Sunflower` & Bộ Sưu Tập Cổ Điển + Linh Vật (`#01` – `#31`)
 
-![Sunflower Pro v3.8 Tracker](previews/01_sunflower_tracker.png)
-![Sunflower Pro v3.8 Guide](previews/01_sunflower_guide.png)
+![Sunflower Pro v3.9 Tracker](previews/01_sunflower_tracker.png)
+![Sunflower Pro v3.9 Guide](previews/01_sunflower_guide.png)
 
 <details>
 <summary>🌻 Mở rộng xem toàn bộ ảnh chụp 30 mẫu cổ điển & thú cưng (#02 – #31)</summary>
@@ -328,7 +411,7 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn** (`0% Digi-E
 
 ---
 
-## 📋 Bảng Tải Trực Tiếp Toàn Bộ 47 Mẫu Template (Đủ 4 Phiên Bản — 188 Tệp)
+## 📋 Bảng Tải Trực Tiếp Toàn Bộ 60 Mẫu Template (Đủ 4 Phiên Bản — 240 Tệp)
 
 > 💡 **Mẹo tải nhanh không cần gõ lệnh:** Bấm vào link bạn chọn bên dưới → bấm biểu tượng **mũi tên tải xuống (`⬇ Download raw file`)** ở góc trên bên phải!
 
@@ -381,6 +464,19 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn** (`0% Digi-E
 | **45** | 🌿 **Digimon Terriermon Mint** *(7-Stage: Terriermon → MegaGargomon)* | [`_Pro.xlsm`](templates/pro_macro/45_Digimon_Terriermon_Mint_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/45_Digimon_Terriermon_Mint.xlsx) | [Desktop](templates/google_sheets_edition/45_Digimon_Terriermon_Mint.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/45_Digimon_Terriermon_Mint_Mobile.xlsx) |
 | **46** | ⛩️ **Digimon Renamon Kuzuhamon** *(8-Stage: Renamon → Kuzuhamon Miko)* | [`_Pro.xlsm`](templates/pro_macro/46_Digimon_Renamon_Kuzuhamon_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/46_Digimon_Renamon_Kuzuhamon.xlsx) | [Desktop](templates/google_sheets_edition/46_Digimon_Renamon_Kuzuhamon.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/46_Digimon_Renamon_Kuzuhamon_Mobile.xlsx) |
 | **47** | ⚡ **Digimon Tentomon Electro** *(7-Stage: Tentomon → HerakleKabuterimon)* | [`_Pro.xlsm`](templates/pro_macro/47_Digimon_Tentomon_Electro_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/47_Digimon_Tentomon_Electro.xlsx) | [Desktop](templates/google_sheets_edition/47_Digimon_Tentomon_Electro.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/47_Digimon_Tentomon_Electro_Mobile.xlsx) |
+| **48** | 🥑 **Capybara Avocado Zen** *(User Special Vẽ Tay — Nước & Bữa Bơ Zen)* | [`_Pro.xlsm`](templates/pro_macro/48_Capybara_Avocado_Zen_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/48_Capybara_Avocado_Zen.xlsx) | [Desktop](templates/google_sheets_edition/48_Capybara_Avocado_Zen.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/48_Capybara_Avocado_Zen_Mobile.xlsx) |
+| **49** | 🍊 **Capybara Yuzu Onsen Spa** *(5 Donut Suối Nóng & Thư Giãn Tối)* | [`_Pro.xlsm`](templates/pro_macro/49_Capybara_Yuzu_Onsen_Spa_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/49_Capybara_Yuzu_Onsen_Spa.xlsx) | [Desktop](templates/google_sheets_edition/49_Capybara_Yuzu_Onsen_Spa.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/49_Capybara_Yuzu_Onsen_Spa_Mobile.xlsx) |
+| **50** | 💕 **Capybara Pip & Puddle Besties** *(Dual-Tone Pink/Lavender Bestie Bond)* | [`_Pro.xlsm`](templates/pro_macro/50_Capybara_Pip_Puddle_Besties_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/50_Capybara_Pip_Puddle_Besties.xlsx) | [Desktop](templates/google_sheets_edition/50_Capybara_Pip_Puddle_Besties.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/50_Capybara_Pip_Puddle_Besties_Mobile.xlsx) |
+| **51** | 🧋 **Capybara Boba Lily Pond** *(Đếm Ly Trà Sữa Dâu Thưởng Tuần)* | [`_Pro.xlsm`](templates/pro_macro/51_Capybara_Boba_Lily_Pond_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/51_Capybara_Boba_Lily_Pond.xlsx) | [Desktop](templates/google_sheets_edition/51_Capybara_Boba_Lily_Pond.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/51_Capybara_Boba_Lily_Pond_Mobile.xlsx) |
+| **52** | 📚 **Capybara Bookworm Study** *(Capy & Chaptered — Giờ Học & Trang Sách)* | [`_Pro.xlsm`](templates/pro_macro/52_Capybara_Bookworm_Study_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/52_Capybara_Bookworm_Study.xlsx) | [Desktop](templates/google_sheets_edition/52_Capybara_Bookworm_Study.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/52_Capybara_Bookworm_Study_Mobile.xlsx) |
+| **53** | 🎧 **Capybara Lofi Picnic Beats** *(Đếm Phút Flow & Playlist Lofi)* | [`_Pro.xlsm`](templates/pro_macro/53_Capybara_Lofi_Picnic_Beats_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/53_Capybara_Lofi_Picnic_Beats.xlsx) | [Desktop](templates/google_sheets_edition/53_Capybara_Lofi_Picnic_Beats.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/53_Capybara_Lofi_Picnic_Beats_Mobile.xlsx) |
+| **54** | 🍔 **Capybara Foodie Snack Club** *(6 Mốc Mở Khóa Món Ngon)* | [`_Pro.xlsm`](templates/pro_macro/54_Capybara_Foodie_Snack_Club_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/54_Capybara_Foodie_Snack_Club.xlsx) | [Desktop](templates/google_sheets_edition/54_Capybara_Foodie_Snack_Club.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/54_Capybara_Foodie_Snack_Club_Mobile.xlsx) |
+| **55** | 🦕 **Capybara Dino Hoodie Play** *(Điểm Niềm Vui & 5 Thanh Pastel)* | [`_Pro.xlsm`](templates/pro_macro/55_Capybara_Dino_Hoodie_Play_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/55_Capybara_Dino_Hoodie_Play.xlsx) | [Desktop](templates/google_sheets_edition/55_Capybara_Dino_Hoodie_Play.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/55_Capybara_Dino_Hoodie_Play_Mobile.xlsx) |
+| **56** | 🍎 **Capybara Apple Orchard Sweet** *(Đếm Táo Thu Hoạch & 3 Điều Biết Ơn)* | [`_Pro.xlsm`](templates/pro_macro/56_Capybara_Apple_Orchard_Sweet_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/56_Capybara_Apple_Orchard_Sweet.xlsx) | [Desktop](templates/google_sheets_edition/56_Capybara_Apple_Orchard_Sweet.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/56_Capybara_Apple_Orchard_Sweet_Mobile.xlsx) |
+| **57** | ☁️ **Capybara Pink Cloud Chill** *(Tối Giản Mây Hồng Êm Ái)* | [`_Pro.xlsm`](templates/pro_macro/57_Capybara_Pink_Cloud_Chill_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/57_Capybara_Pink_Cloud_Chill.xlsx) | [Desktop](templates/google_sheets_edition/57_Capybara_Pink_Cloud_Chill.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/57_Capybara_Pink_Cloud_Chill_Mobile.xlsx) |
+| **58** | 🧚 **Capybara Fairy Party Wish** *(5 Điều Ước Ngôi Sao Tự Thắp Sáng)* | [`_Pro.xlsm`](templates/pro_macro/58_Capybara_Fairy_Party_Wish_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/58_Capybara_Fairy_Party_Wish.xlsx) | [Desktop](templates/google_sheets_edition/58_Capybara_Fairy_Party_Wish.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/58_Capybara_Fairy_Party_Wish_Mobile.xlsx) |
+| **59** | 🪞 **Capybara SelfCare GlowUp** *(3 Thẻ Sáng · Chiều · Tối Glow-Up)* | [`_Pro.xlsm`](templates/pro_macro/59_Capybara_SelfCare_GlowUp_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/59_Capybara_SelfCare_GlowUp.xlsx) | [Desktop](templates/google_sheets_edition/59_Capybara_SelfCare_GlowUp.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/59_Capybara_SelfCare_GlowUp_Mobile.xlsx) |
+| **60** | 📸 **Capybara Snapshot Traveler** *(Nhật Ký Ảnh Polaroid & Dấu Hộ Chiếu)* | [`_Pro.xlsm`](templates/pro_macro/60_Capybara_Snapshot_Traveler_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/60_Capybara_Snapshot_Traveler.xlsx) | [Desktop](templates/google_sheets_edition/60_Capybara_Snapshot_Traveler.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/60_Capybara_Snapshot_Traveler_Mobile.xlsx) |
 
 ---
 
@@ -398,27 +494,27 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn** (`0% Digi-E
 ---
 
 <details>
-<summary>🛠️ Dành Cho Người Yêu Kỹ Thuật & Developer (Benchmark v3.8 Turbo & Lệnh Build)</summary>
+<summary>🛠️ Dành Cho Người Yêu Kỹ Thuật & Developer (Benchmark v3.9 Turbo & Lệnh Build)</summary>
 
-### 📊 Benchmark Tốc Độ Thực Tế Excel COM (`Linked Pictures cũ` vs `v3.8 Turbo`)
-| Thao tác thực tế | Linked Pictures cũ | `01_Sunflower` **Turbo** | `44_Digimon_Guilmon` **v3.8 (8-Stage)** | Tăng tốc |
+### 📊 Benchmark Tốc Độ Thực Tế Excel COM (`Linked Pictures cũ` vs `v3.9 Turbo`)
+| Thao tác thực tế | Linked Pictures cũ | `48_Capybara_Avocado` **v3.9 Turbo** | `44_Digimon_Guilmon` **v3.9 (8-Stage)** | Tăng tốc |
 |---|---:|---:|---:|---:|
-| **1. Tick 1 ô Checkbox (`Monthly Tracker`)** | 347.3 ms | **42.7 ms** | **< 40 ms** | **~8–10× nhanh hơn** |
-| **2a. Đổi Tháng bằng Dropdown (`B3`)** | 4,137.1 ms | **141.6 ms** | **25 – 47 ms** | **~88–165× nhanh hơn!** |
-| **2b. Đổi Tháng bằng Nút 1 chạm (`◀ / ▶`)** | 4,137.1 ms | **51.3 ms** | **21 – 38 ms** | **~108–190× nhanh hơn!** |
-| **3. Đổi Ngày `📝 Nhiệm Vụ Ngày` (`21 ↔ 22`)** | 2,918.2 ms | **46.5 ms** | **20 – 26 ms** | **~110–145× nhanh hơn!** |
-| **4. Đổi Năm `🏆 Tổng Kết Năm` (`2026 ↔ 2027`)** | 317.2 ms | **74.9 ms** | **12 – 14 ms** | **~22–26× nhanh hơn!** |
+| **1. Tick 1 ô Checkbox (`Monthly Tracker`)** | 347.3 ms | **< 40 ms** | **< 40 ms** | **~8–10× nhanh hơn** |
+| **2a. Đổi Tháng bằng Dropdown (`B3`)** | 4,137.1 ms | **21 – 40 ms** | **25 – 47 ms** | **~88–190× nhanh hơn!** |
+| **2b. Đổi Tháng bằng Nút 1 chạm (`◀ / ▶`)** | 4,137.1 ms | **21 – 39 ms** | **21 – 38 ms** | **~108–190× nhanh hơn!** |
+| **3. Đổi Ngày `📝 Nhiệm Vụ Ngày` (`21 ↔ 22`)** | 2,918.2 ms | **20 – 28 ms** | **20 – 26 ms** | **~110–145× nhanh hơn!** |
+| **4. Đổi Năm `🏆 Tổng Kết Năm` (`2026 ↔ 2027`)** | 317.2 ms | **12 – 18 ms** | **12 – 14 ms** | **~18–26× nhanh hơn!** |
 | **Số ảnh nén trong `xl/media/`** | 54 bản sao | **6 PNG duy nhất** | **8 PNG duy nhất** | **Siêu gọn nhẹ!** |
 
 ```powershell
-# Trích xuất bộ 52 sprite Digimon Batch 2 (7 & 8 cấp) & xuất contact sheet:
-python scripts/extract_digimon_batch2.py
+# Trích xuất & vẽ bộ 78 sprite Capybara Chill Collection (#48–#60) & xuất contact sheet:
+python scripts/extract_capybara_assets.py
 
-# Build Pro Interactive (.xlsm) theo lô với Turbo Engine v3.8 (6/7/8 stages):
-python scripts/excel_com_enhancer.py pro 41_Digimon_Patamon_Mythical 42_Digimon_Palmon_Rose 43_Digimon_Gomamon_Arctic 44_Digimon_Guilmon_Crimson 45_Digimon_Terriermon_Mint 46_Digimon_Renamon_Kuzuhamon 47_Digimon_Tentomon_Electro
+# Build Pro Interactive (.xlsm) theo lô với Turbo Engine v3.9:
+python scripts/excel_com_enhancer.py pro 48_capybara_avocado 50_capybara_pip_puddle
 
-# Chạy bộ QA tự động 28 file Digimon v3.8:
-python scripts/qa_verify_digimon_v38.py
+# Chạy bộ QA tự động 52 file Capybara v3.9 trên bản copy tách biệt:
+python scripts/qa_verify_capybara_v39.py
 ```
 
 </details>

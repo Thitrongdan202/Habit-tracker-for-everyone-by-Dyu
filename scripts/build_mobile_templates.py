@@ -44,7 +44,12 @@ PREVIEW_KEYS = {"01_sunflower", "02_cactus", "07_sakura", "10_aurora",
                 "39_digimon_gabumon", "40_digimon_piyomon",
                 "41_digimon_patamon", "42_digimon_palmon", "43_digimon_gomamon",
                 "44_digimon_guilmon", "45_digimon_terriermon", "46_digimon_renamon",
-                "47_digimon_tentomon"}
+                "47_digimon_tentomon",
+                "48_capybara_avocado", "49_capybara_onsen", "50_capybara_pip_puddle",
+                "51_capybara_boba_pond", "52_capybara_bookworm", "53_capybara_lofi_picnic",
+                "54_capybara_foodie", "55_capybara_dino_hoodie", "56_capybara_apple_orchard",
+                "57_capybara_pink_chill", "58_capybara_fairy_party", "59_capybara_selfcare",
+                "60_capybara_traveler"}
 
 
 def _com_retry(fn, retries: int = 12, delay: float = 0.25):
@@ -152,7 +157,7 @@ def _capture_mobile_previews(xl, meta: dict):
         print(f"      [PNG] mobile_{short_key}.png ({sz_top[0]}x{sz_top[1]})", flush=True)
 
         # Capture Mobile Daily Tasks tab on flagship templates
-        if short_key in ("01_sunflower", "30_shiba_inu", "36_digimon_veemon"):
+        if short_key in ("01_sunflower", "30_shiba_inu", "36_digimon_veemon", "48_capybara_avocado"):
             dt_stg = max(1, min(n_stages, int(_com_retry(lambda: ws_calc.Range("E33").Value) or 1)))
             _com_retry(lambda: setattr(ws_dt.Range("F9"), "Value", ""))
             _overlay_sprite(ws_dt, ws_dt.Range("F9:I12"), ASSETS_DIR / slug / f"stage_{dt_stg - 1}.png")
