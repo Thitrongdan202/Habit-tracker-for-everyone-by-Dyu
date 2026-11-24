@@ -840,11 +840,151 @@ ANNUAL_LORE: dict[str, dict] = {
         ],
         ("🥚 Hạt mầm Yêu Thương nảy nở!", "🐦 Biyomon tung cánh bay cao!", "🦅 Garudamon rực cháy bầu trời!", "👑 Phượng Hoàng Bất Tử Phoenixmon!"),
     ),
+    # 41 - Digimon Patamon Mythical (7 Stages!)
+    "digimon_patamon": _lore(
+        "🪽  BẦU TRỜI THẦN THOẠI PATAMON — TỔNG KẾT TIẾN HÓA NĂM",
+        "Huy hiệu Hy Vọng (Crest of Hope) — từ giọt mây Poyomon sải cánh lên Kỳ Lân Unimon & Thần Thú Griffomon!",
+        "🪽  TỔNG ĐIỂM MYTHICAL WING", "ngày Ultimate/Mega ≥",
+        "☁️  BIÊN NIÊN SỬ BẦU TRỜI PATAMON 12 THÁNG (T1 – T12)",
+        "✨  BIỂU ĐỒ ĐÔI CÁNH HY VỌNG 12 THÁNG", "area",
+        "🏅  HUY CHƯƠNG THẦN THOẠI CREST OF HOPE", "👑  GRIFFOMON",
+        [
+            ("☁️  Giọt Mây Poyomon", "Hoàn thành ngày kỷ luật đầu tiên ≥ 80% — đánh thức Digi-Egg of Hope!"),
+            ("🪽  Đôi Cánh Patamon (7d)", "Duy trì chuỗi 7 ngày đầy hy vọng & kỷ luật liên tiếp"),
+            ("🦄  Kỳ Lân Unimon (21d)", "Đạt chuỗi 21 ngày bay cao không bỏ cuộc"),
+            ("🦅  Hippogriffomon Uy Nghi (30d)", "Giữ vững chuỗi 30 ngày sức mạnh bầu trời"),
+            ("☀️  Tháng Mây Vàng (≥ 80%)", "Có ít nhất 1 tháng đạt trung bình ≥ 80%"),
+            ("✨  100 Ngày Hy Vọng (100d)", "Đạt ≥ 100 ngày Ultimate/Mega (≥ 80%) trong năm"),
+            ("🎯  Chinh Phục Mục Tiêu Năm", "Hoàn thành ≥ 50% mục tiêu trên Yearly Goals"),
+            ("👑  Thần Thú Bầu Trời Griffomon", "Đạt ≥ 80% cả năm hoặc ≥ 250 ngày ≥ 80%"),
+        ],
+        ("☁️ Giọt mây Poyomon vừa nở!", "🪽 Patamon đang vỗ cánh bay!", "🦄 Kỳ Lân Unimon tỏa sáng!", "👑 Thần Thú Bầu Trời Griffomon!"),
+    ),
+    # 42 - Digimon Palmon Rose (7 Stages!)
+    "digimon_palmon": _lore(
+        "🌹  VƯỜN HỒNG TIÊN HOA PALMON — TỔNG KẾT TIẾN HÓA NĂM",
+        "Huy hiệu Chân Thành (Crest of Sincerity) — từ hạt bông Yuramon nở rộ thành Tiên Hoa Lilimon & Nữ Hoàng Rosemon!",
+        "🌹  TỔNG ĐIỂM BLOOMING ROSE", "ngày Tiên Hoa ≥",
+        "🌺  KHU VƯỜN PALMON 12 THÁNG (T1 – T12)",
+        "🌸  BIỂU ĐỒ NỞ HOA SINCERITY 12 THÁNG", "area",
+        "🏅  HUY CHƯƠNG NỮ HOÀNG CREST OF SINCERITY", "🌹  ROSEMON",
+        [
+            ("☁️  Hạt Bông Yuramon", "Hoàn thành ngày kỷ luật đầu tiên ≥ 80% — đánh thức mầm xanh!"),
+            ("🌺  Mầm Hoa Palmon (7d)", "Duy trì chuỗi 7 ngày chăm sóc bản thân chân thành"),
+            ("🌵  Cú Đấm Xương Rồng Togemon (21d)", "Đạt chuỗi 21 ngày bền bỉ đầy nghị lực"),
+            ("🧚  Tiên Hoa Lilimon (30d)", "Giữ vững chuỗi 30 ngày tỏa sắc rực rỡ"),
+            ("🌸  Tháng Vườn Hồng (≥ 80%)", "Có ít nhất 1 tháng đạt trung bình ≥ 80%"),
+            ("🌿  100 Ngày Nở Rộ (100d)", "Đạt ≥ 100 ngày Ultimate/Mega (≥ 80%) trong năm"),
+            ("🎯  Chinh Phục Mục Tiêu Năm", "Hoàn thành ≥ 50% mục tiêu trên Yearly Goals"),
+            ("🌹  Nữ Hoàng Hoa Hồng Rosemon", "Đạt ≥ 80% cả năm hoặc ≥ 250 ngày ≥ 80%"),
+        ],
+        ("☁️ Hạt bông Yuramon nảy mầm!", "🌵 Togemon tung cú đấm kỷ luật!", "🧚 Tiên Hoa Lilimon rực rỡ!", "🌹 Nữ Hoàng Hoa Hồng Rosemon!"),
+    ),
+    # 43 - Digimon Gomamon Arctic (8 Stages Ultra!)
+    "digimon_gomamon": _lore(
+        "🧊  ĐẠI SẢNH VIKING GOMAMON — TỔNG KẾT 8 CẤP TIẾN HÓA NĂM",
+        "Huy hiệu Tin Cậy (Crest of Reliability) — hành trình 8 cấp từ Pichimon đến Chiến Thần Vikemon & Cổ Thú Băng Hà!",
+        "🛡️  TỔNG ĐIỂM VIKING RELIABILITY", "ngày Mega/Ultra ≥",
+        "❄️  HÀNH TRÌNH BĂNG HÀ GOMAMON 12 THÁNG (T1 – T12)",
+        "🧊  BIỂU ĐỒ KỶ LUẬT VIKING 12 THÁNG", "column",
+        "🏅  HUY CHƯƠNG BĂNG HÀ CREST OF RELIABILITY", "❄️  ANCIENTMEGA",
+        [
+            ("💧  Giọt Nước Pichimon", "Hoàn thành ngày đầu tiên đạt ≥ 85% — khởi đầu hành trình Bắc Cực!"),
+            ("🦄  Sừng Băng Ikkakumon (7d)", "Duy trì chuỗi 7 ngày đáng tin cậy không bỏ lỡ"),
+            ("🔨  Búa Sấm Zudomon (21d)", "Đạt chuỗi 21 ngày kỷ luật mạnh mẽ như búa sấm"),
+            ("⚔️  Chiến Thần Vikemon (30d)", "Giữ vững chuỗi 30 ngày bản lĩnh Viking kiên cường"),
+            ("🧊  Tháng Băng Tuyết (≥ 80%)", "Có ít nhất 1 tháng đạt trung bình ≥ 80%"),
+            ("🛡️  100 Ngày Tin Cậy (100d)", "Đạt ≥ 100 ngày Mega/Ultra (≥ 85%) trong năm"),
+            ("🎯  Chinh Phục Mục Tiêu Năm", "Hoàn thành ≥ 50% mục tiêu trên Yearly Goals"),
+            ("❄️  Cổ Thú Băng Hà AncientMegatheriummon", "Đạt ≥ 80% cả năm hoặc ≥ 250 ngày ≥ 85%"),
+        ],
+        ("💧 Giọt nước Pichimon thức giấc!", "🔨 Búa sấm Zudomon vang dội!", "⚔️ Chiến Thần Vikemon bất khuất!", "❄️ Cổ Thú Băng Hà AncientMega!"),
+    ),
+    # 44 - Digimon Guilmon Crimson (8 Stages Ultra!)
+    "digimon_guilmon": _lore(
+        "⚔️  THÁNH ĐƯỜNG ROYAL KNIGHT GUILMON — TỔNG KẾT 8 CẤP NĂM",
+        "Hành trình 8 cấp Digital Hazard — từ Hạt Lửa Jyarimon đến Hiệp Sĩ Hoàng Gia Gallantmon & Thánh Quang Crimson Mode!",
+        "👑  TỔNG ĐIỂM ROYAL KNIGHT HONOR", "ngày Mega/Ultra ≥",
+        "🔥  BIÊN NIÊN SỬ GUILMON 12 THÁNG (T1 – T12)",
+        "⚔️  BIỂU ĐỒ DANH DỰ ROYAL KNIGHT 12 THÁNG", "column",
+        "🏅  HUY CHƯƠNG HOÀNG GIA GALLANTMON CRIMSON", "👑  CRIMSON MODE",
+        [
+            ("🔥  Hạt Lửa Jyarimon", "Hoàn thành ngày đầu tiên đạt ≥ 85% — đánh thức Digital Hazard!"),
+            ("🍞  Bánh Mì Guilmon (7d)", "Duy trì chuỗi 7 ngày hăng hái & kỷ luật"),
+            ("⚙️  Chiến Giáp WarGrowlmon (21d)", "Đạt chuỗi 21 ngày bứt phá đầy sức mạnh"),
+            ("🛡️  Hiệp Sĩ Hoàng Gia Gallantmon (30d)", "Giữ vững chuỗi 30 ngày danh dự tối thượng"),
+            ("❤️  Tháng Đỏ Rực (≥ 80%)", "Có ít nhất 1 tháng đạt trung bình ≥ 80%"),
+            ("⚔️  100 Ngày Hoàng Gia (100d)", "Đạt ≥ 100 ngày Mega/Ultra (≥ 85%) trong năm"),
+            ("🎯  Chinh Phục Mục Tiêu Năm", "Hoàn thành ≥ 50% mục tiêu trên Yearly Goals"),
+            ("👑  Thánh Quang Gallantmon Crimson", "Đạt ≥ 80% cả năm hoặc ≥ 250 ngày ≥ 85%"),
+        ],
+        ("🔥 Hạt lửa Jyarimon bùng sáng!", "⚙️ Chiến giáp WarGrowlmon!", "🛡️ Hiệp Sĩ Hoàng Gia Gallantmon!", "👑 Thánh Quang Gallantmon Crimson!"),
+    ),
+    # 45 - Digimon Terriermon Mint (7 Stages!)
+    "digimon_terriermon": _lore(
+        "🌿  ĐẠI SẢNH MOMENTAI TERRIERMON — TỔNG KẾT TIẾN HÓA NĂM",
+        "Tinh thần Momentai bình tĩnh & bền bỉ — từ Mầm Xanh Zerimon đến Tốc Độ Rapidmon & Pháo Đài Cơ Khí MegaGargomon!",
+        "💚  TỔNG ĐIỂM MOMENTAI ZEN", "ngày Ultimate/Mega ≥",
+        "🐰  HÀNH TRÌNH MOMENTAI 12 THÁNG (T1 – T12)",
+        "🌿  BIỂU ĐỒ BÌNH TĨNH & TỐC ĐỘ 12 THÁNG", "combo",
+        "🏅  HUY CHƯƠNG MOMENTAI TERRIERMON", "🤖  MEGAGARGOMON",
+        [
+            ("🌱  Mầm Xanh Zerimon", "Hoàn thành ngày kỷ luật đầu tiên ≥ 80%"),
+            ("🐰  Cứ Bình Tĩnh (Momentai! — 7d)", "Duy trì chuỗi 7 ngày đều đặn, không áp lực"),
+            ("🔫  Bản Lĩnh Gargomon (21d)", "Đạt chuỗi 21 ngày kỷ luật vững chắc"),
+            ("⚡  Tốc Độ Rapidmon (30d)", "Giữ vững chuỗi 30 ngày tăng tốc mượt mà"),
+            ("💚  Tháng Bạc Hà Mát Lành (≥ 80%)", "Có ít nhất 1 tháng đạt trung bình ≥ 80%"),
+            ("🌿  100 Ngày Momentai (100d)", "Đạt ≥ 100 ngày Ultimate/Mega (≥ 80%) trong năm"),
+            ("🎯  Chinh Phục Mục Tiêu Năm", "Hoàn thành ≥ 50% mục tiêu trên Yearly Goals"),
+            ("🤖  Pháo Đài Cơ Khí MegaGargomon", "Đạt ≥ 80% cả năm hoặc ≥ 250 ngày ≥ 80%"),
+        ],
+        ("🌱 Mầm xanh Zerimon nhú lên!", "🐰 Momentai — Cứ bình tĩnh nhé!", "⚡ Tốc độ ánh sáng Rapidmon!", "🤖 Pháo Đài MegaGargomon!"),
+    ),
+    # 46 - Digimon Renamon Kuzuhamon (8 Stages Ultra!)
+    "digimon_renamon": _lore(
+        "⛩️  ĐỀN THỜ HỒ LY RENAMON — TỔNG KẾT 8 CẤP TÂM TĨNH NĂM",
+        "Hành trình 8 cấp Tâm Tĩnh & Chánh Niệm — từ Ánh Trăng Relemon đến Âm Dương Sư Doumon & Thần Nữ Kuzuhamon Miko!",
+        "🔮  TỔNG ĐIỂM SPIRIT FOCUS", "ngày Mega/Ultra ≥",
+        "🦊  HÀNH TRÌNH ĐỀN THỜ RENAMON 12 THÁNG (T1 – T12)",
+        "⛩️  BIỂU ĐỒ TÂM TĨNH KITSUNE 12 THÁNG", "area",
+        "🏅  HUY CHƯƠNG ĐỀN THỜ KUZUHAMON MIKO", "🌸  KUZUHAMON MIKO",
+        [
+            ("🌕  Ánh Trăng Relemon", "Hoàn thành ngày kỷ luật đầu tiên ≥ 85%"),
+            ("🍃  Hồ Ly Vàng Renamon (7d)", "Duy trì chuỗi 7 ngày tập trung sâu & điềm tĩnh"),
+            ("🔥  Cửu Vĩ Tím Youkomon (21d)", "Đạt chuỗi 21 ngày bùng cháy nội lực thanh tao"),
+            ("📜  Âm Dương Sư Doumon (30d)", "Giữ vững chuỗi 30 ngày cân bằng tuyệt đối"),
+            ("💜  Tháng Đền Thờ Tĩnh Lặng (≥ 80%)", "Có ít nhất 1 tháng đạt trung bình ≥ 80%"),
+            ("⛩️  100 Ngày Chánh Niệm (100d)", "Đạt ≥ 100 ngày Mega/Ultra (≥ 85%) trong năm"),
+            ("🎯  Trọn Vẹn Mục Tiêu Năm", "Hoàn thành ≥ 50% mục tiêu trên Yearly Goals"),
+            ("🌸  Thần Nữ Đền Thờ Kuzuhamon Miko", "Đạt ≥ 80% cả năm hoặc ≥ 250 ngày ≥ 85%"),
+        ],
+        ("🌕 Ánh trăng Relemon dịu êm!", "🍃 Hồ Ly Vàng Renamon tập trung!", "📜 Âm Dương Sư Doumon cân bằng!", "🌸 Thần Nữ Kuzuhamon Miko!"),
+    ),
+    # 47 - Digimon Tentomon Electro (7 Stages!)
+    "digimon_tentomon": _lore(
+        "⚡  PHÒNG LAB TRI THỨC TENTOMON — TỔNG KẾT TIẾN HÓA NĂM",
+        "Huy hiệu Tri Thức (Crest of Knowledge) — từ Bong Bóng Bubbmon đến Giáp Sét Kabuterimon & Hoàng Đế HerakleKabuterimon!",
+        "💡  TỔNG ĐIỂM KNOWLEDGE VOLTAGE", "ngày Ultimate/Mega ≥",
+        "🐞  HÀNH TRÌNH TRI THỨC TENTOMON 12 THÁNG (T1 – T12)",
+        "⚡  BIỂU ĐỒ ĐIỆN ÁP TRI THỨC 12 THÁNG", "combo",
+        "🏅  HUY CHƯƠNG SẤM SÉT CREST OF KNOWLEDGE", "👑  HERAKLEKABUTERI",
+        [
+            ("🫧  Bong Bóng Bubbmon", "Hoàn thành ngày kỷ luật đầu tiên ≥ 80%"),
+            ("🐞  Bọ Rùa Tri Thức Tentomon (7d)", "Duy trì chuỗi 7 ngày học hỏi & tò mò liên tiếp"),
+            ("⚡  Giáp Sét Kabuterimon (21d)", "Đạt chuỗi 21 ngày năng lượng học tập bứt phá"),
+            ("🔥  Siêu Giáp MegaKabuterimon (30d)", "Giữ vững chuỗi 30 ngày tập trung cao độ"),
+            ("💡  Tháng Cao Thế Tri Thức (≥ 80%)", "Có ít nhất 1 tháng đạt trung bình ≥ 80%"),
+            ("⚡  100 Ngày Sấm Sét (100d)", "Đạt ≥ 100 ngày Ultimate/Mega (≥ 80%) trong năm"),
+            ("🎯  Chinh Phục Mục Tiêu Năm", "Hoàn thành ≥ 50% mục tiêu trên Yearly Goals"),
+            ("👑  Hoàng Đế Sấm Sét HerakleKabuterimon", "Đạt ≥ 80% cả năm hoặc ≥ 250 ngày ≥ 80%"),
+        ],
+        ("🫧 Bong bóng Bubbmon xuất hiện!", "🐞 Tentomon sẵn sàng khám phá!", "⚡ Giáp Sét Kabuterimon rực sáng!", "👑 Hoàng Đế HerakleKabuterimon!"),
+    ),
 }
 
 
 def get_annual_lore(slug: str) -> dict:
-    """Return bespoke Annual Achievements lore pack for `slug` (40 themes supported)."""
+    """Return bespoke Annual Achievements lore pack for `slug` (47 themes supported)."""
     if slug in ANNUAL_LORE:
         return ANNUAL_LORE[slug]
     raise KeyError(f"Missing bespoke Annual Achievements lore for slug={slug!r}")

@@ -1617,6 +1617,152 @@ def add_digimon_crest_panel(wb, cv: Canvas, tr: TrackerRefs, kind: str = "veemon
             "champ_name": "Birdramon",
             "rookie_name": "Biyomon",
         },
+        "patamon": {
+            "banner": "🪽  CREST OF HOPE  •  MYTHICAL SKY  •  THỐNG KÊ 7 CẤP TIẾN HÓA PATAMON → GRIFFOMON",
+            "right_hdr": "✨  MYTHICAL WING POWER",
+            "stages": [
+                ("🥚 Digi-Egg",       "0%",      "#FFFBEB", "#92400E"),
+                ("☁️ Poyomon",        "1–19%",   "#F0F9FF", "#0369A1"),
+                ("🐾 Tokomon",        "20–39%",  "#FEF3C7", "#B45309"),
+                ("🪽 Patamon",        "40–59%",  "#FFEDD5", "#C2410C"),
+                ("🦄 Unimon",         "60–79%",  "#DBEAFE", "#1D4ED8"),
+                ("🦅 Hippogriffomon", "80–99%",  "#EDE9FE", "#6D28D9"),
+                ("👑 Griffomon",      "100% ✨", "#FEF08A", "#92400E"),
+            ],
+            "mission_lbl": "🪽  NHẬT KÝ HY VỌNG & ĐÔI CÁNH (CREST OF HOPE):",
+            "mission_txt": "Giữ niềm tin vững vàng mỗi ngày — sải rộng đôi cánh kỷ luật từ Patamon lên Thần Thú Bầu Trời Griffomon!",
+            "crest_accent": "#F59E0B",
+            "mega_name": "Griffomon",
+            "ult_name": "Hippogriffomon",
+            "champ_name": "Unimon",
+            "rookie_name": "Patamon",
+        },
+        "palmon": {
+            "banner": "🌹  CREST OF SINCERITY  •  BLOOMING ROSE GARDEN  •  THỐNG KÊ 7 CẤP PALMON → ROSEMON",
+            "right_hdr": "🌸  BLOOMING ROSE POWER",
+            "stages": [
+                ("🥚 Digi-Egg", "0%",      "#F0FDF4", "#166534"),
+                ("☁️ Yuramon",  "1–19%",   "#ECFDF5", "#047857"),
+                ("🌱 Tanemon",  "20–39%",  "#DCFCE7", "#15803D"),
+                ("🌺 Palmon",   "40–59%",  "#BBF7D0", "#166534"),
+                ("🌵 Togemon",  "60–79%",  "#D1FAE5", "#065F46"),
+                ("🧚 Lilimon",  "80–99%",  "#FCE7F3", "#BE185D"),
+                ("🌹 Rosemon",  "100% ✨", "#FFE4E6", "#BE123C"),
+            ],
+            "mission_lbl": "🌹  NHẬT KÝ VƯỜN HOA & CHÂN THÀNH (CREST OF SINCERITY):",
+            "mission_txt": "Chăm sóc bản thân chân thành mỗi ngày để từng mầm xanh nở rộ thành Nữ Hoàng Hoa Hồng Rosemon 100%!",
+            "crest_accent": "#EC4899",
+            "mega_name": "Rosemon",
+            "ult_name": "Lilimon",
+            "champ_name": "Togemon",
+            "rookie_name": "Palmon",
+        },
+        "gomamon": {
+            "banner": "🧊  CREST OF RELIABILITY  •  ARCTIC VIKING  •  8 CẤP TIẾN HÓA GOMAMON → ANCIENTMEGATHERIUM",
+            "right_hdr": "🛡️  VIKING RELIABILITY",
+            "stages": [
+                ("🥚 Digi-Egg",    "0%",      "#ECFEFF", "#155E75"),
+                ("💧 Pichimon",    "1–14%",   "#E0F2FE", "#0369A1"),
+                ("🦭 Bukamon",     "15–29%",  "#F3E8FF", "#6B21A8"),
+                ("🐾 Gomamon",     "30–49%",  "#CFFAFE", "#0E7490"),
+                ("🦄 Ikkakumon",   "50–69%",  "#DBEAFE", "#1D4ED8"),
+                ("🔨 Zudomon",     "70–84%",  "#FEF3C7", "#B45309"),
+                ("⚔️ Vikemon",     "85–99%",  "#EDE9FE", "#5B21B6"),
+                ("❄️ AncientMega", "100% ✨", "#A5F3FC", "#0F293A"),
+            ],
+            "mission_lbl": "🧊  CAM KẾT TIN CẬY VIKING (CREST OF RELIABILITY):",
+            "mission_txt": "Nói là làm, giữ kỷ luật vững như băng hà — vượt qua mọi thử thách để mở khóa Cổ Thú Băng Hà 100%!",
+            "crest_accent": "#06B6D4",
+            "ultra_name": "AncientMegatherium",
+            "mega_name": "Vikemon",
+            "ult_name": "Zudomon",
+            "champ_name": "Ikkakumon",
+            "rookie_name": "Gomamon",
+        },
+        "guilmon": {
+            "banner": "⚔️  ROYAL KNIGHT  •  DIGITAL HAZARD  •  8 CẤP TIẾN HÓA GUILMON → GALLANTMON CRIMSON",
+            "right_hdr": "👑  ROYAL KNIGHT HONOR",
+            "stages": [
+                ("🥚 Digi-Egg",    "0%",      "#FEF2F2", "#991B1B"),
+                ("🔥 Jyarimon",    "1–14%",   "#FFEDD5", "#C2410C"),
+                ("🐾 Gigimon",     "15–29%",  "#FEE2E2", "#B91C1C"),
+                ("🦖 Guilmon",     "30–49%",  "#FECACA", "#991B1B"),
+                ("🔥 Growlmon",    "50–69%",  "#FCA5A5", "#7F1D1D"),
+                ("⚙️ WarGrowlmon", "70–84%",  "#E2E8F0", "#334155"),
+                ("🛡️ Gallantmon",  "85–99%",  "#FEF3C7", "#B45309"),
+                ("👑 CrimsonMode", "100% ✨", "#FEE2E2", "#991B1B"),
+            ],
+            "mission_lbl": "⚔️  DANH DỰ HIỆP SĨ HOÀNG GIA (ROYAL KNIGHT LOG):",
+            "mission_txt": "Rèn kỷ luật thép từng ngày để thức tỉnh Thánh Quang Đỏ Rực — Gallantmon Crimson Mode 100%!",
+            "crest_accent": "#DC2626",
+            "ultra_name": "Gallantmon Crimson",
+            "mega_name": "Gallantmon",
+            "ult_name": "WarGrowlmon",
+            "champ_name": "Growlmon",
+            "rookie_name": "Guilmon",
+        },
+        "terriermon": {
+            "banner": "🌿  MOMENTAI ZEN  •  CHILL TO MECHA  •  THỐNG KÊ 7 CẤP TERRIERMON → MEGAGARGOMON",
+            "right_hdr": "💚  MOMENTAI ZEN SCORE",
+            "stages": [
+                ("🥚 Digi-Egg",     "0%",      "#ECFDF5", "#065F46"),
+                ("🌱 Zerimon",      "1–19%",   "#D1FAE5", "#047857"),
+                ("🐾 Gummymon",     "20–39%",  "#A7F3D0", "#065F46"),
+                ("🐰 Terriermon",   "40–59%",  "#DCFCE7", "#15803D"),
+                ("🔫 Gargomon",     "60–79%",  "#E2E8F0", "#334155"),
+                ("⚡ Rapidmon",     "80–99%",  "#BBF7D0", "#047857"),
+                ("🤖 MegaGargomon", "100% ✨", "#A7F3D0", "#0F2E22"),
+            ],
+            "mission_lbl": "🌿  GHI CHÚ MOMENTAI (CỨ BÌNH TĨNH & ĐỀU ĐẶN):",
+            "mission_txt": "Momentai! Không cần vội vàng, chỉ cần đều đặn mỗi ngày để nâng cấp thành Pháo Đài MegaGargomon 100%!",
+            "crest_accent": "#059669",
+            "mega_name": "MegaGargomon",
+            "ult_name": "Rapidmon",
+            "champ_name": "Gargomon",
+            "rookie_name": "Terriermon",
+        },
+        "renamon": {
+            "banner": "⛩️  MYSTIC SHRINE  •  KITSUNE SPIRIT  •  8 CẤP TIẾN HÓA RENAMON → KUZUHAMON MIKO",
+            "right_hdr": "🔮  SPIRIT FOCUS • TÂM TĨNH",
+            "stages": [
+                ("🥚 Digi-Egg",     "0%",      "#FAF5FF", "#6B21A8"),
+                ("🌕 Relemon",      "1–14%",   "#FEF9C3", "#A16207"),
+                ("🦊 Viximon",      "15–29%",  "#FEF08A", "#854D0E"),
+                ("🍃 Renamon",      "30–49%",  "#FEF3C7", "#B45309"),
+                ("🔥 Youkomon",     "50–69%",  "#EDE9FE", "#5B21B6"),
+                ("📜 Doumon",       "70–84%",  "#FFE4E6", "#BE123C"),
+                ("⛩️ Kuzuhamon",    "85–99%",  "#DDD6FE", "#4C1D95"),
+                ("🌸 KuzuhamonMiko","100% ✨", "#FCE7F3", "#9D174D"),
+            ],
+            "mission_lbl": "⛩️  TÂM TĨNH & PHẢN TƯ ĐỀN THỜ (MINDFULNESS REFLECTION):",
+            "mission_txt": "Giữ tâm tĩnh lặng như Hồ Ly đền thờ — tập trung sâu và chánh niệm mỗi ngày để hóa thân Kuzuhamon Miko!",
+            "crest_accent": "#7C3AED",
+            "ultra_name": "Kuzuhamon Miko",
+            "mega_name": "Kuzuhamon",
+            "ult_name": "Doumon",
+            "champ_name": "Youkomon",
+            "rookie_name": "Renamon",
+        },
+        "tentomon": {
+            "banner": "⚡  CREST OF KNOWLEDGE  •  CYBER LIGHTNING  •  7 CẤP TENTOMON → HERAKLEKABUTERIMON",
+            "right_hdr": "💡  KNOWLEDGE VOLTAGE",
+            "stages": [
+                ("🥚 Digi-Egg",         "0%",      "#EEF2FF", "#3730A3"),
+                ("🫧 Bubbmon",          "1–19%",   "#ECFDF5", "#047857"),
+                ("🩷 Mochimon",         "20–39%",  "#FCE7F3", "#BE185D"),
+                ("🐞 Tentomon",         "40–59%",  "#FEE2E2", "#B91C1C"),
+                ("⚡ Kabuterimon",      "60–79%",  "#E0E7FF", "#4338CA"),
+                ("🔥 MegaKabuterimon",  "80–99%",  "#FFEDD5", "#C2410C"),
+                ("👑 HerakleKabuteri",  "100% ✨", "#FEF3C7", "#B45309"),
+            ],
+            "mission_lbl": "⚡  NHẬT KÝ TRI THỨC & SÁNG TẠO (CREST OF KNOWLEDGE):",
+            "mission_txt": "Tích lũy tri thức và tò mò học hỏi mỗi ngày — nạp đầy điện áp để hóa thân HerakleKabuterimon 100%!",
+            "crest_accent": "#4F46E5",
+            "mega_name": "HerakleKabuterimon",
+            "ult_name": "MegaKabuterimon",
+            "champ_name": "Kabuterimon",
+            "rookie_name": "Tentomon",
+        },
     }[kind]
 
     cv.merge(r0, C_NAME, r0, C_D31, cfg["banner"], bold=True, font_size=9.4,
@@ -1624,23 +1770,21 @@ def add_digimon_crest_panel(wb, cv: Canvas, tr: TrackerRefs, kind: str = "veemon
     cv.merge(r0, C_R0, r0, C_RE, cfg["right_hdr"], bold=True, font_size=9,
              align="center", bg_color=t.primary_dark, font_color=t.on_primary)
 
-    # Left 7-stage distribution across C_NAME..C_D31 (cols 1..32 -> 7 spans of width 4,4,4,5,5,5,5 = 32 cols!)
-    stage_spans = [
-        (1, 4),    # Stage 0 (Digi-Egg)
-        (5, 8),    # Stage 1 (Baby I)
-        (9, 12),   # Stage 2 (Baby II)
-        (13, 17),  # Stage 3 (Rookie)
-        (18, 22),  # Stage 4 (Champion)
-        (23, 27),  # Stage 5 (Ultimate)
-        (28, 32),  # Stage 6 (Mega 100%)
-    ]
+    # Left 7-stage (4,4,4,5,5,5,5 = 32 cols) OR 8-stage (8 x 4 = 32 cols!) distribution across C_NAME..C_D31!
+    is_8 = (len(cfg["stages"]) == 8)
+    if is_8:
+        stage_spans = [(1 + i * 4, 4 + i * 4) for i in range(8)]
+    else:
+        stage_spans = [
+            (1, 4), (5, 8), (9, 12), (13, 17), (18, 22), (23, 27), (28, 32),
+        ]
     stg_rng = f"{tr.calc_q}!{rng(tr.stage_row, 1, tr.stage_row, 31)}"
     for idx, ((c1, c2), (st_lbl, pct_lbl, bg_s, fg_s)) in enumerate(zip(stage_spans, cfg["stages"])):
         stg_num = idx + 1
-        cv.merge(r0 + 1, c1, r0 + 1, c2, st_lbl, bold=True, font_size=8.6,
+        cv.merge(r0 + 1, c1, r0 + 1, c2, st_lbl, bold=True, font_size=(8.1 if is_8 else 8.6),
                  align="center", bg_color=bg_s, font_color=fg_s)
         cv.merge(r0 + 2, c1, r0 + 2, c2, f'=COUNTIF({stg_rng},{stg_num})&" ngày"',
-                 bold=True, font_size=10.5, align="center", bg_color=t.card, font_color=fg_s,
+                 bold=True, font_size=10.2, align="center", bg_color=t.card, font_color=fg_s,
                  font_name=t.font_title)
         cv.merge(r0 + 3, c1, r0 + 3, c2, pct_lbl, italic=True, font_size=7.8,
                  align="center", bg_color=t.page, font_color=t.muted)
@@ -1656,15 +1800,26 @@ def add_digimon_crest_panel(wb, cv: Canvas, tr: TrackerRefs, kind: str = "veemon
 
     # Right Crest Evolution Rank Card (C_R0..C_RE, r0+1..r0+5)
     ov = tr.s["overall"]
-    rank_f = (
-        f'=IF({ov}>=0.999,"👑 MEGA: {cfg["mega_name"]}",'
-        f'IF({ov}>=CFG_THR_3,"⚡ ULTIMATE: {cfg["ult_name"]}",'
-        f'IF({ov}>=CFG_THR_2,"🔥 CHAMPION: {cfg["champ_name"]}",'
-        f'IF({ov}>=CFG_THR_1,"✨ ROOKIE: {cfg["rookie_name"]}","🥚 DIGI-EGG / TRAINING"))))'
-    )
+    if is_8:
+        rank_f = (
+            f'=IF({ov}>=0.999,"👑 ULTRA: {cfg["ultra_name"]}",'
+            f'IF({ov}>=CFG_THR_3,"⚡ MEGA: {cfg["mega_name"]}",'
+            f'IF({ov}>=CFG_THR_2,"🔥 ULTIMATE: {cfg["ult_name"]}",'
+            f'IF({ov}>=CFG_THR_1,"🛡️ CHAMPION: {cfg["champ_name"]}",'
+            f'IF({ov}>=CFG_THR_0,"✨ ROOKIE: {cfg["rookie_name"]}","🥚 DIGI-EGG / TRAINING")))))'
+        )
+        grown_txt = f'="👑 Ultra 100%: "&{tr.s["perfect"]}&" ngày  •  ⚡ ≥85%: "&{tr.s["grown"]}&"d"'
+    else:
+        rank_f = (
+            f'=IF({ov}>=0.999,"👑 MEGA: {cfg["mega_name"]}",'
+            f'IF({ov}>=CFG_THR_3,"⚡ ULTIMATE: {cfg["ult_name"]}",'
+            f'IF({ov}>=CFG_THR_2,"🔥 CHAMPION: {cfg["champ_name"]}",'
+            f'IF({ov}>=CFG_THR_1,"✨ ROOKIE: {cfg["rookie_name"]}","🥚 DIGI-EGG / TRAINING"))))'
+        )
+        grown_txt = f'="👑 Mega 100%: "&{tr.s["perfect"]}&" ngày   •   ⚡ ≥80%: "&{tr.s["grown"]}&"d"'
     cv.merge(r0 + 1, C_R0, r0 + 1, C_RE, "CURRENT FORM  •  CẤP HIỆN TẠI", bold=True, font_size=7.8,
              align="center", bg_color=t.soft, font_color=t.muted)
-    cv.merge(r0 + 2, C_R0, r0 + 2, C_RE, rank_f, bold=True, font_size=9.6,
+    cv.merge(r0 + 2, C_R0, r0 + 2, C_RE, rank_f, bold=True, font_size=9.4,
              align="center", bg_color=t.card, font_color=t.primary_dark, font_name=t.font_title)
     cv.merge(r0 + 3, C_R0, r0 + 3, C_RE, f"={ov}", bold=True, font_size=9.5,
              align="center", num_format="0%", bg_color=t.card, font_color=t.ink)
@@ -1672,8 +1827,7 @@ def add_digimon_crest_panel(wb, cv: Canvas, tr: TrackerRefs, kind: str = "veemon
         "type": "data_bar", "bar_color": cfg["crest_accent"], "bar_solid": True,
         "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1,
     })
-    cv.merge(r0 + 4, C_R0, r0 + 4, C_RE,
-             f'="👑 Mega 100%: "&{tr.s["perfect"]}&" ngày   •   ⚡ ≥80%: "&{tr.s["grown"]}&"d"',
+    cv.merge(r0 + 4, C_R0, r0 + 4, C_RE, grown_txt,
              bold=True, font_size=8.4, align="center", bg_color=t.soft, font_color=t.ink)
     cv.merge(r0 + 5, C_R0, r0 + 5, C_RE,
              f'="🔥 Chuỗi kỷ lục: "&{tr.s["best"]}&" ngày liên tiếp"',

@@ -41,7 +41,10 @@ PREVIEW_KEYS = {"01_sunflower", "02_cactus", "07_sakura", "10_aurora",
                 "20_alpaca_cream", "24_royal_cat_cash", "30_shiba_inu", "31_akita_inu",
                 "32_sakura_min", "33_mochi_cat", "34_fluffy_bunny", "35_milk_mocha",
                 "36_digimon_veemon", "37_digimon_agumon", "38_digimon_gatomon",
-                "39_digimon_gabumon", "40_digimon_piyomon"}
+                "39_digimon_gabumon", "40_digimon_piyomon",
+                "41_digimon_patamon", "42_digimon_palmon", "43_digimon_gomamon",
+                "44_digimon_guilmon", "45_digimon_terriermon", "46_digimon_renamon",
+                "47_digimon_tentomon"}
 
 
 def _com_retry(fn, retries: int = 12, delay: float = 0.25):

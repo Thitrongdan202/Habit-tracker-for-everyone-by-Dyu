@@ -56,6 +56,9 @@ MOBILE_GOALS_SAMPLE = [
 
 
 def _stage6(pct_ref: str, num_stages: int = 6) -> str:
+    if num_stages == 8:
+        return (f"=1+({pct_ref}>0)+({pct_ref}>=CFG_THR_M1)+({pct_ref}>=CFG_THR_0)"
+                f"+({pct_ref}>=CFG_THR_1)+({pct_ref}>=CFG_THR_2)+({pct_ref}>=CFG_THR_3)+({pct_ref}>=0.999)")
     if num_stages == 7:
         return (f"=1+({pct_ref}>0)+({pct_ref}>=CFG_THR_0)+({pct_ref}>=CFG_THR_1)"
                 f"+({pct_ref}>=CFG_THR_2)+({pct_ref}>=CFG_THR_3)+({pct_ref}>=0.999)")
@@ -959,11 +962,16 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
         "🖐️  Cách thủ công không cần Script (3 giây): Chọn vùng ô C21:I35 trên tab Tuần Này → menu Chèn (Insert) → Hộp kiểm (Checkbox).",
     ])
 
-    # Card 3: 2x3 Stage 0..5 Showcase + Editable Thresholds & CFG_IMG_BASE
+    # Card 3: Stage Showcase + Editable Thresholds & CFG_IMG_BASE (6, 7, or 8 stages!)
     cv3.row(rg, 26)
     is_7 = (t.num_stages == 7)
+    is_8 = (t.num_stages == 8)
+    is_digi = (t.num_stages >= 7)
     cv3.merge(rg, 1, rg, 6,
-              "⚡  3. TIẾN HÓA 7 GIAI ĐOẠN (DIGIVOLUTION) & NGƯỠNG" if is_7 else "🎨  3. HOẠT ẢNH 6 GIAI ĐOẠN (2×3) & NGƯỠNG TĂNG TRƯỞNG",
+              "⚡  3. TIẾN HÓA 8 GIAI ĐOẠN (ULTRA DIGIVOLUTION)" if is_8 else (
+                  "⚡  3. TIẾN HÓA 7 GIAI ĐOẠN (DIGIVOLUTION) & NGƯỠNG" if is_7 else
+                  "🎨  3. HOẠT ẢNH 6 GIAI ĐOẠN (2×3) & NGƯỠNG TĂNG TRƯỞNG"
+              ),
               bold=True, font_size=10.5, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
 
     # CFG_IMG_BASE row
@@ -977,7 +985,32 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
 
     # Centered Threshold bar
     r_th = r_url + 1
-    if is_7:
+    if is_8:
+        for dr in range(3):
+            cv3.row(r_th + dr, 25)
+        cv3.merge(r_th, 1, r_th, 2, "S2 (Baby II):", bold=True, font_size=9.0, align="center", bg_color=t.soft, font_color=t.ink)
+        cv3.put(r_th, 3, 0.15, bold=True, font_size=9.8, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+        cv3.merge(r_th, 4, r_th, 5, "S3 (Rookie):", bold=True, font_size=9.0, align="center", bg_color=t.soft, font_color=t.ink)
+        cv3.put(r_th, 6, 0.30, bold=True, font_size=9.8, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+        cv3.merge(r_th + 1, 1, r_th + 1, 2, "S4 (Champ):", bold=True, font_size=9.0, align="center", bg_color=t.soft, font_color=t.ink)
+        cv3.put(r_th + 1, 3, 0.50, bold=True, font_size=9.8, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+        cv3.merge(r_th + 1, 4, r_th + 1, 5, "S5 (Ultim):", bold=True, font_size=9.0, align="center", bg_color=t.soft, font_color=t.ink)
+        cv3.put(r_th + 1, 6, 0.70, bold=True, font_size=9.8, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+        cv3.merge(r_th + 2, 1, r_th + 2, 2, "S6 • Đạt:", bold=True, font_size=9.0, align="center", bg_color=t.soft, font_color=t.ink)
+        cv3.put(r_th + 2, 3, 0.85, bold=True, font_size=9.8, align="center", num_format="0%", bg_color=t.warn_fill, font_color=t.primary_dark)
+        cv3.merge(r_th + 2, 4, r_th + 2, 6, "S7 Ultra: 100% ✨", bold=True, font_size=9.2, align="center", bg_color=t.primary, font_color=t.on_primary)
+        wb.define_name("CFG_THR_M1", f"={dq}!{acell(r_th, 3)}")
+        wb.define_name("CFG_THR_0", f"={dq}!{acell(r_th, 6)}")
+        wb.define_name("CFG_THR_1", f"={dq}!{acell(r_th + 1, 3)}")
+        wb.define_name("CFG_THR_2", f"={dq}!{acell(r_th + 1, 6)}")
+        wb.define_name("CFG_THR_3", f"={dq}!{acell(r_th + 2, 3)}")
+        snames = t.stage_names or ["Digi-Egg", "Baby I", "Baby II", "Rookie", "Champion", "Ultimate", "Mega", "Ultra"]
+        stages_2x3 = [
+            [(0, f"S0 • {snames[0]} (0%)"), (1, f"S1 • {snames[1]} (1–14%)"), (2, f"S2 • {snames[2]} (15–29%)")],
+            [(3, f"S3 • {snames[3]} (30–49%)"), (4, f"S4 • {snames[4]} (50–69%)"), (5, f"S5 • {snames[5]} (70–84%)")],
+        ]
+        r_cur = r_th + 3
+    elif is_7:
         cv3.row(r_th, 26)
         cv3.row(r_th + 1, 26)
         cv3.merge(r_th, 1, r_th, 2, "Stage 2 (Baby II):", bold=True, font_size=9.2, align="center", bg_color=t.soft, font_color=t.ink)
@@ -1019,14 +1052,26 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
         cv3.row(r_cur + 1, 86)
         for bi, (s_idx, s_lbl) in enumerate(grp):
             c1, c2 = 1 + bi * 2, 2 + bi * 2
-            cv3.merge(r_cur, c1, r_cur, c2, s_lbl, bold=True, font_size=(8.6 if is_7 else 9.5), align="center",
+            cv3.merge(r_cur, c1, r_cur, c2, s_lbl, bold=True, font_size=(8.4 if is_digi else 9.5), align="center",
                       bg_color=t.soft, font_color=t.ink)
             cv3.merge(r_cur + 1, c1, r_cur + 1, c2,
                       f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_{s_idx}.png")',
                       align="center", bg_color=t.card)
         r_cur += 2
-    if is_7:
-        # Full-width Hero Mega Stage 6 showcase card!
+    if is_8:
+        snames = t.stage_names or ["Digi-Egg", "Baby I", "Baby II", "Rookie", "Champion", "Ultimate", "Mega", "Ultra"]
+        cv3.row(r_cur, 24)
+        cv3.row(r_cur + 1, 96)
+        cv3.merge(r_cur, 1, r_cur, 3, f"🔥 S6 MEGA • {snames[6]} (85–99%)",
+                  bold=True, font_size=8.8, align="center", bg_color=t.soft, font_color=t.primary_dark)
+        cv3.merge(r_cur + 1, 1, r_cur + 1, 3, '=_xlfn.IMAGE(CFG_IMG_BASE&"stage_6.png")',
+                  align="center", bg_color=t.card)
+        cv3.merge(r_cur, 4, r_cur, 6, f"👑 S7 ULTRA • {snames[7]} (100% ✨)",
+                  bold=True, font_size=8.8, align="center", bg_color=t.primary, font_color=t.on_primary)
+        cv3.merge(r_cur + 1, 4, r_cur + 1, 6, '=_xlfn.IMAGE(CFG_IMG_BASE&"stage_7.png")',
+                  align="center", bg_color=t.card)
+        r_cur += 2
+    elif is_7:
         snames = t.stage_names or ["Digi-Egg", "Baby I", "Baby II", "Rookie", "Champion", "Ultimate", "Mega"]
         cv3.row(r_cur, 24)
         cv3.row(r_cur + 1, 96)
@@ -1043,7 +1088,7 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
     cv3.row(r_cur + 1, 28)
     cv3.row(r_cur + 2, 10)
     cv3.merge(r_cur + 1, 1, r_cur + 1, 6,
-              f"💛  Habit Tracker Mobile Portrait {'v3.7' if is_7 else 'v2.3'} by Dyu  •  github.com/Thitrongdan202",
+              f"💛  Habit Tracker Mobile Portrait {'v3.8' if is_digi else 'v2.3'} by Dyu  •  github.com/Thitrongdan202",
               bold=False, font_size=8.8, italic=True, align="center", text_wrap=True,
               bg_color=t.page, font_color=t.muted)
 

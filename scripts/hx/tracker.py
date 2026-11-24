@@ -101,11 +101,16 @@ def week_days(w: int):               # w = 0..4
 
 
 def stage_formula(pct_ref: str, num_stages: int = 6) -> str:
-    """Consistent 6-stage or 7-stage formula:
+    """Consistent 6-stage, 7-stage, or 8-stage formula:
     - 6 stages (returns 1..6 for stage_0..stage_5):
         0% -> 1, 1-24% -> 2, 25-49% -> 3, 50-74% -> 4, 75-99% -> 5, 100% -> 6
     - 7 stages (returns 1..7 for stage_0..stage_6, Digimon):
-        0% -> 1, 1-19% -> 2, 20-39% -> 3, 40-59% -> 4, 60-79% -> 5, 80-99% -> 6, 100% -> 7."""
+        0% -> 1, 1-19% -> 2, 20-39% -> 3, 40-59% -> 4, 60-79% -> 5, 80-99% -> 6, 100% -> 7
+    - 8 stages (returns 1..8 for stage_0..stage_7, Digimon Ultra/Burst):
+        0% -> 1, 1-14% -> 2, 15-29% -> 3, 30-49% -> 4, 50-69% -> 5, 70-84% -> 6, 85-99% -> 7, 100% -> 8."""
+    if num_stages == 8:
+        return (f"=1+({pct_ref}>0)+({pct_ref}>=CFG_THR_M1)+({pct_ref}>=CFG_THR_0)"
+                f"+({pct_ref}>=CFG_THR_1)+({pct_ref}>=CFG_THR_2)+({pct_ref}>=CFG_THR_3)+({pct_ref}>=0.999)")
     if num_stages == 7:
         return (f"=1+({pct_ref}>0)+({pct_ref}>=CFG_THR_0)+({pct_ref}>=CFG_THR_1)"
                 f"+({pct_ref}>=CFG_THR_2)+({pct_ref}>=CFG_THR_3)+({pct_ref}>=0.999)")

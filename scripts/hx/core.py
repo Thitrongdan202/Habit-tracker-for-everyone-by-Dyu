@@ -70,8 +70,8 @@ class Theme:
     hero_header_fg: str | None = None     # Optional accent banner fg on Grown Hero card
     warn_fill: str = "#FFF6DD"
     warn_line: str = "#F1D88A"
-    num_stages: int = 6                   # 6 for themes #01-#35, 7 for Digimon #36-#40
-    stage_names: list | None = None       # Optional list of 7 Digimon names for Guide
+    num_stages: int = 6                   # 6 (#01-#35), 7 (Digimon 7-stage), 8 (Digimon 8-stage Ultra!)
+    stage_names: list | None = None       # Optional list of 7 or 8 Digimon names for Guide
 
     @property
     def max_stage_idx(self) -> int:

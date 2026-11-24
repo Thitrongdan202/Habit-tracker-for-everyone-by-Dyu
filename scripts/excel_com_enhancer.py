@@ -211,7 +211,7 @@ def add_pro_pill_buttons(wb, meta: dict):
         if "5. HOẠT ẢNH" in val_g:
             r_sec5 = rr_g
             break
-    last_g_col = 8 if n_stages == 7 else 7  # Col H (8) for 7-stage, Col G (7) for 6-stage
+    last_g_col = 1 + n_stages  # Col G (7) for 6-stage, Col H (8) for 7-stage, Col I (9) for 8-stage!
     sec5_bar = ws_g.Range(ws_g.Cells(r_sec5, 2), ws_g.Cells(r_sec5, last_g_col))
     gw = 148.0
     gh = min(21.0, max(17.0, sec5_bar.Height - 4.0))
@@ -379,7 +379,7 @@ def apply_pro_sheet_protection(wb, meta: dict):
     # 5. Guide — ONLY the threshold config cells unlocked!
     ws_g = wb.Worksheets(GUIDE_SHEET)
     ws_g.Cells.Locked = True
-    for thr_nm in ("CFG_THR_0", "CFG_THR_1", "CFG_THR_2", "CFG_THR_3"):
+    for thr_nm in ("CFG_THR_M1", "CFG_THR_0", "CFG_THR_1", "CFG_THR_2", "CFG_THR_3"):
         try:
             wb.Names(thr_nm).RefersToRange.Locked = False
         except Exception:
@@ -458,7 +458,7 @@ def deduplicate_xlsm_media(xlsm_path: Path, slug: str, n_stages: int = 6) -> tup
                                 rid = av
                                 break
                 if rid and shp_name:
-                    m_st = re.search(r"(?:_S|Guide_Stage|ASSET_S)([0-6])$", shp_name)
+                    m_st = re.search(r"(?:_S|Guide_Stage|ASSET_S)([0-7])$", shp_name)
                     if m_st and int(m_st.group(1)) < n_stages:
                         rid_map[rid] = int(m_st.group(1))
         except Exception:

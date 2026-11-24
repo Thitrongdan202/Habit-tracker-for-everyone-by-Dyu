@@ -74,9 +74,20 @@ def add_assets_placeholder(wb, styles: Styles):
 
     ws.set_row(0, 26)
     ws.write(0, 0, "STAGE", hdr)
-    if t.num_stages == 7:
+    if t.num_stages == 8:
+        ws.write(0, 1, "SPRITE (B2:B9)", hdr)
+        ws.write(0, 2, "HƯỚNG DẪN TỰ ĐỔI 8 ẢNH TIẾN HÓA DIGIMON ULTRA (v3.8)", hdr)
+        names = t.stage_names or [f"Stage {i}" for i in range(8)]
+        pcts = ["0%", "1%–14%", "15%–29%", "30%–49%", "50%–69%", "70%–84%", "85%–99%", "100% ✨"]
+        stage_notes = [
+            (f"Stage {i} ({pcts[i]})", f"{names[i]} — Dán ảnh giai đoạn {i} vào B{2 + i}")
+            for i in range(8)
+        ] + [
+            ("(Ô trống ngoài tháng)", "GIỮ NGUYÊN Ô TRẮNG B10 — dùng để ẩn ngày 29/30/31 ở tháng ngắn"),
+        ]
+    elif t.num_stages == 7:
         ws.write(0, 1, "SPRITE (B2:B8)", hdr)
-        ws.write(0, 2, "HƯỚNG DẪN TỰ ĐỔI 7 ẢNH TIẾN HÓA DIGIMON (v3.7)", hdr)
+        ws.write(0, 2, "HƯỚNG DẪN TỰ ĐỔI 7 ẢNH TIẾN HÓA DIGIMON (v3.8)", hdr)
         names = t.stage_names or [f"Stage {i}" for i in range(7)]
         pcts = ["0%", "1%–19%", "20%–39%", "40%–59%", "60%–79%", "80%–99%", "100% ✨"]
         stage_notes = [
@@ -269,6 +280,27 @@ def _addon_digimon_gabumon(wb, cv, tr, seed):
 
 def _addon_digimon_piyomon(wb, cv, tr, seed):
     add_digimon_crest_panel(wb, cv, tr, kind="piyomon")
+
+def _addon_digimon_patamon(wb, cv, tr, seed):
+    add_digimon_crest_panel(wb, cv, tr, kind="patamon")
+
+def _addon_digimon_palmon(wb, cv, tr, seed):
+    add_digimon_crest_panel(wb, cv, tr, kind="palmon")
+
+def _addon_digimon_gomamon(wb, cv, tr, seed):
+    add_digimon_crest_panel(wb, cv, tr, kind="gomamon")
+
+def _addon_digimon_guilmon(wb, cv, tr, seed):
+    add_digimon_crest_panel(wb, cv, tr, kind="guilmon")
+
+def _addon_digimon_terriermon(wb, cv, tr, seed):
+    add_digimon_crest_panel(wb, cv, tr, kind="terriermon")
+
+def _addon_digimon_renamon(wb, cv, tr, seed):
+    add_digimon_crest_panel(wb, cv, tr, kind="renamon")
+
+def _addon_digimon_tentomon(wb, cv, tr, seed):
+    add_digimon_crest_panel(wb, cv, tr, kind="tentomon")
 
 
 # =========================================================================== #
@@ -1600,6 +1632,268 @@ TEMPLATES: list[TemplateDef] = [
         tracker_capture_range="A1:AN45",
         addon_fn=_addon_digimon_piyomon,
     ),
+    # =========================================================================
+    #  BATCH 6 (v3.8): 7 NEW DIGIMON EVOLUTION TEMPLATES (#41 .. #47, 7 & 8 STAGES!)
+    # =========================================================================
+    TemplateDef(
+        stem="41_Digimon_Patamon_Mythical", short_key="41_digimon_patamon",
+        theme=Theme(
+            slug="digimon_patamon", name="DIGIMON PATAMON MYTHICAL", emoji="🪽",
+            tagline_vi="Huy hiệu Hy Vọng (Crest of Hope) 7 cấp thần thoại: Digi-Egg → Poyomon → Tokomon → Patamon → Unimon → Hippogriffomon → Griffomon!",
+            page="#FFFDF7", card="#FFFFFF", ink="#1E293B", muted="#64748B", line="#FDE68A",
+            primary="#F59E0B", primary_dark="#B45309", on_primary="#FFFFFF", soft="#FEF3C7",
+            chart_fill="#BAE6FD", chart_line="#F59E0B",
+            week_head=["#F59E0B", "#60A5FA", "#6D28D9", "#F59E0B", "#3B82F6"],
+            week_tint=["#FFFBEB", "#EFF6FF", "#F5F3FF", "#FFFBEB", "#F0F9FF"],
+            week_check=["#B45309", "#2563EB", "#6D28D9", "#D97706", "#1D4ED8"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#FFFBEB", streak_mid="#FCD34D", streak_hi="#B45309",
+            bar="#F59E0B", donut_rest="#E0F2FE",
+            chart_title="MYTHICAL WING POWER • NĂNG LƯỢNG ĐÔI CÁNH HY VỌNG",
+            num_stages=7,
+            stage_names=[
+                "Digi-Egg of Hope", "Poyomon", "Tokomon",
+                "Patamon", "Unimon", "Hippogriffomon", "Griffomon",
+            ],
+        ),
+        tracker_name="🪽 Patamon Digivolution",
+        habits=[
+            Habit("Thức dậy sớm & hít thở khí trời", goal=28, p=0.90),
+            Habit("Vận động / chạy bộ ngoài trời 30p", goal=25, p=0.86),
+            Habit("Hoàn thành 3 việc quan trọng nhất", goal=28, p=0.89),
+            Habit("Uống đủ 2.5L nước tươi mát", goal=30, p=0.92),
+            Habit("Học kỹ năng mới / ngoại ngữ 30p", goal=26, p=0.85),
+            Habit("Đọc sách truyền cảm hứng 20 phút", goal=26, p=0.85),
+            Habit("Viết 3 điều lạc quan & hy vọng", goal=28, p=0.88),
+            Habit("Ngủ sớm phục hồi năng lượng 23h", goal=28, p=0.87),
+        ],
+        seed=410, label_tag="CREST OF HOPE", garden_label="PATAMON EVOLUTION",
+        grown_label="🪽 MYTHICAL WING\nPOWER (≥80%):",
+        tracker_capture_range="A1:AN45",
+        addon_fn=_addon_digimon_patamon,
+    ),
+    TemplateDef(
+        stem="42_Digimon_Palmon_Rose", short_key="42_digimon_palmon",
+        theme=Theme(
+            slug="digimon_palmon", name="DIGIMON PALMON ROSE", emoji="🌹",
+            tagline_vi="Huy hiệu Chân Thành (Crest of Sincerity) 7 cấp tiên hoa: Digi-Egg → Yuramon → Tanemon → Palmon → Togemon → Lilimon → Rosemon!",
+            page="#F6FBF4", card="#FFFFFF", ink="#14331A", muted="#5B7D60", line="#D4EED8",
+            primary="#4CAF50", primary_dark="#1B5E20", on_primary="#FFFFFF", soft="#E8F5E9",
+            chart_fill="#FBCFE8", chart_line="#EC4899",
+            week_head=["#4CAF50", "#EC4899", "#2E7D32", "#BE123C", "#66BB6A"],
+            week_tint=["#F0FDF4", "#FDF2F8", "#ECFDF5", "#FFF1F2", "#F4FBF4"],
+            week_check=["#2E7D32", "#DB2777", "#15803D", "#BE123C", "#388E3C"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#F0FDF4", streak_mid="#86EFAC", streak_hi="#BE123C",
+            bar="#EC4899", donut_rest="#FCE7F3",
+            chart_title="BLOOMING ROSE GARDEN • VƯỜN HOA TIÊN NỞ RỘ",
+            num_stages=7,
+            stage_names=[
+                "Digi-Egg of Sincerity", "Yuramon", "Tanemon",
+                "Palmon", "Togemon", "Lilimon", "Rosemon",
+            ],
+        ),
+        tracker_name="🌹 Palmon Digivolution",
+        habits=[
+            Habit("Chăm sóc da & uống 2L nước lọc", goal=30, p=0.92),
+            Habit("Ăn nhiều rau xanh & trái cây tươi", goal=28, p=0.88),
+            Habit("Yoga / Pilates giãn cơ 25 phút", goal=25, p=0.85),
+            Habit("Hoàn thành việc trọng tâm hôm nay", goal=28, p=0.88),
+            Habit("Đọc sách / trau dồi kiến thức 20p", goal=26, p=0.85),
+            Habit("Chăm cây xanh & dọn góc sống 10p", goal=28, p=0.86),
+            Habit("Viết nhật ký chân thành cuối ngày", goal=26, p=0.86),
+            Habit("Ngủ sớm dưỡng nhan trước 23h00", goal=28, p=0.87),
+        ],
+        seed=420, label_tag="CREST OF SINCERITY", garden_label="PALMON EVOLUTION",
+        grown_label="🌹 BLOOMING ROSE\nGARDEN (≥80%):",
+        tracker_capture_range="A1:AN45",
+        addon_fn=_addon_digimon_palmon,
+    ),
+    TemplateDef(
+        stem="43_Digimon_Gomamon_Arctic", short_key="43_digimon_gomamon",
+        theme=Theme(
+            slug="digimon_gomamon", name="DIGIMON GOMAMON ARCTIC", emoji="🧊",
+            tagline_vi="Huy hiệu Tin Cậy (Crest of Reliability) 8 cấp siêu tiến hóa: Digi-Egg → Pichimon → Bukamon → Gomamon → Ikkakumon → Zudomon → Vikemon → AncientMegatheriummon!",
+            page="#F4FAFD", card="#FFFFFF", ink="#0F293A", muted="#57788E", line="#CBEAF6",
+            primary="#06B6D4", primary_dark="#0E7490", on_primary="#FFFFFF", soft="#E0F7FA",
+            chart_fill="#A5F3FC", chart_line="#06B6D4", chart_kind="column",
+            week_head=["#06B6D4", "#8B5CF6", "#0284C7", "#D97706", "#0891B2"],
+            week_tint=["#ECFEFF", "#F5F3FF", "#F0F9FF", "#FFFBEB", "#ECFEFF"],
+            week_check=["#0E7490", "#6D28D9", "#0369A1", "#B45309", "#155E75"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#ECFEFF", streak_mid="#67E8F9", streak_hi="#0E7490",
+            bar="#06B6D4", donut_rest="#CFFAFE",
+            chart_title="VIKING RELIABILITY STREAK • BẢN LĨNH TIN CẬY MỖI NGÀY",
+            num_stages=8,
+            stage_names=[
+                "Digi-Egg of Reliability", "Pichimon", "Bukamon", "Gomamon",
+                "Ikkakumon", "Zudomon", "Vikemon", "AncientMegatherium",
+            ],
+        ),
+        tracker_name="🧊 Gomamon Digivolution",
+        habits=[
+            Habit("Dậy đúng giờ & giữ cam kết sáng", goal=28, p=0.90),
+            Habit("Rèn thể lực / bơi / cardio 30 phút", goal=25, p=0.86),
+            Habit("Hoàn thành 100% deadline trong ngày", goal=28, p=0.89),
+            Habit("Uống đủ 2.5L nước mát mỗi ngày", goal=30, p=0.92),
+            Habit("Học chuyên môn / kỹ năng 30 phút", goal=26, p=0.86),
+            Habit("Ghi chi tiêu & giữ kỷ luật tài chính", goal=28, p=0.88),
+            Habit("Dọn gọn bàn & chuẩn bị ngày mai", goal=28, p=0.87),
+            Habit("Ngủ đủ 8 tiếng nạp pin trước 23h", goal=28, p=0.87),
+        ],
+        seed=430, label_tag="CREST OF RELIABILITY", garden_label="GOMAMON 8-STAGE",
+        grown_label="🛡️ VIKING RELIABILITY\nSTREAK (≥85%):",
+        tracker_capture_range="A1:AN45",
+        addon_fn=_addon_digimon_gomamon,
+    ),
+    TemplateDef(
+        stem="44_Digimon_Guilmon_Crimson", short_key="44_digimon_guilmon",
+        theme=Theme(
+            slug="digimon_guilmon", name="DIGIMON GUILMON CRIMSON", emoji="⚔️",
+            tagline_vi="Hiệp Sĩ Hoàng Gia & Digital Hazard 8 cấp tiến hóa: Digi-Egg → Jyarimon → Gigimon → Guilmon → Growlmon → WarGrowlmon → Gallantmon → Gallantmon Crimson Mode!",
+            page="#FFF8F8", card="#FFFFFF", ink="#2B0E0E", muted="#8C5B5B", line="#FECACA",
+            primary="#DC2626", primary_dark="#991B1B", on_primary="#FFFFFF", soft="#FEE2E2",
+            chart_fill="#FCA5A5", chart_line="#DC2626", chart_kind="column",
+            week_head=["#DC2626", "#B91C1C", "#475569", "#CA8A04", "#991B1B"],
+            week_tint=["#FEF2F2", "#FFF1F2", "#F8FAFC", "#FEFCE8", "#FEF2F2"],
+            week_check=["#B91C1C", "#991B1B", "#334155", "#A16207", "#7F1D1D"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#FEF2F2", streak_mid="#F87171", streak_hi="#991B1B",
+            bar="#DC2626", donut_rest="#FEE2E2",
+            chart_title="ROYAL KNIGHT HONOR • PHONG ĐỘ HIỆP SĨ HOÀNG GIA",
+            num_stages=8,
+            stage_names=[
+                "Digital Hazard Egg", "Jyarimon", "Gigimon", "Guilmon",
+                "Growlmon", "WarGrowlmon", "Gallantmon", "Gallantmon Crimson",
+            ],
+        ),
+        tracker_name="⚔️ Guilmon Digivolution",
+        habits=[
+            Habit("Thức dậy 6h00 & chinh phục việc khó", goal=28, p=0.90),
+            Habit("Tập gym / rèn sức mạnh 35 phút", goal=25, p=0.87),
+            Habit("2 phiên Deep Work không điện thoại", goal=28, p=0.89),
+            Habit("Ăn đủ đạm & uống đủ 2.5L nước", goal=30, p=0.92),
+            Habit("Học kỹ năng mũi nhọn 30 phút", goal=26, p=0.86),
+            Habit("Đọc sách chiến lược / tư duy 20p", goal=26, p=0.85),
+            Habit("Kiểm soát chi tiêu & không trì hoãn", goal=28, p=0.88),
+            Habit("Tổng kết mục tiêu & ngủ trước 23h", goal=28, p=0.87),
+        ],
+        seed=440, label_tag="ROYAL KNIGHT HONOR", garden_label="GUILMON 8-STAGE",
+        grown_label="👑 ROYAL KNIGHT\nHONOR (≥85%):",
+        tracker_capture_range="A1:AN45",
+        addon_fn=_addon_digimon_guilmon,
+    ),
+    TemplateDef(
+        stem="45_Digimon_Terriermon_Mint", short_key="45_digimon_terriermon",
+        theme=Theme(
+            slug="digimon_terriermon", name="DIGIMON TERRIERMON MINT", emoji="🌿",
+            tagline_vi="Tinh thần Momentai 7 cấp tiến hóa từ dễ thương tới cơ khí: Digi-Egg → Zerimon → Gummymon → Terriermon → Gargomon → Rapidmon → MegaGargomon!",
+            page="#F5FDF8", card="#FFFFFF", ink="#0F2E22", muted="#52826E", line="#C6F3DC",
+            primary="#059669", primary_dark="#065F46", on_primary="#FFFFFF", soft="#D1FAE5",
+            chart_fill="#A7F3D0", chart_line="#059669",
+            week_head=["#10B981", "#059669", "#475569", "#F43F5E", "#047857"],
+            week_tint=["#ECFDF5", "#F0FDF4", "#F8FAFC", "#FFF1F2", "#ECFDF5"],
+            week_check=["#059669", "#047857", "#334155", "#E11D48", "#065F46"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#ECFDF5", streak_mid="#6EE7B7", streak_hi="#047857",
+            bar="#059669", donut_rest="#D1FAE5",
+            chart_title="MOMENTAI ZEN SCORE • NHỊP SỐNG BÌNH TĨNH & ĐỀU ĐẶN",
+            num_stages=7,
+            stage_names=[
+                "Momentai Digi-Egg", "Zerimon", "Gummymon",
+                "Terriermon", "Gargomon", "Rapidmon", "MegaGargomon",
+            ],
+        ),
+        tracker_name="🌿 Terriermon Digivolution",
+        habits=[
+            Habit("Dậy nhẹ nhàng & hít thở Momentai", goal=28, p=0.90),
+            Habit("Đi bộ / chạy bộ thư giãn 25 phút", goal=25, p=0.86),
+            Habit("Hoàn thành 3 đầu việc ưu tiên", goal=28, p=0.89),
+            Habit("Uống đủ 2L nước & nghỉ mắt 20-20-20", goal=30, p=0.92),
+            Habit("Học kỹ năng công nghệ / ngoại ngữ", goal=26, p=0.85),
+            Habit("Đọc sách / nghe podcast 20 phút", goal=26, p=0.85),
+            Habit("Dọn gọn góc làm việc 10 phút", goal=28, p=0.87),
+            Habit("Thư giãn không màn hình trước ngủ", goal=28, p=0.86),
+        ],
+        seed=450, label_tag="MOMENTAI ZEN", garden_label="TERRIERMON EVOLUTION",
+        grown_label="💚 MOMENTAI ZEN\nSCORE (≥80%):",
+        tracker_capture_range="A1:AN45",
+        addon_fn=_addon_digimon_terriermon,
+    ),
+    TemplateDef(
+        stem="46_Digimon_Renamon_Kuzuhamon", short_key="46_digimon_renamon",
+        theme=Theme(
+            slug="digimon_renamon", name="DIGIMON RENAMON KUZUHAMON", emoji="⛩️",
+            tagline_vi="Đền Thờ Hồ Ly 8 cấp tiến hóa Tâm Tĩnh: Digi-Egg → Relemon → Viximon → Renamon → Youkomon → Doumon → Kuzuhamon → Kuzuhamon Miko Mode!",
+            page="#FBF9FF", card="#FFFFFF", ink="#1F1630", muted="#73638F", line="#E4D7FB",
+            primary="#5B21B6", primary_dark="#3B0764", on_primary="#FFFFFF", soft="#EDE9FE",
+            chart_fill="#DDD6FE", chart_line="#7C3AED",
+            week_head=["#5B21B6", "#CA8A04", "#E11D48", "#7C3AED", "#4C1D95"],
+            week_tint=["#F5F3FF", "#FEFCE8", "#FFF1F2", "#FAF5FF", "#F5F3FF"],
+            week_check=["#5B21B6", "#A16207", "#BE123C", "#6D28D9", "#4C1D95"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#F5F3FF", streak_mid="#C4B5FD", streak_hi="#4C1D95",
+            bar="#7C3AED", donut_rest="#EDE9FE",
+            chart_title="SPIRIT FOCUS • TÂM TĨNH & CHÁNH NIỆM MỖI NGÀY",
+            num_stages=8,
+            stage_names=[
+                "Mystic Kitsune Egg", "Relemon", "Viximon", "Renamon",
+                "Youkomon", "Doumon", "Kuzuhamon", "Kuzuhamon Miko",
+            ],
+        ),
+        tracker_name="⛩️ Renamon Digivolution",
+        habits=[
+            Habit("Thiền tĩnh tâm / hít thở sâu 15p", goal=28, p=0.90),
+            Habit("Yoga / giãn cơ linh hoạt 25 phút", goal=25, p=0.86),
+            Habit("Deep Work tập trung cao độ 2 giờ", goal=28, p=0.89),
+            Habit("Uống đủ 2L nước & trà thanh lọc", goal=30, p=0.92),
+            Habit("Đọc sách triết lý / chuyên sâu 25p", goal=26, p=0.86),
+            Habit("Học ngoại ngữ / sáng tạo 25 phút", goal=26, p=0.85),
+            Habit("Viết nhật ký phản tư & biết ơn", goal=28, p=0.88),
+            Habit("Tắt thiết bị sớm & ngủ đủ 8 tiếng", goal=28, p=0.87),
+        ],
+        seed=460, label_tag="SPIRIT FOCUS", garden_label="RENAMON 8-STAGE",
+        grown_label="🔮 SPIRIT FOCUS\nTÂM TĨNH (≥85%):",
+        tracker_capture_range="A1:AN45",
+        addon_fn=_addon_digimon_renamon,
+    ),
+    TemplateDef(
+        stem="47_Digimon_Tentomon_Electro", short_key="47_digimon_tentomon",
+        theme=Theme(
+            slug="digimon_tentomon", name="DIGIMON TENTOMON ELECTRO", emoji="⚡",
+            tagline_vi="Huy hiệu Tri Thức (Crest of Knowledge) 7 cấp sấm sét: Digi-Egg → Bubbmon → Mochimon → Tentomon → Kabuterimon → MegaKabuterimon → HerakleKabuterimon!",
+            page="#F5F6FF", card="#FFFFFF", ink="#1E1B4B", muted="#636694", line="#D4D8FA",
+            primary="#4F46E5", primary_dark="#312E81", on_primary="#FFFFFF", soft="#E0E7FF",
+            chart_fill="#C7D2FE", chart_line="#4F46E5",
+            week_head=["#4F46E5", "#EF4444", "#F59E0B", "#4338CA", "#6366F1"],
+            week_tint=["#EEF2FF", "#FEF2F2", "#FFFBEB", "#EEF2FF", "#F5F3FF"],
+            week_check=["#4338CA", "#DC2626", "#B45309", "#3730A3", "#4F46E5"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#EEF2FF", streak_mid="#A5B4FC", streak_hi="#312E81",
+            bar="#4F46E5", donut_rest="#E0E7FF",
+            chart_title="KNOWLEDGE VOLTAGE • ĐIỆN ÁP TRI THỨC MỖI NGÀY",
+            num_stages=7,
+            stage_names=[
+                "Digi-Egg of Knowledge", "Bubbmon", "Mochimon",
+                "Tentomon", "Kabuterimon", "MegaKabuterimon", "HerakleKabuteri",
+            ],
+        ),
+        tracker_name="⚡ Tentomon Digivolution",
+        habits=[
+            Habit("Dậy sớm & lên kế hoạch học tập", goal=28, p=0.90),
+            Habit("Học lập trình / chuyên ngành 45p", goal=26, p=0.88),
+            Habit("Hoàn thành 2 phiên Deep Work sâu", goal=28, p=0.89),
+            Habit("Uống đủ 2.5L nước giữ não tỉnh táo", goal=30, p=0.92),
+            Habit("Đọc tài liệu / sách kiến thức 25p", goal=26, p=0.86),
+            Habit("Tập thể dục / chạy bộ 25 phút", goal=25, p=0.84),
+            Habit("Ghi chú bài học mới (Second Brain)", goal=28, p=0.87),
+            Habit("Ngủ đủ giấc bảo vệ trí nhớ 23h", goal=28, p=0.86),
+        ],
+        seed=470, label_tag="CREST OF KNOWLEDGE", garden_label="TENTOMON EVOLUTION",
+        grown_label="💡 KNOWLEDGE\nVOLTAGE (≥80%):",
+        tracker_capture_range="A1:AN45",
+        addon_fn=_addon_digimon_tentomon,
+    ),
 ]
 
 
@@ -1649,7 +1943,10 @@ def build_template(tdef: TemplateDef, out_path: Path, edition: str = "pro_xlsm")
     wb = xlsxwriter.Workbook(str(out_path))
     styles = Styles(wb, tdef.theme)
 
-    stg_txt = "7 giai đoạn tiến hóa Digimon" if tdef.theme.num_stages == 7 else "6 giai đoạn"
+    stg_txt = (
+        "8 giai đoạn siêu tiến hóa Digimon" if tdef.theme.num_stages == 8
+        else ("7 giai đoạn tiến hóa Digimon" if tdef.theme.num_stages == 7 else "6 giai đoạn")
+    )
     extra_tab_docs = [
         (DAILY_TASKS_SHEET, "Quản lý nhiệm vụ đột xuất theo từng ngày (Ngày/Tháng/Năm), nhóm ưu tiên & hoạt ảnh lớn dần 0% → 100%!"),
         (YEARLY_GOALS_SHEET, f"Lập mục tiêu năm (2024–2040), chia nhỏ Tháng/Tuần/Ngày & bộ đếm hoạt ảnh động {stg_txt}."),
@@ -1719,14 +2016,14 @@ def build_template(tdef: TemplateDef, out_path: Path, edition: str = "pro_xlsm")
         {"sheet": ANNUAL_SHEET, "range": ann_info["capture_range"], "out": f"{tdef.short_key}_annual_achievements.png"},
     ]
     g_col = g_info.get("guide_last_col", "H")
-    if tdef.short_key in ("01_sunflower", "36_digimon_veemon"):
+    if tdef.short_key in ("01_sunflower", "36_digimon_veemon", "41_digimon_patamon", "44_digimon_guilmon"):
         captures.append({"sheet": GUIDE_SHEET, "range": f"A1:{g_col}{g_info['guide_last_row']}", "out": f"{tdef.short_key}_guide.png"})
     if tdef.short_key in ("01_sunflower", "20_alpaca_cream", "24_royal_cat_cash", "26_purple_cat",
                           "30_shiba_inu", "31_akita_inu", "33_mochi_cat", "35_milk_mocha",
-                          "36_digimon_veemon", "37_digimon_agumon"):
+                          "36_digimon_veemon", "37_digimon_agumon", "44_digimon_guilmon", "46_digimon_renamon"):
         captures.append({"sheet": DAILY_TASKS_SHEET, "range": dt_info["capture_range"], "out": f"{tdef.short_key}_daily_tasks.png"})
     if tdef.short_key in ("01_sunflower", "20_alpaca_cream", "30_shiba_inu", "35_milk_mocha",
-                          "36_digimon_veemon"):
+                          "36_digimon_veemon", "44_digimon_guilmon"):
         captures.append({"sheet": YEARLY_GOALS_SHEET, "range": "A1:J26", "out": f"{tdef.short_key}_yearly_goals.png"})
 
     return {

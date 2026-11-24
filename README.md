@@ -1,9 +1,9 @@
-# ⚡ Habit Tracker Collection for Everyone — by Dyu (v3.7 — 40 Themes × 4 Editions)
+# ⚡ Habit Tracker Collection for Everyone — by Dyu (v3.8 — 47 Themes × 4 Editions)
 
-> **Bộ sưu tập 40 mẫu Habit Tracker hoàn toàn miễn phí chuẩn Digital Planner — tích hợp 245 ảnh hoạt ảnh tự lớn lên theo % thói quen mỗi ngày (Hoa lá, Thú cưng Kawaii, Alpaca, Gấu trúc, Shiba/Akita & 5 mẫu Digimon 7 cấp tiến hóa)!**
+> **Bộ sưu tập 47 mẫu Habit Tracker hoàn toàn miễn phí chuẩn Digital Planner — tích hợp 297 ảnh hoạt ảnh tự lớn lên theo % thói quen mỗi ngày (Hoa lá, Thú cưng Kawaii, Alpaca, Gấu trúc, Shiba/Akita & 12 mẫu Digimon 7–8 cấp tiến hóa chuẩn canon)!**
 > **Dùng mượt 100% Offline trên Microsoft Excel (Windows & Mac) — có kèm bản thử nghiệm cho Google Sheets & Điện thoại.**
 
-![Version 3.7](https://img.shields.io/badge/Version-3.7_40_Themes-1D6FE2?style=for-the-badge)
+![Version 3.8](https://img.shields.io/badge/Version-3.8_47_Themes-1D6FE2?style=for-the-badge)
 ![Pro #1 Recommended](https://img.shields.io/badge/⭐_KHUYÊN_DÙNG_%231-Pro_.XLSM_(Excel_365)-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white)
 ![Zero Macro Offline](https://img.shields.io/badge/%232_Offline_No--Macro-.XLSX_(Excel_2016--365)-4E9F76?style=for-the-badge)
 ![Google Sheets Beta](https://img.shields.io/badge/%233_Google_Sheets-Beta_(Đang_thử_nghiệm)-F59E0B?style=for-the-badge&logo=googlesheets&logoColor=white)
@@ -27,7 +27,7 @@ Không cần biết kỹ thuật — chỉ cần xem máy tính của bạn đan
 #### ⚡ `#1` Pro Interactive (`.xlsm`) — ⭐ KHUYÊN DÙNG SỐ 1 (Đẹp nhất • Siêu mượt • Full Hiệu Ứng)
 - **Phù hợp với:** **Microsoft 365 (Excel 365 bản mới trên Windows & Mac)**.
 - **Có gì xịn nhất:**
-  - Hoạt ảnh 6–7 giai đoạn siêu mượt (**29–54 ms** khi đổi tháng, **4–5 ms** khi đổi ngày), không giật lag!
+  - Hoạt ảnh 6–8 giai đoạn siêu mượt (**25–54 ms** khi đổi tháng, **4–26 ms** khi đổi ngày), không giật lag!
   - Đầy đủ hiệu ứng **Hero Bounce** (linh vật nảy vui), **Sparkle/Heart Burst** (bắn pháo hoa khi đạt 100% hoặc chuỗi 7/14/21/30 ngày), **Toast Banner** (thông báo nổi tiếng Việt góc phải, bật/tắt 1 chạm).
   - Nút **`◀ Tháng` / `Tháng ▶`**, **`◀ Hôm qua` / `Hôm nay` / `Ngày mai ▶`** 1 chạm — **tự động lưu lịch sử từng Tháng / Năm / Ngày** ngay trong file (100% Offline!).
   - Hỗ trợ **`Ctrl+Z` / nút `↩ Undo`** thực thụ & tự động khóa bảo vệ dòng công thức `TOTAL` chống kéo đè, dấu tick ô vuông màu pastel chuẩn từng theme!
@@ -39,7 +39,7 @@ Không cần biết kỹ thuật — chỉ cần xem máy tính của bạn đan
 
 #### ✨ `#2` Excel Universal Offline (`.xlsx`) — Ổn Định Cho Mọi Đời Excel Cũ & Mới
 - **Phù hợp với:** **Excel 2016, 2019, 2021, 365 (Windows & Mac)**, hoặc máy công ty/trường học chặn chạy Macro.
-- **Có gì:** Chạy **100% Offline**, không có Macro nên **0 cảnh báo bảo mật**, **không bao giờ hiện chữ `TRUE`/`FALSE`** trên Excel đời cũ, vẫn có đủ **54–55 hoạt ảnh** cây/thú cưng/Digimon lớn lên theo `%` hoàn thành thực tế!
+- **Có gì:** Chạy **100% Offline**, không có Macro nên **0 cảnh báo bảo mật**, **không bao giờ hiện chữ `TRUE`/`FALSE`** trên Excel đời cũ, vẫn có đủ **54–56 hoạt ảnh** cây/thú cưng/Digimon lớn lên theo `%` hoàn thành thực tế!
 - **Hạn chế nhỏ:** Vì không có VBA nên không tự lưu nhiều tháng trên cùng 1 trang — sang tháng mới bạn chỉ cần **nhân bản (Copy) file** hoặc sao chép sheet là dùng tiếp trong 2 giây.
 
 #### ☁️ `#3` Google Sheets Desktop (`.xlsx` + `.gs`) — 🧪 ĐANG THỬ NGHIỆM (BETA • CÒN MỘT SỐ LỖI NHỎ)
@@ -56,8 +56,8 @@ Không cần biết kỹ thuật — chỉ cần xem máy tính của bạn đan
 
 > **Người dùng KHÔNG cần cài Python, KHÔNG cần đăng nhập GitHub!** Bạn chọn 1 trong 2 cách dưới đây:
 
-### Cách 1 (Khuyên dùng — Tải tự động 1 dòng lệnh, chọn theo số `1–40` hoặc tải hết)
-Trình tải tương tác sẽ hỏi bạn muốn bản nào (`[1]`–`[4]`) và mẫu số mấy (`36`, `36-40`, `30,33,35`, hoặc `A` tải toàn bộ 40 mẫu), rồi tự tải sạch đẹp vào thư mục `template/` trên máy bạn:
+### Cách 1 (Khuyên dùng — Tải tự động 1 dòng lệnh, chọn theo số `1–47` hoặc tải hết)
+Trình tải tương tác sẽ hỏi bạn muốn bản nào (`[1]`–`[4]`) và mẫu số mấy (`44`, `41-47`, `36-47`, hoặc `A` tải toàn bộ 47 mẫu), rồi tự tải sạch đẹp vào thư mục `template/` trên máy bạn:
 
 - **🪟 Windows:** Nhấn phím **Windows** → gõ **`PowerShell`** → mở *Windows PowerShell* → dán dòng lệnh dưới đây → nhấn **Enter**:
 ```powershell
@@ -70,17 +70,20 @@ curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-ev
 
 ### Cách 2 (Tải thủ công trực tiếp trên web GitHub — Không cần gõ lệnh!)
 Nếu bạn không quen mở PowerShell/Terminal, tải trực tiếp ngay trên trình duyệt chỉ với **3 bước**:
-1. Kéo xuống **[Bảng Tải Trực Tiếp 40 Mẫu Template](#-bảng-tải-trực-tiếp-toàn-bộ-40-mẫu-template-đủ-4-phiên-bản--160-tệp)** bên dưới và **bấm vào link phiên bản bạn muốn** (vd: `_Pro.xlsm` cho Excel 365 hoặc `.xlsx` cho Excel 2016–2021).
+1. Kéo xuống **[Bảng Tải Trực Tiếp 47 Mẫu Template](#-bảng-tải-trực-tiếp-toàn-bộ-47-mẫu-template-đủ-4-phiên-bản--188-tệp)** bên dưới và **bấm vào link phiên bản bạn muốn** (vd: `_Pro.xlsm` cho Excel 365 hoặc `.xlsx` cho Excel 2016–2021).
 2. Ở trang file vừa mở ra, bấm nút **Download raw file** *(biểu tượng **mũi tên tải xuống `⬇`** ở góc trên bên phải khung xem file)*.
 3. Mở file vừa tải về bằng Microsoft Excel *(nếu là bản Pro `.xlsm`, nhớ làm theo **2 bước Unblock + Enable Content** ở mục trên)* và bắt đầu tick ngay!
 
 ---
 
-## 🎭 Xem Trước 245 Hoạt Ảnh Tiến Hóa (Cây Cối • Thú Cưng • Alpaca • Panda • Digimon 7 Cấp!)
+## 🎭 Xem Trước 297 Hoạt Ảnh Tiến Hóa (Cây Cối • Thú Cưng • Alpaca • Panda • 12 Bộ Digimon 7–8 Cấp!)
 
 Mỗi ngày bạn tick hoàn thành thói quen từ `0% → 100%`, linh vật / cây hoa / Digimon của ngày đó sẽ tự động lớn lên hoặc tiến hóa ngay trước mắt bạn!
 
-### ⚡ MỚI v3.7 — Bộ 5 Chủ Đề Digimon 7 Cấp Tiến Hóa (`#36`–`#40` — 35 Sprites Chuẩn Canon)
+### ⚡ MỚI v3.8 — Batch 6: 7 Chủ Đề Digimon 7 & 8 Cấp Tiến Hóa (`#41`–`#47` — 52 Sprites Chuẩn Canon)
+![52 Digimon Batch 2 Evolution Sprites Contact Sheet](previews/assets_contact_sheet_digimon_batch2.png)
+
+### ⚡ Batch 5 — 5 Chủ Đề Digimon 7 Cấp Tiến Hóa (`#36`–`#40` — 35 Sprites Chuẩn Canon)
 ![35 Digimon 7-Stage Evolution Sprites Contact Sheet](previews/assets_contact_sheet_digimon.png)
 
 ### 🦙🐼 Bộ 4 Alpaca & Gấu Trúc Mochi Vẽ Độc Bản (`#20`, `#21`, `#22`, `#23` — 24 Sprites)
@@ -103,9 +106,53 @@ Mỗi ngày bạn tick hoàn thành thói quen từ `0% → 100%`, linh vật / 
 
 ---
 
-## ⚡ Showcase Bộ Sưu Tập Digimon 7-Stage Evolution (`#36` – `#40`)
+## ⚡ Showcase Bộ Sưu Tập 12 Chủ Đề Digimon 7–8 Cấp Tiến Hóa (`#36` – `#47`)
 
-Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn đầy đủ**: `0% Digi-Egg` → `1–19% Baby I` → `20–39% Baby II` → `40–59% Rookie` → `60–79% Champion / Armor` → `80–99% Ultimate` → **`100% Mega ✨`** — kèm bảng **Crest Digivice Breakdown** thống kê số ngày đạt từng dạng & thẻ **Current Form Power Meter**!
+Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn** (`0% Digi-Egg → 1–19% → 20–39% → 40–59% → 60–79% → 80–99% → 100% Mega ✨`) hoặc **8 giai đoạn Ultra/Burst** (`0% Digi-Egg → 1–14% → 15–29% → 30–49% → 50–69% → 70–84% → 85–99% Mega → 100% Ultra/Burst ✨`) — kèm bảng **Crest Digivice Breakdown** thống kê số ngày đạt từng dạng & thẻ **Current Form Power Meter**!
+
+### 44. ⚔️ Digimon Guilmon Crimson *(MỚI v3.8 — 8 Cấp Ultra)* — `Digi-Egg → Jyarimon → Gigimon → Guilmon → Growlmon → WarGrowlmon → Gallantmon → Gallantmon Crimson`
+![Digimon Guilmon Crimson Tracker](previews/44_digimon_guilmon_tracker.png)
+<details>
+<summary>📸 Xem thêm: Hướng Dẫn 8 Cấp Tiến Hóa (2×4 Gallery), Đại Sảnh Royal Knight, Nhiệm Vụ Ngày & Yearly Goals</summary>
+
+![Guilmon 8-Stage Guide](previews/44_digimon_guilmon_guide.png)
+![Guilmon Annual Achievements](previews/44_digimon_guilmon_annual_achievements.png)
+![Guilmon Daily Tasks](previews/44_digimon_guilmon_daily_tasks.png)
+![Guilmon Yearly Goals](previews/44_digimon_guilmon_yearly_goals.png)
+
+</details>
+
+### 46. ⛩️ Digimon Renamon Kuzuhamon *(MỚI v3.8 — 8 Cấp Ultra)* — `Digi-Egg → Relemon → Viximon → Renamon → Youkomon → Doumon → Kuzuhamon → Kuzuhamon Miko`
+![Digimon Renamon Kuzuhamon Tracker](previews/46_digimon_renamon_tracker.png)
+<details>
+<summary>📸 Xem thêm: Đại Sảnh Đền Thờ Hồ Ly & Nhiệm Vụ Ngày</summary>
+
+![Renamon Annual Achievements](previews/46_digimon_renamon_annual_achievements.png)
+![Renamon Daily Tasks](previews/46_digimon_renamon_daily_tasks.png)
+
+</details>
+
+### 41. 🪽 Digimon Patamon Mythical *(MỚI v3.8 — 7 Cấp)* — `Digi-Egg → Poyomon → Tokomon → Patamon → Unimon → Hippogriffomon → Griffomon`
+![Digimon Patamon Mythical Tracker](previews/41_digimon_patamon_tracker.png)
+<details>
+<summary>📸 Xem thêm: Hướng Dẫn 7 Cấp Patamon & Đại Sảnh Bầu Trời Thần Thoại</summary>
+
+![Patamon 7-Stage Guide](previews/41_digimon_patamon_guide.png)
+![Patamon Annual Achievements](previews/41_digimon_patamon_annual_achievements.png)
+
+</details>
+
+### 42. 🌹 Digimon Palmon Rose *(MỚI v3.8 — 7 Cấp)* — `Digi-Egg → Yuramon → Tanemon → Palmon → Togemon → Lilimon → Rosemon`
+![Digimon Palmon Rose Tracker](previews/42_digimon_palmon_tracker.png)
+
+### 43. 🧊 Digimon Gomamon Arctic *(MỚI v3.8 — 8 Cấp Ultra)* — `Digi-Egg → Pichimon → Bukamon → Gomamon → Ikkakumon → Zudomon → Vikemon → AncientMegatheriummon`
+![Digimon Gomamon Arctic Tracker](previews/43_digimon_gomamon_tracker.png)
+
+### 45. 🌿 Digimon Terriermon Mint *(MỚI v3.8 — 7 Cấp)* — `Digi-Egg → Zerimon → Gummymon → Terriermon → Gargomon → Rapidmon → MegaGargomon`
+![Digimon Terriermon Mint Tracker](previews/45_digimon_terriermon_tracker.png)
+
+### 47. ⚡ Digimon Tentomon Electro *(MỚI v3.8 — 7 Cấp)* — `Digi-Egg → Bubbmon → Mochimon → Tentomon → Kabuterimon → MegaKabuterimon → HerakleKabuterimon`
+![Digimon Tentomon Electro Tracker](previews/47_digimon_tentomon_tracker.png)
 
 ### 36. ⚡ Digimon Veemon Miracle — `Digi-Egg → Chibomon → DemiVeemon → Veemon → Flamedramon → Paildramon → Magnamon`
 ![Digimon Veemon Miracle Tracker](previews/36_digimon_veemon_tracker.png)
@@ -139,15 +186,24 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn đầy đủ*
 ![Digimon Piyomon Love Tracker](previews/40_digimon_piyomon_tracker.png)
 
 <details>
-<summary>📱 Xem 5 màn hình thử nghiệm Mobile Portrait Digimon (`#36`–`#40` — Early Beta)</summary>
+<summary>📱 Xem 12 màn hình thử nghiệm Mobile Portrait Digimon (`#36`–`#47` — Early Beta)</summary>
 
 <table>
   <tr>
-    <td align="center"><img src="previews/mobile_36_digimon_veemon.png" width="165" alt="Mobile Veemon"/><br/><sub><b>⚡ Veemon Miracle</b></sub></td>
-    <td align="center"><img src="previews/mobile_37_digimon_agumon.png" width="165" alt="Mobile Agumon"/><br/><sub><b>🔥 Agumon Courage</b></sub></td>
-    <td align="center"><img src="previews/mobile_38_digimon_gatomon.png" width="165" alt="Mobile Gatomon"/><br/><sub><b>✨ Gatomon Light</b></sub></td>
-    <td align="center"><img src="previews/mobile_39_digimon_gabumon.png" width="165" alt="Mobile Gabumon"/><br/><sub><b>❄️ Gabumon Friend</b></sub></td>
-    <td align="center"><img src="previews/mobile_40_digimon_piyomon.png" width="165" alt="Mobile Piyomon"/><br/><sub><b>❤️ Piyomon Love</b></sub></td>
+    <td align="center"><img src="previews/mobile_41_digimon_patamon.png" width="150" alt="Mobile Patamon"/><br/><sub><b>🪽 Patamon</b></sub></td>
+    <td align="center"><img src="previews/mobile_42_digimon_palmon.png" width="150" alt="Mobile Palmon"/><br/><sub><b>🌹 Palmon</b></sub></td>
+    <td align="center"><img src="previews/mobile_43_digimon_gomamon.png" width="150" alt="Mobile Gomamon"/><br/><sub><b>🧊 Gomamon 8</b></sub></td>
+    <td align="center"><img src="previews/mobile_44_digimon_guilmon.png" width="150" alt="Mobile Guilmon"/><br/><sub><b>⚔️ Guilmon 8</b></sub></td>
+    <td align="center"><img src="previews/mobile_45_digimon_terriermon.png" width="150" alt="Mobile Terriermon"/><br/><sub><b>🌿 Terriermon</b></sub></td>
+    <td align="center"><img src="previews/mobile_46_digimon_renamon.png" width="150" alt="Mobile Renamon"/><br/><sub><b>⛩️ Renamon 8</b></sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="previews/mobile_47_digimon_tentomon.png" width="150" alt="Mobile Tentomon"/><br/><sub><b>⚡ Tentomon</b></sub></td>
+    <td align="center"><img src="previews/mobile_36_digimon_veemon.png" width="150" alt="Mobile Veemon"/><br/><sub><b>⚡ Veemon</b></sub></td>
+    <td align="center"><img src="previews/mobile_37_digimon_agumon.png" width="150" alt="Mobile Agumon"/><br/><sub><b>🔥 Agumon</b></sub></td>
+    <td align="center"><img src="previews/mobile_38_digimon_gatomon.png" width="150" alt="Mobile Gatomon"/><br/><sub><b>✨ Gatomon</b></sub></td>
+    <td align="center"><img src="previews/mobile_39_digimon_gabumon.png" width="150" alt="Mobile Gabumon"/><br/><sub><b>❄️ Gabumon</b></sub></td>
+    <td align="center"><img src="previews/mobile_40_digimon_piyomon.png" width="150" alt="Mobile Piyomon"/><br/><sub><b>❤️ Piyomon</b></sub></td>
   </tr>
 </table>
 
@@ -200,8 +256,8 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn đầy đủ*
 
 ## 🎨 Giao Diện Thực Tế `01_Sunflower` & Bộ Sưu Tập Cổ Điển + Linh Vật (`#01` – `#31`)
 
-![Sunflower Pro v3.7 Tracker](previews/01_sunflower_tracker.png)
-![Sunflower Pro v3.7 Guide](previews/01_sunflower_guide.png)
+![Sunflower Pro v3.8 Tracker](previews/01_sunflower_tracker.png)
+![Sunflower Pro v3.8 Guide](previews/01_sunflower_guide.png)
 
 <details>
 <summary>🌻 Mở rộng xem toàn bộ ảnh chụp 30 mẫu cổ điển & thú cưng (#02 – #31)</summary>
@@ -272,7 +328,7 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn đầy đủ*
 
 ---
 
-## 📋 Bảng Tải Trực Tiếp Toàn Bộ 40 Mẫu Template (Đủ 4 Phiên Bản — 160 Tệp)
+## 📋 Bảng Tải Trực Tiếp Toàn Bộ 47 Mẫu Template (Đủ 4 Phiên Bản — 188 Tệp)
 
 > 💡 **Mẹo tải nhanh không cần gõ lệnh:** Bấm vào link bạn chọn bên dưới → bấm biểu tượng **mũi tên tải xuống (`⬇ Download raw file`)** ở góc trên bên phải!
 
@@ -318,6 +374,13 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn đầy đủ*
 | **38** | ✨ **Digimon Gatomon Light** *(7-Stage: Gatomon → LovelyAngemon)* | [`_Pro.xlsm`](templates/pro_macro/38_Digimon_Gatomon_Light_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/38_Digimon_Gatomon_Light.xlsx) | [Desktop](templates/google_sheets_edition/38_Digimon_Gatomon_Light.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/38_Digimon_Gatomon_Light_Mobile.xlsx) |
 | **39** | ❄️ **Digimon Gabumon Friendship** *(7-Stage: Gabumon → MetalGarurumon)* | [`_Pro.xlsm`](templates/pro_macro/39_Digimon_Gabumon_Friendship_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/39_Digimon_Gabumon_Friendship.xlsx) | [Desktop](templates/google_sheets_edition/39_Digimon_Gabumon_Friendship.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/39_Digimon_Gabumon_Friendship_Mobile.xlsx) |
 | **40** | ❤️ **Digimon Piyomon Love** *(7-Stage: Biyomon → Phoenixmon)* | [`_Pro.xlsm`](templates/pro_macro/40_Digimon_Piyomon_Love_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/40_Digimon_Piyomon_Love.xlsx) | [Desktop](templates/google_sheets_edition/40_Digimon_Piyomon_Love.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/40_Digimon_Piyomon_Love_Mobile.xlsx) |
+| **41** | 🪽 **Digimon Patamon Mythical** *(7-Stage: Patamon → Griffomon)* | [`_Pro.xlsm`](templates/pro_macro/41_Digimon_Patamon_Mythical_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/41_Digimon_Patamon_Mythical.xlsx) | [Desktop](templates/google_sheets_edition/41_Digimon_Patamon_Mythical.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/41_Digimon_Patamon_Mythical_Mobile.xlsx) |
+| **42** | 🌹 **Digimon Palmon Rose** *(7-Stage: Palmon → Rosemon)* | [`_Pro.xlsm`](templates/pro_macro/42_Digimon_Palmon_Rose_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/42_Digimon_Palmon_Rose.xlsx) | [Desktop](templates/google_sheets_edition/42_Digimon_Palmon_Rose.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/42_Digimon_Palmon_Rose_Mobile.xlsx) |
+| **43** | 🧊 **Digimon Gomamon Arctic** *(8-Stage: Gomamon → AncientMegatheriummon)* | [`_Pro.xlsm`](templates/pro_macro/43_Digimon_Gomamon_Arctic_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/43_Digimon_Gomamon_Arctic.xlsx) | [Desktop](templates/google_sheets_edition/43_Digimon_Gomamon_Arctic.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/43_Digimon_Gomamon_Arctic_Mobile.xlsx) |
+| **44** | ⚔️ **Digimon Guilmon Crimson** *(8-Stage: Guilmon → Gallantmon Crimson)* | [`_Pro.xlsm`](templates/pro_macro/44_Digimon_Guilmon_Crimson_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/44_Digimon_Guilmon_Crimson.xlsx) | [Desktop](templates/google_sheets_edition/44_Digimon_Guilmon_Crimson.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/44_Digimon_Guilmon_Crimson_Mobile.xlsx) |
+| **45** | 🌿 **Digimon Terriermon Mint** *(7-Stage: Terriermon → MegaGargomon)* | [`_Pro.xlsm`](templates/pro_macro/45_Digimon_Terriermon_Mint_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/45_Digimon_Terriermon_Mint.xlsx) | [Desktop](templates/google_sheets_edition/45_Digimon_Terriermon_Mint.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/45_Digimon_Terriermon_Mint_Mobile.xlsx) |
+| **46** | ⛩️ **Digimon Renamon Kuzuhamon** *(8-Stage: Renamon → Kuzuhamon Miko)* | [`_Pro.xlsm`](templates/pro_macro/46_Digimon_Renamon_Kuzuhamon_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/46_Digimon_Renamon_Kuzuhamon.xlsx) | [Desktop](templates/google_sheets_edition/46_Digimon_Renamon_Kuzuhamon.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/46_Digimon_Renamon_Kuzuhamon_Mobile.xlsx) |
+| **47** | ⚡ **Digimon Tentomon Electro** *(7-Stage: Tentomon → HerakleKabuterimon)* | [`_Pro.xlsm`](templates/pro_macro/47_Digimon_Tentomon_Electro_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/47_Digimon_Tentomon_Electro.xlsx) | [Desktop](templates/google_sheets_edition/47_Digimon_Tentomon_Electro.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/47_Digimon_Tentomon_Electro_Mobile.xlsx) |
 
 ---
 
@@ -335,27 +398,27 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn đầy đủ*
 ---
 
 <details>
-<summary>🛠️ Dành Cho Người Yêu Kỹ Thuật & Developer (Benchmark v3.7 Turbo & Lệnh Build)</summary>
+<summary>🛠️ Dành Cho Người Yêu Kỹ Thuật & Developer (Benchmark v3.8 Turbo & Lệnh Build)</summary>
 
-### 📊 Benchmark Tốc Độ Thực Tế Excel COM (`Linked Pictures cũ` vs `v3.7 Turbo`)
-| Thao tác thực tế | Linked Pictures cũ | `01_Sunflower` **Turbo** | `36_Digimon_Veemon` **v3.7 (7-Stage)** | Tăng tốc |
+### 📊 Benchmark Tốc Độ Thực Tế Excel COM (`Linked Pictures cũ` vs `v3.8 Turbo`)
+| Thao tác thực tế | Linked Pictures cũ | `01_Sunflower` **Turbo** | `44_Digimon_Guilmon` **v3.8 (8-Stage)** | Tăng tốc |
 |---|---:|---:|---:|---:|
 | **1. Tick 1 ô Checkbox (`Monthly Tracker`)** | 347.3 ms | **42.7 ms** | **< 40 ms** | **~8–10× nhanh hơn** |
-| **2a. Đổi Tháng bằng Dropdown (`B3`)** | 4,137.1 ms | **141.6 ms** | **29 – 54 ms** | **~75–140× nhanh hơn!** |
-| **2b. Đổi Tháng bằng Nút 1 chạm (`◀ / ▶`)** | 4,137.1 ms | **51.3 ms** | **21 – 41 ms** | **~80–190× nhanh hơn!** |
-| **3. Đổi Ngày `📝 Nhiệm Vụ Ngày` (`21 ↔ 22`)** | 2,918.2 ms | **46.5 ms** | **4 – 5 ms** | **~60–580× nhanh hơn!** |
-| **4. Đổi Năm `🏆 Tổng Kết Năm` (`2026 ↔ 2027`)** | 317.2 ms | **74.9 ms** | **13 – 15 ms** | **~21× nhanh hơn!** |
-| **Số ảnh nén trong `xl/media/`** | 54 bản sao | **6 PNG duy nhất** | **7 PNG duy nhất** | **Siêu gọn nhẹ!** |
+| **2a. Đổi Tháng bằng Dropdown (`B3`)** | 4,137.1 ms | **141.6 ms** | **25 – 47 ms** | **~88–165× nhanh hơn!** |
+| **2b. Đổi Tháng bằng Nút 1 chạm (`◀ / ▶`)** | 4,137.1 ms | **51.3 ms** | **21 – 38 ms** | **~108–190× nhanh hơn!** |
+| **3. Đổi Ngày `📝 Nhiệm Vụ Ngày` (`21 ↔ 22`)** | 2,918.2 ms | **46.5 ms** | **20 – 26 ms** | **~110–145× nhanh hơn!** |
+| **4. Đổi Năm `🏆 Tổng Kết Năm` (`2026 ↔ 2027`)** | 317.2 ms | **74.9 ms** | **12 – 14 ms** | **~22–26× nhanh hơn!** |
+| **Số ảnh nén trong `xl/media/`** | 54 bản sao | **6 PNG duy nhất** | **8 PNG duy nhất** | **Siêu gọn nhẹ!** |
 
 ```powershell
-# Trích xuất bộ 35 sprite Digimon chuẩn canon & xuất contact sheet:
-python scripts/extract_digimon_assets.py
+# Trích xuất bộ 52 sprite Digimon Batch 2 (7 & 8 cấp) & xuất contact sheet:
+python scripts/extract_digimon_batch2.py
 
-# Build Pro Interactive (.xlsm) theo lô với Turbo Engine v3.7 (tự recycle Excel COM mỗi 5 file):
-python scripts/excel_com_enhancer.py pro 36_Digimon_Veemon_Miracle 37_Digimon_Agumon_Courage 38_Digimon_Gatomon_Light 39_Digimon_Gabumon_Friendship 40_Digimon_Piyomon_Love
+# Build Pro Interactive (.xlsm) theo lô với Turbo Engine v3.8 (6/7/8 stages):
+python scripts/excel_com_enhancer.py pro 41_Digimon_Patamon_Mythical 42_Digimon_Palmon_Rose 43_Digimon_Gomamon_Arctic 44_Digimon_Guilmon_Crimson 45_Digimon_Terriermon_Mint 46_Digimon_Renamon_Kuzuhamon 47_Digimon_Tentomon_Electro
 
-# Build Mobile Portrait (.xlsx) hỗ trợ 6 & 7 giai đoạn:
-python scripts/build_mobile_templates.py 36_digimon_veemon 37_digimon_agumon 38_digimon_gatomon 39_digimon_gabumon 40_digimon_piyomon
+# Chạy bộ QA tự động 28 file Digimon v3.8:
+python scripts/qa_verify_digimon_v38.py
 ```
 
 </details>

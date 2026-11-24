@@ -1,6 +1,6 @@
-# ☁️ Hướng Dẫn Sử Dụng Google Sheets — Desktop & Điện Thoại Khổ Dọc (v3.7)
+# ☁️ Hướng Dẫn Sử Dụng Google Sheets — Desktop & Điện Thoại Khổ Dọc (v3.8)
 
-> **1 Script duy nhất (`google_sheets_1click_setup.gs` v3.7 Turbo) tự nhận diện cả 2 bản Cloud (tương thích 100% cả 35 mẫu 6 giai đoạn & 5 mẫu Digimon 7 giai đoạn `#36`–`#40`!):**
+> **1 Script duy nhất (`google_sheets_1click_setup.gs` v3.8 Turbo) tự nhận diện cả 2 bản Cloud (tương thích 100% cả 35 mẫu 6 giai đoạn & 12 mẫu Digimon 7–8 giai đoạn `#36`–`#47`!):**
 > - **Bản Desktop (`templates/google_sheets_edition/`):** Gọn 5 tab (`📖 Hướng Dẫn`, `Monthly Tracker`, `📝 Nhiệm Vụ Ngày`, `🎯 Yearly Goals & Habits`, `🏆 Tổng Kết & Thành Tựu Năm`), lịch tháng 31 ngày + lưu tự động O(1) từng Ngày & 12 Tháng vào `_Database`.
 > - **Bản Điện Thoại Khổ Dọc (`templates/mobile_portrait_sheets/`):** Gọn 4 tab (`📱 Tuần Này`, `📝 Việc Hôm Nay`, `🎯 Mục Tiêu & Thành Tựu`, `📖 Hướng Dẫn`), vừa khít chiều dọc iPhone/Android **0 cuộn ngang**, ô tick lớn `38pt` dễ bấm bằng ngón cái + tự lưu từng Tuần (`YYYY-MM-W#`) & từng Ngày (`YYYY-MM-DD`) vào `_Database`!
 
@@ -36,5 +36,5 @@ Nếu không muốn dùng Apps Script:
 ---
 
 ## ✨ Mẹo Hay
-- **Hoạt ảnh `=IMAGE()` động 6 hoặc 7 giai đoạn:** Cả 7 icon ngày, Weekly Hero, Yearly Goals Hero & Huy hiệu tự biến đổi từ `Stage 0` (0%) → `Stage 5` / `Stage 6 Mega ✨` (100%) theo đúng tiến độ thực tế.
-- **Đổi bộ ảnh riêng:** Vào tab `📖 Hướng Dẫn`, dán URL thư mục chứa 6 ảnh `stage_0.png` → `stage_5.png` (hoặc 7 ảnh `stage_0.png` → `stage_6.png` cho Digimon `#36`–`#40`) vào ô vàng **`CFG_IMG_BASE`**.
+- **Hoạt ảnh `=IMAGE()` động 6, 7 hoặc 8 giai đoạn:** Cả 7 icon ngày, Weekly Hero, Yearly Goals Hero & Huy hiệu tự biến đổi từ `Stage 0` (0%) → `Stage 5 / 6 / 7 Ultra ✨` (100%) theo đúng tiến độ thực tế.
+- **Đổi bộ ảnh riêng:** Vào tab `📖 Hướng Dẫn`, dán URL thư mục chứa 6 (`stage_0..5.png`), 7 (`stage_0..6.png`), hoặc 8 (`stage_0..7.png`) ảnh vào ô vàng **`CFG_IMG_BASE`**.
