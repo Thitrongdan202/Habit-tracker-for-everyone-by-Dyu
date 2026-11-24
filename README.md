@@ -1,13 +1,25 @@
 # 🥑 Habit Tracker Collection for Everyone — by Dyu (v3.9 — 60 Themes × 4 Editions)
 
-> **Bộ sưu tập 60 mẫu Habit Tracker hoàn toàn miễn phí chuẩn Digital Planner — tích hợp 375 ảnh hoạt ảnh tự lớn lên theo % thói quen mỗi ngày (13 chủ đề Capybara Chill độc bản gồm Capybara Bơ Xanh vẽ tay, 12 bộ Digimon 7–8 cấp tiến hóa chuẩn canon, Thú cưng Kawaii, Alpaca, Gấu trúc, Shiba/Akita & Hoa lá)!**
-> **Dùng mượt 100% Offline trên Microsoft Excel (Windows & Mac) — có kèm bản thử nghiệm cho Google Sheets & Điện thoại.**
-
 ![Version 3.9](https://img.shields.io/badge/Version-3.9_60_Themes-65A30D?style=for-the-badge)
 ![Pro #1 Recommended](https://img.shields.io/badge/⭐_KHUYÊN_DÙNG_%231-Pro_.XLSM_(Excel_365)-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white)
 ![Zero Macro Offline](https://img.shields.io/badge/%232_Offline_No--Macro-.XLSX_(Excel_2016--365)-4E9F76?style=for-the-badge)
 ![Google Sheets Beta](https://img.shields.io/badge/%233_Google_Sheets-Beta_(Đang_thử_nghiệm)-F59E0B?style=for-the-badge&logo=googlesheets&logoColor=white)
 ![Mobile Early Beta](https://img.shields.io/badge/%234_Mobile_Portrait-Early_Beta_(Còn_lỗi)-9E9AD1?style=for-the-badge)
+
+<table width="100%">
+  <tr>
+    <td width="74%" valign="middle">
+      <p><b>Bộ sưu tập 60 mẫu Habit Tracker hoàn toàn miễn phí mãi mãi cho cộng đồng</b> — chuẩn Digital Planner với <b>375 ảnh hoạt ảnh</b> tự lớn lên & tiến hóa theo % thói quen mỗi ngày (<b>13 chủ đề Capybara Chill độc bản</b> gồm Capybara Bơ Xanh vẽ tay, <b>12 bộ Digimon 7–8 cấp tiến hóa chuẩn canon</b>, Thú cưng Kawaii, Alpaca, Gấu trúc, Shiba/Akita & Hoa lá)!</p>
+      <p>Dùng mượt <b>100% Offline trên Microsoft Excel (Windows & Mac)</b> — bản Pro siêu mượt (<code>&lt;150ms</code>, hiệu ứng pháo hoa, tự lưu nhiều Tháng/Ngày/Năm, <code>Ctrl+Z</code> Undo), bản Offline không Macro cho mọi đời Excel 2016–365, kèm bản thử nghiệm cho Google Sheets & Điện thoại.</p>
+      <p>🌟 Nếu bộ template giúp bạn duy trì thói quen đều đặn & vui hơn mỗi ngày, hãy bấm tặng repo một nút <b>⭐ Star</b> ở góc trên bên phải để tiếp thêm động lực cho Dyu chia sẻ thêm nhiều mẫu dễ thương mới nhé!</p>
+    </td>
+    <td width="26%" align="center" valign="middle">
+      <img src="assets/donate_qr.png" width="165" alt="VietQR - Than Trong Duy" />
+      <br/>
+      <sub><b>☕ Mời Dyu ly trà tiếp sức</b><br/>Miễn phí 100% — ủng hộ tùy tâm 💛</sub>
+    </td>
+  </tr>
+</table>
 
 ---
 
@@ -113,53 +125,88 @@ Mỗi ngày bạn tick hoàn thành thói quen từ `0% → 100%`, linh vật / 
 
 Mỗi một trong **13 mẫu Capybara** đều được thiết kế **độc bản hoàn toàn (Zero Clones!)** — khác biệt từ bảng màu, kiểu biểu đồ (`Area` / `Column` / `Line`), bảng tính năng phụ riêng biệt bên dưới (Nhật ký Nước & Bữa Bơ, 5 Donut Suối Nóng, Bộ đếm Ly Boba, Giờ Học & Trang Sách, Playlist Lofi, Bảng Mở Khóa Món Ngon, Đếm Táo Thu Hoạch, 5 Điều Ước Sao, Phân Nhóm Sáng/Chiều/Tối Glow-Up, Nhật Ký Ảnh Polaroid…) cho đến **13 bộ Huy Hiệu Thành Tựu Năm** riêng biệt!
 
-### 48. 🥑 Capybara Avocado Zen *(User Special — Vẽ Tay Độc Quyền!)* — `Gối Bơ → Thuyền Bơ Ngủ → Đội Bơ → Ôm Bơ → Áo Choàng Bơ → Vua Bơ Zen!`
-![Capybara Avocado Zen Tracker](previews/48_capybara_avocado_tracker.png)
-<details>
-<summary>📸 Xem thêm: Hướng Dẫn 6 Cấp Capybara Bơ Xanh, Thung Lũng Bơ Xanh Cả Năm, Nhiệm Vụ Ngày & Yearly Goals</summary>
+<table width="100%">
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/48_capybara_avocado_tracker.png" width="100%" alt="Capybara Avocado Zen Tracker"/><br/>
+      <b>48. 🥑 Capybara Avocado Zen</b> <i>(User Special Vẽ Tay!)</i><br/>
+      <sub>Gối Bơ → Thuyền Bơ → Đội Bơ → Ôm Bơ → Áo Choàng Bơ → Vua Bơ Zen!</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/50_capybara_pip_puddle_tracker.png" width="100%" alt="Capybara Pip & Puddle Besties Tracker"/><br/>
+      <b>50. 💕 Capybara Pip & Puddle Besties</b> <i>(Dual-Tone Pink & Lavender)</i><br/>
+      <sub>Ngủ Gối Đôi → Tò Mò → Chào Ngày Mới → Bánh Quy → Khăn Ấm → Yêu Thương!</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/49_capybara_onsen_tracker.png" width="100%" alt="Capybara Yuzu Onsen Spa Tracker"/><br/>
+      <b>49. 🍊 Capybara Yuzu Onsen Spa</b><br/>
+      <sub>5 Đồng Hồ Donut Thư Giãn & Góc Wind-Down Buổi Tối</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/51_capybara_boba_pond_tracker.png" width="100%" alt="Capybara Boba Lily Pond Tracker"/><br/>
+      <b>51. 🧋 Capybara Boba Lily Pond</b><br/>
+      <sub>Bộ Đếm Tự Động Tích Ly Trà Sữa Dâu Theo Tuần</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/52_capybara_bookworm_tracker.png" width="100%" alt="Capybara Bookworm Study Tracker"/><br/>
+      <b>52. 📚 Capybara Bookworm Study</b> <i>(Capy & Chaptered)</i><br/>
+      <sub>Giờ Học, Số Trang Sách & Biểu Đồ Cột Tập Trung</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/53_capybara_lofi_picnic_tracker.png" width="100%" alt="Capybara Lofi Picnic Beats Tracker"/><br/>
+      <b>53. 🎧 Capybara Lofi Picnic Beats</b><br/>
+      <sub>Đếm Phút Deep Flow & Bảng Playlist Lofi Yêu Thích</sub>
+    </td>
+  </tr>
+</table>
 
-![Capybara Avocado Guide](previews/48_capybara_avocado_guide.png)
-![Capybara Avocado Annual Achievements](previews/48_capybara_avocado_annual_achievements.png)
-![Capybara Avocado Daily Tasks](previews/48_capybara_avocado_daily_tasks.png)
-![Capybara Avocado Yearly Goals](previews/48_capybara_avocado_yearly_goals.png)
+<details>
+<summary>📸 Xem thêm các tab chi tiết của #48 Avocado Zen & #50 Pip & Puddle (Hướng Dẫn, Tổng Kết Năm, Nhiệm Vụ Ngày & Yearly Goals)</summary>
+
+<table width="100%">
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/48_capybara_avocado_guide.png" width="100%" alt="Capybara Avocado Guide"/><br/><sub><b>48. Hướng Dẫn 6 Cấp Capybara Bơ Xanh</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/48_capybara_avocado_annual_achievements.png" width="100%" alt="Capybara Avocado Annual Achievements"/><br/><sub><b>48. Thung Lũng Bơ Xanh Cả Năm</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/48_capybara_avocado_daily_tasks.png" width="100%" alt="Capybara Avocado Daily Tasks"/><br/><sub><b>48. Nhiệm Vụ Ngày (Avocado Zen)</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/48_capybara_avocado_yearly_goals.png" width="100%" alt="Capybara Avocado Yearly Goals"/><br/><sub><b>48. Yearly Goals & Habits (Avocado Zen)</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/50_capybara_pip_puddle_guide.png" width="100%" alt="Pip & Puddle Guide"/><br/><sub><b>50. Hướng Dẫn Pip & Puddle</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/50_capybara_pip_puddle_annual_achievements.png" width="100%" alt="Pip & Puddle Annual Achievements"/><br/><sub><b>50. Đại Sảnh Đôi Bạn Thân Pip & Puddle</b></sub></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center" valign="top"><img src="previews/50_capybara_pip_puddle_daily_tasks.png" width="60%" alt="Pip & Puddle Daily Tasks"/><br/><sub><b>50. Nhiệm Vụ Ngày (Pip & Puddle)</b></sub></td>
+  </tr>
+</table>
 
 </details>
-
-### 50. 💕 Capybara Pip & Puddle Besties *(Dual-Tone Pink & Lavender)* — `Ngủ Gối Đôi → Đôi Bạn Tò Mò → Chào Ngày Mới → Tiệc Bánh Quy → Chung Khăn Ấm → Gửi Yêu Thương!`
-![Capybara Pip & Puddle Besties Tracker](previews/50_capybara_pip_puddle_tracker.png)
-<details>
-<summary>📸 Xem thêm: Hướng Dẫn Pip & Puddle, Đại Sảnh Đôi Bạn Thân & Nhiệm Vụ Ngày</summary>
-
-![Pip & Puddle Guide](previews/50_capybara_pip_puddle_guide.png)
-![Pip & Puddle Annual Achievements](previews/50_capybara_pip_puddle_annual_achievements.png)
-![Pip & Puddle Daily Tasks](previews/50_capybara_pip_puddle_daily_tasks.png)
-
-</details>
-
-### 49. 🍊 Capybara Yuzu Onsen Spa — 5 Đồng Hồ Donut Thư Giãn & Góc Wind-Down Buổi Tối
-![Capybara Yuzu Onsen Spa Tracker](previews/49_capybara_onsen_tracker.png)
-
-### 51. 🧋 Capybara Boba Lily Pond — Bộ Đếm Tự Động Tích Ly Trà Sữa Dâu Theo Tuần
-![Capybara Boba Lily Pond Tracker](previews/51_capybara_boba_pond_tracker.png)
-
-### 52. 📚 Capybara Bookworm Study *(Capy & Chaptered)* — Giờ Học, Số Trang Sách & Biểu Đồ Cột Tập Trung
-![Capybara Bookworm Study Tracker](previews/52_capybara_bookworm_tracker.png)
-
-### 53. 🎧 Capybara Lofi Picnic Beats — Đếm Phút Deep Flow & Bảng Playlist Lofi Yêu Thích
-![Capybara Lofi Picnic Beats Tracker](previews/53_capybara_lofi_picnic_tracker.png)
 
 <details>
 <summary>🍊 Mở rộng xem thêm 7 mẫu Capybara Chill cực xinh (#54 – #60: Foodie, Dino Hoodie, Apple Orchard, Pink Cloud, Fairy Party, SelfCare GlowUp, Snapshot Traveler)</summary>
 
-| Mẫu Capybara | Preview |
-|---|---|
-| **54. 🍔 Capybara Foodie Snack Club** *(6 Mốc Mở Khóa Món Ngon)* | ![Foodie Capy](previews/54_capybara_foodie_tracker.png) |
-| **55. 🦕 Capybara Dino Hoodie Play** *(Điểm Niềm Vui & 5 Thanh Pastel)* | ![Dino Hoodie Capy](previews/55_capybara_dino_hoodie_tracker.png) |
-| **56. 🍎 Capybara Apple Orchard Sweet** *(Đếm Táo Thu Hoạch & Biết Ơn)* | ![Apple Orchard Capy](previews/56_capybara_apple_orchard_tracker.png) |
-| **57. ☁️ Capybara Pink Cloud Chill** *(Tối Giản Mây Hồng Êm Ái)* | ![Pink Cloud Capy](previews/57_capybara_pink_chill_tracker.png) |
-| **58. 🧚 Capybara Fairy Party Wish** *(5 Điều Ước Ngôi Sao Tự Thắp Sáng)* | ![Fairy Party Capy](previews/58_capybara_fairy_party_tracker.png) |
-| **59. 🪞 Capybara SelfCare GlowUp** *(3 Thẻ Sáng · Chiều · Tối Glow-Up)* | ![SelfCare Capy](previews/59_capybara_selfcare_tracker.png) |
-| **60. 📸 Capybara Snapshot Traveler** *(Nhật Ký Polaroid & Dấu Hộ Chiếu)* | ![Traveler Capy](previews/60_capybara_traveler_tracker.png) |
+<table width="100%">
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/54_capybara_foodie_tracker.png" width="100%" alt="Foodie Capy"/><br/><sub><b>54. 🍔 Capybara Foodie Snack Club</b> (6 Mốc Mở Khóa Món Ngon)</sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/55_capybara_dino_hoodie_tracker.png" width="100%" alt="Dino Hoodie Capy"/><br/><sub><b>55. 🦕 Capybara Dino Hoodie Play</b> (Điểm Niềm Vui & 5 Thanh Pastel)</sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/56_capybara_apple_orchard_tracker.png" width="100%" alt="Apple Orchard Capy"/><br/><sub><b>56. 🍎 Capybara Apple Orchard Sweet</b> (Đếm Táo Thu Hoạch & Biết Ơn)</sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/57_capybara_pink_chill_tracker.png" width="100%" alt="Pink Cloud Capy"/><br/><sub><b>57. ☁️ Capybara Pink Cloud Chill</b> (Tối Giản Mây Hồng Êm Ái)</sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/58_capybara_fairy_party_tracker.png" width="100%" alt="Fairy Party Capy"/><br/><sub><b>58. 🧚 Capybara Fairy Party Wish</b> (5 Điều Ước Ngôi Sao Tự Thắp Sáng)</sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/59_capybara_selfcare_tracker.png" width="100%" alt="SelfCare Capy"/><br/><sub><b>59. 🪞 Capybara SelfCare GlowUp</b> (3 Thẻ Sáng · Chiều · Tối Glow-Up)</sub></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center" valign="top"><img src="previews/60_capybara_traveler_tracker.png" width="50%" alt="Traveler Capy"/><br/><sub><b>60. 📸 Capybara Snapshot Traveler</b> (Nhật Ký Polaroid & Dấu Hộ Chiếu)</sub></td>
+  </tr>
+</table>
 
 </details>
 
@@ -193,80 +240,68 @@ Mỗi một trong **13 mẫu Capybara** đều được thiết kế **độc b�
 
 Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn** (`0% Digi-Egg → 1–19% → 20–39% → 40–59% → 60–79% → 80–99% → 100% Mega ✨`) hoặc **8 giai đoạn Ultra/Burst** (`0% Digi-Egg → 1–14% → 15–29% → 30–49% → 50–69% → 70–84% → 85–99% Mega → 100% Ultra/Burst ✨`) — kèm bảng **Crest Digivice Breakdown** thống kê số ngày đạt từng dạng & thẻ **Current Form Power Meter**!
 
-### 44. ⚔️ Digimon Guilmon Crimson *(8 Cấp Ultra)* — `Digi-Egg → Jyarimon → Gigimon → Guilmon → Growlmon → WarGrowlmon → Gallantmon → Gallantmon Crimson`
-![Digimon Guilmon Crimson Tracker](previews/44_digimon_guilmon_tracker.png)
-<details>
-<summary>📸 Xem thêm: Hướng Dẫn 8 Cấp Tiến Hóa (2×4 Gallery), Đại Sảnh Royal Knight, Nhiệm Vụ Ngày & Yearly Goals</summary>
+<table width="100%">
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/44_digimon_guilmon_tracker.png" width="100%" alt="Digimon Guilmon Crimson Tracker"/><br/><b>44. ⚔️ Digimon Guilmon Crimson</b> <i>(8 Cấp Ultra)</i><br/><sub>Guilmon → Growlmon → WarGrowlmon → Gallantmon → Crimson</sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/46_digimon_renamon_tracker.png" width="100%" alt="Digimon Renamon Kuzuhamon Tracker"/><br/><b>46. ⛩️ Digimon Renamon Kuzuhamon</b> <i>(8 Cấp Ultra)</i><br/><sub>Renamon → Youkomon → Doumon → Kuzuhamon → Miko</sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/41_digimon_patamon_tracker.png" width="100%" alt="Digimon Patamon Mythical Tracker"/><br/><b>41. 🪽 Digimon Patamon Mythical</b> <i>(7 Cấp)</i><br/><sub>Poyomon → Tokomon → Patamon → Unimon → Hippogriffomon → Griffomon</sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/42_digimon_palmon_tracker.png" width="100%" alt="Digimon Palmon Rose Tracker"/><br/><b>42. 🌹 Digimon Palmon Rose</b> <i>(7 Cấp)</i><br/><sub>Yuramon → Tanemon → Palmon → Togemon → Lilimon → Rosemon</sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/43_digimon_gomamon_tracker.png" width="100%" alt="Digimon Gomamon Arctic Tracker"/><br/><b>43. 🧊 Digimon Gomamon Arctic</b> <i>(8 Cấp Ultra)</i><br/><sub>Gomamon → Ikkakumon → Zudomon → Vikemon → AncientMegatheriummon</sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/45_digimon_terriermon_tracker.png" width="100%" alt="Digimon Terriermon Mint Tracker"/><br/><b>45. 🌿 Digimon Terriermon Mint</b> <i>(7 Cấp)</i><br/><sub>Zerimon → Gummymon → Terriermon → Gargomon → Rapidmon → MegaGargomon</sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/47_digimon_tentomon_tracker.png" width="100%" alt="Digimon Tentomon Electro Tracker"/><br/><b>47. ⚡ Digimon Tentomon Electro</b> <i>(7 Cấp)</i><br/><sub>Bubbmon → Mochimon → Tentomon → Kabuterimon → MegaKabuterimon → Herakle</sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/36_digimon_veemon_tracker.png" width="100%" alt="Digimon Veemon Miracle Tracker"/><br/><b>36. ⚡ Digimon Veemon Miracle</b> <i>(7 Cấp)</i><br/><sub>Chibomon → DemiVeemon → Veemon → Flamedramon → Paildramon → Magnamon</sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/37_digimon_agumon_tracker.png" width="100%" alt="Digimon Agumon Courage Tracker"/><br/><b>37. 🔥 Digimon Agumon Courage</b> <i>(7 Cấp)</i><br/><sub>Botamon → Koromon → Agumon → Greymon → MetalGreymon → WarGreymon</sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/38_digimon_gatomon_tracker.png" width="100%" alt="Digimon Gatomon Light Tracker"/><br/><b>38. ✨ Digimon Gatomon Light</b> <i>(7 Cấp)</i><br/><sub>YukimiBotamon → Nyaromon → Salamon → Gatomon → Angewomon → LovelyAngemon</sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/39_digimon_gabumon_tracker.png" width="100%" alt="Digimon Gabumon Friendship Tracker"/><br/><b>39. ❄️ Digimon Gabumon Friendship</b> <i>(7 Cấp)</i><br/><sub>Punimon → Tsunomon → Gabumon → Garurumon → WereGarurumon → MetalGarurumon</sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/40_digimon_piyomon_tracker.png" width="100%" alt="Digimon Piyomon Love Tracker"/><br/><b>40. ❤️ Digimon Piyomon Love</b> <i>(7 Cấp)</i><br/><sub>Nyokimon → Yokomon → Biyomon → Birdramon → Garudamon → Phoenixmon</sub></td>
+  </tr>
+</table>
 
-![Guilmon 8-Stage Guide](previews/44_digimon_guilmon_guide.png)
-![Guilmon Annual Achievements](previews/44_digimon_guilmon_annual_achievements.png)
-![Guilmon Daily Tasks](previews/44_digimon_guilmon_daily_tasks.png)
-![Guilmon Yearly Goals](previews/44_digimon_guilmon_yearly_goals.png)
+<details>
+<summary>📸 Xem thêm các tab Hướng Dẫn 7–8 Cấp, Đại Sảnh Thành Tựu, Nhiệm Vụ Ngày & Yearly Goals của Digimon</summary>
+
+<table width="100%">
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/44_digimon_guilmon_guide.png" width="100%" alt="Guilmon 8-Stage Guide"/><br/><sub><b>44. Guilmon 8-Stage Guide</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/44_digimon_guilmon_annual_achievements.png" width="100%" alt="Guilmon Annual Achievements"/><br/><sub><b>44. Guilmon Annual Achievements</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/44_digimon_guilmon_daily_tasks.png" width="100%" alt="Guilmon Daily Tasks"/><br/><sub><b>44. Guilmon Daily Tasks</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/44_digimon_guilmon_yearly_goals.png" width="100%" alt="Guilmon Yearly Goals"/><br/><sub><b>44. Guilmon Yearly Goals</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/46_digimon_renamon_annual_achievements.png" width="100%" alt="Renamon Annual Achievements"/><br/><sub><b>46. Renamon Annual Achievements</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/46_digimon_renamon_daily_tasks.png" width="100%" alt="Renamon Daily Tasks"/><br/><sub><b>46. Renamon Daily Tasks</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/41_digimon_patamon_guide.png" width="100%" alt="Patamon 7-Stage Guide"/><br/><sub><b>41. Patamon 7-Stage Guide</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/41_digimon_patamon_annual_achievements.png" width="100%" alt="Patamon Annual Achievements"/><br/><sub><b>41. Patamon Annual Achievements</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/36_digimon_veemon_guide.png" width="100%" alt="Veemon 7-Stage Guide"/><br/><sub><b>36. Veemon 7-Stage Guide</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/36_digimon_veemon_annual_achievements.png" width="100%" alt="Veemon Annual Achievements"/><br/><sub><b>36. Veemon Annual Achievements</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/36_digimon_veemon_daily_tasks.png" width="100%" alt="Veemon Daily Tasks"/><br/><sub><b>36. Veemon Daily Tasks</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/36_digimon_veemon_yearly_goals.png" width="100%" alt="Veemon Yearly Goals"/><br/><sub><b>36. Veemon Yearly Goals</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/37_digimon_agumon_annual_achievements.png" width="100%" alt="Agumon Annual Achievements"/><br/><sub><b>37. Agumon Annual Achievements</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/37_digimon_agumon_daily_tasks.png" width="100%" alt="Agumon Daily Tasks"/><br/><sub><b>37. Agumon Daily Tasks</b></sub></td>
+  </tr>
+</table>
 
 </details>
-
-### 46. ⛩️ Digimon Renamon Kuzuhamon *(8 Cấp Ultra)* — `Digi-Egg → Relemon → Viximon → Renamon → Youkomon → Doumon → Kuzuhamon → Kuzuhamon Miko`
-![Digimon Renamon Kuzuhamon Tracker](previews/46_digimon_renamon_tracker.png)
-<details>
-<summary>📸 Xem thêm: Đại Sảnh Đền Thờ Hồ Ly & Nhiệm Vụ Ngày</summary>
-
-![Renamon Annual Achievements](previews/46_digimon_renamon_annual_achievements.png)
-![Renamon Daily Tasks](previews/46_digimon_renamon_daily_tasks.png)
-
-</details>
-
-### 41. 🪽 Digimon Patamon Mythical *(7 Cấp)* — `Digi-Egg → Poyomon → Tokomon → Patamon → Unimon → Hippogriffomon → Griffomon`
-![Digimon Patamon Mythical Tracker](previews/41_digimon_patamon_tracker.png)
-<details>
-<summary>📸 Xem thêm: Hướng Dẫn 7 Cấp Patamon & Đại Sảnh Bầu Trời Thần Thoại</summary>
-
-![Patamon 7-Stage Guide](previews/41_digimon_patamon_guide.png)
-![Patamon Annual Achievements](previews/41_digimon_patamon_annual_achievements.png)
-
-</details>
-
-### 42. 🌹 Digimon Palmon Rose *(7 Cấp)* — `Digi-Egg → Yuramon → Tanemon → Palmon → Togemon → Lilimon → Rosemon`
-![Digimon Palmon Rose Tracker](previews/42_digimon_palmon_tracker.png)
-
-### 43. 🧊 Digimon Gomamon Arctic *(8 Cấp Ultra)* — `Digi-Egg → Pichimon → Bukamon → Gomamon → Ikkakumon → Zudomon → Vikemon → AncientMegatheriummon`
-![Digimon Gomamon Arctic Tracker](previews/43_digimon_gomamon_tracker.png)
-
-### 45. 🌿 Digimon Terriermon Mint *(7 Cấp)* — `Digi-Egg → Zerimon → Gummymon → Terriermon → Gargomon → Rapidmon → MegaGargomon`
-![Digimon Terriermon Mint Tracker](previews/45_digimon_terriermon_tracker.png)
-
-### 47. ⚡ Digimon Tentomon Electro *(7 Cấp)* — `Digi-Egg → Bubbmon → Mochimon → Tentomon → Kabuterimon → MegaKabuterimon → HerakleKabuterimon`
-![Digimon Tentomon Electro Tracker](previews/47_digimon_tentomon_tracker.png)
-
-### 36. ⚡ Digimon Veemon Miracle — `Digi-Egg → Chibomon → DemiVeemon → Veemon → Flamedramon → Paildramon → Magnamon`
-![Digimon Veemon Miracle Tracker](previews/36_digimon_veemon_tracker.png)
-<details>
-<summary>📸 Xem thêm: Hướng Dẫn Tiến Hóa 7 Giai Đoạn, Đại Sảnh Kỳ Tích Veemon, Nhiệm Vụ Ngày & Yearly Goals</summary>
-
-![Veemon 7-Stage Guide](previews/36_digimon_veemon_guide.png)
-![Veemon Annual Achievements](previews/36_digimon_veemon_annual_achievements.png)
-![Veemon Daily Tasks](previews/36_digimon_veemon_daily_tasks.png)
-![Veemon Yearly Goals](previews/36_digimon_veemon_yearly_goals.png)
-
-</details>
-
-### 37. 🔥 Digimon Agumon Courage — `Digi-Egg → Botamon → Koromon → Agumon → Greymon → MetalGreymon → WarGreymon`
-![Digimon Agumon Courage Tracker](previews/37_digimon_agumon_tracker.png)
-<details>
-<summary>📸 Xem thêm: Đại Sảnh Dũng Khí Agumon & Nhiệm Vụ Ngày</summary>
-
-![Agumon Annual Achievements](previews/37_digimon_agumon_annual_achievements.png)
-![Agumon Daily Tasks](previews/37_digimon_agumon_daily_tasks.png)
-
-</details>
-
-### 38. ✨ Digimon Gatomon Light — `Digi-Egg → YukimiBotamon → Nyaromon → Salamon → Gatomon → Angewomon → LovelyAngemon`
-![Digimon Gatomon Light Tracker](previews/38_digimon_gatomon_tracker.png)
-
-### 39. ❄️ Digimon Gabumon Friendship — `Digi-Egg → Punimon → Tsunomon → Gabumon → Garurumon → WereGarurumon → MetalGarurumon`
-![Digimon Gabumon Friendship Tracker](previews/39_digimon_gabumon_tracker.png)
-
-### 40. ❤️ Digimon Piyomon Love — `Digi-Egg → Nyokimon → Yokomon → Biyomon → Birdramon → Garudamon → Phoenixmon`
-![Digimon Piyomon Love Tracker](previews/40_digimon_piyomon_tracker.png)
 
 <details>
 <summary>📱 Xem 12 màn hình thử nghiệm Mobile Portrait Digimon (`#36`–`#47` — Early Beta)</summary>
@@ -296,42 +331,37 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn** (`0% Digi-E
 
 ## 🎀 Showcase 4 Mẫu Signature (`#32` – `#35`)
 
-### 35. 🐻 Milk & Mocha Bear Sweet Love — 5 Biểu Đồ Tròn Tuần + 1 Tổng Tháng
-![Milk & Mocha Bear Sweet Love](previews/35_milk_mocha_tracker.png)
+<table width="100%">
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/35_milk_mocha_tracker.png" width="100%" alt="Milk & Mocha Bear Sweet Love"/><br/><b>35. 🐻 Milk & Mocha Bear Sweet Love</b><br/><sub>5 Biểu Đồ Tròn Tuần + 1 Tổng Tháng</sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/33_mochi_cat_tracker.png" width="100%" alt="Peach Mochi Cat Mood Suite"/><br/><b>33. 🐱 Peach Mochi Cat & Mood Suite</b><br/><sub>Hộp Cam + Nhật Ký 6 Cảm Xúc + Quick To-Do</sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/34_fluffy_bunny_tracker.png" width="100%" alt="Fluffy Bunny Sticker Pop"/><br/><b>34. 🐰 Fluffy Bunny Sticker Pop</b><br/><sub>5 Dải Màu Pastel & Bunny Progress Ring</sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/32_sakura_min_tracker.png" width="100%" alt="Sakura Blossom Minimalist"/><br/><b>32. 🌸 Sakura Blossom Minimalist</b><br/><sub>Cây Hoa Anh Đào Tối Giản Tinh Khôi</sub></td>
+  </tr>
+</table>
+
 <details>
-<summary>📸 Xem thêm: Nhiệm Vụ Ngày (Nút ◀ Hôm qua / Hôm nay / Ngày mai ▶), Yearly Goals & Đại Sảnh Milk & Mocha</summary>
+<summary>📸 Xem thêm: Nhiệm Vụ Ngày, Yearly Goals & Đại Sảnh Thành Tựu 4 Mẫu Signature (#32 – #35)</summary>
 
-![Milk & Mocha Daily Tasks](previews/35_milk_mocha_daily_tasks.png)
-![Milk & Mocha Yearly Goals](previews/35_milk_mocha_yearly_goals.png)
-![Milk & Mocha Annual Achievements](previews/35_milk_mocha_annual_achievements.png)
-
-</details>
-
-### 33. 🐱 Peach Mochi Cat & Mood Suite — Hộp Cam + Nhật Ký 6 Cảm Xúc + Quick To-Do
-![Peach Mochi Cat Mood Suite](previews/33_mochi_cat_tracker.png)
-<details>
-<summary>📸 Xem thêm: Nhiệm Vụ Ngày & Đại Sảnh Mèo Mochi</summary>
-
-![Mochi Cat Daily Tasks](previews/33_mochi_cat_daily_tasks.png)
-![Mochi Cat Annual Achievements](previews/33_mochi_cat_annual_achievements.png)
-
-</details>
-
-### 34. 🐰 Fluffy Bunny Sticker Pop — 5 Dải Màu Pastel & Bunny Progress Ring
-![Fluffy Bunny Sticker Pop](previews/34_fluffy_bunny_tracker.png)
-<details>
-<summary>📸 Xem thêm: Đại Sảnh Thỏ Bông Sticker Pop</summary>
-
-![Fluffy Bunny Annual Achievements](previews/34_fluffy_bunny_annual_achievements.png)
-
-</details>
-
-### 32. 🌸 Sakura Blossom Minimalist — Cây Hoa Anh Đào Tối Giản Tinh Khôi
-![Sakura Blossom Minimalist](previews/32_sakura_min_tracker.png)
-<details>
-<summary>📸 Xem thêm: Đại Sảnh Rừng Anh Đào Tối Giản</summary>
-
-![Sakura Minimalist Annual Achievements](previews/32_sakura_min_annual_achievements.png)
+<table width="100%">
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/35_milk_mocha_daily_tasks.png" width="100%" alt="Milk & Mocha Daily Tasks"/><br/><sub><b>35. Milk & Mocha Daily Tasks</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/35_milk_mocha_yearly_goals.png" width="100%" alt="Milk & Mocha Yearly Goals"/><br/><sub><b>35. Milk & Mocha Yearly Goals</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/35_milk_mocha_annual_achievements.png" width="100%" alt="Milk & Mocha Annual Achievements"/><br/><sub><b>35. Đại Sảnh Milk & Mocha</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/33_mochi_cat_daily_tasks.png" width="100%" alt="Mochi Cat Daily Tasks"/><br/><sub><b>33. Mochi Cat Daily Tasks</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/33_mochi_cat_annual_achievements.png" width="100%" alt="Mochi Cat Annual Achievements"/><br/><sub><b>33. Đại Sảnh Mèo Mochi</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/34_fluffy_bunny_annual_achievements.png" width="100%" alt="Fluffy Bunny Annual Achievements"/><br/><sub><b>34. Đại Sảnh Thỏ Bông Sticker Pop</b></sub></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center" valign="top"><img src="previews/32_sakura_min_annual_achievements.png" width="50%" alt="Sakura Minimalist Annual Achievements"/><br/><sub><b>32. Đại Sảnh Rừng Anh Đào Tối Giản</b></sub></td>
+  </tr>
+</table>
 
 </details>
 
@@ -339,44 +369,78 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn** (`0% Digi-E
 
 ## 🎨 Giao Diện Thực Tế `01_Sunflower` & Bộ Sưu Tập Cổ Điển + Linh Vật (`#01` – `#31`)
 
-![Sunflower Pro v3.9 Tracker](previews/01_sunflower_tracker.png)
-![Sunflower Pro v3.9 Guide](previews/01_sunflower_guide.png)
+<table width="100%">
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/01_sunflower_tracker.png" width="100%" alt="Sunflower Pro v3.9 Tracker"/><br/><sub><b>01. 🌻 Sunflower Pro v3.9 Tracker</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/01_sunflower_guide.png" width="100%" alt="Sunflower Pro v3.9 Guide"/><br/><sub><b>01. 🌻 Sunflower Pro v3.9 Guide</b></sub></td>
+  </tr>
+</table>
 
 <details>
 <summary>🌻 Mở rộng xem toàn bộ ảnh chụp 30 mẫu cổ điển & thú cưng (#02 – #31)</summary>
 
-| Mẫu | Preview |
-|---|---|
-| **02. 🌵 Cactus Bloom Pastel Weeks** | ![Cactus](previews/02_cactus_tracker.png) |
-| **03. 🌈 Rainbow Executive Donuts** | ![Rainbow](previews/03_rainbow_tracker.png) |
-| **04. 🌿 Sage Botanical Living** | ![Botanical](previews/04_botanical_tracker.png) |
-| **05. 🌙 Lavender Dream Wellness** | ![Lavender](previews/05_lavender_tracker.png) |
-| **06. 🚀 Midnight Navy Focus XP** | ![Navy](previews/06_navy_tracker.png) |
-| **07. 🌸 Sakura Zen Study Planner** | ![Sakura](previews/07_sakura_tracker.png) |
-| **08. 🪸 Ocean Coral Fitness** | ![Ocean](previews/08_ocean_tracker.png) |
-| **09. 🍵 Matcha Cafe Routine** | ![Matcha](previews/09_matcha_tracker.png) |
-| **10. 🌌 Aurora Glow RPG Quest** | ![Aurora](previews/10_aurora_tracker.png) |
-| **11. 🌹 Velvet Rose Garden** | ![Velvet Rose](previews/11_velvet_rose_tracker.png) |
-| **12. 🌷 Blue Tulip Mint Breeze** | ![Blue Tulip](previews/12_blue_tulip_tracker.png) |
-| **13. 🌸 Buttercream Blossom Bars** | ![Buttercream](previews/13_buttercream_blossom_tracker.png) |
-| **14. 🌳 Emerald Forest Gold Stars** | ![Emerald Forest](previews/14_emerald_forest_tracker.png) |
-| **15. 🌻 Mocha Rose Terracotta** | ![Mocha Sunflower](previews/15_mocha_sunflower_tracker.png) |
-| **16. 🏡 Dream Home Architect** | ![Dream Home](previews/16_dream_house_tracker.png) |
-| **17. 🌺 Wildflower Bloom & Mood** | ![Wildflower](previews/17_wildflower_mood_tracker.png) |
-| **18. 🌳 Plum Oak Master Suite** | ![Plum Oak](previews/18_plum_oak_tracker.png) |
-| **19. 🌻 Meadow Emerald Sunflower** | ![Meadow Sunflower](previews/19_meadow_sunflower_tracker.png) |
-| **20. 🦙 Cream Alpaca Cozy Cafe & Budget** | ![Cream Alpaca](previews/20_alpaca_cream_tracker.png) |
-| **21. 🌸 Blush Alpaca Fairy Flower Crown** | ![Blush Alpaca](previews/21_alpaca_blush_tracker.png) |
-| **22. 🍵 Matcha Alpaca Picnic Explorer** | ![Matcha Alpaca](previews/22_alpaca_matcha_tracker.png) |
-| **23. 🐼 Bamboo Panda Round Zen Garden** | ![Bamboo Panda](previews/23_bamboo_panda_tracker.png) |
-| **24. 👑 Royal Cat Saving Cash** | ![Royal Cat](previews/24_royal_cat_cash_tracker.png) |
-| **25. 🐱 Ginger Kitten Basket** | ![Ginger Kitten](previews/25_ginger_kitten_tracker.png) |
-| **26. 🌙 Pastel Purple Starlight Cat** | ![Starlight Lavender Cat](previews/26_purple_cat_tracker.png) |
-| **27. 🐣 Hatching Chick Studio** | ![Hatching Chick](previews/27_hatching_chick_tracker.png) |
-| **28. 🍬 Cotton Candy Jar Sweet** | ![Candy Jar](previews/28_candy_jar_tracker.png) |
-| **29. 🌹 Watercolor Rose Bouquet** | ![Rose Bouquet](previews/29_rose_bouquet_tracker.png) |
-| **30. 🐕 Shiba Inu Happy Bork** | ![Shiba Inu](previews/30_shiba_inu_tracker.png) |
-| **31. ❄️ Akita Inu Snow Loyal** | ![Akita Inu](previews/31_akita_inu_tracker.png) |
+<table width="100%">
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/02_cactus_tracker.png" width="100%" alt="Cactus"/><br/><sub><b>02. 🌵 Cactus Bloom Pastel Weeks</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/03_rainbow_tracker.png" width="100%" alt="Rainbow"/><br/><sub><b>03. 🌈 Rainbow Executive Donuts</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/04_botanical_tracker.png" width="100%" alt="Botanical"/><br/><sub><b>04. 🌿 Sage Botanical Living</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/05_lavender_tracker.png" width="100%" alt="Lavender"/><br/><sub><b>05. 🌙 Lavender Dream Wellness</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/06_navy_tracker.png" width="100%" alt="Navy"/><br/><sub><b>06. 🚀 Midnight Navy Focus XP</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/07_sakura_tracker.png" width="100%" alt="Sakura"/><br/><sub><b>07. 🌸 Sakura Zen Study Planner</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/08_ocean_tracker.png" width="100%" alt="Ocean"/><br/><sub><b>08. 🪸 Ocean Coral Fitness</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/09_matcha_tracker.png" width="100%" alt="Matcha"/><br/><sub><b>09. 🍵 Matcha Cafe Routine</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/10_aurora_tracker.png" width="100%" alt="Aurora"/><br/><sub><b>10. 🌌 Aurora Glow RPG Quest</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/11_velvet_rose_tracker.png" width="100%" alt="Velvet Rose"/><br/><sub><b>11. 🌹 Velvet Rose Garden</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/12_blue_tulip_tracker.png" width="100%" alt="Blue Tulip"/><br/><sub><b>12. 🌷 Blue Tulip Mint Breeze</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/13_buttercream_blossom_tracker.png" width="100%" alt="Buttercream"/><br/><sub><b>13. 🌸 Buttercream Blossom Bars</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/14_emerald_forest_tracker.png" width="100%" alt="Emerald Forest"/><br/><sub><b>14. 🌳 Emerald Forest Gold Stars</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/15_mocha_sunflower_tracker.png" width="100%" alt="Mocha Sunflower"/><br/><sub><b>15. 🌻 Mocha Rose Terracotta</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/16_dream_house_tracker.png" width="100%" alt="Dream Home"/><br/><sub><b>16. 🏡 Dream Home Architect</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/17_wildflower_mood_tracker.png" width="100%" alt="Wildflower"/><br/><sub><b>17. 🌺 Wildflower Bloom & Mood</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/18_plum_oak_tracker.png" width="100%" alt="Plum Oak"/><br/><sub><b>18. 🌳 Plum Oak Master Suite</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/19_meadow_sunflower_tracker.png" width="100%" alt="Meadow Sunflower"/><br/><sub><b>19. 🌻 Meadow Emerald Sunflower</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/20_alpaca_cream_tracker.png" width="100%" alt="Cream Alpaca"/><br/><sub><b>20. 🦙 Cream Alpaca Cozy Cafe & Budget</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/21_alpaca_blush_tracker.png" width="100%" alt="Blush Alpaca"/><br/><sub><b>21. 🌸 Blush Alpaca Fairy Flower Crown</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/22_alpaca_matcha_tracker.png" width="100%" alt="Matcha Alpaca"/><br/><sub><b>22. 🍵 Matcha Alpaca Picnic Explorer</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/23_bamboo_panda_tracker.png" width="100%" alt="Bamboo Panda"/><br/><sub><b>23. 🐼 Bamboo Panda Round Zen Garden</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/24_royal_cat_cash_tracker.png" width="100%" alt="Royal Cat"/><br/><sub><b>24. 👑 Royal Cat Saving Cash</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/25_ginger_kitten_tracker.png" width="100%" alt="Ginger Kitten"/><br/><sub><b>25. 🐱 Ginger Kitten Basket</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/26_purple_cat_tracker.png" width="100%" alt="Starlight Lavender Cat"/><br/><sub><b>26. 🌙 Pastel Purple Starlight Cat</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/27_hatching_chick_tracker.png" width="100%" alt="Hatching Chick"/><br/><sub><b>27. 🐣 Hatching Chick Studio</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/28_candy_jar_tracker.png" width="100%" alt="Candy Jar"/><br/><sub><b>28. 🍬 Cotton Candy Jar Sweet</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/29_rose_bouquet_tracker.png" width="100%" alt="Rose Bouquet"/><br/><sub><b>29. 🌹 Watercolor Rose Bouquet</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/30_shiba_inu_tracker.png" width="100%" alt="Shiba Inu"/><br/><sub><b>30. 🐕 Shiba Inu Happy Bork</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/31_akita_inu_tracker.png" width="100%" alt="Akita Inu"/><br/><sub><b>31. ❄️ Akita Inu Snow Loyal</b></sub></td>
+  </tr>
+</table>
 
 </details>
 
