@@ -92,7 +92,7 @@ Nếu bạn không quen mở PowerShell/Terminal, tải trực tiếp ngay trên
 
 Mỗi ngày bạn tick hoàn thành thói quen từ `0% → 100%`, linh vật / Capybara / cây hoa / Digimon của ngày đó sẽ tự động lớn lên hoặc tiến hóa ngay trước mắt bạn!
 
-### 🥑🍊 MỚI v3.9 — Batch 7: 13 Chủ Đề Capybara Chill Collection (`#48`–`#60` — 78 Sprites, gồm Capybara Bơ Xanh Vẽ Tay!)
+### 🥑🍊 MỚI v3.9 — Batch 7: 13 Chủ Đề Capybara Chill Collection (`#48`–`#60` — 78 Sprites Độc Bản Từ Bé Capybara 0% → 100% Đỉnh Cao!)
 ![78 Capybara Chill Collection Sprites Contact Sheet](previews/assets_contact_sheet_capybara.png)
 
 ### ⚡ Batch 6 — 7 Chủ Đề Digimon 7 & 8 Cấp Tiến Hóa (`#41`–`#47` — 52 Sprites Chuẩn Canon)
@@ -130,7 +130,7 @@ Mỗi một trong **13 mẫu Capybara** đều được thiết kế **độc b�
     <td width="50%" align="center" valign="top">
       <img src="previews/48_capybara_avocado_tracker.png" width="100%" alt="Capybara Avocado Zen Tracker"/><br/>
       <b>48. 🥑 Capybara Avocado Zen</b> <i>(User Special Vẽ Tay!)</i><br/>
-      <sub>Gối Bơ → Thuyền Bơ → Đội Bơ → Ôm Bơ → Áo Choàng Bơ → Vua Bơ Zen!</sub>
+      <sub>Bé Bơ Ló Mặt → Thuyền Bơ → Đội Bơ → Ôm Bơ → Áo Choàng Bơ → Vua Bơ Zen!</sub>
     </td>
     <td width="50%" align="center" valign="top">
       <img src="previews/50_capybara_pip_puddle_tracker.png" width="100%" alt="Capybara Pip & Puddle Besties Tracker"/><br/>
@@ -573,6 +573,7 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn** (`0% Digi-E
 ```powershell
 # Trích xuất & vẽ bộ 78 sprite Capybara Chill Collection (#48–#60) & xuất contact sheet:
 python scripts/extract_capybara_assets.py
+python scripts/generate_capybara_story_assets.py
 
 # Build Pro Interactive (.xlsm) theo lô với Turbo Engine v3.9:
 python scripts/excel_com_enhancer.py pro 48_capybara_avocado 50_capybara_pip_puddle

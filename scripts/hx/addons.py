@@ -2402,7 +2402,7 @@ def add_capybara_dino_hoodie_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 
             "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1,
         })
         cv.merge(rb0 + 3, c1, rb0 + 3, c2,
-                 f'=IF({pct_ref}>=0.8,"🦖 Dino Siêu Quậy!",IF({pct_ref}>=0.5,"🌸 Vòng Hoa Vui","🐤 Vịt Con Ngủ"))',
+                 f'=IF({pct_ref}>=0.8,"🦖 Dino Siêu Quậy!",IF({pct_ref}>=0.5,"🦕 Khoác Áo Dino","🥚 Bé Dino Ngủ"))',
                  italic=True, font_size=8.0, align="center", bg_color=t.page, font_color=fg)
     cv.grid(rb0 + 1, C_NAME, rb0 + 3, C_D31, t.line)
     cv.box(rb0, C_NAME, rb0 + 3, C_D31, t.line)
@@ -2614,10 +2614,10 @@ def add_capybara_selfcare_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 590
     cv.box(r0 + 4, C_NAME, r0 + 5, C_D31, t.line)
 
     # Right GlowUp Score Card
-    cv.merge(r0, C_R0, r0, C_RE, "💐  GLOW-UP METER", bold=True, font_size=8.8, align="center",
+    cv.merge(r0, C_R0, r0, C_RE, "✨  GLOW-UP METER", bold=True, font_size=8.8, align="center",
              bg_color=t.primary, font_color="#FFFFFF")
     cv.merge(r0 + 1, C_R0, r0 + 2, C_RE,
-             f'=IF({tr.s["overall"]}>=0.85,"💐 Radiant Glow!",IF({tr.s["overall"]}>=0.6,"🕶️ Stylish Self-Care","🪞 Starting Fresh"))',
+             f'=IF({tr.s["overall"]}>=0.85,"✨ Radiant Glow!",IF({tr.s["overall"]}>=0.6,"🕶️ Stylish Self-Care","🪞 Starting Fresh"))',
              bold=True, font_size=10.5, align="center", bg_color="#FFF1F2", font_color="#BE123C",
              font_name=t.font_title)
     cv.merge(r0 + 3, C_R0, r0 + 3, C_RE, f'="✨ Ngày tỏa sáng: "&{tr.s["grown"]}&" ngày"',
