@@ -1947,7 +1947,7 @@ TEMPLATES: list[TemplateDef] = [
         stem="48_Capybara_Avocado_Zen", short_key="48_capybara_avocado",
         theme=Theme(
             slug="capybara_avocado", name="CAPYBARA AVOCADO ZEN", emoji="🥑",
-            tagline_vi="Phiên bản đặc biệt Capybara Bơ Xanh vẽ tay độc quyền: Gối bơ → Thuyền bơ ngủ trưa → Đội bơ → Ôm bơ → Áo choàng bơ → Vua Bơ Zen!",
+            tagline_vi="Phiên bản đặc biệt Capybara Bơ Xanh vẽ tay độc quyền: Bé bơ ló mặt → Thuyền bơ ngủ trưa → Đội bơ → Ôm bơ → Áo choàng bơ → Vua Bơ Zen!",
             page="#F6FAEE", card="#FFFFFF", ink="#2F3B1F", muted="#6E7F54", line="#DCE8C5",
             primary="#65A30D", primary_dark="#3F6212", on_primary="#FFFFFF", soft="#ECFCCB",
             chart_fill="#BEF264", chart_line="#4D7C0F", chart_kind="area",
@@ -1960,7 +1960,7 @@ TEMPLATES: list[TemplateDef] = [
             chart_title="AVOCADO ZEN WELLNESS • NHỊP SỐNG LÀNH MẠNH MỖI NGÀY",
             num_stages=6,
             stage_names=[
-                "Gối Bơ Xanh", "Thuyền Bơ Ngủ", "Đội Bơ Mini",
+                "Bé Bơ Ló Mặt", "Thuyền Bơ Ngủ", "Đội Bơ Mini",
                 "Ôm Bơ Cười", "Áo Choàng Bơ", "Vua Bơ Zen!",
             ],
         ),
@@ -2219,8 +2219,8 @@ TEMPLATES: list[TemplateDef] = [
             chart_title="DINO HOODIE PLAYLAND • NĂNG LƯỢNG VUI VẺ MỖI NGÀY",
             num_stages=6,
             stage_names=[
-                "Vịt Vàng Bé Xíu", "Ngủ Cùng Vịt", "Vịt Con Thức Dậy",
-                "Đội Vòng Hoa", "Cầm Bó Hoa Dại", "Dino Hoodie!",
+                "Bé Dino Ngủ", "Chui Áo Dino", "Khoác Áo Dino",
+                "Dino Nhảy Vui", "Dino Vui Nhộn", "Vua Dino Hoodie!",
             ],
         ),
         tracker_name="🦕 Dino Hoodie Capy",
@@ -2367,8 +2367,8 @@ TEMPLATES: list[TemplateDef] = [
             chart_title="SELFCARE GLOW-UP • HÀNH TRÌNH TỎA SÁNG MỖI NGÀY",
             num_stages=6,
             stage_names=[
-                "Gương Bàn Phấn", "Giường Ngủ Êm", "Sáng Tươi Tắn",
-                "Soi Gương Glow", "Kính Tim Sành", "Bó Hoa Tỏa Sáng!",
+                "Bé Gương Xinh", "Thức Dậy Sớm", "Đắp Mặt Nạ",
+                "Soi Gương Glow", "Kính Tim Sành", "Nữ Hoàng Glow-Up!",
             ],
         ),
         tracker_name="🪞 SelfCare Glow Capy",
