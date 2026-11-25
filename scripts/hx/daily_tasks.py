@@ -287,7 +287,7 @@ def build_daily_tasks_sheet(
         })
     else:
         cv.merge(*hero_box,
-                 f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN({t.num_stages},MAX(1,{dt_stage_ref}))-1)&".png")',
+                 f"=INDEX(_Assets!{t.assets_range},{dt_stage_ref})",
                  align="center", bg_color=t.card)
 
     cv.merge(17, 7, 18, 7,

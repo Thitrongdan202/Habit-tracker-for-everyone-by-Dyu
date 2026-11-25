@@ -199,7 +199,7 @@ def build_yearly_goals_v21(wb, styles: Styles, ws_calc, year: int = 2026,
         })
     else:
         cv.merge(rp + 1, 8, rp + 3, 8,
-                 f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN({t.num_stages},MAX(1,{yg_stage_ref}))-1)&".png")',
+                 f"=INDEX(_Assets!{t.assets_range},{yg_stage_ref})",
                  align="center", bg_color=t.card)
     cv.merge(rp + 4, 7, rp + 4, 8,
              f'="trên "&{yg_tot_ref}&" mục tiêu  •  "&TEXT({yg_pct_ref},"0%")',
@@ -412,7 +412,7 @@ def build_annual_achievements_sheet(
         })
     else:
         cv.merge(*hero_ann_box,
-                 f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN({t.num_stages},MAX(1,{ann_hero_stg_q}))-1)&".png")',
+                 f"=INDEX(_Assets!{t.assets_range},{ann_hero_stg_q})",
                  align="center", bg_color=t.card)
     cv.merge(10, 4, 10, 7, f'="Biểu tượng tăng trưởng theo % năm "&{sel_y_local}',
              font_size=8.3, italic=True, align="center", bg_color=t.card, font_color=t.muted)
@@ -484,7 +484,7 @@ def build_annual_achievements_sheet(
             })
         else:
             cv.put(r_g + 2, c,
-                   f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN({t.num_stages},MAX(1,{m_stg_q}))-1)&".png")',
+                   f"=INDEX(_Assets!{t.assets_range},{m_stg_q})",
                    align="center", bg_color=t.card)
 
         cv.put(r_g + 3, c, f"={cq}!{acell(rm, CALC_ANN_COL0 + 2)}", align="center", font_size=9,
@@ -655,7 +655,7 @@ def build_annual_achievements_sheet(
         })
     else:
         cv.merge(*ach_icon_box,
-                 f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN({t.num_stages},MAX(1,{ach_stg_q}))-1)&".png")',
+                 f"=INDEX(_Assets!{t.assets_range},{ach_stg_q})",
                  align="center", bg_color=t.card)
 
     r0_msg, r1_msg, r2_msg, r3_msg = lore["ranks"]

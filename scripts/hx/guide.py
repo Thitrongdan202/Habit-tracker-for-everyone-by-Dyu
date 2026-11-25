@@ -61,7 +61,7 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     elif edition == "offline":
         mode_txt = f"✨ BẢN EXCEL OFFLINE KHÔNG MACRO ({ver_tag} .XLSX)  •  Gọn nhẹ 5 tab  •  Chạy mọi Excel 2016–365 Win/Mac  •  0 cảnh báo bảo mật"
     else:
-        mode_txt = f"☁️ BẢN GOOGLE SHEETS EDITION ({ver_tag})  •  Gọn 5 tab + _Database  •  Hoạt ảnh =IMAGE() động  •  Kèm Script 1-Click Checkbox!"
+        mode_txt = f"☁️ BẢN GOOGLE SHEETS EDITION ({ver_tag})  •  Font Be Vietnam Pro sắc nét  •  Cache _Assets + INDEX siêu mượt  •  Script 1-Click!"
 
     cv.merge(3, 1, 3, last_c, mode_txt, font_size=9, bold=True, align="center",
              bg_color=t.card, font_color=t.primary_dark)
@@ -220,16 +220,6 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
              bold=True, font_size=10.5, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
 
     cur_r = r_cfg + 1
-    if gsheets:
-        cv.row(cur_r, 28)
-        cv.merge(cur_r, 1, cur_r, 2, "🔗  Đường dẫn ảnh (CFG_IMG_BASE):", bold=True, font_size=9.5,
-                 align="left", indent=1, bg_color=t.soft, font_color=t.ink)
-        cv.merge(cur_r, 3, cur_r, last_c, t.img_base, bold=False, font_size=8.8, align="left",
-                 bg_color=t.warn_fill, font_color=t.ink, indent=1)
-        wb.define_name("CFG_IMG_BASE", f"={q}!{acell(cur_r, 3)}")
-        cv.hline(cur_r, 1, last_c, t.line)
-        cur_r += 1
-
     # Threshold bar — 3 thresholds (6-stage), 4 thresholds (7-stage), or 5 thresholds (8-stage Ultra!)
     r_thr = cur_r
     guide_sprite_slots = []
@@ -288,7 +278,7 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
                                                "r1": r_si, "c1": c1, "r2": r_si, "c2": c2,
                                                "formula": f"=_Assets!$B${2 + idx}"})
                 else:
-                    cv.merge(r_si, c1, r_si, c2, f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_{idx}.png")',
+                    cv.merge(r_si, c1, r_si, c2, f"=_Assets!$B${2 + idx}",
                              align="center", bg_color=t.card)
                 cv.merge(r_sd, c1, r_sd, c2, pct_subs[idx], bold=is_final, font_size=8.8, align="center",
                          bg_color=(t.soft if is_final else t.card),
@@ -370,7 +360,7 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
                                            "r1": r_simg, "c1": c, "r2": r_simg, "c2": c,
                                            "formula": f"=_Assets!$B${2 + idx}"})
             else:
-                cv.put(r_simg, c, f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_{idx}.png")', align="center", bg_color=t.card)
+                cv.put(r_simg, c, f"=_Assets!$B${2 + idx}", align="center", bg_color=t.card)
             cv.put(r_sdesc, c, st_sub, bold=is_mega, font_size=8.6, align="center", text_wrap=True,
                    bg_color=(t.soft if is_mega else t.card),
                    font_color=(t.primary_dark if is_mega else t.muted))
@@ -395,9 +385,8 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
         )
     else:
         tip_txt = (
-            f"💡  Muốn tự thay bộ icon riêng trên Google Sheets? Tạo {t.num_stages} file PNG (stage_0.png → stage_{t.max_stage_idx}.png), "
-            f"tải lên GitHub public rồi dán URL thư mục gốc vào ô vàng CFG_IMG_BASE ở trên. "
-            f"Hoặc sửa các ô ngưỡng màu vàng để tùy chỉnh tốc độ tiến hóa!"
+            f"💡  Muốn tự thay bộ icon riêng trên Google Sheets? Mở sheet ẩn _Assets (Xem → Trang tính ẩn → _Assets) "
+            f"và sửa trực tiếp {t.num_stages} công thức =IMAGE(...) trong ô {slot_range_txt} — toàn bộ 31 ngày, Hero & 12 tháng tự đồng bộ siêu tốc nhờ bộ nhớ đệm INDEX!"
         )
     tip_lines = text_lines(tip_txt, 118, factor=0.76)
     cv.row(r_tip, max(64, tip_lines * 16 + 20))
