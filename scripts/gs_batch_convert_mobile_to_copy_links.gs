@@ -13,9 +13,14 @@
  *      - Đã giữ nguyên màu pastel từng ngày T2–CN & màu chủ đề từng template
  *      - Đã ép font tiếng Việt sắc nét `Be Vietnam Pro` trên toàn bộ 4 tab hiển thị
  *      - Đã ẩn đường lưới mặc định (`setHiddenGridlines(true)`) & ẩn `_Calc`, `_Database`, `_Assets`
+ *      - Đã nướng sẵn ảnh native `CellImage` vào `_Assets` (loại bỏ hoàn toàn `=IMAGE("https://...")` -> 0 lỗi `#REF!` trên app Google Trang tính điện thoại!)
  *      - Đã mở quyền chia sẻ RIÊNG TỪNG FILE ("Anyone with link: Viewer") — KHÔNG chia sẻ thư mục gốc
  *      - Tự xuất bảng Markdown gồm 60 link `https://docs.google.com/spreadsheets/d/<ID>/copy`
  *        vào file `MOBILE_COPY_LINKS_TABLE.md` trong thư mục output!
+ *
+ *  ★ NÂNG CẤP TẠI CHỖ CHO 60 FILE MOBILE ĐÃ CONVERT (GIỮ NGUYÊN 100% LINK `/copy` CŨ):
+ *    - Nếu bạn đã convert sẵn 60 file Mobile trên Drive, chỉ cần chọn hàm `upgradeExistingMobileSheetsToCellImages` -> bấm Run!
+ *    - Script sẽ nướng `CellImage` trực tiếp vào `_Assets` của từng file hiện có (không đổi File ID, giữ nguyên toàn bộ link `/copy` cũ & tự bỏ qua file đã nướng khi chạy lại!).
  *
  *  HƯỚNG DẪN CHẠY 1 LẦN TRÊN GOOGLE DRIVE (2 PHÚT):
  *    1. Tải các file `*_Mobile.xlsx` từ `templates/mobile_portrait_sheets/` lên 1 thư mục Drive.
@@ -84,6 +89,7 @@ function batchConvertMobileToCopyLinks() {
   });
 
   Logger.log("Found " + xlsxFiles.length + " mobile .xlsx file(s) in '" + srcFolder.getName() + "'.");
+  var imageCache = {};
   var convertedNow = 0;
   var skipped = 0;
   var pausedForTime = false;
@@ -105,7 +111,7 @@ function batchConvertMobileToCopyLinks() {
 
     try {
       var newId = mobConvertXlsxToNativeSheet_(file.getId(), baseName, outFolderId);
-      mobPolishConvertedSheet_(newId);
+      mobPolishConvertedSheet_(newId, imageCache);
       // Safe privacy: set sharing ONLY on the individual converted file (never on parent folder!)
       DriveApp.getFileById(newId).setSharing(
         DriveApp.Access.ANYONE_WITH_LINK,
@@ -143,6 +149,67 @@ function exportMobileCopyLinksMarkdown() {
   Logger.log("Exported " + Object.keys(existingMap).length + " Mobile /copy links to MOBILE_COPY_LINKS_TABLE.md:\n\n" + md);
 }
 
+/**
+ * In-place Upgrader: bakes native `CellImage` sprites into `_Assets` across ALL
+ * already-converted Mobile native Google Sheets in OUTPUT_FOLDER_ID without recreating files
+ * or changing any `/copy` URL! Skips already-baked sheets instantly & stops safely at 4.5 min.
+ */
+function upgradeExistingMobileSheetsToCellImages() {
+  if (!OUTPUT_FOLDER_ID && (!SOURCE_FOLDER_ID || SOURCE_FOLDER_ID === "PASTE_YOUR_MOBILE_XLSX_DRIVE_FOLDER_ID_HERE")) {
+    throw new Error("Vui lòng điền SOURCE_FOLDER_ID hoặc OUTPUT_FOLDER_ID trước khi chạy!");
+  }
+  var tStart = Date.now();
+  var outFolder = OUTPUT_FOLDER_ID
+    ? DriveApp.getFolderById(OUTPUT_FOLDER_ID)
+    : mobResolveOutputFolder_(DriveApp.getFolderById(SOURCE_FOLDER_ID));
+
+  var sheetFiles = [];
+  var iter = outFolder.getFilesByType(MimeType.GOOGLE_SHEETS);
+  while (iter.hasNext()) {
+    sheetFiles.push(iter.next());
+  }
+  sheetFiles.sort(function (a, b) {
+    return a.getName().localeCompare(b.getName(), "en", { numeric: true });
+  });
+
+  Logger.log("Scanning " + sheetFiles.length + " existing Mobile Google Sheet(s) in '" + outFolder.getName() + "' for CellImage baking...");
+  var imageCache = {};
+  var upgraded = 0;
+  var skipped = 0;
+  var pausedForTime = false;
+
+  for (var i = 0; i < sheetFiles.length; i++) {
+    if (Date.now() - tStart > SOFT_LIMIT_MS) {
+      pausedForTime = true;
+      Logger.log("Reached 4.5-minute safe checkpoint (" + i + "/" + sheetFiles.length + "). Run again to resume!");
+      break;
+    }
+
+    var file = sheetFiles[i];
+    var name = file.getName();
+    try {
+      var ss = SpreadsheetApp.openById(file.getId());
+      var baked = bakeAssetsAsCellImages_(ss, imageCache);
+      if (baked === 0) {
+        skipped++;
+        Logger.log("[" + (i + 1) + "/" + sheetFiles.length + "] SKIP (already baked): " + name);
+      } else {
+        SpreadsheetApp.flush();
+        upgraded++;
+        Logger.log("[" + (i + 1) + "/" + sheetFiles.length + "] Baked " + baked + " CellImages: " + name);
+      }
+    } catch (err) {
+      Logger.log("[" + (i + 1) + "/" + sheetFiles.length + "] ERROR on " + name + ": " + err);
+    }
+  }
+
+  Logger.log("============================================================");
+  Logger.log("Mobile CellImage upgrade complete: upgraded=" + upgraded + ", skipped=" + skipped + ", total=" + sheetFiles.length);
+  if (pausedForTime) {
+    Logger.log("NOTICE: Re-run upgradeExistingMobileSheetsToCellImages() to finish remaining sheets.");
+  }
+}
+
 // ============================================================================
 //  DRIVE API v3 / v2 AUTO-DETECT CONVERSION
 // ============================================================================
@@ -173,9 +240,105 @@ function mobConvertXlsxToNativeSheet_(fileId, baseName, parentFolderId) {
 }
 
 // ============================================================================
+//  NATIVE CELLIMAGE BAKER (ELIMINATES `=IMAGE("https://...")` & `#REF!` ON MOBILE!)
+// ============================================================================
+function mobBuildBakedCellImage_(url, altTitle, imageCache) {
+  if (!imageCache[url]) {
+    try {
+      var res = UrlFetchApp.fetch(url, { muteHttpExceptions: true });
+      if (res.getResponseCode() === 200) {
+        var blob = res.getBlob();
+        var ct = blob.getContentType() || "image/png";
+        var b64 = Utilities.base64Encode(blob.getBytes());
+        imageCache[url] = "data:" + ct + ";base64," + b64;
+      } else {
+        Logger.log("  WARN: HTTP " + res.getResponseCode() + " fetching " + url + " (falling back to direct URL)");
+        imageCache[url] = url;
+      }
+    } catch (errFetch) {
+      Logger.log("  WARN: UrlFetchApp failed for " + url + ": " + errFetch);
+      imageCache[url] = url;
+    }
+  }
+
+  var src = imageCache[url] || url;
+  try {
+    return SpreadsheetApp.newCellImage()
+      .setSourceUrl(src)
+      .setAltTextTitle(altTitle || "Habit Sprite")
+      .build();
+  } catch (errBuild) {
+    return SpreadsheetApp.newCellImage()
+      .setSourceUrl(url)
+      .setAltTextTitle(altTitle || "Habit Sprite")
+      .build();
+  }
+}
+
+/**
+ * Replaces all `=IMAGE("https://...", ...)` formulas in hidden `_Assets!B2:B20`
+ * (and any stray `=IMAGE()` formulas on `Hướng Dẫn`) with baked native `CellImage` values.
+ * Returns count of baked/patched cells (returns 0 immediately if already baked — idempotent!).
+ */
+function bakeAssetsAsCellImages_(ss, imageCache) {
+  imageCache = imageCache || {};
+  var imgRe = /^=\s*(?:_xlfn\.)?IMAGE\(\s*"([^"]+)"/i;
+  var bakedCount = 0;
+  var urlToAssetRef = {};
+
+  var wsAssets = ss.getSheetByName("_Assets");
+  if (wsAssets) {
+    var labels = wsAssets.getRange("A2:A20").getValues();
+    var formulas = wsAssets.getRange("B2:B20").getFormulas();
+    for (var i = 0; i < formulas.length; i++) {
+      var f = formulas[i][0];
+      if (!f) continue;
+      var m = f.match(imgRe);
+      if (!m) continue;
+      var url = m[1];
+      var rowNum = 2 + i;
+      var stageLabel = String(labels[i][0] || "").trim() || ("Habit Sprite " + i);
+      var cellImg = mobBuildBakedCellImage_(url, stageLabel, imageCache);
+      wsAssets.getRange(rowNum, 2).setValue(cellImg);
+      urlToAssetRef[url] = "_Assets!$B$" + rowNum;
+      bakedCount++;
+    }
+  }
+
+  // Also scan `Hướng Dẫn` (Guide) in case any cell still contains a direct `=IMAGE("https://...")` formula
+  var sheets = ss.getSheets();
+  for (var s = 0; s < sheets.length; s++) {
+    var sh = sheets[s];
+    if (sh.getName().indexOf("Hướng Dẫn") === -1) continue;
+    var dr = sh.getDataRange();
+    if (dr.getNumRows() === 0 || dr.getNumColumns() === 0) continue;
+    var gFormulas = dr.getFormulas();
+    var r0 = dr.getRow();
+    var c0 = dr.getColumn();
+    for (var r = 0; r < gFormulas.length; r++) {
+      for (var c = 0; c < gFormulas[r].length; c++) {
+        var gf = gFormulas[r][c];
+        if (!gf) continue;
+        var gm = gf.match(imgRe);
+        if (!gm) continue;
+        var gUrl = gm[1];
+        if (urlToAssetRef[gUrl]) {
+          sh.getRange(r0 + r, c0 + c).setFormula("=" + urlToAssetRef[gUrl]);
+        } else {
+          sh.getRange(r0 + r, c0 + c).setValue(mobBuildBakedCellImage_(gUrl, "Guide Sprite", imageCache));
+        }
+        bakedCount++;
+      }
+    }
+  }
+
+  return bakedCount;
+}
+
+// ============================================================================
 //  PRECISION MOBILE SHEET POLISH (BE VIETNAM PRO + HIDDEN GRIDLINES + BOOLEAN-SAFE CHECKBOXES)
 // ============================================================================
-function mobPolishConvertedSheet_(spreadsheetId) {
+function mobPolishConvertedSheet_(spreadsheetId, imageCache) {
   var ss = SpreadsheetApp.openById(spreadsheetId);
   var sheets = ss.getSheets();
 
@@ -225,6 +388,9 @@ function mobPolishConvertedSheet_(spreadsheetId) {
     var goalAccent = mobPickAccentColor_(wsGoals, "B11", "B2", "#B57A7A");
     mobConvertBoolRange_(wsGoals, MOB_GOALS_RANGE, goalAccent);
   }
+
+  // 4) Bake native CellImages into `_Assets` so fresh Mobile /copy sheets have ZERO `#REF!`
+  bakeAssetsAsCellImages_(ss, imageCache);
 
   SpreadsheetApp.flush();
 }
