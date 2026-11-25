@@ -157,9 +157,10 @@ def text_lines(text: str, width_chars: float, factor: float = 1.0) -> int:
 #  Format cache
 # --------------------------------------------------------------------------- #
 class Styles:
-    def __init__(self, wb, theme: Theme):
+    def __init__(self, wb, theme: Theme, gsheets: bool = False):
         self.wb = wb
         self.t = theme
+        self.gsheets = gsheets
         self._cache: dict = {}
 
     def base(self) -> dict:
@@ -169,6 +170,16 @@ class Styles:
     def get(self, props: dict):
         p = self.base()
         p.update({k: v for k, v in props.items() if v is not None})
+        if self.gsheets:
+            p["font_name"] = "Be Vietnam Pro"
+            fs = p.get("font_size", 10)
+            if isinstance(fs, (int, float)):
+                if fs < 9:
+                    p["font_size"] = 9
+                elif fs < 10:
+                    p["font_size"] = max(9, int(round(fs)))
+                else:
+                    p["font_size"] = int(round(fs))
         # drop "pattern" when no bg
         key = tuple(sorted((k, str(v)) for k, v in p.items()))
         if key not in self._cache:
@@ -300,10 +311,11 @@ class Canvas:
         d = self._cell(r, c)
         d["props"].update(props)
         if self.gsheets:
-            # Google Sheets Edition: clean centered, softly styled boolean cells ready for 1-click Insert -> Checkbox or Apps Script!
+            # Google Sheets Edition: crisp centered 10pt boolean cells in matching week/theme pastel color
+            # so native Google Sheets checkboxes inherit clean pastel styling with zero 7pt fallback!
             d["props"].setdefault("align", "center")
-            d["props"]["font_size"] = 7.5
-            d["props"]["font_color"] = self.t.muted
+            d["props"]["font_size"] = 10
+            d["props"].setdefault("font_color", self.t.primary_dark)
             d["kind"], d["value"] = "value", bool(value)
         else:
             # Pro .xlsm & Universal Offline .xlsx: Excel Native Cell Checkboxes with theme/week pastel colors!
@@ -424,4 +436,5 @@ def place_chart(cv: Canvas, chart, r1, c1, r2, c2, pad_x=0, pad_y=0):
 
 
 def axis_font(theme: Theme, size=8, color=None):
-    return {"name": theme.font, "size": size, "color": color or theme.muted}
+    sz = max(9, int(round(size))) if theme.font == "Be Vietnam Pro" else size
+    return {"name": theme.font, "size": sz, "color": color or theme.muted}

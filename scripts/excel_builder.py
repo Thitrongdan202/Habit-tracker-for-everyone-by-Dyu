@@ -16,7 +16,7 @@ from __future__ import annotations
 import json
 import random
 import sys
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Callable
 
@@ -121,6 +121,52 @@ def add_assets_placeholder(wb, styles: Styles):
         ws.write(r, 0, st, lab)
         ws.write_blank(r, 1, None, slot)
         ws.write(r, 2, note, tip)
+    return ws
+
+
+def add_gsheets_assets_sheet(wb, styles: Styles):
+    """Hidden `_Assets` sprite cache for Google Sheets Edition:
+    holds ONLY the 6-8 unique `=IMAGE("https://.../stage_X.png", 1)` formulas in B2:B(1+N)
+    plus an empty hide slot at B(2+N) so all 50+ sprite displays use instant `=INDEX(_Assets!...)`!"""
+    t = styles.t
+    ws = wb.add_worksheet(ASSETS_SHEET)
+    ws.hide_gridlines(2)
+    ws.set_column(0, 0, 26)
+    ws.set_column(1, 1, 14)
+    ws.set_column(2, 2, 62)
+    hdr = wb.add_format({"font_name": t.font, "font_size": 10, "bold": True,
+                         "bg_color": t.primary, "font_color": t.on_primary,
+                         "align": "center", "valign": "vcenter"})
+    lab = wb.add_format({"font_name": t.font, "font_size": 10, "bold": True,
+                         "bg_color": t.soft, "font_color": t.ink,
+                         "align": "center", "valign": "vcenter"})
+    slot = wb.add_format({"font_name": t.font, "font_size": 10, "bg_color": t.card,
+                          "align": "center", "valign": "vcenter"})
+    tip = wb.add_format({"font_name": t.font, "font_size": 10, "font_color": t.muted,
+                         "bg_color": t.page, "valign": "vcenter", "text_wrap": True})
+
+    ws.set_row(0, 26)
+    ws.write(0, 0, "STAGE", hdr)
+    ws.write(0, 1, f"SPRITE CACHE (B2:B{1 + t.num_stages})", hdr)
+    ws.write(0, 2, "GOOGLE SHEETS IMAGE CACHE (6-8 URLs -> INDEX LOOKUP)", hdr)
+
+    names = t.stage_names or [f"Stage {i}" for i in range(t.num_stages)]
+    for i in range(t.num_stages):
+        r = 1 + i
+        url = f"{t.img_base}stage_{i}.png"
+        ws.set_row(r, 68)
+        ws.write(r, 0, f"Stage {i} ({names[i]})", lab)
+        ws.write_formula(r, 1, f'=IMAGE("{url}",1)', slot)
+        ws.write(r, 2, url, tip)
+
+    # Trailing blank cell at B(2+num_stages) for out-of-month hidden days (Feb 29/30/31)
+    r_blank = 1 + t.num_stages
+    ws.set_row(r_blank, 28)
+    ws.write(r_blank, 0, "(Blank / Hide Day)", lab)
+    ws.write(r_blank, 1, "", slot)
+    ws.write(r_blank, 2, "GIỮ NGUYÊN Ô TRỐNG — dùng để ẩn ngày 29/30/31 ở tháng ngắn", tip)
+
+    ws.hide()
     return ws
 
 
@@ -2475,11 +2521,23 @@ def build_template(tdef: TemplateDef, out_path: Path, edition: str = "pro_xlsm")
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     wb = xlsxwriter.Workbook(str(out_path))
-    styles = Styles(wb, tdef.theme)
+    if gsheets:
+        theme = replace(
+            tdef.theme,
+            font="Be Vietnam Pro",
+            font_title="Be Vietnam Pro",
+            font_month="Be Vietnam Pro",
+        )
+        wb.formats[0].set_font_name("Be Vietnam Pro")
+        wb.formats[0].set_font_size(10)
+        styles = Styles(wb, theme, gsheets=True)
+    else:
+        theme = tdef.theme
+        styles = Styles(wb, theme, gsheets=False)
 
     stg_txt = (
-        "8 giai đoạn siêu tiến hóa Digimon" if tdef.theme.num_stages == 8
-        else ("7 giai đoạn tiến hóa Digimon" if tdef.theme.num_stages == 7 else "6 giai đoạn")
+        "8 giai đoạn siêu tiến hóa Digimon" if theme.num_stages == 8
+        else ("7 giai đoạn tiến hóa Digimon" if theme.num_stages == 7 else "6 giai đoạn")
     )
     extra_tab_docs = [
         (DAILY_TASKS_SHEET, "Quản lý nhiệm vụ đột xuất theo từng ngày (Ngày/Tháng/Năm), nhóm ưu tiên & hoạt ảnh lớn dần 0% → 100%!"),
@@ -2489,7 +2547,7 @@ def build_template(tdef: TemplateDef, out_path: Path, edition: str = "pro_xlsm")
     g_info = build_guide(wb, styles, tdef.tracker_name, extra_tab_docs, edition=edition)
 
     ws_calc = init_calc_sheet(wb, active_year=2026, last_loaded_key="2026-10",
-                              last_goal_year=2026, theme=tdef.theme)
+                              last_goal_year=2026, theme=theme)
 
     dyn_anims: list[dict] = []
     static_pics: list[dict] = list(g_info["linked_pictures"])
@@ -2543,6 +2601,8 @@ def build_template(tdef: TemplateDef, out_path: Path, edition: str = "pro_xlsm")
     ws_calc.hide()
     if universal:
         add_assets_placeholder(wb, styles)
+    elif gsheets:
+        add_gsheets_assets_sheet(wb, styles)
     wb.close()
 
     captures = [

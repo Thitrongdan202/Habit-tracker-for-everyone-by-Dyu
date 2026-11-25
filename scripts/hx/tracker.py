@@ -326,11 +326,16 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
         rc[ec["key"]] = C_R0 + 5 + i
 
     # ------------------------------------------------------------------ geometry
+    name_w = max(spec.name_width, 38.5) if spec.gsheets else spec.name_width
+    day_w = max(spec.day_width, 6.0) if spec.gsheets else spec.day_width
+    r_widths = ((7.4, 9.6, 11.4, 10.0, 10.0)
+                if (spec.gsheets and spec.right_widths == (6.4, 8.8, 10.8, 8.8, 8.8))
+                else spec.right_widths)
     cv.col(0, 2.4)
-    cv.col(C_NAME, spec.name_width)
-    cv.cols(C_D0, C_D31, spec.day_width)
+    cv.col(C_NAME, name_w)
+    cv.cols(C_D0, C_D31, day_w)
     cv.col(C_GAP, 1.6)
-    for i, w in enumerate(spec.right_widths):
+    for i, w in enumerate(r_widths):
         cv.col(C_R0 + i, w)
     for i, ec in enumerate(spec.extra_cols):
         cv.col(C_R0 + 5 + i, ec.get("width", 9))
@@ -571,7 +576,8 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
     # ------------------------------------------------------------------ top-right card
     if spec.top_right == "donut":
         cv.box(R_BAND0, C_R0, R_BAND1, C_RE, t.line, fill=t.card)
-        cv.merge(R_BAND0, C_R0, R_BAND0, C_RE, "MONTHLY PROGRESS", bold=True, font_size=8.5,
+        cv.merge(R_BAND0, C_R0, R_BAND0, C_RE, "MONTHLY PROGRESS", bold=True,
+                 font_size=(11 if spec.gsheets else 8.5),
                  align="center", bg_color=t.soft, font_color=t.ink)
         cd1 = C_R0 + 2
         cv.merge(R_BAND0 + 1, C_R0, R_BAND1, cd1, f"={S['overall']}", bold=True, font_size=15,
@@ -614,10 +620,10 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
             cv.put(R_IMG, c, "", bg_color=t.card, align="center")
         else:
             st_ref = f"{cq}!{acell(stage_row, k)}"
-            cv.put(R_IMG, c, f'=IF({dc}="","",_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN({t.num_stages},MAX(1,{st_ref}))-1)&".png"))',
+            cv.put(R_IMG, c, f'=IF({dc}="","",INDEX(_Assets!{t.assets_range},{st_ref}))',
                    bg_color=t.card, align="center")
         col_rng = f"{colname(c)}${R_H0 + 1}:{colname(c)}${R_H1 + 1}"
-        if spec.pro_mode:
+        if spec.pro_mode or spec.gsheets:
             done_f = f'=IF({dc}="","",COUNTIFS({names_local},"?*",{col_rng},TRUE))'
         else:
             done_f = (f'=IF({dc}="","",COUNTIFS({names_local},"?*",{col_rng},TRUE)+'
@@ -643,7 +649,7 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
         cv.merge(*hero_box, "", align="center", bg_color=t.card)
     else:
         cv.merge(*hero_box,
-                 f'=_xlfn.IMAGE(CFG_IMG_BASE&"stage_"&(MIN({t.num_stages},MAX(1,{hero_stage_cell}))-1)&".png")',
+                 f"=INDEX(_Assets!{t.assets_range},{hero_stage_cell})",
                  align="center", bg_color=t.card)
     cv.merge(R_DONE, C_R0, R_PCT, split, f"={S['grown']}", bold=True, font_size=26, align="center",
              bg_color=t.card, font_color=t.primary_dark, font_name=t.font_title)
@@ -660,7 +666,8 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
     for w in range(5):
         days = week_days(w)
         c1, c2 = day_col(days[0]), day_col(days[-1])
-        cv.merge(R_WEEK, c1, R_WEEK, c2, f"WEEK {w + 1}", bold=True, font_size=9, align="center",
+        cv.merge(R_WEEK, c1, R_WEEK, c2, f"WEEK {w + 1}", bold=True,
+                 font_size=(11 if spec.gsheets else 9), align="center",
                  bg_color=t.week_head[w], font_color=t.week_on[w])
         for k in days:
             c = day_col(k)
@@ -709,7 +716,7 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
         for k in range(1, 32):
             tr_ref = f"{q}!{cell(r, day_col(k))}"
             prev = "0" if k == 1 else cell(r_calc, k - 1)
-            if spec.pro_mode:
+            if spec.pro_mode or spec.gsheets:
                 if k <= 28:
                     ws_calc.write_formula(r_calc, k, f'=IF({tr_ref}=TRUE,{prev}+1,0)')
                 else:
@@ -798,8 +805,8 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
         cf_props = {"bg_color": chk_bg, "font_color": t.week_check[w]}
         if spec.gsheets:
             cf_props["bold"] = True
-        if spec.pro_mode:
-            # Native C++ cell-value equality (TRUE) — 100% identical pastel fill, ZERO formula overhead!
+        if spec.pro_mode or spec.gsheets:
+            # Fast native cell-value equality (== TRUE) — 1 rule per week color, ZERO formula CF lag!
             ws.conditional_format(a, {"type": "cell", "criteria": "==", "value": True,
                                       "format": wb.add_format(cf_props)})
         else:

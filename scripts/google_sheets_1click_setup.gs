@@ -1,20 +1,26 @@
 /**
  * ============================================================================
- *  HABIT TRACKER v3.9 TURBO — 1-CLICK GOOGLE SHEETS CHECKBOX + FAST AUTO-SAVE
+ *  HABIT TRACKER v3.9 TURBO — 1-CLICK GOOGLE SHEETS SETUP & ZERO-LAG STORAGE
  *  AUTO-DETECTS BOTH:
  *    - Desktop 5-Tab Google Sheets Edition (`templates/google_sheets_edition/`)
  *    - Mobile Portrait Edition (`templates/mobile_portrait_sheets/`)
  *  Repo: https://github.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu
  * ============================================================================
  *
- *  v3.9 TURBO PERFORMANCE UPGRADES (60 Themes: 6-Stage Capybara/Pets/Plants + 7/8-Stage Digimon):
- *    - Single-pass O(1) index map (`buildColIndex_`) -> 1 RPC instead of 4-6 scans!
- *    - Batched multi-column `getValues()` / `setValues()` (B17:AI36, B3:B5, D5:F5, B21:I35)
- *    - RangeList bulk checkbox insertion in `convertBooleanCellsInRange_`
- *    - Zero redundant `SpreadsheetApp.flush()` calls
+ *  KEY PERFORMANCE & UX UPGRADES:
+ *    1. 0ms Fast-Exit `onEdit(e)`: normal checkbox ticks exit IMMEDIATELY with
+ *       ZERO Spreadsheet API calls and ZERO `_Database` writes (Google Sheets
+ *       already auto-saves the active sheet to the cloud).
+ *    2. Document-Locked Bulk Sync (`LockService.getDocumentLock()`): ONLY runs
+ *       when switching Month / Year / Date dropdowns — flushes & loads in ONE
+ *       bulk `getValues()` / `setValues()` call and displays an instant toast.
+ *    3. 1-Click `setupHabitTracker()`: inserts themed pastel native Checkboxes
+ *       on ALL 3 interactive tabs, enforces crisp `Be Vietnam Pro` Vietnamese
+ *       typography, hides default gridlines on all 5 visible tabs, hides
+ *       `_Calc` / `_Database` / `_Assets`, and initializes `_Database`.
  *
  *  HƯỚNG DẪN CÀI ĐẶT 1 LẦN (10 GIÂY):
- *    1. Tải file `.xlsx` lên Google Drive -> Mở bằng Google Trang tính (Google Sheets)
+ *    1. Tải file `.xlsx` lên Google Drive -> Mở bằng Google Trang tính
  *       -> Tệp (File) -> Lưu dưới dạng Google Trang tính (Save as Google Sheets).
  *    2. Mở menu: Tiện ích mở rộng (Extensions) -> Apps Script.
  *    3. Xóa mã mặc định, dán toàn bộ đoạn code này vào và nhấn Lưu (Ctrl+S).
@@ -23,6 +29,14 @@
 
 var HT_CALC_SHEET = "_Calc";
 var HT_DB_SHEET = "_Database";
+var HT_ASSETS_SHEET = "_Assets";
+var HT_FONT_FAMILY = "Be Vietnam Pro";
+
+// Hidden `_Calc` cells storing currently loaded keys (Desktop 5-tab edition)
+var HT_KEY_MONTH_CELL = "AN2";   // LAST_MONTH_KEY ("YYYY-MM")
+var HT_KEY_YEAR_CELL = "AN3";    // LAST_YEAR_KEY  (YYYY)
+var HT_KEY_DAILY_CELL = "AN12";  // LAST_DAILY_KEY ("YYYY-MM-DD")
+
 var HT_N_HABITS_DESK = 20;
 var HT_N_GOALS_DESK = 20;
 var HT_N_TASKS_DESK = 20;
@@ -35,6 +49,10 @@ var HT_MONTHS = {
   july: 7, august: 8, september: 9, october: 10, november: 11, december: 12
 };
 
+// Week column spans on Monthly Tracker (C..AG = Days 1..31)
+var HT_WEEK_RANGES = ["C17:I36", "J17:P36", "Q17:W36", "X17:AD36", "AE17:AG36"];
+var HT_WEEK_SAMPLE_CELLS = ["C17", "J17", "Q17", "X17", "AE17"];
+
 function isMobilePortraitWorkbook_(ss) {
   var sheets = ss.getSheets();
   for (var i = 0; i < sheets.length; i++) {
@@ -43,12 +61,37 @@ function isMobilePortraitWorkbook_(ss) {
   return false;
 }
 
+/**
+ * 1-Click Master Setup:
+ *  - Enforces `Be Vietnam Pro` font & hides default gridlines on all visible tabs
+ *  - Inserts native themed pastel Checkboxes on all 3 interactive tabs
+ *  - Hides `_Calc`, `_Database`, `_Assets`
+ *  - Initializes `_Database` snapshot for the active Month / Date / Year
+ *  - Cleans any duplicate installable `onEdit` triggers (simple trigger handles everything!)
+ */
 function setupHabitTracker() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   if (isMobilePortraitWorkbook_(ss)) {
     setupMobilePortrait_(ss);
   } else {
     setupDesktopEdition_(ss);
+  }
+}
+
+function polishVisibleSheets_(ss) {
+  var sheets = ss.getSheets();
+  for (var i = 0; i < sheets.length; i++) {
+    var sh = sheets[i];
+    var nm = sh.getName();
+    if (nm === HT_CALC_SHEET || nm === HT_DB_SHEET || nm === HT_ASSETS_SHEET) {
+      if (!sh.isSheetHidden()) sh.hideSheet();
+      continue;
+    }
+    sh.setHiddenGridlines(true);
+    var dr = sh.getDataRange();
+    if (dr.getNumRows() > 0 && dr.getNumColumns() > 0) {
+      dr.setFontFamily(HT_FONT_FAMILY);
+    }
   }
 }
 
@@ -62,7 +105,44 @@ function applyPastelCheckboxes_(rng, accent, fontSize) {
   if (fontSize) rng.setFontSize(fontSize);
 }
 
+/**
+ * Inserts checkboxes week-by-week on C17:AG36 so each Week 1..5 preserves
+ * its signature pastel checkbox accent color from the template!
+ */
+function applyWeeklyPastelCheckboxes_(tracker, fallbackAccent) {
+  var gridRng = tracker.getRange("C17:AG36");
+  var allVals = gridRng.getValues();
+  gridRng.insertCheckboxes()
+    .setHorizontalAlignment("center")
+    .setVerticalAlignment("middle")
+    .setFontSize(10);
+
+  for (var w = 0; w < HT_WEEK_RANGES.length; w++) {
+    var wkColor = tracker.getRange(HT_WEEK_SAMPLE_CELLS[w]).getFontColor();
+    if (!wkColor || wkColor === "#000000" || wkColor.toLowerCase() === "#ffffff") {
+      wkColor = fallbackAccent;
+    }
+    tracker.getRange(HT_WEEK_RANGES[w]).setFontColor(wkColor);
+  }
+  // Restore exact boolean values in ONE bulk call
+  gridRng.setValues(allVals);
+}
+
+function cleanDuplicateOnEditTriggers_() {
+  try {
+    var triggers = ScriptApp.getProjectTriggers();
+    for (var i = 0; i < triggers.length; i++) {
+      if (triggers[i].getHandlerFunction() === "onEdit") {
+        ScriptApp.deleteTrigger(triggers[i]);
+      }
+    }
+  } catch (err) {
+    // Simple trigger works automatically even without trigger permissions
+  }
+}
+
 function setupMobilePortrait_(ss) {
+  polishVisibleSheets_(ss);
   var wsWk = findSheetContaining_(ss, "Tuần Này");
   var wsDt = findSheetContaining_(ss, "Việc Hôm Nay");
   var wsGo = findSheetContaining_(ss, "Mục Tiêu");
@@ -81,17 +161,18 @@ function setupMobilePortrait_(ss) {
     converted++;
   }
 
-  hideIfExists_(ss, HT_CALC_SHEET);
-  hideIfExists_(ss, HT_DB_SHEET);
+  cleanDuplicateOnEditTriggers_();
   SpreadsheetApp.flush();
   ss.toast(
-    "Bản Điện Thoại (Mobile Portrait v3.9 Turbo): Đã bật Checkbox Pastel cho " + converted + " bảng & tối ưu tốc độ lưu Tuần/Ngày/Năm!",
-    "Habit Tracker Mobile v3.9 — Sẵn sàng 📱⚡",
-    8
+    "Đã bật Checkbox Pastel (" + converted + " bảng), font Be Vietnam Pro & ẩn lưới cho bản Mobile!",
+    "Habit Tracker Mobile v3.9 — Sẵn sàng ⚡",
+    6
   );
 }
 
 function setupDesktopEdition_(ss) {
+  polishVisibleSheets_(ss);
+
   var tracker = findDesktopTrackerSheet_(ss);
   var dt = findSheetContaining_(ss, "Nhiệm Vụ Ngày");
   var yg = findSheetContaining_(ss, "Yearly Goals");
@@ -99,7 +180,7 @@ function setupDesktopEdition_(ss) {
 
   if (tracker) {
     var accent = tracker.getRange("B14").getBackground() || "#C88E8E";
-    applyPastelCheckboxes_(tracker.getRange("C17:AG36"), accent, 0);
+    applyWeeklyPastelCheckboxes_(tracker, accent);
     converted++;
 
     var maxR = tracker.getMaxRows();
@@ -118,75 +199,148 @@ function setupDesktopEdition_(ss) {
   }
 
   if (dt) {
-    applyPastelCheckboxes_(dt.getRange("B9:B28"), dt.getRange("B2").getBackground() || "#B57A7A", 0);
+    applyPastelCheckboxes_(dt.getRange("B9:B28"), dt.getRange("B2").getBackground() || "#B57A7A", 10);
     converted++;
   }
 
   if (yg) {
-    applyPastelCheckboxes_(yg.getRange("B6:B25"), yg.getRange("B2").getBackground() || "#B57A7A", 0);
+    applyPastelCheckboxes_(yg.getRange("B6:B25"), yg.getRange("B2").getBackground() || "#B57A7A", 10);
     converted++;
   }
 
-  hideIfExists_(ss, HT_CALC_SHEET);
-  hideIfExists_(ss, HT_DB_SHEET);
+  initDesktopDatabaseSnapshot_(ss, tracker, dt, yg);
+  cleanDuplicateOnEditTriggers_();
   SpreadsheetApp.flush();
+
   ss.toast(
-    "Bản Desktop v3.9 Turbo: Đã bật Checkbox Pastel cho " + converted + " bảng & kích hoạt bộ máy lưu O(1) siêu tốc!",
+    "Đã bật Checkbox Pastel (" + converted + " bảng), font Be Vietnam Pro, ẩn lưới & khởi tạo _Database 0ms!",
     "Habit Tracker v3.9 Turbo — Sẵn sàng ⚡✨",
-    8
+    7
   );
 }
 
 /**
- * Fast Simple Trigger: instant O(1) range-guard exit on normal checkbox ticks (0 extra RPCs!).
+ * Ensures `_Calc` keys & `_Database` contain the active Month, Date, and Year snapshot
+ * right after setup so switching away & back preserves every initial entry cleanly.
+ */
+function initDesktopDatabaseSnapshot_(ss, tracker, dt, yg) {
+  var wsCalc = ss.getSheetByName(HT_CALC_SHEET);
+  var wsDb = ss.getSheetByName(HT_DB_SHEET);
+  if (!wsCalc || !wsDb) return;
+
+  if (tracker) {
+    var sel = tracker.getRange("B3:B5").getValues();
+    var mo = HT_MONTHS[String(sel[0][0] || "").trim().toLowerCase()] || 0;
+    var yr = parseInt(sel[2][0], 10) || 0;
+    if (mo >= 1 && mo <= 12 && yr >= 2000 && yr <= 2100) {
+      var mKey = pad4_(yr) + "-" + pad2_(mo);
+      wsCalc.getRange(HT_KEY_MONTH_CELL).setNumberFormat("@").setValue(mKey);
+      var mIdx = buildColIndex_(wsDb, 1, HT_N_HABITS_DESK);
+      if (!mIdx.map[mKey]) {
+        saveDesktopMonthToDb_(ss, wsDb, mIdx, mKey, tracker.getRange("B17:AI36").getValues());
+      }
+    }
+  }
+
+  if (dt) {
+    var dSel = dt.getRange("D5:F5").getValues()[0];
+    var dDay = parseInt(dSel[0], 10) || 0;
+    var dMo = HT_MONTHS[String(dSel[1] || "").trim().toLowerCase()] || 0;
+    var dYr = parseInt(dSel[2], 10) || 0;
+    if (dDay >= 1 && dMo >= 1 && dMo <= 12 && dYr >= 2000 && dYr <= 2100) {
+      var dKey = pad4_(dYr) + "-" + pad2_(dMo) + "-" + pad2_(dDay);
+      wsCalc.getRange(HT_KEY_DAILY_CELL).setNumberFormat("@").setValue(dKey);
+      var dtIdx = buildColIndex_(wsDb, 59, HT_N_TASKS_DESK);
+      if (!dtIdx.map[dKey]) {
+        saveDesktopDailyToDb_(wsDb, dtIdx, dKey, dt.getRange("B9:F28").getValues(), dt.getRange("B31").getValue());
+      }
+    }
+  }
+
+  if (yg) {
+    var yYr = parseInt(yg.getRange("I2").getValue(), 10) || 0;
+    if (yYr >= 2000 && yYr <= 2100) {
+      wsCalc.getRange(HT_KEY_YEAR_CELL).setValue(yYr);
+      var gIdx = buildColIndex_(wsDb, 47, HT_N_GOALS_DESK);
+      if (!gIdx.map[String(yYr)]) {
+        saveDesktopGoalsToDb_(wsDb, gIdx, yYr, yg.getRange("B6:F25").getValues());
+      }
+    }
+  }
+}
+
+/**
+ * STRICT 0ms FAST-EXIT SIMPLE TRIGGER:
+ *   - Normal checkbox ticks (`row >= 6`), habit edits, task edits, and goal edits
+ *     EXIT IMMEDIATELY in 0ms with ZERO Spreadsheet API calls & ZERO `_Database` writes!
+ *   - ONLY fires document-locked bulk `_Database` sync when a Month / Year / Date
+ *     selector dropdown changes!
  */
 function onEdit(e) {
   if (!e || !e.range) return;
   var row = e.range.getRow();
   var col = e.range.getColumn();
-  // Fast-path exit: dropdown selectors ONLY live in rows 2, 3, or 5!
-  // Any checkbox tick (row >= 6) exits in < 1ms with ZERO Spreadsheet API calls!
+
+  // 0ms fast-exit guard: selector dropdowns ONLY live in exact coordinates in rows 2, 3, or 5!
   if (row > 5 || row < 2) return;
+  var isCandidate =
+    (col === 2 && (row === 3 || row === 5)) ||            // Desktop Monthly (B3, B5) / Mobile (B5)
+    (row === 5 && col >= 3 && col <= 7) ||                // Desktop Daily (D5:F5) / Mobile (C5, F5, G5)
+    (row === 2 && col === 9) ||                           // Desktop Yearly Goals (I2)
+    (row === 3 && col === 5);                             // Mobile Yearly Goals (E3)
+  if (!isCandidate) return;
 
   var sh = e.range.getSheet();
   var name = sh.getName();
-  if (name === HT_CALC_SHEET || name === HT_DB_SHEET ||
-      name.indexOf("Hướng Dẫn") !== -1 || name.indexOf("Tổng Kết") !== -1) return;
+  if (name === HT_CALC_SHEET || name === HT_DB_SHEET || name === HT_ASSETS_SHEET ||
+      name.indexOf("Hướng Dẫn") !== -1 || name.indexOf("Tổng Kết") !== -1) {
+    return;
+  }
 
   var ss = e.source;
   if (name.indexOf("Tuần Này") !== -1) {
     if (row === 5 && (col === 2 || col === 3 || col === 6)) {
-      handleMobileWeekSwitch_(ss, sh);
+      withDocLock_(function () { handleMobileWeekSwitch_(ss, sh); });
     }
     return;
   }
   if (name.indexOf("Việc Hôm Nay") !== -1) {
     if (row === 5 && (col === 2 || col === 3 || col === 7)) {
-      handleMobileDailyTasksSwitch_(ss, sh);
+      withDocLock_(function () { handleMobileDailyTasksSwitch_(ss, sh); });
     }
     return;
   }
   if (name.indexOf("Mục Tiêu") !== -1) {
     if (row === 3 && col === 5) {
-      handleMobileGoalsSwitch_(ss, sh);
+      withDocLock_(function () { handleMobileGoalsSwitch_(ss, sh); });
     }
     return;
   }
   if (name.indexOf("Nhiệm Vụ Ngày") !== -1) {
     if (row === 5 && col >= 4 && col <= 6) {
-      handleDesktopDailyTasksSwitch_(ss, sh);
+      withDocLock_(function () { handleDesktopDailyTasksSwitch_(ss, sh); });
     }
     return;
   }
   if (name.indexOf("Yearly Goals") !== -1) {
     if (row === 2 && col === 9) {
-      handleDesktopYearlyGoalsSwitch_(ss, sh);
+      withDocLock_(function () { handleDesktopYearlyGoalsSwitch_(ss, sh); });
     }
     return;
   }
-  // Monthly Tracker dropdowns: B3 (row 3, col 2) or B5 (row 5, col 2)
+  // Monthly Tracker dropdowns: B3 (Month) or B5 (Year)
   if (col === 2 && (row === 3 || row === 5)) {
-    handleDesktopMonthlySwitch_(ss, sh);
+    withDocLock_(function () { handleDesktopMonthlySwitch_(ss, sh); });
+  }
+}
+
+function withDocLock_(fn) {
+  var lock = LockService.getDocumentLock();
+  if (!lock.tryLock(8000)) return;
+  try {
+    fn();
+  } finally {
+    lock.releaseLock();
   }
 }
 
@@ -213,6 +367,277 @@ function buildColIndex_(wsDb, keyCol, blockSize) {
 }
 
 // ============================================================================
+//  DESKTOP 5-TAB ZERO-LAG BULK PERSISTENCE ENGINE (YYYY-MM, YYYY, YYYY-MM-DD)
+// ============================================================================
+function handleDesktopMonthlySwitch_(ss, ws) {
+  var wsCalc = ss.getSheetByName(HT_CALC_SHEET);
+  var wsDb = ss.getSheetByName(HT_DB_SHEET);
+  if (!wsCalc || !wsDb) return;
+
+  // 1 batched read for Month (B3) + Year (B5)
+  var sel = ws.getRange("B3:B5").getValues();
+  var oldKey = keyStr_(wsCalc.getRange(HT_KEY_MONTH_CELL).getValue());
+  var newMo = HT_MONTHS[String(sel[0][0] || "").trim().toLowerCase()] || 0;
+  var newYr = parseInt(sel[2][0], 10) || 0;
+  if (newMo < 1 || newMo > 12 || newYr < 2000 || newYr > 2100) return;
+
+  var newKey = pad4_(newYr) + "-" + pad2_(newMo);
+  if (oldKey === newKey) return;
+
+  // 1 bulk read for B17:AI36 (B=0 Name, C..AG=1..31 Grid, AH=32 Gap, AI=33 Goal)
+  var curAll = ws.getRange("B17:AI36").getValues();
+  var mIdx = buildColIndex_(wsDb, 1, HT_N_HABITS_DESK);
+
+  if (oldKey.length === 7 && oldKey.charAt(4) === "-") {
+    saveDesktopMonthToDb_(ss, wsDb, mIdx, oldKey, curAll);
+  }
+
+  var srcRow = mIdx.map[newKey] || 0;
+  var loadGrid = [];
+  var gridChanged = false;
+  var loadedFromDb = false;
+
+  if (srcRow > 0) {
+    loadedFromDb = true;
+    var srcBlock = wsDb.getRange(srcRow, 1, HT_N_HABITS_DESK, 35).getValues();
+    var loadNames = [];
+    var loadGoals = [];
+    var hasAnyName = false;
+    var namesChanged = false;
+    var goalsChanged = false;
+    for (var r = 0; r < HT_N_HABITS_DESK; r++) {
+      var nm = srcBlock[r][2];
+      var gl = srcBlock[r][3];
+      if (String(nm || "").trim() !== "") hasAnyName = true;
+      if (String(curAll[r][0] || "") !== String(nm || "")) namesChanged = true;
+      if (String(curAll[r][33] || "") !== String(gl || "")) goalsChanged = true;
+      loadNames.push([nm]);
+      loadGoals.push([gl]);
+      var rowOut = [];
+      for (var d = 0; d < 31; d++) {
+        var bVal = isChecked_(srcBlock[r][4 + d]);
+        if (isChecked_(curAll[r][1 + d]) !== bVal) gridChanged = true;
+        rowOut.push(bVal);
+      }
+      loadGrid.push(rowOut);
+    }
+    if (hasAnyName && namesChanged) ws.getRange("B17:B36").setValues(loadNames);
+    if (hasAnyName && goalsChanged) ws.getRange("AI17:AI36").setValues(loadGoals);
+    if (gridChanged) ws.getRange("C17:AG36").setValues(loadGrid);
+  } else {
+    for (var r2 = 0; r2 < HT_N_HABITS_DESK; r2++) {
+      var blankRow = [];
+      for (var d2 = 0; d2 < 31; d2++) {
+        if (isChecked_(curAll[r2][1 + d2])) gridChanged = true;
+        blankRow.push(false);
+      }
+      loadGrid.push(blankRow);
+    }
+    if (gridChanged) ws.getRange("C17:AG36").setValues(loadGrid);
+  }
+
+  wsCalc.getRange(HT_KEY_MONTH_CELL).setNumberFormat("@").setValue(newKey);
+  ss.toast(
+    "Đã lưu " + (oldKey || "tháng cũ") + " → " +
+    (loadedFromDb ? "mở dữ liệu tháng " + newKey : "tạo tháng mới trống " + newKey) + "!",
+    "📅 Đồng bộ Tháng",
+    3
+  );
+}
+
+function saveDesktopMonthToDb_(ss, wsDb, mIdx, saveKey, curAll) {
+  var rawBlock = [];
+  for (var r = 0; r < HT_N_HABITS_DESK; r++) {
+    var row = [saveKey, r + 1, curAll[r][0], curAll[r][33]];
+    for (var d = 0; d < 31; d++) row.push(isChecked_(curAll[r][1 + d]));
+    rawBlock.push(row);
+  }
+  var dstRow = mIdx.map[saveKey] || 0;
+  if (dstRow === 0) {
+    dstRow = mIdx.nextRow;
+    mIdx.map[saveKey] = dstRow;
+    mIdx.nextRow += HT_N_HABITS_DESK;
+  }
+  wsDb.getRange(dstRow, 1, HT_N_HABITS_DESK, 1).setNumberFormat("@");
+  wsDb.getRange(dstRow, 1, HT_N_HABITS_DESK, 35).setValues(rawBlock);
+
+  var yr = parseInt(saveKey.substring(0, 4), 10);
+  var mo = parseInt(saveKey.substring(5, 7), 10);
+  var dimDays = new Date(yr, mo, 0).getDate();
+
+  var activeRows = [];
+  var totalDone = 0;
+  var totalGoal = 0;
+  var bestStreak = 0;
+  for (var i = 0; i < HT_N_HABITS_DESK; i++) {
+    if (String(curAll[i][0] || "").trim() !== "") {
+      activeRows.push(i);
+      var gVal = Number(curAll[i][33]);
+      totalGoal += (gVal > 0) ? Math.min(gVal, dimDays) : dimDays;
+      var run = 0;
+      for (var k = 0; k < dimDays; k++) {
+        if (isChecked_(curAll[i][1 + k])) {
+          totalDone++;
+          run++;
+          if (run > bestStreak) bestStreak = run;
+        } else {
+          run = 0;
+        }
+      }
+    }
+  }
+
+  var grownDays = 0;
+  var perfectDays = 0;
+  var thr3 = getGrownThreshold_(ss);
+  if (activeRows.length > 0) {
+    for (var dayIdx = 0; dayIdx < dimDays; dayIdx++) {
+      var doneDay = 0;
+      for (var a = 0; a < activeRows.length; a++) {
+        if (isChecked_(curAll[activeRows[a]][1 + dayIdx])) doneDay++;
+      }
+      var pct = doneDay / activeRows.length;
+      if (pct >= thr3 - 1e-6) grownDays++;
+      if (pct >= 0.999) perfectDays++;
+    }
+  }
+
+  var overall = totalGoal > 0 ? Math.min(1, totalDone / totalGoal) : 0;
+  var sumIdx = buildColIndex_(wsDb, 37, 1);
+  var sRow = sumIdx.map[saveKey] || sumIdx.nextRow;
+  wsDb.getRange(sRow, 37).setNumberFormat("@");
+  wsDb.getRange(sRow, 37, 1, 9).setValues([[saveKey, yr, mo, totalDone, totalGoal, overall, grownDays, perfectDays, bestStreak]]);
+}
+
+function saveDesktopGoalsToDb_(wsDb, gIdx, saveYr, curYG) {
+  var ygBlock = [];
+  var gDone = 0;
+  var gTot = 0;
+  for (var r = 0; r < HT_N_GOALS_DESK; r++) {
+    var chk = isChecked_(curYG[r][0]);
+    var gTxt = curYG[r][1];
+    if (String(gTxt || "").trim() !== "") {
+      gTot++;
+      if (chk) gDone++;
+    }
+    ygBlock.push([saveYr, r + 1, chk, gTxt, curYG[r][2], curYG[r][3], curYG[r][4]]);
+  }
+  var key = String(saveYr);
+  var dstR = gIdx.map[key] || gIdx.nextRow;
+  if (!gIdx.map[key]) {
+    gIdx.map[key] = dstR;
+    gIdx.nextRow += HT_N_GOALS_DESK;
+  }
+  wsDb.getRange(dstR, 47, HT_N_GOALS_DESK, 7).setValues(ygBlock);
+
+  var sIdx = buildColIndex_(wsDb, 55, 1);
+  var sR = sIdx.map[key] || sIdx.nextRow;
+  wsDb.getRange(sR, 55, 1, 3).setValues([[saveYr, gDone, gTot]]);
+}
+
+function handleDesktopYearlyGoalsSwitch_(ss, ws) {
+  var wsCalc = ss.getSheetByName(HT_CALC_SHEET);
+  var wsDb = ss.getSheetByName(HT_DB_SHEET);
+  if (!wsCalc || !wsDb) return;
+
+  var oldYr = parseInt(wsCalc.getRange(HT_KEY_YEAR_CELL).getValue(), 10) || 0;
+  var newYr = parseInt(ws.getRange("I2").getValue(), 10) || 0;
+  if (newYr < 2000 || newYr > 2100 || oldYr === newYr) return;
+
+  var gIdx = buildColIndex_(wsDb, 47, HT_N_GOALS_DESK);
+  if (oldYr >= 2000) {
+    saveDesktopGoalsToDb_(wsDb, gIdx, oldYr, ws.getRange("B6:F25").getValues());
+  }
+
+  var srcR = gIdx.map[String(newYr)] || 0;
+  var loadYG = [];
+  if (srcR > 0) {
+    var srcBlock = wsDb.getRange(srcR, 47, HT_N_GOALS_DESK, 7).getValues();
+    for (var i = 0; i < HT_N_GOALS_DESK; i++) {
+      loadYG.push([isChecked_(srcBlock[i][2]), srcBlock[i][3], srcBlock[i][4], srcBlock[i][5], srcBlock[i][6]]);
+    }
+  } else {
+    for (var j = 0; j < HT_N_GOALS_DESK; j++) loadYG.push([false, "", "", "", ""]);
+  }
+  ws.getRange("B6:F25").setValues(loadYG);
+  wsCalc.getRange(HT_KEY_YEAR_CELL).setValue(newYr);
+
+  ss.toast(
+    "Đã lưu Mục tiêu năm " + oldYr + " → " + (srcR > 0 ? "mở năm " + newYr : "tạo năm mới " + newYr) + "!",
+    "🎯 Đồng bộ Năm",
+    3
+  );
+}
+
+function saveDesktopDailyToDb_(wsDb, dtIdx, saveKey, curTasks, curNote) {
+  var block = [];
+  for (var r = 0; r < HT_N_TASKS_DESK; r++) {
+    block.push([
+      saveKey, r + 1, isChecked_(curTasks[r][0]), curTasks[r][1], curTasks[r][2],
+      curTasks[r][3], curTasks[r][4], (r === 0 ? curNote : "")
+    ]);
+  }
+  var dstR = dtIdx.map[saveKey] || dtIdx.nextRow;
+  if (!dtIdx.map[saveKey]) {
+    dtIdx.map[saveKey] = dstR;
+    dtIdx.nextRow += HT_N_TASKS_DESK;
+  }
+  wsDb.getRange(dstR, 59, HT_N_TASKS_DESK, 1).setNumberFormat("@");
+  wsDb.getRange(dstR, 59, HT_N_TASKS_DESK, 8).setValues(block);
+}
+
+function handleDesktopDailyTasksSwitch_(ss, ws) {
+  var wsCalc = ss.getSheetByName(HT_CALC_SHEET);
+  var wsDb = ss.getSheetByName(HT_DB_SHEET);
+  if (!wsCalc || !wsDb) return;
+
+  // 1 batched read for Day (D5), Month (E5), Year (F5)
+  var sel = ws.getRange("D5:F5").getValues()[0];
+  var oldKey = keyStr_(wsCalc.getRange(HT_KEY_DAILY_CELL).getValue());
+  var newDay = parseInt(sel[0], 10) || 0;
+  var newMo = HT_MONTHS[String(sel[1] || "").trim().toLowerCase()] || 0;
+  var newYr = parseInt(sel[2], 10) || 0;
+  if (newDay < 1 || newMo < 1 || newMo > 12 || newYr < 2000 || newYr > 2100) return;
+
+  var maxDay = new Date(newYr, newMo, 0).getDate();
+  if (newDay > maxDay) {
+    newDay = maxDay;
+    ws.getRange("D5").setValue(newDay);
+  }
+  var newKey = pad4_(newYr) + "-" + pad2_(newMo) + "-" + pad2_(newDay);
+  if (oldKey === newKey) return;
+
+  var dtIdx = buildColIndex_(wsDb, 59, HT_N_TASKS_DESK);
+  if (oldKey.length === 10) {
+    saveDesktopDailyToDb_(wsDb, dtIdx, oldKey, ws.getRange("B9:F28").getValues(), ws.getRange("B31").getValue());
+  }
+
+  var srcR = dtIdx.map[newKey] || 0;
+  var loadTasks = [];
+  var loadNote = "";
+  if (srcR > 0) {
+    var srcArr = wsDb.getRange(srcR, 59, HT_N_TASKS_DESK, 8).getValues();
+    for (var i = 0; i < HT_N_TASKS_DESK; i++) {
+      loadTasks.push([isChecked_(srcArr[i][2]), srcArr[i][3], srcArr[i][4], srcArr[i][5], srcArr[i][6]]);
+    }
+    loadNote = srcArr[0][7];
+  } else {
+    for (var j = 0; j < HT_N_TASKS_DESK; j++) {
+      loadTasks.push([false, "", "", "", ""]);
+    }
+  }
+  ws.getRange("B9:F28").setValues(loadTasks);
+  ws.getRange("B31").setValue(loadNote);
+  wsCalc.getRange(HT_KEY_DAILY_CELL).setNumberFormat("@").setValue(newKey);
+
+  ss.toast(
+    "Đã lưu ngày " + (oldKey || "cũ") + " → " + (srcR > 0 ? "mở ngày " + newKey : "ngày mới trống " + newKey) + "!",
+    "📝 Nhiệm Vụ Ngày",
+    3
+  );
+}
+
+// ============================================================================
 //  MOBILE PORTRAIT PERSISTENCE ENGINE (YYYY-MM-W# & YYYY — BATCHED O(1))
 // ============================================================================
 function parseWeekNum_(raw) {
@@ -225,7 +650,6 @@ function handleMobileWeekSwitch_(ss, ws) {
   var wsDb = ss.getSheetByName(HT_DB_SHEET);
   if (!wsCalc || !wsDb) return;
 
-  // 1 batched read for Month (B5), Year (C5), Week (F5)
   var sel = ws.getRange("B5:F5").getValues()[0];
   var oldKey = keyStr_(wsCalc.getRange("E14").getValue());
   var newMo = HT_MONTHS[String(sel[0] || "").trim().toLowerCase()] || 0;
@@ -236,16 +660,12 @@ function handleMobileWeekSwitch_(ss, ws) {
   var newKey = pad4_(newYr) + "-" + pad2_(newMo) + "-W" + newWk;
   if (oldKey === newKey) return;
 
-  // Single-pass O(1) index for BOTH save & load!
   var wkIdx = buildColIndex_(wsDb, 1, HT_N_HABITS_MOB);
-
-  // 1) Batch-read B21:I35 (names col 0 + 7-day grid cols 1..7) in ONE RPC!
   var curAll = ws.getRange("B21:I35").getValues();
   if (oldKey.indexOf("-W") !== -1) {
     saveMobileWeekToDb_(ss, wsDb, wkIdx, oldKey, curAll);
   }
 
-  // 2) O(1) load newKey
   var srcRow = wkIdx.map[newKey] || 0;
   var loadGrid = [];
   if (srcRow > 0) {
@@ -272,6 +692,7 @@ function handleMobileWeekSwitch_(ss, ws) {
   }
 
   wsCalc.getRange("E14").setValue(newKey);
+  ss.toast("Đã lưu " + oldKey + " → mở " + newKey + "!", "📱 Tuần Này", 3);
 }
 
 function saveMobileWeekToDb_(ss, wsDb, wkIdx, saveKey, curAll) {
@@ -353,9 +774,7 @@ function handleMobileGoalsSwitch_(ss, ws) {
   if (newYr < 2000 || newYr > 2100 || oldYr === newYr) return;
 
   var gIdx = buildColIndex_(wsDb, 23, HT_N_GOALS_MOB);
-
   if (oldYr >= 2000) {
-    // 1 batched read for B11:C22
     var curBC = ws.getRange("B11:C22").getValues();
     var block = [];
     var gDone = 0;
@@ -390,253 +809,7 @@ function handleMobileGoalsSwitch_(ss, ws) {
   }
   ws.getRange("B11:C22").setValues(loadBC);
   wsCalc.getRange("E15").setValue(newYr);
-}
-
-// ============================================================================
-//  DESKTOP 5-TAB PERSISTENCE ENGINE (YYYY-MM, YYYY, YYYY-MM-DD — BATCHED O(1))
-// ============================================================================
-function handleDesktopMonthlySwitch_(ss, ws) {
-  var wsCalc = ss.getSheetByName(HT_CALC_SHEET);
-  var wsDb = ss.getSheetByName(HT_DB_SHEET);
-  if (!wsCalc || !wsDb) return;
-
-  // 1 batched read for B3:B5 (Month + Year)
-  var sel = ws.getRange("B3:B5").getValues();
-  var oldKey = keyStr_(wsCalc.getRange("AN2").getValue());
-  var newMo = HT_MONTHS[String(sel[0][0] || "").trim().toLowerCase()] || 0;
-  var newYr = parseInt(sel[2][0], 10) || 0;
-  if (newMo < 1 || newMo > 12 || newYr < 2000 || newYr > 2100) return;
-
-  var newKey = pad4_(newYr) + "-" + pad2_(newMo);
-  if (oldKey === newKey) return;
-
-  // 1 batched read for B17:AI36 (Col B=0 Name, C..AG=1..31 Grid, AH=32 Spacer, AI=33 Goal)
-  var curAll = ws.getRange("B17:AI36").getValues();
-  // Single-pass O(1) index for BOTH save & load!
-  var mIdx = buildColIndex_(wsDb, 1, HT_N_HABITS_DESK);
-
-  if (oldKey.length === 7 && oldKey.charAt(4) === "-") {
-    saveDesktopMonthToDb_(ss, wsDb, mIdx, oldKey, curAll);
-  }
-
-  var srcRow = mIdx.map[newKey] || 0;
-  var loadGrid = [];
-  var gridChanged = false;
-  if (srcRow > 0) {
-    var srcBlock = wsDb.getRange(srcRow, 1, HT_N_HABITS_DESK, 35).getValues();
-    var loadNames = [];
-    var loadGoals = [];
-    var hasAnyName = false;
-    var namesChanged = false;
-    var goalsChanged = false;
-    for (var r = 0; r < HT_N_HABITS_DESK; r++) {
-      var nm = srcBlock[r][2];
-      var gl = srcBlock[r][3];
-      if (String(nm || "").trim() !== "") hasAnyName = true;
-      if (String(curAll[r][0] || "") !== String(nm || "")) namesChanged = true;
-      if (String(curAll[r][33] || "") !== String(gl || "")) goalsChanged = true;
-      loadNames.push([nm]);
-      loadGoals.push([gl]);
-      var rowOut = [];
-      for (var d = 0; d < 31; d++) {
-        var bVal = isChecked_(srcBlock[r][4 + d]);
-        if (isChecked_(curAll[r][1 + d]) !== bVal) gridChanged = true;
-        rowOut.push(bVal);
-      }
-      loadGrid.push(rowOut);
-    }
-    if (hasAnyName && namesChanged) ws.getRange("B17:B36").setValues(loadNames);
-    if (hasAnyName && goalsChanged) ws.getRange("AI17:AI36").setValues(loadGoals);
-    if (gridChanged) ws.getRange("C17:AG36").setValues(loadGrid);
-  } else {
-    for (var r2 = 0; r2 < HT_N_HABITS_DESK; r2++) {
-      var blankRow = [];
-      for (var d2 = 0; d2 < 31; d2++) {
-        if (isChecked_(curAll[r2][1 + d2])) gridChanged = true;
-        blankRow.push(false);
-      }
-      loadGrid.push(blankRow);
-    }
-    if (gridChanged) ws.getRange("C17:AG36").setValues(loadGrid);
-  }
-
-  wsCalc.getRange("AN2").setNumberFormat("@").setValue(newKey);
-}
-
-function saveDesktopMonthToDb_(ss, wsDb, mIdx, saveKey, curAll) {
-  var rawBlock = [];
-  for (var r = 0; r < HT_N_HABITS_DESK; r++) {
-    var row = [saveKey, r + 1, curAll[r][0], curAll[r][33]];
-    for (var d = 0; d < 31; d++) row.push(isChecked_(curAll[r][1 + d]));
-    rawBlock.push(row);
-  }
-  var dstRow = mIdx.map[saveKey] || 0;
-  if (dstRow === 0) {
-    dstRow = mIdx.nextRow;
-    mIdx.map[saveKey] = dstRow;
-    mIdx.nextRow += HT_N_HABITS_DESK;
-  }
-  wsDb.getRange(dstRow, 1, HT_N_HABITS_DESK, 1).setNumberFormat("@");
-  wsDb.getRange(dstRow, 1, HT_N_HABITS_DESK, 35).setValues(rawBlock);
-
-  var yr = parseInt(saveKey.substring(0, 4), 10);
-  var mo = parseInt(saveKey.substring(5, 7), 10);
-  var dimDays = new Date(yr, mo, 0).getDate();
-
-  var activeRows = [];
-  var totalDone = 0;
-  var totalGoal = 0;
-  var bestStreak = 0;
-  for (var i = 0; i < HT_N_HABITS_DESK; i++) {
-    if (String(curAll[i][0] || "").trim() !== "") {
-      activeRows.push(i);
-      var gVal = Number(curAll[i][33]);
-      totalGoal += (gVal > 0) ? Math.min(gVal, dimDays) : dimDays;
-      var run = 0;
-      for (var k = 0; k < dimDays; k++) {
-        if (isChecked_(curAll[i][1 + k])) {
-          totalDone++;
-          run++;
-          if (run > bestStreak) bestStreak = run;
-        } else {
-          run = 0;
-        }
-      }
-    }
-  }
-
-  var grownDays = 0;
-  var perfectDays = 0;
-  var thr3 = getGrownThreshold_(ss);
-  if (activeRows.length > 0) {
-    for (var dayIdx = 0; dayIdx < dimDays; dayIdx++) {
-      var doneDay = 0;
-      for (var a = 0; a < activeRows.length; a++) {
-        if (isChecked_(curAll[activeRows[a]][1 + dayIdx])) doneDay++;
-      }
-      var pct = doneDay / activeRows.length;
-      if (pct >= thr3 - 1e-6) grownDays++;
-      if (pct >= 0.999) perfectDays++;
-    }
-  }
-
-  var overall = totalGoal > 0 ? Math.min(1, totalDone / totalGoal) : 0;
-  var sumIdx = buildColIndex_(wsDb, 37, 1);
-  var sRow = sumIdx.map[saveKey] || sumIdx.nextRow;
-  wsDb.getRange(sRow, 37).setNumberFormat("@");
-  wsDb.getRange(sRow, 37, 1, 9).setValues([[saveKey, yr, mo, totalDone, totalGoal, overall, grownDays, perfectDays, bestStreak]]);
-}
-
-function handleDesktopYearlyGoalsSwitch_(ss, ws) {
-  var wsCalc = ss.getSheetByName(HT_CALC_SHEET);
-  var wsDb = ss.getSheetByName(HT_DB_SHEET);
-  if (!wsCalc || !wsDb) return;
-
-  var oldYr = parseInt(wsCalc.getRange("AN3").getValue(), 10) || 0;
-  var newYr = parseInt(ws.getRange("I2").getValue(), 10) || 0;
-  if (newYr < 2000 || newYr > 2100 || oldYr === newYr) return;
-
-  var gIdx = buildColIndex_(wsDb, 47, HT_N_GOALS_DESK);
-
-  if (oldYr >= 2000) {
-    var curYG = ws.getRange("B6:F25").getValues();
-    var ygBlock = [];
-    var gDone = 0;
-    var gTot = 0;
-    for (var r = 0; r < HT_N_GOALS_DESK; r++) {
-      var chk = isChecked_(curYG[r][0]);
-      var gTxt = curYG[r][1];
-      if (String(gTxt || "").trim() !== "") {
-        gTot++;
-        if (chk) gDone++;
-      }
-      ygBlock.push([oldYr, r + 1, chk, gTxt, curYG[r][2], curYG[r][3], curYG[r][4]]);
-    }
-    var oldKey = String(oldYr);
-    var dstR = gIdx.map[oldKey] || gIdx.nextRow;
-    wsDb.getRange(dstR, 47, HT_N_GOALS_DESK, 7).setValues(ygBlock);
-
-    var sIdx = buildColIndex_(wsDb, 55, 1);
-    var sR = sIdx.map[oldKey] || sIdx.nextRow;
-    wsDb.getRange(sR, 55, 1, 3).setValues([[oldYr, gDone, gTot]]);
-  }
-
-  var srcR = gIdx.map[String(newYr)] || 0;
-  var loadYG = [];
-  if (srcR > 0) {
-    var srcBlock = wsDb.getRange(srcR, 47, HT_N_GOALS_DESK, 7).getValues();
-    for (var i = 0; i < HT_N_GOALS_DESK; i++) {
-      loadYG.push([isChecked_(srcBlock[i][2]), srcBlock[i][3], srcBlock[i][4], srcBlock[i][5], srcBlock[i][6]]);
-    }
-  } else {
-    for (var j = 0; j < HT_N_GOALS_DESK; j++) loadYG.push([false, "", "", "", ""]);
-  }
-  ws.getRange("B6:F25").setValues(loadYG);
-  wsCalc.getRange("AN3").setValue(newYr);
-}
-
-// ============================================================================
-//  DAILY ONE-OFF TASKS PERSISTENCE ENGINE (YYYY-MM-DD — BATCHED O(1))
-// ============================================================================
-function handleDesktopDailyTasksSwitch_(ss, ws) {
-  var wsCalc = ss.getSheetByName(HT_CALC_SHEET);
-  var wsDb = ss.getSheetByName(HT_DB_SHEET);
-  if (!wsCalc || !wsDb) return;
-
-  // 1 batched read for D5:F5 (Day, Month, Year)
-  var sel = ws.getRange("D5:F5").getValues()[0];
-  var oldKey = keyStr_(wsCalc.getRange("AN12").getValue());
-  var newDay = parseInt(sel[0], 10) || 0;
-  var newMo = HT_MONTHS[String(sel[1] || "").trim().toLowerCase()] || 0;
-  var newYr = parseInt(sel[2], 10) || 0;
-  if (newDay < 1 || newMo < 1 || newMo > 12 || newYr < 2000 || newYr > 2100) return;
-
-  var maxDay = new Date(newYr, newMo, 0).getDate();
-  if (newDay > maxDay) {
-    newDay = maxDay;
-    ws.getRange("D5").setValue(newDay);
-  }
-  var newKey = pad4_(newYr) + "-" + pad2_(newMo) + "-" + pad2_(newDay);
-  if (oldKey === newKey) return;
-
-  var dtIdx = buildColIndex_(wsDb, 59, HT_N_TASKS_DESK);
-
-  if (oldKey.length === 10) {
-    var curTasks = ws.getRange("B9:F28").getValues();
-    var curNote = ws.getRange("B31").getValue();
-    var block = [];
-    for (var r = 0; r < HT_N_TASKS_DESK; r++) {
-      block.push([
-        oldKey, r + 1, isChecked_(curTasks[r][0]), curTasks[r][1], curTasks[r][2],
-        curTasks[r][3], curTasks[r][4], (r === 0 ? curNote : "")
-      ]);
-    }
-    var dstR = dtIdx.map[oldKey] || dtIdx.nextRow;
-    if (!dtIdx.map[oldKey]) {
-      dtIdx.map[oldKey] = dstR;
-      dtIdx.nextRow += HT_N_TASKS_DESK;
-    }
-    wsDb.getRange(dstR, 59, HT_N_TASKS_DESK, 1).setNumberFormat("@");
-    wsDb.getRange(dstR, 59, HT_N_TASKS_DESK, 8).setValues(block);
-  }
-
-  var srcR = dtIdx.map[newKey] || 0;
-  var loadTasks = [];
-  var loadNote = "";
-  if (srcR > 0) {
-    var srcArr = wsDb.getRange(srcR, 59, HT_N_TASKS_DESK, 8).getValues();
-    for (var i = 0; i < HT_N_TASKS_DESK; i++) {
-      loadTasks.push([isChecked_(srcArr[i][2]), srcArr[i][3], srcArr[i][4], srcArr[i][5], srcArr[i][6]]);
-    }
-    loadNote = srcArr[0][7];
-  } else {
-    for (var j = 0; j < HT_N_TASKS_DESK; j++) {
-      loadTasks.push([false, "", "", "", ""]);
-    }
-  }
-  ws.getRange("B9:F28").setValues(loadTasks);
-  ws.getRange("B31").setValue(loadNote);
-  wsCalc.getRange("AN12").setNumberFormat("@").setValue(newKey);
+  ss.toast("Đã lưu Mục tiêu " + oldYr + " → mở " + newYr + "!", "🎯 Mục Tiêu", 3);
 }
 
 function handleMobileDailyTasksSwitch_(ss, ws) {
@@ -644,7 +817,6 @@ function handleMobileDailyTasksSwitch_(ss, ws) {
   var wsDb = ss.getSheetByName(HT_DB_SHEET);
   if (!wsCalc || !wsDb) return;
 
-  // 1 batched read for B5:G5 (Day=0, Month=1, Year=5)
   var sel = ws.getRange("B5:G5").getValues()[0];
   var oldKey = keyStr_(wsCalc.getRange("E29").getValue());
   var newDay = parseInt(sel[0], 10) || 0;
@@ -661,9 +833,7 @@ function handleMobileDailyTasksSwitch_(ss, ws) {
   if (oldKey === newKey) return;
 
   var dtIdx = buildColIndex_(wsDb, 32, HT_N_TASKS_MOB);
-
   if (oldKey.length === 10) {
-    // 1 batched read for B16:G30 (B=0 chk, C=1 name, G=5 prio)
     var curAll = ws.getRange("B16:G30").getValues();
     var curNote = ws.getRange("B33").getValue();
     var block = [];
@@ -700,6 +870,7 @@ function handleMobileDailyTasksSwitch_(ss, ws) {
   ws.getRange("G16:G30").setValues(loadPr);
   ws.getRange("B33").setValue(loadNote);
   wsCalc.getRange("E29").setNumberFormat("@").setValue(newKey);
+  ss.toast("Đã lưu ngày " + oldKey + " → mở " + newKey + "!", "📝 Việc Hôm Nay", 3);
 }
 
 // ============================================================================
@@ -717,7 +888,7 @@ function findDesktopTrackerSheet_(ss) {
   var sheets = ss.getSheets();
   for (var i = 0; i < sheets.length; i++) {
     var n = sheets[i].getName();
-    if (n !== HT_CALC_SHEET && n !== HT_DB_SHEET &&
+    if (n !== HT_CALC_SHEET && n !== HT_DB_SHEET && n !== HT_ASSETS_SHEET &&
         n.indexOf("Hướng Dẫn") === -1 &&
         n.indexOf("Nhiệm Vụ Ngày") === -1 &&
         n.indexOf("Yearly Goals") === -1 &&
@@ -737,11 +908,6 @@ function getGrownThreshold_(ss) {
     }
   } catch (err) {}
   return 0.75;
-}
-
-function hideIfExists_(ss, name) {
-  var s = ss.getSheetByName(name);
-  if (s && !s.isSheetHidden()) s.hideSheet();
 }
 
 function isChecked_(v) {
@@ -782,19 +948,18 @@ function convertBooleanCellsInRange_(sheet, a1Range, accent) {
     }
   }
   if (a1List.length === 0) return;
-  // Bulk RangeList formatting (1 batched call instead of N cell-by-cell RPCs!)
   var rl = sheet.getRangeList(a1List);
   rl.insertCheckboxes()
     .setFontColor(accent)
+    .setFontSize(10)
     .setHorizontalAlignment("center")
     .setVerticalAlignment("middle");
-  // Restore original boolean values in ONE bulk call
   rng.setValues(vals);
 }
 
 function onOpen() {
   SpreadsheetApp.getUi()
     .createMenu("⚡ Habit Tracker v3.9 Turbo")
-    .addItem("☑️ Bật Checkbox & Tự Lưu _Database (1-Click)", "setupHabitTracker")
+    .addItem("☑️ Bật Checkbox, Font Đẹp & Lưu 0ms (1-Click)", "setupHabitTracker")
     .addToUi();
 }
