@@ -2683,4 +2683,1271 @@ def add_capybara_traveler_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 600
     cv.box(r0, C_R0, r0 + 5, C_RE, t.line)
 
 
+# =========================================================================== #
+#  LOOPY PASTEL COLLECTION (#61–#70) — 10 BESPOKE SIGNATURE ADDON BLOCKS!
+#  Strictly placed at R_EXTRA (row 39+) so ZERO onEdit(e) coordinates shift!
+# =========================================================================== #
+
+# 61. Loopy Red Bow Glow-Up: Daily Glow-Up Mood + Self-Love Rituals + Red Bow Rank Card
+def add_loopy_red_bow_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 610):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23); cv.row(r0 + 1, 22); cv.row(r0 + 2, 10)
+    for rr in range(r0 + 3, r0 + 7):
+        cv.row(rr, 22)
+
+    cv.put(r0, C_NAME, "🎀  RED BOW GLOW-UP ENERGY", bold=True, font_size=9.2, align="left", indent=1,
+           bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_D0, r0, C_D31, "MỨC ĐỘ TỰ TIN & NĂNG LƯỢNG GLOW-UP MỖI NGÀY (THANG 1 – 5)",
+             bold=True, font_size=8.6, align="center", bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_R0, r0, C_RE, "🌼  GLOW AVG", bold=True, font_size=8.8, align="center",
+             bg_color=t.primary_dark, font_color=t.on_primary)
+
+    r_gl = r0 + 1
+    cv.put(r_gl, C_NAME, "✨  Điểm rạng rỡ hôm nay (1–5)", bold=True, font_size=9.0, align="left", indent=1,
+           bg_color=t.soft, font_color=t.ink)
+    rnd = random.Random(seed)
+    for k in range(1, 32):
+        c = day_col(k)
+        val = "" if k > 22 else rnd.choice([4, 5, 4, 5, 3, 5, 4, 5])
+        cv.put(r_gl, c, val, align="center", font_size=9.0, bold=True, bg_color=t.card,
+               font_color=t.ink, num_format="0")
+    gl_rng = rng(r_gl, C_D0, r_gl, C_D31)
+    cv.unlock(r_gl, C_D0, r_gl, C_D31)
+    cv.grid(r_gl, C_NAME, r_gl, C_D31, t.line)
+    cv.box(r0, C_NAME, r_gl, C_D31, t.line)
+    ws.conditional_format(gl_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 1,
+                                   "mid_type": "num", "mid_value": 3, "max_type": "num", "max_value": 5,
+                                   "min_color": "#FFF8EA", "mid_color": "#FBCFE8", "max_color": "#D85A68"})
+    cv.merge(r_gl, C_R0, r_gl, C_RE, f"=IFERROR(AVERAGE({gl_rng}),0)", bold=True, font_size=11.0,
+             align="center", num_format='0.0" / 5 🎀"', bg_color=t.soft, font_color=t.primary_dark)
+    cv.box(r0, C_R0, r_gl, C_RE, t.line)
+
+    rb0 = r0 + 3
+    c_mid = 16
+    cv.merge(rb0, C_NAME, rb0, c_mid, "🎀  MORNING & EVENING GLOW-UP CHECKLIST", bold=True, font_size=9.0,
+             align="left", indent=1, bg_color="#D85A68", font_color="#FFFFFF")
+    notes_l = [
+        "• Sáng: Hít thở sâu 3 nhịp, skincare gọn gàng & tự khen mình trước gương!",
+        "• Trưa: Uống đủ nước, nghỉ mắt 10 phút & giữ dáng ngồi thật xinh.",
+        "• Tối: Ghi 1 niềm vui nhỏ nở rộ như bông hoa vàng trên tay Loopy.",
+    ]
+    for i, txt in enumerate(notes_l):
+        cv.merge(rb0 + 1 + i, C_NAME, rb0 + 1 + i, c_mid, txt, font_size=9.0, align="left", indent=1,
+                 bg_color=t.card, font_color=t.ink)
+        cv.hline(rb0 + 1 + i, C_NAME, c_mid, t.line)
+    cv.unlock(rb0 + 1, C_NAME, rb0 + 3, c_mid)
+    cv.box(rb0, C_NAME, rb0 + 3, c_mid, t.line)
+
+    cv.merge(rb0, c_mid + 2, rb0, C_D31, "🌼  LOOPY SELF-LOVE NOTES", bold=True, font_size=9.0,
+             align="left", indent=1, bg_color="#6E99B5", font_color="#FFFFFF")
+    notes_r = [
+        "• Không sao nếu có ngày lỡ quên việc!! Hít thở rồi thắt nơ đỏ làm lại!",
+        "• Tập trung từng bước nhỏ — hoa vàng sẽ nở vào đúng ngày 100%.",
+        "• Tự thưởng một buổi chiều thư giãn khi hoàn thành tốt mục tiêu tuần.",
+    ]
+    for i, txt in enumerate(notes_r):
+        cv.merge(rb0 + 1 + i, c_mid + 2, rb0 + 1 + i, C_D31, txt, font_size=9.0, align="left", indent=1,
+                 bg_color=t.card, font_color=t.ink)
+        cv.hline(rb0 + 1 + i, c_mid + 2, C_D31, t.line)
+    cv.unlock(rb0 + 1, c_mid + 2, rb0 + 3, C_D31)
+    cv.box(rb0, c_mid + 2, rb0 + 3, C_D31, t.line)
+
+    ov = tr.s["overall"]
+    cv.merge(rb0, C_R0, rb0, C_RE, "👑  RED BOW RANK", bold=True, font_size=8.8, align="center",
+             bg_color=t.primary_dark, font_color=t.on_primary)
+    cv.merge(rb0 + 1, C_R0, rb0 + 2, C_RE,
+             f'=IF({ov}>=0.9,"🌼 Hoa Vàng Nở Rộ!",IF({ov}>=0.7,"🌸 Chống Cằm Nụ Hoa",'
+             f'IF({ov}>=0.4,"🎀 Nơ Đỏ Sẵn Sàng","❗ Hít Thở Bắt Đầu")))',
+             bold=True, font_size=10.0, align="center", bg_color=t.soft, font_color=t.primary_dark)
+    cv.merge(rb0 + 3, C_R0, rb0 + 3, C_RE,
+             f'="🎀 Ngày Glow: "&{tr.s["grown"]}&"d  •  🔥 Best: "&{tr.s["best"]}&"d"',
+             bold=True, font_size=8.8, align="center", bg_color=t.card, font_color=t.primary_dark)
+    cv.box(rb0, C_R0, rb0 + 3, C_RE, t.line)
+
+
+# 62. Loopy Taiyaki Street Snack: Weekly Taiyaki & Dango Treat Counter + Healthy Balance Note
+def add_loopy_taiyaki_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 620):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23)
+    for rr in range(r0 + 1, r0 + 6):
+        cv.row(rr, 22)
+
+    cv.merge(r0, C_NAME, r0, C_D31, "🐟  TAIYAKI & DANGO REWARD COUNTER  •  TÍCH BÁNH CÁ NÓNG THEO TUẦN (MỖI 2 NGÀY ≥75% = 1 PHẦN!)",
+             bold=True, font_size=9.0, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_R0, r0, C_RE, "🍡  TOTAL TREATS", bold=True, font_size=8.8, align="center",
+             bg_color="#6E9E82", font_color="#FFFFFF")
+
+    stg_row = tr.stage_row
+    wk_day_spans = [(1, 7), (8, 14), (15, 21), (22, 28), (29, 31)]
+    col_spans = [(1, 6), (7, 13), (14, 19), (20, 26), (27, 32)]
+    for w, ((d1, d2), (c1, c2)) in enumerate(zip(wk_day_spans, col_spans)):
+        st_rng = f"{tr.calc_q}!{rng(stg_row, d1, stg_row, d2)}"
+        cv.merge(r0 + 1, c1, r0 + 1, c2, f"🐟 WEEK {w + 1} (Ngày {d1}–{d2})", bold=True, font_size=8.6,
+                 align="center", bg_color=t.week_head[w], font_color=t.week_on[w])
+        cv.merge(r0 + 2, c1, r0 + 2, c2, f'=INT(COUNTIF({st_rng},">=5")/2)&" phần 🐟"', bold=True, font_size=11.0,
+                 align="center", bg_color=t.card, font_color=t.primary_dark)
+        cv.merge(r0 + 3, c1, r0 + 3, c2, f'=COUNTIF({st_rng},">=5")&" ngày đạt ≥75%"', italic=True,
+                 font_size=8.5, align="center", bg_color=t.soft, font_color=t.ink)
+
+    cv.merge(r0 + 4, C_NAME, r0 + 4, C_D31, "🍡  STREET SNACK SMART REWARD NOTE  •  QUY TẮC TỰ THƯỞNG BÁNH NGỌT LÀNH MẠNH",
+             bold=True, font_size=8.8, align="left", indent=1, bg_color="#E6F2EC", font_color="#2D5A42")
+    cv.merge(r0 + 5, C_NAME, r0 + 5, C_D31,
+             "• Ăn đủ bữa chính giàu rau xanh & tự thưởng 1 chiếc bánh Taiyaki nóng hoặc xiên Dango cuối tuần khi hoàn thành KPI!",
+             font_size=9.0, align="left", indent=1, bg_color=t.card, font_color=t.ink)
+    cv.unlock(r0 + 5, C_NAME, r0 + 5, C_D31)
+    cv.grid(r0 + 1, C_NAME, r0 + 5, C_D31, t.line)
+    cv.box(r0, C_NAME, r0 + 5, C_D31, t.line)
+
+    cv.merge(r0 + 1, C_R0, r0 + 2, C_RE, f'=INT({tr.s["grown"]}/2)&" PHẦN 🐟"', bold=True, font_size=15.0,
+             align="center", bg_color=t.soft, font_color=t.primary_dark)
+    cv.merge(r0 + 3, C_R0, r0 + 3, C_RE, f'="🍡 Ngày bánh nóng: "&{tr.s["grown"]}&" ngày"',
+             bold=True, font_size=8.8, align="center", bg_color="#E6F2EC", font_color="#2D5A42")
+    cv.merge(r0 + 4, C_R0, r0 + 5, C_RE,
+             f'="✨ Ngày 100%: "&{tr.s["perfect"]}&"d"&CHAR(10)&"🔥 Best: "&{tr.s["best"]}&"d"',
+             bold=True, font_size=8.8, align="center", text_wrap=True, bg_color=t.card, font_color=t.ink)
+    cv.grid(r0 + 1, C_R0, r0 + 5, C_RE, t.line)
+    cv.box(r0, C_R0, r0 + 5, C_RE, t.line)
+
+
+# 63. Loopy Piggy Dessert Cafe: 6-Stage Dessert Menu Unlock Strip + Sweet Self-Care Menu
+def add_loopy_piggy_cafe_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 630):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23)
+    for rr in range(r0 + 1, r0 + 6):
+        cv.row(rr, 22)
+
+    cv.merge(r0, C_NAME, r0, C_D31, "🧁  PIGGY DESSERT CAFE MENU  •  THỐNG KÊ 6 MÓN TRÁNG MIỆNG MỞ KHÓA TRONG THÁNG",
+             bold=True, font_size=9.2, align="left", indent=1, bg_color=t.primary, font_color="#FFFFFF")
+    cv.merge(r0, C_R0, r0, C_RE, "🍒  CAFE RANK", bold=True, font_size=8.8, align="center",
+             bg_color="#5EA9C7", font_color="#FFFFFF")
+
+    stg_rng = f"{tr.calc_q}!{rng(tr.stage_row, 1, tr.stage_row, 31)}"
+    tiers = [
+        ("🧀 Phô Mai", "0%", "#FFFBEB", "#B45309"),
+        ("🐷 Mũ Heo", "1–24%", "#FCE7F3", "#BE185D"),
+        ("🍦 Kem 1 Viên", "25–49%", "#FFFDF0", "#A16207"),
+        ("🍨 Kem 2 Viên", "50–74%", "#E0F2FE", "#0369A1"),
+        ("🍰 Bánh Cherry", "75–99%", "#FFE4E6", "#BE123C"),
+        ("👑 Tiệc Cafe!", "100% ✨", "#FCE7F3", "#9D174D"),
+    ]
+    spans = [(1, 5), (6, 10), (11, 15), (16, 21), (22, 26), (27, 32)]
+    for i, ((c1, c2), (lbl, pct, bg, fg)) in enumerate(zip(spans, tiers)):
+        cv.merge(r0 + 1, c1, r0 + 1, c2, lbl, bold=True, font_size=8.8, align="center", bg_color=bg, font_color=fg)
+        cv.merge(r0 + 2, c1, r0 + 2, c2, f'=COUNTIF({stg_rng},{i + 1})&" ngày"', bold=True, font_size=10.5,
+                 align="center", bg_color=t.card, font_color=fg)
+        cv.merge(r0 + 3, c1, r0 + 3, c2, pct, italic=True, font_size=8.2, align="center", bg_color=t.page, font_color=t.muted)
+
+    cv.merge(r0 + 4, C_NAME, r0 + 4, C_D31, "🍨  WEEKLY CAFE SELF-CARE TREAT  •  GÓC TỰ THƯỞNG NGỌT NGÀO CUỐI TUẦN",
+             bold=True, font_size=8.8, align="left", indent=1, bg_color="#E6F5FA", font_color="#1D5E78")
+    cv.merge(r0 + 5, C_NAME, r0 + 5, C_D31,
+             "• Mục tiêu tuần ≥80%: Hẹn quán cafe xinh, thưởng thức 1 món bánh dâu cherry yêu thích & chụp ảnh kỷ niệm!",
+             font_size=9.0, align="left", indent=1, bg_color=t.card, font_color=t.ink)
+    cv.unlock(r0 + 5, C_NAME, r0 + 5, C_D31)
+    cv.grid(r0 + 1, C_NAME, r0 + 5, C_D31, t.line)
+    cv.box(r0, C_NAME, r0 + 5, C_D31, t.line)
+
+    ov = tr.s["overall"]
+    cv.merge(r0 + 1, C_R0, r0 + 2, C_RE,
+             f'=IF({ov}>=0.9,"👑 Tiệc Cafe 5 Sao!",IF({ov}>=0.7,"🍒 Bánh Cherry",'
+             f'IF({ov}>=0.45,"🍨 Kem 2 Viên","🐷 Mũ Heo Xinh")))',
+             bold=True, font_size=10.0, align="center", bg_color=t.soft, font_color=t.primary_dark)
+    cv.merge(r0 + 3, C_R0, r0 + 3, C_RE, f"={ov}", bold=True, font_size=9.5, align="center",
+             num_format="0%", bg_color=t.card, font_color=t.ink)
+    ws.conditional_format(rng(r0 + 3, C_R0, r0 + 3, C_RE), {
+        "type": "data_bar", "bar_color": "#F28FB0", "bar_solid": True,
+        "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1,
+    })
+    cv.merge(r0 + 4, C_R0, r0 + 5, C_RE,
+             f'="🍒 Ngày 100%: "&{tr.s["perfect"]}&"d"&CHAR(10)&"🔥 Streak: "&{tr.s["best"]}&"d"',
+             bold=True, font_size=8.8, align="center", text_wrap=True, bg_color="#E6F5FA", font_color="#1D5E78")
+    cv.grid(r0 + 1, C_R0, r0 + 5, C_RE, t.line)
+    cv.box(r0, C_R0, r0 + 5, C_RE, t.line)
+
+
+# 64. Loopy Sauna Sheep Detox: Daily Detox Calm Meter (1–5) + 5 Weekly Sauna Donut Gauges
+def add_loopy_sauna_sheep_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 640):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23); cv.row(r0 + 1, 22); cv.row(r0 + 2, 10)
+    for rr in range(r0 + 3, r0 + 8):
+        cv.row(rr, 22)
+
+    cv.put(r0, C_NAME, "🐑  SAUNA DETOX CALM METER", bold=True, font_size=9.2, align="left", indent=1,
+           bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_D0, r0, C_D31, "MỨC ĐỘ THƯ GIÃN & GIẢI TỎA CĂNG THẲNG MỖI TỐI (THANG 1 – 5)",
+             bold=True, font_size=8.6, align="center", bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_R0, r0, C_RE, "♨️  DETOX AVG", bold=True, font_size=8.8, align="center",
+             bg_color="#5B8EB8", font_color="#FFFFFF")
+
+    r_clm = r0 + 1
+    cv.put(r_clm, C_NAME, "♨️  Độ nhẹ lòng cuối ngày (1–5)", bold=True, font_size=9.0, align="left", indent=1,
+           bg_color=t.soft, font_color=t.ink)
+    rnd = random.Random(seed)
+    for k in range(1, 32):
+        c = day_col(k)
+        val = "" if k > 22 else rnd.choice([4, 4, 5, 5, 3, 4, 5, 5])
+        cv.put(r_clm, c, val, align="center", font_size=9.0, bold=True, bg_color=t.card,
+               font_color=t.ink, num_format="0")
+    clm_rng = rng(r_clm, C_D0, r_clm, C_D31)
+    cv.unlock(r_clm, C_D0, r_clm, C_D31)
+    cv.grid(r_clm, C_NAME, r_clm, C_D31, t.line)
+    cv.box(r0, C_NAME, r_clm, C_D31, t.line)
+    ws.conditional_format(clm_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 1,
+                                    "mid_type": "num", "mid_value": 3, "max_type": "num", "max_value": 5,
+                                    "min_color": "#FDF6E9", "mid_color": "#DBEAFE", "max_color": "#60A5FA"})
+    cv.merge(r_clm, C_R0, r_clm, C_RE, f"=IFERROR(AVERAGE({clm_rng}),0)", bold=True, font_size=11.0,
+             align="center", num_format='0.0" / 5 🐑"', bg_color="#EAF3FB", font_color="#2B5C8A")
+    cv.box(r0, C_R0, r_clm, C_RE, t.line)
+
+    rd = r0 + 3
+    cv.merge(rd, C_NAME, rd + 4, C_NAME, "🐑  YANGMEORI WEEKLY\nNhịp Detox 5 Tuần", bold=True,
+             font_size=10.0, align="center", text_wrap=True, bg_color=t.card, font_color=t.primary_dark)
+    rb = tr.calc_row_base
+    spans = [(2, 7), (8, 13), (14, 19), (20, 25), (26, 32)]
+    dcols = ["#C99368", "#6B9EC8", "#D87A90", "#A6734B", "#5B8EB8"]
+    for w, (c1, c2) in enumerate(spans):
+        hc = CALC_WK_COL0 + w
+        cv.merge(rd, c1, rd, c2, f"WEEK {w + 1}", bold=True, font_size=8.6, align="center",
+                 bg_color=t.week_head[w], font_color=t.week_on[w])
+        cv.merge(rd + 1, c1, rd + 4, c2, f"={tr.calc_q}!{acell(rb + 2, hc)}", bold=True, font_size=12.5,
+                 align="center", num_format="0%", bg_color=t.card, font_color=dcols[w])
+        dch = donut(wb, f"={tr.calc_q}!{rng(rb + 2, hc, rb + 3, hc)}", [dcols[w], t.donut_rest], hole=70)
+        place_chart(cv, dch, rd + 1, c1, rd + 4, c2, pad_x=10, pad_y=2)
+        cv.vline(c2, rd, rd + 4, t.line, where="right")
+    cv.box(rd, C_NAME, rd + 4, C_D31, t.line)
+
+    cv.merge(rd, C_R0, rd, C_RE, "♨️  WA~ DETOX RITUAL", bold=True, font_size=8.8, align="center",
+             bg_color=t.primary_dark, font_color="#FFFFFF")
+    cv.merge(rd + 1, C_R0, rd + 3, C_RE,
+             "• Tháo kính, tắm ấm 10p & đắp mặt nạ thư giãn.\n• Uống trà lúa mạch ấm, rời xa màn hình.\n• Thở nhẹ một cái thật đã: WA~!",
+             font_size=8.8, align="left", indent=1, text_wrap=True, bg_color=t.card, font_color=t.ink)
+    cv.unlock(rd + 1, C_R0, rd + 3, C_RE)
+    cv.merge(rd + 4, C_R0, rd + 4, C_RE,
+             f'="🐑 Ngày Detox: "&{tr.s["grown"]}&"d  •  ✨ 100%: "&{tr.s["perfect"]}&"d"',
+             bold=True, font_size=8.8, align="center", bg_color=t.soft, font_color=t.primary_dark)
+    cv.box(rd, C_R0, rd + 4, C_RE, t.line)
+
+
+# 65. Loopy Honey Bee KPI: Daily Deep Work Hours + KPI Focus Column Chart + Team Cheer Card
+def add_loopy_honey_bee_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 650):
+    t, ws, q = cv.t, cv.ws, tr.q
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23); cv.row(r0 + 1, 22); cv.row(r0 + 2, 10)
+    for rr in range(r0 + 3, r0 + 9):
+        cv.row(rr, 20)
+
+    cv.put(r0, C_NAME, "🐝  HONEY BEE KPI HOURS", bold=True, font_size=9.2, align="left", indent=1,
+           bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_D0, r0, C_D31, "SỐ GIỜ LÀM VIỆC TẬP TRUNG ĐẠT KPI MỖI NGÀY (DEEP WORK HOURS)",
+             bold=True, font_size=8.6, align="center", bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_R0, r0, C_RE, "🍯  TOTAL HOURS", bold=True, font_size=8.8, align="center",
+             bg_color="#7A5C52", font_color="#FFFFFF")
+
+    r_h = r0 + 1
+    cv.put(r_h, C_NAME, "⏱️  Giờ tập trung KPI (h)", bold=True, font_size=9.0, align="left", indent=1,
+           bg_color=t.soft, font_color=t.ink)
+    rnd = random.Random(seed)
+    for k in range(1, 32):
+        c = day_col(k)
+        val = "" if k > 22 else rnd.choice([3.0, 3.5, 4.0, 4.5, 5.0, 4.0, 5.5, 6.0])
+        cv.put(r_h, c, val, align="center", font_size=8.8, bold=True, bg_color=t.card,
+               font_color=t.ink, num_format="0.0")
+    h_rng = rng(r_h, C_D0, r_h, C_D31)
+    cv.unlock(r_h, C_D0, r_h, C_D31)
+    cv.grid(r_h, C_NAME, r_h, C_D31, t.line)
+    cv.box(r0, C_NAME, r_h, C_D31, t.line)
+    ws.conditional_format(h_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 0,
+                                  "mid_type": "num", "mid_value": 3.5, "max_type": "num", "max_value": 6.5,
+                                  "min_color": "#FFFDF2", "mid_color": "#FEF08A", "max_color": "#EAB844"})
+    cv.merge(r_h, C_R0, r_h, C_RE, f"=SUM({h_rng})", bold=True, font_size=11.0, align="center",
+             num_format='0.0" giờ 🍯"', bg_color=t.soft, font_color="#7A5C52")
+    cv.box(r0, C_R0, r_h, C_RE, t.line)
+
+    rc0, rc1 = r0 + 3, r0 + 8
+    ch = wb.add_chart({"type": "column"})
+    ch.add_series({
+        "name": "KPI Hours",
+        "categories": f"={q}!{rng(R_DAY, C_D0, R_DAY, C_D31)}",
+        "values": f"={q}!{h_rng}",
+        "fill": {"color": "#EAB844"},
+        "border": {"none": True},
+        "gap": 55,
+    })
+    ch.set_title({"name": "DAILY HONEY BEE KPI HOURS • GIỜ TẬP TRUNG HIỆU SUẤT MỖI NGÀY",
+                  "name_font": {"name": t.font, "size": 9.2, "bold": True, "color": t.ink}})
+    ch.set_y_axis({"min": 0, "max": 7, "major_unit": 2, "num_format": '0"h"',
+                   "num_font": axis_font(t), "line": {"none": True},
+                   "major_gridlines": {"visible": True, "line": {"color": t.line, "dash_type": "dash"}}})
+    ch.set_x_axis({"num_font": axis_font(t, 8.0), "line": {"color": t.line}})
+    ch.set_legend({"none": True})
+    ch.set_chartarea({"border": {"color": t.line, "width": 0.75}, "fill": {"color": t.card}})
+    place_chart(cv, ch, rc0, C_NAME, rc1, C_D31)
+
+    cv.merge(rc0, C_R0, rc0, C_RE, "🧸  PASTEL BEAR CHEER", bold=True, font_size=8.8, align="center",
+             bg_color="#7A5C52", font_color="#FFFFFF")
+    cv.merge(rc0 + 1, C_R0, rc0 + 3, C_RE,
+             "• Chia việc thành 3 block Pomodoro 50 phút.\n• Giải quyết đầu việc khó nhất trước 11h.\n• Cả hội bạn gấu pastel đang cổ vũ bạn!",
+             font_size=8.8, align="left", indent=1, text_wrap=True, bg_color=t.card, font_color=t.ink)
+    cv.unlock(rc0 + 1, C_R0, rc0 + 3, C_RE)
+    cv.merge(rc0 + 4, C_R0, rc1, C_RE,
+             f'="🍯 TB: "&TEXT(IFERROR(AVERAGE({h_rng}),0),"0.0")&" h/ngày"&CHAR(10)&"🐝 Ngày KPI: "&{tr.s["grown"]}&"d"',
+             bold=True, font_size=8.8, align="center", text_wrap=True, bg_color=t.soft, font_color="#7A5C52")
+    cv.box(rc0, C_R0, rc1, C_RE, t.line)
+
+
+# 66. Loopy Poolside Duck Chill: Daily Hydration Glasses + 5-Week Aqua Chill Progress Bars
+def add_loopy_poolside_duck_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 660):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23); cv.row(r0 + 1, 22); cv.row(r0 + 2, 10)
+    for rr in range(r0 + 3, r0 + 7):
+        cv.row(rr, 22)
+
+    cv.put(r0, C_NAME, "💧  POOLSIDE HYDRATION LOG", bold=True, font_size=9.2, align="left", indent=1,
+           bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_D0, r0, C_D31, "SỐ LY NƯỚC MÁT UỐNG MỖI NGÀY CÙNG LOOPY PHAO VỊT (MỤC TIÊU 8 LY)",
+             bold=True, font_size=8.6, align="center", bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_R0, r0, C_RE, "💧  AVG CUPS", bold=True, font_size=8.8, align="center",
+             bg_color="#D99B16", font_color="#FFFFFF")
+
+    r_w = r0 + 1
+    cv.put(r_w, C_NAME, "🥤  Số ly nước lọc (ly/ngày)", bold=True, font_size=9.0, align="left", indent=1,
+           bg_color=t.soft, font_color=t.ink)
+    rnd = random.Random(seed)
+    for k in range(1, 32):
+        c = day_col(k)
+        val = "" if k > 22 else rnd.choice([6, 7, 8, 8, 9, 7, 8, 8])
+        cv.put(r_w, c, val, align="center", font_size=9.0, bold=True, bg_color=t.card,
+               font_color=t.ink, num_format="0")
+    w_rng = rng(r_w, C_D0, r_w, C_D31)
+    cv.unlock(r_w, C_D0, r_w, C_D31)
+    cv.grid(r_w, C_NAME, r_w, C_D31, t.line)
+    cv.box(r0, C_NAME, r_w, C_D31, t.line)
+    ws.conditional_format(w_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 4,
+                                  "mid_type": "num", "mid_value": 7, "max_type": "num", "max_value": 10,
+                                  "min_color": "#F2FBFF", "mid_color": "#BAE6FD", "max_color": "#38BDF8"})
+    cv.merge(r_w, C_R0, r_w, C_RE, f"=IFERROR(AVERAGE({w_rng}),0)", bold=True, font_size=11.0,
+             align="center", num_format='0.0" ly 💧"', bg_color="#FEF9C3", font_color="#854D0E")
+    cv.box(r0, C_R0, r_w, C_RE, t.line)
+
+    rb0 = r0 + 3
+    rb = tr.calc_row_base
+    cv.merge(rb0, C_NAME, rb0, C_D31, "🐥  POOLSIDE WEEKLY CHILL BARS  •  THANH TIẾN ĐỘ HỒ XANH 5 TUẦN",
+             bold=True, font_size=9.0, align="left", indent=1, bg_color="#2A8EB5", font_color="#FFFFFF")
+    spans = [(1, 6), (7, 13), (14, 19), (20, 26), (27, 32)]
+    p_cols = ["#6EC6E6", "#F7CF52", "#38BDF8", "#F59E0B", "#0EA5E9"]
+    p_bgs = ["#E0F2FE", "#FEF9C3", "#E0F2FE", "#FEF3C7", "#E0F2FE"]
+    p_fgs = ["#075985", "#854D0E", "#0369A1", "#92400E", "#0C4A6E"]
+    for w, ((c1, c2), bc, bg, fg) in enumerate(zip(spans, p_cols, p_bgs, p_fgs)):
+        hc = CALC_WK_COL0 + w
+        pct_ref = f"{tr.calc_q}!{acell(rb + 2, hc)}"
+        cv.merge(rb0 + 1, c1, rb0 + 1, c2, f"🐥 WEEK {w + 1}", bold=True, font_size=8.6, align="center",
+                 bg_color=bg, font_color=fg)
+        cv.merge(rb0 + 2, c1, rb0 + 2, c2, f"={pct_ref}", bold=True, font_size=11.0, align="center",
+                 num_format="0%", bg_color=t.card, font_color=fg)
+        ws.conditional_format(rng(rb0 + 2, c1, rb0 + 2, c2), {
+            "type": "data_bar", "bar_color": bc, "bar_solid": True,
+            "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1,
+        })
+        cv.merge(rb0 + 3, c1, rb0 + 3, c2,
+                 f'=IF({pct_ref}>=0.8,"🌊 Nổi Chill Hết Nấc!",IF({pct_ref}>=0.5,"🛟 Phao Sọc Xinh","🐥 Ôm Phao Vịt"))',
+                 italic=True, font_size=8.3, align="center", bg_color=t.page, font_color=fg)
+    cv.grid(rb0 + 1, C_NAME, rb0 + 3, C_D31, t.line)
+    cv.box(rb0, C_NAME, rb0 + 3, C_D31, t.line)
+
+    cv.merge(rb0, C_R0, rb0, C_RE, "☀️  SUMMER CHILL NOTE", bold=True, font_size=8.8, align="center",
+             bg_color="#F59E0B", font_color="#FFFFFF")
+    cv.merge(rb0 + 1, C_R0, rb0 + 2, C_RE,
+             "• Giữ cơ thể mát mẻ, giãn cơ nhẹ & nghỉ giải lao đầy nắng!",
+             font_size=8.8, align="left", indent=1, text_wrap=True, bg_color=t.card, font_color=t.ink)
+    cv.unlock(rb0 + 1, C_R0, rb0 + 2, C_RE)
+    cv.merge(rb0 + 3, C_R0, rb0 + 3, C_RE,
+             f'="🐥 Pool Days: "&{tr.s["grown"]}&"d  •  🔥 Best: "&{tr.s["best"]}&"d"',
+             bold=True, font_size=8.8, align="center", bg_color=t.soft, font_color=t.primary_dark)
+    cv.box(rb0, C_R0, rb0 + 3, C_RE, t.line)
+
+
+# 67. Loopy Fluffy Commuter Diary: 4-Week Commuter Workday Diary & On-Time Clock-Out Counter
+def add_loopy_fluffy_commuter_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 670):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23)
+    for rr in range(r0 + 1, r0 + 6):
+        cv.row(rr, 22)
+
+    cv.merge(r0, C_NAME, r0, C_D31, "🎒  FLUFFY COMMUTER WORKDAY DIARY  •  NHẬT KÝ ĐI LÀM & GHI CHÚ TAN LÀM ĐÚNG GIỜ",
+             bold=True, font_size=9.1, align="left", indent=1, bg_color=t.primary, font_color="#FFFFFF")
+    cv.merge(r0, C_R0, r0, C_RE, "🌟  ON-TIME BADGE", bold=True, font_size=8.8, align="center",
+             bg_color="#C98A2C", font_color="#FFFFFF")
+
+    cv.put(r0 + 1, C_NAME, "📅  TUẦN LÀM VIỆC", bold=True, font_size=8.8, align="center",
+           bg_color="#FDE7A9", font_color="#5C4033")
+    cv.merge(r0 + 1, C_D0, r0 + 1, 14, "💼  TRỌNG TÂM TUẦN (TOP PRIORITY)", bold=True, font_size=8.8,
+             align="center", bg_color="#FDE7A9", font_color="#5C4033")
+    cv.merge(r0 + 1, 15, r0 + 1, C_D31, "⭐  NIỀM VUI TAN LÀM / GHI CHÚ NHANH", bold=True, font_size=8.8,
+             align="center", bg_color="#F3EAE4", font_color="#5C4033")
+
+    rows = [
+        ("Tuần 1 • Khởi động", "Hoàn thiện kế hoạch tháng & dọn gọn hộp thư", "Đội mũ bông đi làm đúng giờ, ghé mua 1 ly cafe ấm!"),
+        ("Tuần 2 • Tăng tốc", "Xử lý xong báo cáo / dự án cốt lõi đúng hạn", "Tan làm 17h30 đi dạo ngắm hoàng hôn cực chill."),
+        ("Tuần 3 • Giữ nhịp", "Duy trì Deep Work buổi sáng, không mang việc về nhà", "Tự nấu bữa tối ấm cúng & nghe podcast yêu thích."),
+        ("Tuần 4 • Tổng kết", "Rà soát KPI, đóng gói gọn gàng & chuẩn bị tháng mới", "Thưởng cho mình 1 buổi cuối tuần ngủ nướng thả ga!"),
+    ]
+    for i, (wk_s, pri_s, joy_s) in enumerate(rows):
+        rr = r0 + 2 + i
+        bg = "#FFFFFF" if i % 2 == 0 else "#FFFBF2"
+        cv.put(rr, C_NAME, wk_s, bold=True, font_size=8.8, align="left", indent=1, bg_color=bg, font_color="#5C4033")
+        cv.merge(rr, C_D0, rr, 14, pri_s, font_size=8.8, align="left", indent=1, bg_color=bg, font_color=t.ink)
+        cv.merge(rr, 15, rr, C_D31, joy_s, font_size=8.8, align="left", indent=1, bg_color=bg, font_color=t.ink)
+    cv.unlock(r0 + 2, C_NAME, r0 + 5, C_D31)
+    cv.grid(r0 + 1, C_NAME, r0 + 5, C_D31, t.line)
+    cv.box(r0, C_NAME, r0 + 5, C_D31, t.primary)
+
+    cv.merge(r0 + 1, C_R0, r0 + 2, C_RE, f'="🌟 "&{tr.s["grown"]}&" NGÀY"', bold=True, font_size=15.0,
+             align="center", bg_color="#FEF3C7", font_color="#8B5A12")
+    cv.merge(r0 + 3, C_R0, r0 + 3, C_RE, f"=MIN(1,{tr.s['grown']}/22)", bold=True, font_size=9.2,
+             align="center", num_format='0%" (Mốc 22 ngày)"', bg_color=t.card, font_color=t.primary_dark)
+    ws.conditional_format(rng(r0 + 3, C_R0, r0 + 3, C_RE), {
+        "type": "data_bar", "bar_color": "#D99B38", "bar_solid": True,
+        "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1,
+    })
+    cv.merge(r0 + 4, C_R0, r0 + 5, C_RE,
+             f'="💼 Ngày 100%: "&{tr.s["perfect"]}&"d"&CHAR(10)&"🔥 Best: "&{tr.s["best"]}&"d"',
+             bold=True, font_size=8.8, align="center", text_wrap=True, bg_color=t.soft, font_color=t.ink)
+    cv.grid(r0 + 1, C_R0, r0 + 5, C_RE, t.line)
+    cv.box(r0, C_R0, r0 + 5, C_RE, t.line)
+
+
+# 68. Loopy Panda Zen Study: Daily Study Minutes + Pages Read + Zen Study Milestone Card
+def add_loopy_panda_study_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 680):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23); cv.row(r0 + 1, 22); cv.row(r0 + 2, 22); cv.row(r0 + 3, 10)
+    for rr in range(r0 + 4, r0 + 7):
+        cv.row(rr, 22)
+
+    cv.put(r0, C_NAME, "🐼  PANDA ZEN STUDY LOG", bold=True, font_size=9.2, align="left", indent=1,
+           bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_D0, r0, C_D31, "PHÚT TỰ HỌC SÂU (MINS)  •  SỐ TRANG SÁCH / TÀI LIỆU ĐỌC MỖI NGÀY (PAGES)",
+             bold=True, font_size=8.6, align="center", bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_R0, r0, C_RE, "🎋  STUDY TOTALS", bold=True, font_size=8.8, align="center",
+             bg_color="#3E7A5B", font_color="#FFFFFF")
+
+    r_m, r_p = r0 + 1, r0 + 2
+    cv.put(r_m, C_NAME, "⏱️  Phút tập trung học (mins)", bold=True, font_size=9.0, align="left", indent=1,
+           bg_color=t.soft, font_color=t.ink)
+    cv.put(r_p, C_NAME, "📖  Số trang đọc mỗi ngày", bold=True, font_size=9.0, align="left", indent=1,
+           bg_color=t.card, font_color=t.ink)
+    rnd = random.Random(seed)
+    for k in range(1, 32):
+        c = day_col(k)
+        if k > 22:
+            cv.put(r_m, c, "", align="center", font_size=8.8, bg_color=t.card, num_format="0")
+            cv.put(r_p, c, "", align="center", font_size=8.8, bg_color=t.card, num_format="0")
+        else:
+            cv.put(r_m, c, rnd.choice([45, 60, 75, 90, 60, 90, 120, 75]),
+                   align="center", font_size=8.8, bold=True, bg_color=t.card, font_color=t.ink, num_format="0")
+            cv.put(r_p, c, rnd.choice([10, 15, 20, 25, 18, 22, 30, 16]),
+                   align="center", font_size=8.8, bg_color=t.card, font_color=t.ink, num_format="0")
+
+    m_rng = rng(r_m, C_D0, r_m, C_D31)
+    p_rng = rng(r_p, C_D0, r_p, C_D31)
+    cv.unlock(r_m, C_D0, r_p, C_D31)
+    cv.grid(r_m, C_NAME, r_p, C_D31, t.line)
+    cv.box(r0, C_NAME, r_p, C_D31, t.line)
+    ws.conditional_format(m_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 0,
+                                  "mid_type": "num", "mid_value": 60, "max_type": "num", "max_value": 120,
+                                  "min_color": "#F7FBF9", "mid_color": "#B8DEC9", "max_color": "#3E7A5B"})
+    ws.conditional_format(p_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 0,
+                                  "mid_type": "num", "mid_value": 15, "max_type": "num", "max_value": 30,
+                                  "min_color": "#F7FBF9", "mid_color": "#CBD5E1", "max_color": "#4E545C"})
+
+    cv.merge(r_m, C_R0, r_m, C_R0 + 2, "Tổng giờ học:", font_size=8.8, align="left", indent=1, bg_color=t.card, font_color=t.muted)
+    cv.merge(r_m, C_R0 + 3, r_m, C_RE, f"=SUM({m_rng})/60", bold=True, font_size=10.5, align="center",
+             num_format='0.0" h"', bg_color="#E6F5EC", font_color="#2D5A42")
+    cv.merge(r_p, C_R0, r_p, C_R0 + 2, "Tổng trang:", font_size=8.8, align="left", indent=1, bg_color=t.card, font_color=t.muted)
+    cv.merge(r_p, C_R0 + 3, r_p, C_RE, f"=SUM({p_rng})", bold=True, font_size=10.5, align="center",
+             num_format='#,##0" tr"', bg_color=t.soft, font_color=t.ink)
+    cv.hline(r_m, C_R0, C_RE, t.line)
+    cv.box(r0, C_R0, r_p, C_RE, t.line)
+
+    rb0 = r0 + 4
+    cv.merge(rb0, C_NAME, rb0, C_D31, "🎋  PANDA ZEN FOCUS NOTES  •  MỤC TIÊU ÔN TẬP & GHI CHÚ TRI THỨC THÁNG NÀY",
+             bold=True, font_size=9.0, align="left", indent=1, bg_color="#3E7A5B", font_color="#FFFFFF")
+    cv.merge(rb0 + 1, C_NAME, rb0 + 1, C_D31,
+             "• Môn / Kỹ năng trọng tâm: Ôn ngoại ngữ 30p sáng + tóm tắt 3 ý chính mỗi chương sách đang đọc.",
+             font_size=9.0, align="left", indent=1, bg_color=t.card, font_color=t.ink)
+    cv.merge(rb0 + 2, C_NAME, rb0 + 2, C_D31,
+             "• Không gian Zen: Tắt thông báo điện thoại, đặt 1 ly trà xanh mát & bật nhạc không lời nhẹ nhàng.",
+             font_size=9.0, align="left", indent=1, bg_color=t.card, font_color=t.ink)
+    cv.unlock(rb0 + 1, C_NAME, rb0 + 2, C_D31)
+    cv.grid(rb0 + 1, C_NAME, rb0 + 2, C_D31, t.line)
+    cv.box(rb0, C_NAME, rb0 + 2, C_D31, t.line)
+
+    cv.merge(rb0, C_R0, rb0, C_RE, "🐼  ZEN SCHOLAR RANK", bold=True, font_size=8.8, align="center",
+             bg_color=t.primary, font_color="#FFFFFF")
+    cv.merge(rb0 + 1, C_R0, rb0 + 2, C_RE,
+             f'="🎋 Ngày Zen: "&{tr.s["grown"]}&" ngày"&CHAR(10)&"🔥 Best Streak: "&{tr.s["best"]}&"d"',
+             bold=True, font_size=9.0, align="center", text_wrap=True, bg_color="#E6F5EC", font_color="#2D5A42")
+    cv.box(rb0, C_R0, rb0 + 2, C_RE, t.line)
+
+
+# 69. Loopy Ruffle Sleep Routine: Daily Sleep Hours + 3-Part Bedtime Routine Cards
+def add_loopy_ruffle_sleep_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 690):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23); cv.row(r0 + 1, 22); cv.row(r0 + 2, 10)
+    for rr in range(r0 + 3, r0 + 7):
+        cv.row(rr, 22)
+
+    cv.put(r0, C_NAME, "🛏️  RUFFLE SLEEP HOURS LOG", bold=True, font_size=9.2, align="left", indent=1,
+           bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_D0, r0, C_D31, "SỐ GIỜ NGỦ MỖI ĐÊM CÙNG LOOPY GỐI BÈO (MỤC TIÊU 7.5 – 8.5 GIỜ)",
+             bold=True, font_size=8.6, align="center", bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r0, C_R0, r0, C_RE, "💤  AVG SLEEP", bold=True, font_size=8.8, align="center",
+             bg_color="#7C6BA8", font_color="#FFFFFF")
+
+    r_sl = r0 + 1
+    cv.put(r_sl, C_NAME, "🌙  Giờ ngủ chất lượng (giờ)", bold=True, font_size=9.0, align="left", indent=1,
+           bg_color=t.soft, font_color=t.ink)
+    rnd = random.Random(seed)
+    for k in range(1, 32):
+        c = day_col(k)
+        val = "" if k > 22 else rnd.choice([7.0, 7.5, 8.0, 8.0, 8.5, 7.5, 8.0, 7.5])
+        cv.put(r_sl, c, val, align="center", font_size=8.8, bold=True, bg_color=t.card,
+               font_color=t.ink, num_format="0.0")
+    sl_rng = rng(r_sl, C_D0, r_sl, C_D31)
+    cv.unlock(r_sl, C_D0, r_sl, C_D31)
+    cv.grid(r_sl, C_NAME, r_sl, C_D31, t.line)
+    cv.box(r0, C_NAME, r_sl, C_D31, t.line)
+    ws.conditional_format(sl_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 5.5,
+                                   "mid_type": "num", "mid_value": 7.5, "max_type": "num", "max_value": 9.0,
+                                   "min_color": "#FDFBE9", "mid_color": "#EAE4F7", "max_color": "#E892AC"})
+    cv.merge(r_sl, C_R0, r_sl, C_RE, f"=IFERROR(AVERAGE({sl_rng}),0)", bold=True, font_size=11.0,
+             align="center", num_format='0.0" giờ 💤"', bg_color="#EAE4F7", font_color="#5B468A")
+    cv.box(r0, C_R0, r_sl, C_RE, t.line)
+
+    # 3 Cozy Bedtime Wind-Down Cards
+    rb0 = r0 + 3
+    cards = [
+        ("🎀  21:30 • KÉO RÈM NƠ HỒNG", (1, 10), "#E892AC", "#FFF2F6",
+         "• Cất điện thoại ra xa giường.\n• Bật đèn vàng dịu & xịt thơm gối."),
+        ("🫧  22:00 • THƯ GIÃN TỰA GỐI", (12, 21), "#8B74B8", "#F4F0FC",
+         "• Dưỡng da tối & giãn cơ nhẹ 5p.\n• Đọc 5 trang sách nhẹ nhàng."),
+        ("💤  22:30 • GIẤC MƠ HOA ZZZ", (23, 32), "#C96A88", "#FFF5F8",
+         "• Hít thở sâu 4-7-8 thả lỏng vai.\n• Ngủ đủ 8 tiếng đón sáng tươi tắn!"),
+    ]
+    for title, (c1, c2), h_bg, c_bg, body in cards:
+        cv.merge(rb0, c1, rb0, c2, title, bold=True, font_size=8.8, align="center",
+                 bg_color=h_bg, font_color="#FFFFFF")
+        cv.merge(rb0 + 1, c1, rb0 + 3, c2, body, font_size=8.8, align="left", indent=1,
+                 text_wrap=True, bg_color=c_bg, font_color=t.ink)
+        cv.unlock(rb0 + 1, c1, rb0 + 3, c2)
+        cv.box(rb0, c1, rb0 + 3, c2, h_bg)
+
+    cv.merge(rb0, C_R0, rb0, C_RE, "🌙  SLEEP SCORE", bold=True, font_size=8.8, align="center",
+             bg_color=t.primary_dark, font_color="#FFFFFF")
+    cv.merge(rb0 + 1, C_R0, rb0 + 2, C_RE,
+             f'=IF(IFERROR(AVERAGE({sl_rng}),0)>=7.8,"💤 Giấc Mơ Hoa!",IF(IFERROR(AVERAGE({sl_rng}),0)>=7.0,"🫧 Ngủ Đủ Giấc","🎀 Đi Ngủ Sớm Nhé"))',
+             bold=True, font_size=10.0, align="center", bg_color=t.soft, font_color=t.primary_dark)
+    cv.merge(rb0 + 3, C_R0, rb0 + 3, C_RE,
+             f'="🌙 Đêm Ngon: "&{tr.s["grown"]}&"d  •  🔥 Best: "&{tr.s["best"]}&"d"',
+             bold=True, font_size=8.6, align="center", bg_color=t.card, font_color=t.ink)
+    cv.box(rb0, C_R0, rb0 + 3, C_RE, t.line)
+
+
+# 70. Loopy Hair Roller GRWM: Daily GRWM Glow Score + 3-Step Hair & Skincare Routine Cards
+def add_loopy_hair_roller_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 700):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23); cv.row(r0 + 1, 22); cv.row(r0 + 2, 10)
+    for rr in range(r0 + 3, r0 + 7):
+        cv.row(rr, 22)
+
+    cv.put(r0, C_NAME, "💇‍♀️  HAIR ROLLER GRWM GLOW", bold=True, font_size=9.2, align="left", indent=1,
+           bg_color=t.primary, font_color="#FFFFFF")
+    cv.merge(r0, C_D0, r0, C_D31, "CHỈ SỐ CHỈN CHU & RẠNG RỠ GRWM MỖI NGÀY CÙNG LOOPY LÔ CUỐN MÁI (1 – 5)",
+             bold=True, font_size=9.0, align="center", bg_color=t.primary, font_color="#FFFFFF")
+    cv.merge(r0, C_R0, r0, C_RE, "🪞  GRWM AVG", bold=True, font_size=9.0, align="center",
+             bg_color="#4A3B42", font_color="#FFFFFF")
+
+    r_gr = r0 + 1
+    cv.put(r_gr, C_NAME, "✨  Độ chỉn chu sáng (1–5)", bold=True, font_size=9.0, align="left", indent=1,
+           bg_color=t.soft, font_color=t.ink)
+    rnd = random.Random(seed)
+    for k in range(1, 32):
+        c = day_col(k)
+        val = "" if k > 22 else rnd.choice([4, 5, 4, 5, 3, 5, 4, 5])
+        cv.put(r_gr, c, val, align="center", font_size=9.0, bold=True, bg_color=t.card,
+               font_color=t.ink, num_format="0")
+    gr_rng = rng(r_gr, C_D0, r_gr, C_D31)
+    cv.unlock(r_gr, C_D0, r_gr, C_D31)
+    cv.grid(r_gr, C_NAME, r_gr, C_D31, t.line)
+    cv.box(r0, C_NAME, r_gr, C_D31, t.line)
+    ws.conditional_format(gr_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 1,
+                                   "mid_type": "num", "mid_value": 3, "max_type": "num", "max_value": 5,
+                                   "min_color": "#FFF7FA", "mid_color": "#F7B4C9", "max_color": "#D96B8D"})
+    cv.merge(r_gr, C_R0, r_gr, C_RE, f"=IFERROR(AVERAGE({gr_rng}),0)", bold=True, font_size=11.0,
+             align="center", num_format='0.0" / 5 🪞"', bg_color="#FDEAF1", font_color="#A84264")
+    cv.box(r0, C_R0, r_gr, C_RE, t.line)
+
+    rb0 = r0 + 3
+    cards = [
+        ("💇‍♀️  BƯỚC 1 • CUỐN LÔ & TRÀ ẤM", (1, 10), "#D96B8D", "#FFF5F8",
+         "• Cuốn lô mái bồng, rửa mặt sạch.\n• Nhấp 1 ngụm trà ấm tỉnh hồn ngay!"),
+        ("🌸  BƯỚC 2 • SKINCARE & MÁ HỒNG", (12, 21), "#4A3B42", "#F7F2F4",
+         "• Dưỡng ẩm, chống nắng đủ lượng.\n• Chấm nhẹ má hồng & dưỡng môi xinh."),
+        ("🪞  BƯỚC 3 • THÁO LÔ TỎA SÁNG", (23, 32), "#C45175", "#FFF5F9",
+         "• Tháo lô mái bồng, kẹp nơ hồng.\n• Soi gương mỉm cười tự tin ra cửa!"),
+    ]
+    for title, (c1, c2), h_bg, c_bg, body in cards:
+        cv.merge(rb0, c1, rb0, c2, title, bold=True, font_size=9.0, align="center",
+                 bg_color=h_bg, font_color="#FFFFFF")
+        cv.merge(rb0 + 1, c1, rb0 + 3, c2, body, font_size=9.0, align="left", indent=1,
+                 text_wrap=True, bg_color=c_bg, font_color=t.ink)
+        cv.unlock(rb0 + 1, c1, rb0 + 3, c2)
+        cv.box(rb0, c1, rb0 + 3, c2, h_bg)
+
+    ov = tr.s["overall"]
+    cv.merge(rb0, C_R0, rb0, C_RE, "👑  GRWM RANK", bold=True, font_size=9.0, align="center",
+             bg_color=t.primary_dark, font_color="#FFFFFF")
+    cv.merge(rb0 + 1, C_R0, rb0 + 2, C_RE,
+             f'=IF({ov}>=0.9,"✨ Xinh Lung Linh!",IF({ov}>=0.7,"🪞 Mái Bồng Soi Gương",'
+             f'IF({ov}>=0.45,"🌸 Chấm Má Hồng","💇‍♀️ Cuốn Lô Bắt Đầu")))',
+             bold=True, font_size=9.8, align="center", bg_color=t.soft, font_color=t.primary_dark)
+    cv.merge(rb0 + 3, C_R0, rb0 + 3, C_RE,
+             f'="🪞 Ngày GRWM: "&{tr.s["grown"]}&"d • 🔥 "&{tr.s["best"]}&"d"',
+             bold=True, font_size=9.0, align="center", bg_color=t.card, font_color=t.ink)
+    cv.box(rb0, C_R0, rb0 + 3, C_RE, t.line)
+
+
+# =========================================================================== #
+#  LOTSO STRAWBERRY BEAR COLLECTION (#71–#80) — 10 BESPOKE ADDON BLOCKS!
+#  Strictly placed at R_EXTRA (row 39+) so ZERO onEdit(e) coordinates shift!
+# =========================================================================== #
+
+# 71. Lotso Strawberry Harvest: Live Strawberry Basket Counter + 3-Line Sweet Harvest Note
+def add_lotso_strawberry_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 710):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23)
+    for rr in range(r0 + 1, r0 + 6):
+        cv.row(rr, 22)
+
+    c_mid = 13
+    cv.merge(r0, C_NAME, r0, c_mid, "🍓  STRAWBERRY HARVEST BASKET  •  GIỎ DÂU TÂY THU HOẠCH THÁNG",
+             bold=True, font_size=9.1, align="left", indent=1, bg_color=t.primary, font_color="#FFFFFF")
+    cv.merge(r0 + 1, C_NAME, r0 + 3, 5,
+             f'="🍓 "&{tr.s["tdone"]}&CHAR(10)&"QUẢ DÂU ĐÃ HÁI"',
+             bold=True, font_size=13.5, align="center", text_wrap=True, bg_color=t.soft, font_color=t.primary_dark)
+    cv.merge(r0 + 1, 6, r0 + 1, c_mid, f'="🌿 Ngày hái dâu chín (≥75%):  "&{tr.s["grown"]}&" ngày"',
+             bold=True, font_size=9.1, align="left", indent=1, bg_color=t.card, font_color="#2D6A42")
+    cv.merge(r0 + 2, 6, r0 + 2, c_mid, f'="😍 Ngày mắt tim 100%:  "&{tr.s["perfect"]}&" ngày rực rỡ"',
+             bold=True, font_size=9.1, align="left", indent=1, bg_color="#FFF5F8", font_color=t.primary_dark)
+    cv.merge(r0 + 3, 6, r0 + 3, c_mid, f'="🎯 Tỷ lệ chín mọng tháng:  "&TEXT({tr.s["overall"]},"0%")',
+             bold=True, font_size=9.1, align="left", indent=1, bg_color=t.card, font_color=t.ink)
+    cv.merge(r0 + 4, C_NAME, r0 + 5, c_mid,
+             f'=IF({tr.s["tdone"]}>=180,"🍓 Vụ mùa dâu chín mọng tuyệt đỉnh!",IF({tr.s["tdone"]}>=90,"🌿 Vườn dâu đang chín đỏ rất đều!","🐾 Hết quay lưng lì lợm, bắt đầu hái dâu thôi!"))',
+             bold=True, font_size=9.1, align="center", bg_color="#EBF7EC", font_color="#2D6A42")
+    cv.grid(r0 + 1, C_NAME, r0 + 5, c_mid, t.line)
+    cv.box(r0, C_NAME, r0 + 5, c_mid, t.primary)
+
+    c_g0 = c_mid + 2
+    cv.merge(r0, c_g0, r0, C_D31, "💌  LOTSO SWEET HARVEST NOTES  •  GHI CHÚ THÀNH QUẢ NGỌT NGÀO",
+             bold=True, font_size=9.1, align="left", indent=1, bg_color="#5B9E65", font_color="#FFFFFF")
+    notes = [
+        "1. Khi thấy lười như Lotso quay lưng (0%): làm 1 thói quen nhỏ nhất trong 2 phút!",
+        "2. Mỗi dấu tick là một quả dâu chín đỏ — tích đều cuối tuần sẽ có giỏ dâu đầy ắp.",
+        "3. Tự thưởng sinh tố dâu / trà trái cây mát lạnh khi tuần đạt ≥ 80%!",
+        "",
+        "",
+    ]
+    for i, g in enumerate(notes):
+        cv.merge(r0 + 1 + i, c_g0, r0 + 1 + i, C_D31, g, font_size=9.0, align="left", indent=1,
+                 bg_color=t.card, font_color=t.ink)
+        cv.hline(r0 + 1 + i, c_g0, C_D31, t.line)
+    cv.unlock(r0 + 1, c_g0, r0 + 5, C_D31)
+    cv.box(r0, c_g0, r0 + 5, C_D31, "#5B9E65")
+
+    cv.merge(r0, C_R0, r0, C_RE, "🍓  HARVEST GOAL", bold=True, font_size=9.0, align="center",
+             bg_color=t.primary_dark, font_color="#FFFFFF")
+    cv.merge(r0 + 1, C_R0, r0 + 2, C_RE, f"=MIN(1,{tr.s['tdone']}/200)", bold=True, font_size=14.0,
+             align="center", num_format="0%", bg_color=t.soft, font_color=t.primary_dark)
+    ws.conditional_format(rng(r0 + 1, C_R0, r0 + 2, C_RE), {
+        "type": "data_bar", "bar_color": "#E56B8C", "bar_solid": True,
+        "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1,
+    })
+    cv.merge(r0 + 3, C_R0, r0 + 3, C_RE, "Mốc vụ mùa: 200 dâu", italic=True, font_size=9.0,
+             align="center", bg_color=t.card, font_color=t.muted)
+    cv.merge(r0 + 4, C_R0, r0 + 5, C_RE,
+             f'="🔥 Chuỗi Hái Dâu:"&CHAR(10)&{tr.s["best"]}&" ngày liên tiếp"',
+             bold=True, font_size=9.0, align="center", text_wrap=True, bg_color="#EBF7EC", font_color="#2D6A42")
+    cv.grid(r0 + 1, C_R0, r0 + 5, C_RE, t.line)
+    cv.box(r0, C_R0, r0 + 5, C_RE, t.line)
+
+
+# 72. Lotso Strawberry Milk Cafe: Daily Hydration & Milk Treat Log + Cafe Menu Reward Bar
+def add_lotso_milk_cafe_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 720):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23); cv.row(r0 + 1, 22); cv.row(r0 + 2, 10)
+    for rr in range(r0 + 3, r0 + 6):
+        cv.row(rr, 22)
+
+    cv.put(r0, C_NAME, "🥛  STRAWBERRY MILK & WATER", bold=True, font_size=9.2, align="left", indent=1,
+           bg_color=t.primary, font_color="#FFFFFF")
+    cv.merge(r0, C_D0, r0, C_D31, "SỐ LY NƯỚC LỌC & SỮA DÂU TƯƠI BỔ SUNG MỖI NGÀY (MỤC TIÊU 8 LY)",
+             bold=True, font_size=9.0, align="center", bg_color=t.primary, font_color="#FFFFFF")
+    cv.merge(r0, C_R0, r0, C_RE, "🍓  AVG CUPS", bold=True, font_size=9.0, align="center",
+             bg_color="#53966F", font_color="#FFFFFF")
+
+    r_w = r0 + 1
+    cv.put(r_w, C_NAME, "🥤  Số ly nước / sữa (ly)", bold=True, font_size=9.0, align="left", indent=1,
+           bg_color=t.soft, font_color=t.ink)
+    rnd = random.Random(seed)
+    for k in range(1, 32):
+        c = day_col(k)
+        val = "" if k > 22 else rnd.choice([6, 7, 8, 8, 9, 7, 8, 8])
+        cv.put(r_w, c, val, align="center", font_size=9.0, bold=True, bg_color=t.card, font_color=t.ink, num_format="0")
+    w_rng = rng(r_w, C_D0, r_w, C_D31)
+    cv.unlock(r_w, C_D0, r_w, C_D31)
+    cv.grid(r_w, C_NAME, r_w, C_D31, t.line)
+    cv.box(r0, C_NAME, r_w, C_D31, t.line)
+    ws.conditional_format(w_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 4,
+                                  "mid_type": "num", "mid_value": 7, "max_type": "num", "max_value": 10,
+                                  "min_color": "#FFF8F5", "mid_color": "#F7B2C4", "max_color": "#D65076"})
+    cv.merge(r_w, C_R0, r_w, C_RE, f"=IFERROR(AVERAGE({w_rng}),0)", bold=True, font_size=11.0, align="center",
+             num_format='0.0" ly 🥛"', bg_color="#E8F6EE", font_color="#2D6A4A")
+    cv.box(r0, C_R0, r_w, C_RE, t.line)
+
+    rb0 = r0 + 3
+    ov = tr.s["overall"]
+    cv.merge(rb0, C_NAME, rb0, C_D31, "🍰  STRAWBERRY MILK CAFE MENU  •  QUY TẮC PHA CHẾ & TỰ THƯỞNG CUỐI TUẦN",
+             bold=True, font_size=9.0, align="left", indent=1, bg_color="#53966F", font_color="#FFFFFF")
+    cv.merge(rb0 + 1, C_NAME, rb0 + 1, C_D31,
+             "• Sáng: Đeo tạp dề dâu tây, uống 1 ly nước ấm + bữa sáng đủ chất để tỉnh táo làm việc.",
+             font_size=9.0, align="left", indent=1, bg_color=t.card, font_color=t.ink)
+    cv.merge(rb0 + 2, C_NAME, rb0 + 2, C_D31,
+             "• Cuối tuần ≥80%: Tự pha 1 ly sữa dâu kem tươi + lát bánh Shortcake ăn mừng kỷ luật!",
+             font_size=9.0, align="left", indent=1, bg_color=t.card, font_color=t.ink)
+    cv.unlock(rb0 + 1, C_NAME, rb0 + 2, C_D31)
+    cv.grid(rb0 + 1, C_NAME, rb0 + 2, C_D31, t.line)
+    cv.box(rb0, C_NAME, rb0 + 2, C_D31, t.line)
+
+    cv.merge(rb0, C_R0, rb0, C_RE, "🍰  CAFE RANK", bold=True, font_size=9.0, align="center",
+             bg_color=t.primary, font_color="#FFFFFF")
+    cv.merge(rb0 + 1, C_R0, rb0 + 1, C_RE,
+             f'=IF({ov}>=0.85,"🍰 Tiệc Shortcake!",IF({ov}>=0.6,"🥛 Sữa Dâu Kem Tươi","🍓 Đeo Tạp Dề Mở Quán"))',
+             bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.primary_dark)
+    cv.merge(rb0 + 2, C_R0, rb0 + 2, C_RE,
+             f'="🍓 Ngày Cafe: "&{tr.s["grown"]}&"d • 🔥 "&{tr.s["best"]}&"d"',
+             bold=True, font_size=9.0, align="center", bg_color=t.card, font_color=t.ink)
+    cv.box(rb0, C_R0, rb0 + 2, C_RE, t.line)
+
+
+# 73. Lotso Berry Flower Crown: 6-Stage Crown Weaving Counter + Garden Affirmation
+def add_lotso_flower_crown_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 730):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23)
+    for rr in range(r0 + 1, r0 + 6):
+        cv.row(rr, 22)
+
+    cv.merge(r0, C_NAME, r0, C_D31, "👑  BERRY FLOWER CROWN WEAVER  •  THỐNG KÊ 6 BƯỚC KẾT VƯƠNG MIỆN HOA DÂU TRONG THÁNG",
+             bold=True, font_size=9.1, align="left", indent=1, bg_color=t.primary, font_color="#FFFFFF")
+    cv.merge(r0, C_R0, r0, C_RE, "🌼  CROWN RANK", bold=True, font_size=9.0, align="center",
+             bg_color="#539662", font_color="#FFFFFF")
+
+    stg_rng = f"{tr.calc_q}!{rng(tr.stage_row, 1, tr.stage_row, 31)}"
+    tiers = [
+        ("🌱 Đầu Trơn", "0%", "#FFF9F5", "#9C4A5E"),
+        ("🌼 Cài Cúc", "1–24%", "#FEF9C3", "#854D0E"),
+        ("🌿 Nửa Vòng", "25–49%", "#E8F5EB", "#2D6A42"),
+        ("👑 Vương Miện", "50–74%", "#FCE7EE", "#B82E50"),
+        ("🍓 Chùm Dâu", "75–99%", "#FFE4EC", "#9E1F42"),
+        ("✨ Rạng Rỡ!", "100% ✨", "#FCE7F3", "#9D174D"),
+    ]
+    spans = [(1, 5), (6, 10), (11, 15), (16, 21), (22, 26), (27, 32)]
+    for i, ((c1, c2), (lbl, pct, bg, fg)) in enumerate(zip(spans, tiers)):
+        cv.merge(r0 + 1, c1, r0 + 1, c2, lbl, bold=True, font_size=9.0, align="center", bg_color=bg, font_color=fg)
+        cv.merge(r0 + 2, c1, r0 + 2, c2, f'=COUNTIF({stg_rng},{i + 1})&" ngày"', bold=True, font_size=10.5,
+                 align="center", bg_color=t.card, font_color=fg)
+        cv.merge(r0 + 3, c1, r0 + 3, c2, pct, italic=True, font_size=9.0, align="center", bg_color=t.page, font_color=t.muted)
+
+    cv.merge(r0 + 4, C_NAME, r0 + 4, C_D31, "🌸  GARDEN BLOOMING AFFIRMATION  •  LỜI NHẮN KHU VƯỜN HOA DÂU",
+             bold=True, font_size=9.0, align="left", indent=1, bg_color="#E8F5EB", font_color="#2D6A42")
+    cv.merge(r0 + 5, C_NAME, r0 + 5, C_D31,
+             "• Mỗi thói quen đều đặn là một bông cúc trắng & quả dâu đỏ — kiên trì từng ngày sẽ kết trọn chiếc vương miện rực rỡ!",
+             font_size=9.0, align="left", indent=1, bg_color=t.card, font_color=t.ink)
+    cv.unlock(r0 + 5, C_NAME, r0 + 5, C_D31)
+    cv.grid(r0 + 1, C_NAME, r0 + 5, C_D31, t.line)
+    cv.box(r0, C_NAME, r0 + 5, C_D31, t.line)
+
+    ov = tr.s["overall"]
+    cv.merge(r0 + 1, C_R0, r0 + 2, C_RE,
+             f'=IF({ov}>=0.9,"👑 Hoàng Tử Vườn Dâu!",IF({ov}>=0.7,"🍓 Chùm Dâu Chín",'
+             f'IF({ov}>=0.45,"🌿 Kết Nửa Vòng Hoa","🌼 Cài Bông Cúc Đầu")))',
+             bold=True, font_size=10.0, align="center", bg_color=t.soft, font_color=t.primary_dark)
+    cv.merge(r0 + 3, C_R0, r0 + 3, C_RE, f"={ov}", bold=True, font_size=9.5, align="center",
+             num_format="0%", bg_color=t.card, font_color=t.ink)
+    ws.conditional_format(rng(r0 + 3, C_R0, r0 + 3, C_RE), {
+        "type": "data_bar", "bar_color": "#D94A6B", "bar_solid": True,
+        "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1,
+    })
+    cv.merge(r0 + 4, C_R0, r0 + 5, C_RE,
+             f'="👑 Ngày 100%: "&{tr.s["perfect"]}&"d"&CHAR(10)&"🔥 Best: "&{tr.s["best"]}&"d"',
+             bold=True, font_size=9.0, align="center", text_wrap=True, bg_color="#E8F5EB", font_color="#2D6A42")
+    cv.grid(r0 + 1, C_R0, r0 + 5, C_RE, t.line)
+    cv.box(r0, C_R0, r0 + 5, C_RE, t.line)
+
+
+# 74. Lotso Overalls Toy Workshop: 4-Week Workshop Project Sprint Log + Rocket Counter
+def add_lotso_overalls_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 740):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23)
+    for rr in range(r0 + 1, r0 + 6):
+        cv.row(rr, 22)
+
+    cv.merge(r0, C_NAME, r0, C_D31, "🚀  TOY WORKSHOP SPRINT JOURNAL  •  SỔ TAY DỰ ÁN & BẢNG STICKER TUẦN",
+             bold=True, font_size=9.1, align="left", indent=1, bg_color=t.primary, font_color="#FFFFFF")
+    cv.merge(r0, C_R0, r0, C_RE, "🚀  ROCKET BOOST", bold=True, font_size=9.0, align="center",
+             bg_color="#E3657B", font_color="#FFFFFF")
+
+    cv.put(r0 + 1, C_NAME, "📅  CHẶNG XƯỞNG", bold=True, font_size=9.0, align="center", bg_color="#EBF5EC", font_color="#2E5E33")
+    cv.merge(r0 + 1, C_D0, r0 + 1, 14, "🛠️  MỤC TIÊU SÁNG TẠO / DỰ ÁN", bold=True, font_size=9.0,
+             align="center", bg_color="#EBF5EC", font_color="#2E5E33")
+    cv.merge(r0 + 1, 15, r0 + 1, C_D31, "🎉  THÀNH QUẢ & STICKER ĐÃ DÁN", bold=True, font_size=9.0,
+             align="center", bg_color="#FDECEF", font_color="#9E2A42")
+
+    sprints = [
+        ("Tuần 1 • Khởi ca", "Lên bản vẽ kế hoạch & dọn bàn gọn gàng", "Mặc quần yếm cài cúc, chào Hi! tràn năng lượng."),
+        ("Tuần 2 • Chế tác", "Hoàn thiện phần lõi của dự án / bài học", "Dán thêm sticker dâu tây handmade lên sổ tay!"),
+        ("Tuần 3 • Tăng tốc", "Bứt phá hoàn tất các hạng mục tồn đọng", "Phóng tên lửa vàng – cam vượt tiến độ tuần!"),
+        ("Tuần 4 • Ăn mừng", "Đóng gói sản phẩm & nhìn lại bài học hay", "Vẫy tay ăn mừng cùng bạn heo hồng cực vui!"),
+    ]
+    for i, (w_s, p_s, r_s) in enumerate(sprints):
+        rr = r0 + 2 + i
+        bg = "#FFFFFF" if i % 2 == 0 else "#FFFBF0"
+        cv.put(rr, C_NAME, w_s, bold=True, font_size=9.0, align="left", indent=1, bg_color=bg, font_color="#2E5E33")
+        cv.merge(rr, C_D0, rr, 14, p_s, font_size=9.0, align="left", indent=1, bg_color=bg, font_color=t.ink)
+        cv.merge(rr, 15, rr, C_D31, r_s, font_size=9.0, align="left", indent=1, bg_color=bg, font_color=t.ink)
+    cv.unlock(r0 + 2, C_NAME, r0 + 5, C_D31)
+    cv.grid(r0 + 1, C_NAME, r0 + 5, C_D31, t.line)
+    cv.box(r0, C_NAME, r0 + 5, C_D31, t.primary)
+
+    cv.merge(r0 + 1, C_R0, r0 + 2, C_RE, f'="🚀 "&{tr.s["grown"]}&" LẦN"', bold=True, font_size=14.5,
+             align="center", bg_color="#FDECEF", font_color="#B82E4C")
+    cv.merge(r0 + 3, C_R0, r0 + 3, C_RE, f"=MIN(1,{tr.s['grown']}/20)", bold=True, font_size=9.2,
+             align="center", num_format='0%" (Mốc 20 ngày)"', bg_color=t.card, font_color="#2E5E33")
+    ws.conditional_format(rng(r0 + 3, C_R0, r0 + 3, C_RE), {
+        "type": "data_bar", "bar_color": "#6D9F71", "bar_solid": True,
+        "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1,
+    })
+    cv.merge(r0 + 4, C_R0, r0 + 5, C_RE,
+             f'="🛠️ Ngày 100%: "&{tr.s["perfect"]}&"d"&CHAR(10)&"🔥 Best: "&{tr.s["best"]}&"d"',
+             bold=True, font_size=9.0, align="center", text_wrap=True, bg_color="#EBF5EC", font_color="#2E5E33")
+    cv.grid(r0 + 1, C_R0, r0 + 5, C_RE, t.line)
+    cv.box(r0, C_R0, r0 + 5, C_RE, t.line)
+
+
+# 75. Lotso LoFi Earphones Flow: Daily Flow Minutes + Lo-Fi Playlist & Soundwave Stats
+def add_lotso_lofi_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 750):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23); cv.row(r0 + 1, 22); cv.row(r0 + 2, 10)
+    for rr in range(r0 + 3, r0 + 7):
+        cv.row(rr, 22)
+
+    cv.put(r0, C_NAME, "🎧  LO-FI FLOW MINUTES", bold=True, font_size=9.2, align="left", indent=1,
+           bg_color=t.primary, font_color="#FFFFFF")
+    cv.merge(r0, C_D0, r0, C_D31, "SỐ PHÚT TẬP TRUNG SÂU CÙNG NHẠC LO-FI MỖI NGÀY (MINUTES)",
+             bold=True, font_size=9.0, align="center", bg_color=t.primary, font_color="#FFFFFF")
+    cv.merge(r0, C_R0, r0, C_RE, "🎵  TOTAL FLOW", bold=True, font_size=9.0, align="center",
+             bg_color="#6B3A2E", font_color="#FFFFFF")
+
+    r_fl = r0 + 1
+    cv.put(r_fl, C_NAME, "🎶  Phút Deep Flow (mins)", bold=True, font_size=9.0, align="left", indent=1,
+           bg_color=t.soft, font_color=t.ink)
+    rnd = random.Random(seed)
+    for k in range(1, 32):
+        c = day_col(k)
+        val = "" if k > 22 else rnd.choice([45, 60, 75, 90, 120, 60, 90, 105])
+        cv.put(r_fl, c, val, align="center", font_size=9.0, bold=True, bg_color=t.card, font_color=t.ink, num_format="0")
+    fl_rng = rng(r_fl, C_D0, r_fl, C_D31)
+    cv.unlock(r_fl, C_D0, r_fl, C_D31)
+    cv.grid(r_fl, C_NAME, r_fl, C_D31, t.line)
+    cv.box(r0, C_NAME, r_fl, C_D31, t.line)
+    ws.conditional_format(fl_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 0,
+                                   "mid_type": "num", "mid_value": 60, "max_type": "num", "max_value": 120,
+                                   "min_color": "#FFF4F2", "mid_color": "#F5C2D0", "max_color": "#C84B6E"})
+    cv.merge(r_fl, C_R0, r_fl, C_RE, f"=SUM({fl_rng})/60", bold=True, font_size=11.0, align="center",
+             num_format='0.0" giờ 🎧"', bg_color="#F5EBE8", font_color="#6B3A2E")
+    cv.box(r0, C_R0, r_fl, C_RE, t.line)
+
+    rb0 = r0 + 3
+    c_mid = 16
+    cv.merge(rb0, C_NAME, rb0, c_mid, "📻  LOTSO LO-FI PLAYLIST  •  NHẠC TẬP TRUNG YÊU THÍCH", bold=True, font_size=9.0,
+             align="left", indent=1, bg_color="#C84B6E", font_color="#FFFFFF")
+    tracks = [
+        "♫  Track 01: Warm Berry Coffee Shop Lo-Fi Beats (90 BPM Focus)",
+        "♫  Track 02: Rainy Afternoon Vinyl & Soft Guitar Study Mix",
+        "♫  Track 03: Midnight Strawberry Piano Deep Flow Session",
+    ]
+    for i, trk in enumerate(tracks):
+        cv.merge(rb0 + 1 + i, C_NAME, rb0 + 1 + i, c_mid, trk, font_size=9.0, align="left", indent=1,
+                 bg_color=t.card, font_color=t.ink)
+        cv.hline(rb0 + 1 + i, C_NAME, c_mid, t.line)
+    cv.unlock(rb0 + 1, C_NAME, rb0 + 3, c_mid)
+    cv.box(rb0, C_NAME, rb0 + 3, c_mid, t.line)
+
+    cv.merge(rb0, c_mid + 2, rb0, C_D31, "🌊  DEEP FLOW RULES  •  BÍ QUYẾT VÀO GUỒNG", bold=True, font_size=9.0,
+             align="left", indent=1, bg_color="#6B3A2E", font_color="#FFFFFF")
+    rules = [
+        "• Đeo tai nghe dây nâu, bật chế độ Không Làm Phiền (DND) 45 phút.",
+        "• Mở duy nhất 1 tab công việc chính — gạt hết xao nhãng sang một bên.",
+        "• Kết thúc phiên nhạc: vươn vai, uống nước ấm & ghi lại tiến độ!",
+    ]
+    for i, rl in enumerate(rules):
+        cv.merge(rb0 + 1 + i, c_mid + 2, rb0 + 1 + i, C_D31, rl, font_size=9.0, align="left", indent=1,
+                 bg_color=t.card, font_color=t.ink)
+        cv.hline(rb0 + 1 + i, c_mid + 2, C_D31, t.line)
+    cv.unlock(rb0 + 1, c_mid + 2, rb0 + 3, C_D31)
+    cv.box(rb0, c_mid + 2, rb0 + 3, C_D31, t.line)
+
+    cv.merge(rb0, C_R0, rb0, C_RE, "🎶  FLOW METER", bold=True, font_size=9.0, align="center",
+             bg_color=t.primary_dark, font_color="#FFFFFF")
+    cv.merge(rb0 + 1, C_R0, rb0 + 2, C_RE,
+             f'="🎧 TB: "&TEXT(IFERROR(AVERAGE({fl_rng}),0),"0")&" phút/ngày"',
+             bold=True, font_size=10.0, align="center", bg_color=t.soft, font_color=t.primary_dark)
+    cv.merge(rb0 + 3, C_R0, rb0 + 3, C_RE,
+             f'="🎵 Ngày Flow: "&{tr.s["grown"]}&"d • 🔥 "&{tr.s["best"]}&"d"',
+             bold=True, font_size=9.0, align="center", bg_color=t.card, font_color="#6B3A2E")
+    cv.box(rb0, C_R0, rb0 + 3, C_RE, t.line)
+
+
+# 76. Lotso Mood Detox Comic: Daily Stress-to-Joy Meter (1–5) + 5 Weekly Mood Detox Donut Gauges
+def add_lotso_mood_detox_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 760):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23); cv.row(r0 + 1, 22); cv.row(r0 + 2, 10)
+    for rr in range(r0 + 3, r0 + 8):
+        cv.row(rr, 22)
+
+    cv.put(r0, C_NAME, "⚡  MOOD DETOX METER", bold=True, font_size=9.2, align="left", indent=1,
+           bg_color=t.primary, font_color="#FFFFFF")
+    cv.merge(r0, C_D0, r0, C_D31, "CHỈ SỐ GIẢI TỎA STRESS & TÂM TRẠNG TÍCH CỰC MỖI NGÀY (1 = TIA SÉT → 5 = MƯA TIM)",
+             bold=True, font_size=9.0, align="center", bg_color=t.primary, font_color="#FFFFFF")
+    cv.merge(r0, C_R0, r0, C_RE, "💖  MOOD AVG", bold=True, font_size=9.0, align="center",
+             bg_color="#D9A026", font_color="#FFFFFF")
+
+    r_m = r0 + 1
+    cv.put(r_m, C_NAME, "💗  Tâm trạng cuối ngày (1–5)", bold=True, font_size=9.0, align="left", indent=1,
+           bg_color=t.soft, font_color=t.ink)
+    rnd = random.Random(seed)
+    for k in range(1, 32):
+        c = day_col(k)
+        val = "" if k > 22 else rnd.choice([4, 4, 5, 5, 3, 4, 5, 5])
+        cv.put(r_m, c, val, align="center", font_size=9.0, bold=True, bg_color=t.card, font_color=t.ink, num_format="0")
+    m_rng = rng(r_m, C_D0, r_m, C_D31)
+    cv.unlock(r_m, C_D0, r_m, C_D31)
+    cv.grid(r_m, C_NAME, r_m, C_D31, t.line)
+    cv.box(r0, C_NAME, r_m, C_D31, t.line)
+    ws.conditional_format(m_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 1,
+                                  "mid_type": "num", "mid_value": 3, "max_type": "num", "max_value": 5,
+                                  "min_color": "#FEF3C7", "mid_color": "#FBCFE8", "max_color": "#B8456A"})
+    cv.merge(r_m, C_R0, r_m, C_RE, f"=IFERROR(AVERAGE({m_rng}),0)", bold=True, font_size=11.0,
+             align="center", num_format='0.0" / 5 💖"', bg_color="#FEF9C3", font_color="#854D0E")
+    cv.box(r0, C_R0, r_m, C_RE, t.line)
+
+    rd = r0 + 3
+    cv.merge(rd, C_NAME, rd + 4, C_NAME, "💖  MOOD DETOX GAUGES\nNhịp cân bằng 5 tuần", bold=True,
+             font_size=10.0, align="center", text_wrap=True, bg_color=t.card, font_color=t.primary_dark)
+    rb = tr.calc_row_base
+    spans = [(2, 7), (8, 13), (14, 19), (20, 25), (26, 32)]
+    dcols = ["#B8456A", "#E5B03A", "#A8649E", "#D95D82", "#9C3456"]
+    for w, (c1, c2) in enumerate(spans):
+        hc = CALC_WK_COL0 + w
+        cv.merge(rd, c1, rd, c2, f"WEEK {w + 1}", bold=True, font_size=9.0, align="center",
+                 bg_color=t.week_head[w], font_color=t.week_on[w])
+        cv.merge(rd + 1, c1, rd + 4, c2, f"={tr.calc_q}!{acell(rb + 2, hc)}", bold=True, font_size=12.5,
+                 align="center", num_format="0%", bg_color=t.card, font_color=dcols[w])
+        dch = donut(wb, f"={tr.calc_q}!{rng(rb + 2, hc, rb + 3, hc)}", [dcols[w], t.donut_rest], hole=70)
+        place_chart(cv, dch, rd + 1, c1, rd + 4, c2, pad_x=10, pad_y=2)
+        cv.vline(c2, rd, rd + 4, t.line, where="right")
+    cv.box(rd, C_NAME, rd + 4, C_D31, t.line)
+
+    cv.merge(rd, C_R0, rd, C_RE, "🎈  ANTI-STRESS TIP", bold=True, font_size=9.0, align="center",
+             bg_color=t.primary_dark, font_color="#FFFFFF")
+    cv.merge(rd + 1, C_R0, rd + 3, C_RE,
+             "• Bực bội? Dừng 60 giây, uống ngụm nước mát.\n• Chia việc lớn thành 1 bước siêu nhỏ.\n• Ôm bóng tim & khen mình đã cố gắng!",
+             font_size=9.0, align="left", indent=1, text_wrap=True, bg_color=t.card, font_color=t.ink)
+    cv.unlock(rd + 1, C_R0, rd + 3, C_RE)
+    cv.merge(rd + 4, C_R0, rd + 4, C_RE,
+             f'="💖 Ngày An: "&{tr.s["grown"]}&"d • ✨ "&{tr.s["perfect"]}&"d"',
+             bold=True, font_size=9.0, align="center", bg_color=t.soft, font_color=t.primary_dark)
+    cv.box(rd, C_R0, rd + 4, C_RE, t.line)
+
+
+# 77. Lotso Floral Sweet Dreams: Evening Sleep Hours + 3-Part Sweet Dreams Cloud Routine
+def add_lotso_sweet_dreams_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 770):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23); cv.row(r0 + 1, 22); cv.row(r0 + 2, 10)
+    for rr in range(r0 + 3, r0 + 7):
+        cv.row(rr, 22)
+
+    cv.put(r0, C_NAME, "🐑  SWEET DREAMS SLEEP LOG", bold=True, font_size=9.2, align="left", indent=1,
+           bg_color=t.primary, font_color="#FFFFFF")
+    cv.merge(r0, C_D0, r0, C_D31, "SỐ GIỜ NGỦ ÊM ÁI CÙNG MÂY CỪU TÍM MỖI ĐÊM (MỤC TIÊU 7.5 – 8.5 GIỜ)",
+             bold=True, font_size=9.0, align="center", bg_color=t.primary, font_color="#FFFFFF")
+    cv.merge(r0, C_R0, r0, C_RE, "☁️  AVG SLEEP", bold=True, font_size=9.0, align="center",
+             bg_color="#8A6BB8", font_color="#FFFFFF")
+
+    r_sl = r0 + 1
+    cv.put(r_sl, C_NAME, "🌙  Giờ ngủ mỗi đêm (h)", bold=True, font_size=9.0, align="left", indent=1,
+           bg_color=t.soft, font_color=t.ink)
+    rnd = random.Random(seed)
+    for k in range(1, 32):
+        c = day_col(k)
+        val = "" if k > 22 else rnd.choice([7.5, 8.0, 8.0, 8.5, 7.0, 7.5, 8.0, 8.0])
+        cv.put(r_sl, c, val, align="center", font_size=9.0, bold=True, bg_color=t.card, font_color=t.ink, num_format="0.0")
+    sl_rng = rng(r_sl, C_D0, r_sl, C_D31)
+    cv.unlock(r_sl, C_D0, r_sl, C_D31)
+    cv.grid(r_sl, C_NAME, r_sl, C_D31, t.line)
+    cv.box(r0, C_NAME, r_sl, C_D31, t.line)
+    ws.conditional_format(sl_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 5.5,
+                                   "mid_type": "num", "mid_value": 7.5, "max_type": "num", "max_value": 9.0,
+                                   "min_color": "#FFF7FB", "mid_color": "#E6DAF7", "max_color": "#C25674"})
+    cv.merge(r_sl, C_R0, r_sl, C_RE, f"=IFERROR(AVERAGE({sl_rng}),0)", bold=True, font_size=11.0,
+             align="center", num_format='0.0" giờ 🐑"', bg_color="#F1EAF9", font_color="#5E408C")
+    cv.box(r0, C_R0, r_sl, C_RE, t.line)
+
+    rb0 = r0 + 3
+    cards = [
+        ("🌹  21:30 • TỔNG KẾT BÓ HOA", (1, 10), "#C25674", "#FFF5F9",
+         "• Tick gọn các thói quen hôm nay.\n• Ghi 1 bông hoa biết ơn dịu dàng."),
+        ("☁️  22:00 • ĐÁM MÂY THƯ GIÃN", (12, 21), "#9374C4", "#F5F0FC",
+         "• Hạ ánh sáng đèn, rời màn hình.\n• Uống trà hoa cúc ấm nhẹ lòng."),
+        ("🐑  22:30 • ĐẾM CỪU TÍM NGỦ", (23, 32), "#A64561", "#FFF4F8",
+         "• Hít sâu thở chậm thả lỏng vai.\n• Ngủ sâu 8 tiếng mơ đẹp êm ái!"),
+    ]
+    for title, (c1, c2), h_bg, c_bg, body in cards:
+        cv.merge(rb0, c1, rb0, c2, title, bold=True, font_size=9.0, align="center", bg_color=h_bg, font_color="#FFFFFF")
+        cv.merge(rb0 + 1, c1, rb0 + 3, c2, body, font_size=9.0, align="left", indent=1, text_wrap=True, bg_color=c_bg, font_color=t.ink)
+        cv.unlock(rb0 + 1, c1, rb0 + 3, c2)
+        cv.box(rb0, c1, rb0 + 3, c2, h_bg)
+
+    cv.merge(rb0, C_R0, rb0, C_RE, "🐑  DREAM SCORE", bold=True, font_size=9.0, align="center",
+             bg_color=t.primary_dark, font_color="#FFFFFF")
+    cv.merge(rb0 + 1, C_R0, rb0 + 2, C_RE,
+             f'=IF(IFERROR(AVERAGE({sl_rng}),0)>=7.8,"🐑 Mơ Cừu Bồng Bềnh!",IF(IFERROR(AVERAGE({sl_rng}),0)>=7.0,"🌹 Ngủ Đủ Giấc","☁️ Ngủ Sớm Hơn Nhé"))',
+             bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.primary_dark)
+    cv.merge(rb0 + 3, C_R0, rb0 + 3, C_RE,
+             f'="🌙 Đêm Đẹp: "&{tr.s["grown"]}&"d • 🔥 "&{tr.s["best"]}&"d"',
+             bold=True, font_size=9.0, align="center", bg_color=t.card, font_color=t.ink)
+    cv.box(rb0, C_R0, rb0 + 3, C_RE, t.line)
+
+
+# 78. Lotso Daisy Cheek Glow: Daily Joy Score + 5-Week Sunny Daisy Progress Bars
+def add_lotso_daisy_glow_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 780):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23); cv.row(r0 + 1, 22); cv.row(r0 + 2, 10)
+    for rr in range(r0 + 3, r0 + 7):
+        cv.row(rr, 22)
+
+    cv.put(r0, C_NAME, "🌼  DAISY CHEEK GLOW SCORE", bold=True, font_size=9.2, align="left", indent=1,
+           bg_color=t.primary, font_color="#FFFFFF")
+    cv.merge(r0, C_D0, r0, C_D31, "ĐỘ TƯƠI TẮN & NIỀM VUI NHẸ NHÀNG MỖI NGÀY CÙNG LOTSO HOA CÚC (1 – 5)",
+             bold=True, font_size=9.0, align="center", bg_color=t.primary, font_color="#FFFFFF")
+    cv.merge(r0, C_R0, r0, C_RE, "☀️  GLOW AVG", bold=True, font_size=9.0, align="center",
+             bg_color="#D9A31E", font_color="#FFFFFF")
+
+    r_gl = r0 + 1
+    cv.put(r_gl, C_NAME, "🌼  Điểm tươi tắn ngày (1–5)", bold=True, font_size=9.0, align="left", indent=1,
+           bg_color=t.soft, font_color=t.ink)
+    rnd = random.Random(seed)
+    for k in range(1, 32):
+        c = day_col(k)
+        val = "" if k > 22 else rnd.choice([4, 5, 4, 5, 3, 5, 4, 5])
+        cv.put(r_gl, c, val, align="center", font_size=9.0, bold=True, bg_color=t.card, font_color=t.ink, num_format="0")
+    j_rng = rng(r_gl, C_D0, r_gl, C_D31)
+    cv.unlock(r_gl, C_D0, r_gl, C_D31)
+    cv.grid(r_gl, C_NAME, r_gl, C_D31, t.line)
+    cv.box(r0, C_NAME, r_gl, C_D31, t.line)
+    ws.conditional_format(j_rng, {"type": "3_color_scale", "min_type": "num", "min_value": 1,
+                                  "mid_type": "num", "mid_value": 3, "max_type": "num", "max_value": 5,
+                                  "min_color": "#FFF9F2", "mid_color": "#FEF08A", "max_color": "#F6CE55"})
+    cv.merge(r_gl, C_R0, r_gl, C_RE, f"=IFERROR(AVERAGE({j_rng}),0)", bold=True, font_size=11.0,
+             align="center", num_format='0.0" / 5 🌼"', bg_color="#FEF9C3", font_color="#854D0E")
+    cv.box(r0, C_R0, r_gl, C_RE, t.line)
+
+    rb0 = r0 + 3
+    rb = tr.calc_row_base
+    cv.merge(rb0, C_NAME, rb0, C_D31, "🌼  SUNNY DAISY WEEKLY PROGRESS  •  THANH TIẾN ĐỘ HOA CÚC 5 TUẦN",
+             bold=True, font_size=9.0, align="left", indent=1, bg_color="#96394F", font_color="#FFFFFF")
+    spans = [(1, 6), (7, 13), (14, 19), (20, 26), (27, 32)]
+    p_cols = ["#B94E66", "#F6CE55", "#D67086", "#EAB308", "#A33E55"]
+    p_bgs = ["#FCECEF", "#FEF9C3", "#FCECEF", "#FEF3C7", "#FCECEF"]
+    p_fgs = ["#8C2D42", "#854D0E", "#8C2D42", "#92400E", "#752235"]
+    for w, ((c1, c2), bc, bg, fg) in enumerate(zip(spans, p_cols, p_bgs, p_fgs)):
+        hc = CALC_WK_COL0 + w
+        pct_ref = f"{tr.calc_q}!{acell(rb + 2, hc)}"
+        cv.merge(rb0 + 1, c1, rb0 + 1, c2, f"🌼 WEEK {w + 1}", bold=True, font_size=9.0, align="center", bg_color=bg, font_color=fg)
+        cv.merge(rb0 + 2, c1, rb0 + 2, c2, f"={pct_ref}", bold=True, font_size=11.0, align="center",
+                 num_format="0%", bg_color=t.card, font_color=fg)
+        ws.conditional_format(rng(rb0 + 2, c1, rb0 + 2, c2), {
+            "type": "data_bar", "bar_color": bc, "bar_solid": True,
+            "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1,
+        })
+        cv.merge(rb0 + 3, c1, rb0 + 3, c2,
+                 f'=IF({pct_ref}>=0.8,"🌼 Rạng Rỡ Nháy Mắt!",IF({pct_ref}>=0.5,"😊 Áp Má Cười Hiền","🌱 Nụ Cúc Hé Mở"))',
+                 italic=True, font_size=9.0, align="center", bg_color=t.page, font_color=fg)
+    cv.grid(rb0 + 1, C_NAME, rb0 + 3, C_D31, t.line)
+    cv.box(rb0, C_NAME, rb0 + 3, C_D31, t.line)
+
+    cv.merge(rb0, C_R0, rb0, C_RE, "☀️  DAISY SMILE NOTE", bold=True, font_size=9.0, align="center",
+             bg_color="#D9A31E", font_color="#FFFFFF")
+    cv.merge(rb0 + 1, C_R0, rb0 + 2, C_RE,
+             "• Thả lỏng đôi vai, mỉm cười chữ U thật hiền mỗi sáng!",
+             font_size=9.0, align="left", indent=1, text_wrap=True, bg_color=t.card, font_color=t.ink)
+    cv.unlock(rb0 + 1, C_R0, rb0 + 2, C_RE)
+    cv.merge(rb0 + 3, C_R0, rb0 + 3, C_RE,
+             f'="🌼 Glow Days: "&{tr.s["grown"]}&"d • 🔥 "&{tr.s["best"]}&"d"',
+             bold=True, font_size=9.0, align="center", bg_color=t.soft, font_color=t.primary_dark)
+    cv.box(rb0, C_R0, rb0 + 3, C_RE, t.line)
+
+
+# 79. Lotso Bunny Headband Selfcare: 3 Live Routine Grouping Cards (Morning / Day / Spa Night)
+def add_lotso_bunny_selfcare_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 790):
+    from .tracker import R_H0, CALC_DONEN_COL, CALC_GOALN_COL
+    t, cq = cv.t, tr.calc_q
+    C_RE = tr.c_right_end
+    rb = tr.calc_row_base
+    r0 = R_EXTRA
+    cv.row(r0, 23)
+    for rr in range(r0 + 1, r0 + 6):
+        cv.row(rr, 22)
+
+    groups = [
+        ("☀️  MORNING FRESH (SÁNG)", 0, 2, (1, 10), "#EB7B9B", "#FFF2F6", "#A63759"),
+        ("🍓  DAYTIME CARE (BAN NGÀY)", 3, 5, (12, 21), "#A8649E", "#F8F0F7", "#733A6B"),
+        ("🐰  NIGHT SPA ROUTINE (TỐI)", 6, 8, (23, 32), "#8B529E", "#F5EEF9", "#5B2E6B"),
+    ]
+    for title, h_a, h_b, (c1, c2), hdr_bg, card_bg, fg in groups:
+        d_rng = f"{cq}!{rng(rb + R_H0 + h_a, CALC_DONEN_COL, rb + R_H0 + h_b, CALC_DONEN_COL)}"
+        g_rng = f"{cq}!{rng(rb + R_H0 + h_a, CALC_GOALN_COL, rb + R_H0 + h_b, CALC_GOALN_COL)}"
+        cv.merge(r0, c1, r0, c2, title, bold=True, font_size=9.0, align="center", bg_color=hdr_bg, font_color="#FFFFFF")
+        cv.merge(r0 + 1, c1, r0 + 2, c2, f"=IFERROR(SUM({d_rng})/SUM({g_rng}),0)", bold=True, font_size=17.0,
+                 align="center", num_format="0%", bg_color=t.card, font_color=fg)
+        cv.merge(r0 + 3, c1, r0 + 3, c2, f'=SUM({d_rng})&" / "&SUM({g_rng})&" bước hoàn thành"',
+                 bold=True, font_size=9.0, align="center", bg_color=card_bg, font_color=fg)
+        cv.box(r0, c1, r0 + 3, c2, hdr_bg)
+
+    cv.merge(r0 + 4, C_NAME, r0 + 4, C_D31, "🐰  BUNNY HEADBAND SPA PROMISE  •  LỜI HỨA CHĂM SÓC BẢN THÂN",
+             bold=True, font_size=9.0, align="left", indent=1, bg_color="#F3E5F5", font_color="#6A326E")
+    cv.merge(r0 + 5, C_NAME, r0 + 5, C_D31,
+             "• Đặt điện thoại xuống đúng giờ, đeo bờm tai thỏ tím & dành trọn 15 phút skincare thư giãn yêu chiều bản thân!",
+             italic=True, font_size=9.0, align="left", indent=1, bg_color=t.card, font_color=t.ink)
+    cv.unlock(r0 + 5, C_NAME, r0 + 5, C_D31)
+    cv.box(r0 + 4, C_NAME, r0 + 5, C_D31, t.line)
+
+    cv.merge(r0, C_R0, r0, C_RE, "🐰  SPA GLOW RANK", bold=True, font_size=9.0, align="center",
+             bg_color=t.primary, font_color="#FFFFFF")
+    cv.merge(r0 + 1, C_R0, r0 + 2, C_RE,
+             f'=IF({tr.s["overall"]}>=0.85,"🐰 Rạng Ngời Self-Care!",IF({tr.s["overall"]}>=0.6,"🧴 Đắp Mặt Nạ Dâu","🎀 Đeo Bờm Bắt Đầu"))',
+             bold=True, font_size=9.8, align="center", bg_color=t.soft, font_color=t.primary_dark)
+    cv.merge(r0 + 3, C_R0, r0 + 3, C_RE, f'="🐰 Ngày Spa: "&{tr.s["grown"]}&" ngày"',
+             bold=True, font_size=9.0, align="center", bg_color=t.card, font_color=t.ink)
+    cv.merge(r0 + 4, C_R0, r0 + 5, C_RE,
+             f'="💖 Ngày 100%: "&{tr.s["perfect"]}&"d"&CHAR(10)&"🔥 Best: "&{tr.s["best"]}&"d"',
+             bold=True, font_size=9.0, align="center", text_wrap=True, bg_color="#FFF2F6", font_color="#A63759")
+    cv.grid(r0 + 1, C_R0, r0 + 5, C_RE, t.line)
+    cv.box(r0, C_R0, r0 + 5, C_RE, t.line)
+
+
+# 80. Lotso Berry Gift Box Party: 5-Week Gift Box Unlocks + Celebration Wish Board
+def add_lotso_gift_box_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 800):
+    t, ws = cv.t, cv.ws
+    C_RE = tr.c_right_end
+    r0 = R_EXTRA
+    cv.row(r0, 23)
+    for rr in range(r0 + 1, r0 + 7):
+        cv.row(rr, 22)
+
+    cv.merge(r0, C_NAME, r0, C_D31, "🎁  BERRY GIFT BOX PARTY UNLOCKS  •  MỞ KHÓA 5 HỘP QUÀ PHẦN THƯỞNG TUẦN",
+             bold=True, font_size=9.2, align="left", indent=1, bg_color=t.primary, font_color="#FFFFFF")
+    cv.merge(r0, C_R0, r0, C_RE, "🎉  PARTY LEVEL", bold=True, font_size=9.0, align="center",
+             bg_color="#942449", font_color="#FFFFFF")
+
+    rb = tr.calc_row_base
+    spans = [(1, 6), (7, 13), (14, 19), (20, 26), (27, 32)]
+    w_bgs = ["#FCE7EF", "#FEF5D6", "#FCE7EF", "#FEF5D6", "#FCE7EF"]
+    w_fgs = ["#C43E67", "#8A6208", "#C43E67", "#8A6208", "#942449"]
+    w_bars = ["#C43E67", "#F5CB69", "#E05A84", "#EAB948", "#A82E54"]
+    for w, ((c1, c2), bg, fg, barc) in enumerate(zip(spans, w_bgs, w_fgs, w_bars)):
+        hc = CALC_WK_COL0 + w
+        pct_ref = f"{tr.calc_q}!{acell(rb + 2, hc)}"
+        cv.merge(r0 + 1, c1, r0 + 1, c2, f"🎁 WEEK {w + 1}", bold=True, font_size=9.0, align="center", bg_color=bg, font_color=fg)
+        cv.merge(r0 + 2, c1, r0 + 2, c2, f"={pct_ref}", bold=True, font_size=11.0, align="center", num_format="0%",
+                 bg_color=t.card, font_color=fg)
+        ws.conditional_format(rng(r0 + 2, c1, r0 + 2, c2), {
+            "type": "data_bar", "bar_color": barc, "bar_solid": True,
+            "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1,
+        })
+        cv.merge(r0 + 3, c1, r0 + 3, c2,
+                 f'=IF({pct_ref}>=0.8,"🥳 Tung Confetti Quà!",IF({pct_ref}>=0.5,"🧁 Mở Hộp Cupcake","🎁 Hộp Quà Đang Chờ"))',
+                 italic=True, font_size=9.0, align="center", bg_color=t.page, font_color=fg)
+
+    cv.merge(r0 + 4, C_NAME, r0 + 4, C_D31, "🧁  CELEBRATION WISH & REWARD BOARD  •  BẢNG ĐIỀU ƯỚC & PHẦN THƯỞNG KỶ LUẬT",
+             bold=True, font_size=9.0, align="left", indent=1, bg_color="#FEF5D6", font_color="#785206")
+    cv.merge(r0 + 5, C_NAME, r0 + 5, C_D31,
+             "• Điều ước tháng này: Duy trì đều đặn thói quen nhỏ để tự tin mở trọn 5 hộp quà tuần cùng Lotso!",
+             font_size=9.0, align="left", indent=1, bg_color=t.card, font_color=t.ink)
+    cv.merge(r0 + 6, C_NAME, r0 + 6, C_D31,
+             "• Phần thưởng Tiệc 100%: Thưởng 1 chiếc bánh Cupcake / món quà nhỏ mơ ước khi tổng tháng đạt ≥ 80%!",
+             font_size=9.0, align="left", indent=1, bg_color=t.card, font_color=t.ink)
+    cv.unlock(r0 + 5, C_NAME, r0 + 6, C_D31)
+    cv.grid(r0 + 1, C_NAME, r0 + 6, C_D31, t.line)
+    cv.box(r0, C_NAME, r0 + 6, C_D31, t.line)
+
+    ov = tr.s["overall"]
+    cv.merge(r0 + 1, C_R0, r0 + 2, C_RE,
+             f'=IF({ov}>=0.9,"🥳 CONFETTI PARTY!",IF({ov}>=0.7,"🧁 ÔM CUPCAKE ƯỚC",'
+             f'IF({ov}>=0.45,"🎉 ĐỘI MŨ TIỆC","🎁 LẤP LÓ HỘP QUÀ")))',
+             bold=True, font_size=9.8, align="center", bg_color=t.soft, font_color=t.primary_dark)
+    cv.merge(r0 + 3, C_R0, r0 + 4, C_RE,
+             f'="🎁 Tổng lượt tick: "&{tr.s["tdone"]}&CHAR(10)&"🎉 Ngày tiệc ≥75%: "&{tr.s["grown"]}&"d"',
+             bold=True, font_size=9.0, align="center", text_wrap=True, bg_color=t.card, font_color=t.ink)
+    cv.merge(r0 + 5, C_R0, r0 + 6, C_RE,
+             f'="✨ Ngày 100%: "&{tr.s["perfect"]}&"d"&CHAR(10)&"🔥 Best Streak: "&{tr.s["best"]}&"d"',
+             bold=True, font_size=9.0, align="center", text_wrap=True, bg_color="#FEF5D6", font_color="#785206")
+    cv.grid(r0 + 1, C_R0, r0 + 6, C_RE, t.line)
+    cv.box(r0, C_R0, r0 + 6, C_RE, t.line)
+
+
+
+
 

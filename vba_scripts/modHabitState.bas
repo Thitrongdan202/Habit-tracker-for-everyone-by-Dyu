@@ -1300,10 +1300,21 @@ Public Sub CleanupToasts()
         Application.OnTime EarliestTime:=gToastDueTime, Procedure:="DismissToast", Schedule:=False
         gToastScheduled = False
     End If
+    Dim tShp As Shape
     If Not gToastShp Is Nothing Then
-        gToastShp.Visible = MSO_FALSE
+        Set tShp = gToastShp
     ElseIf Len(gToastSheetName) > 0 Then
-        ThisWorkbook.Worksheets(gToastSheetName).Shapes("FX_TOAST").Visible = MSO_FALSE
+        Set tShp = ThisWorkbook.Worksheets(gToastSheetName).Shapes("FX_TOAST")
+    End If
+    If Not tShp Is Nothing Then
+        If tShp.Visible = MSO_TRUE Then
+            Dim baseL As Single
+            baseL = tShp.Left
+            tShp.Left = Application.Max(2!, baseL - 10!)
+            WaitSec 0.018
+            tShp.Visible = MSO_FALSE
+            tShp.Left = baseL
+        End If
     End If
     On Error GoTo 0
 End Sub
@@ -1458,6 +1469,25 @@ Public Sub ShowToast(ByVal ws As Worksheet, ByVal msgText As String)
         On Error GoTo SafeExit
     End If
 
+    Dim tLeft As Single, tTop As Single, tW As Single, tH As Single
+    tW = 310!
+    tH = 34!
+
+    ' Position cleanly at the BOTTOM-LEFT of ActiveWindow.VisibleRange (right above sheet tabs!)
+    On Error Resume Next
+    Dim visR As Range
+    Set visR = ActiveWindow.VisibleRange
+    If Not visR Is Nothing Then
+        tLeft = visR.Left + 14!
+        tTop = visR.Top + visR.Height - tH - 18!
+    Else
+        tLeft = 14!
+        tTop = ws.Range("A20").Top
+    End If
+    If tLeft < 10! Then tLeft = 10!
+    If tTop < 10! Then tTop = 10!
+    On Error GoTo SafeExit
+
     Dim toast As Shape
     If gToastSheetName = ws.Name And Not gToastShp Is Nothing Then
         On Error Resume Next
@@ -1469,8 +1499,10 @@ Public Sub ShowToast(ByVal ws As Worksheet, ByVal msgText As String)
     End If
 
     If Not toast Is Nothing Then
-        ' Ultra-fast O(1) toast reuse (~1ms instead of ~30ms AddShape!)
+        ' Ultra-fast O(1) toast reuse repositioned to current bottom-left viewport
         toast.TextFrame2.TextRange.Text = msgText
+        toast.Top = tTop
+        toast.Left = Application.Max(2!, tLeft - 14!)
         toast.Visible = MSO_TRUE
     Else
         If Len(gToastSheetName) > 0 And gToastSheetName <> ws.Name Then
@@ -1482,25 +1514,7 @@ Public Sub ShowToast(ByVal ws As Worksheet, ByVal msgText As String)
         ws.Shapes("FX_TOAST").Delete
         On Error GoTo SafeExit
 
-        Dim tLeft As Single, tTop As Single, tW As Single, tH As Single
-        tW = 310!
-        tH = 34!
-
-        On Error Resume Next
-        Dim visR As Range
-        Set visR = ActiveWindow.VisibleRange
-        If Not visR Is Nothing Then
-            tLeft = visR.Left + visR.Width - tW - 18!
-            tTop = visR.Top + 14!
-        Else
-            tLeft = ws.Range("T2").Left
-            tTop = ws.Range("T2").Top + 8!
-        End If
-        If tLeft < 16! Then tLeft = 16!
-        If tTop < 8! Then tTop = 8!
-        On Error GoTo SafeExit
-
-        Set toast = ws.Shapes.AddShape(MSO_ROUNDED_RECT, tLeft, tTop, tW, tH)
+        Set toast = ws.Shapes.AddShape(MSO_ROUNDED_RECT, Application.Max(2!, tLeft - 14!), tTop, tW, tH)
         toast.Name = "FX_TOAST"
         toast.Adjustments(1) = 0.4
         toast.Fill.Solid
@@ -1530,6 +1544,16 @@ Public Sub ShowToast(ByVal ws As Worksheet, ByVal msgText As String)
         Set gToastShp = toast
         gToastSheetName = ws.Name
     End If
+
+    ' Gentle 3-step slide-in from bottom-left edge (<45ms total, non-blocking!)
+    On Error Resume Next
+    Application.ScreenUpdating = True
+    toast.Left = Application.Max(2!, tLeft - 8!)
+    WaitSec 0.015
+    toast.Left = Application.Max(2!, tLeft - 3!)
+    WaitSec 0.015
+    toast.Left = tLeft
+    On Error GoTo SafeExit
 
     gToastDueTime = Now + TimeSerial(0, 0, 2)
     gToastScheduled = True
