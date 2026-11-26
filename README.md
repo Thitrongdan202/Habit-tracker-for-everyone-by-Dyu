@@ -1,6 +1,6 @@
-# 🥑 Habit Tracker Collection for Everyone — by Dyu (v3.9 — 60 Themes × 4 Editions)
+# 🍓🎀 Habit Tracker Collection for Everyone — by Dyu (v4.0 — 80 Themes × 4 Editions)
 
-![Version 3.9](https://img.shields.io/badge/Version-3.9_60_Themes-65A30D?style=for-the-badge)
+![Version 4.0](https://img.shields.io/badge/Version-4.0_80_Themes-E56B8C?style=for-the-badge)
 ![Pro #1 Recommended](https://img.shields.io/badge/⭐_KHUYÊN_DÙNG_%231-Pro_.XLSM_(Excel_365)-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white)
 ![Zero Macro Offline](https://img.shields.io/badge/%232_Offline_No--Macro-.XLSX_(Excel_2016--365)-4E9F76?style=for-the-badge)
 ![Google Sheets Beta](https://img.shields.io/badge/%233_Google_Sheets-Beta_(Đang_thử_nghiệm)-F59E0B?style=for-the-badge&logo=googlesheets&logoColor=white)
@@ -9,7 +9,8 @@
 <table width="100%">
   <tr>
     <td width="74%" valign="middle">
-      <p><b>Bộ sưu tập 60 mẫu Habit Tracker hoàn toàn miễn phí mãi mãi cho cộng đồng</b> — chuẩn Digital Planner với <b>375 ảnh hoạt ảnh</b> tự lớn lên & tiến hóa theo % thói quen mỗi ngày (<b>13 chủ đề Capybara Chill độc bản</b> gồm Capybara Bơ Xanh vẽ tay, <b>12 bộ Digimon 7–8 cấp tiến hóa chuẩn canon</b>, Thú cưng Kawaii, Alpaca, Gấu trúc, Shiba/Akita & Hoa lá)!</p>
+      <p><b>Bộ sưu tập 80 mẫu Habit Tracker hoàn toàn miễn phí mãi mãi cho cộng đồng (320 tệp đủ 4 phiên bản)</b> — chuẩn Digital Planner với <b>495 ảnh hoạt ảnh</b> tự lớn lên & tiến hóa theo % thói quen mỗi ngày (<b>10 chủ đề Gấu Dâu Lotso Pastel #71–#80</b>, <b>10 chủ đề Hải Ly Loopy Pastel #61–#70</b>, <b>13 chủ đề Capybara Chill #48–#60</b>, <b>12 bộ Digimon 7–8 cấp chuẩn canon #36–#47</b>, Thú cưng Kawaii, Alpaca, Gấu trúc, Shiba/Akita & Hoa lá)!</p>
+      <p><b>✨ Có gì mới ở v4.0:</b> Bổ sung 20 chủ đề Loopy & Lotso vẽ vector mượt mà (cánh tay cong tự nhiên, mũ trùm ôm trọn khuôn mặt, cốt truyện 6 giai đoạn liền mạch `0% → 100%`), tối ưu thanh thông báo Toast góc trái dưới trên Pro Macro, đồng bộ trọn bộ <code>install.ps1</code> / <code>install.sh</code> & kiểm toán COM 4 phiên bản.</p>
       <p>Dùng mượt <b>100% Offline trên Microsoft Excel (Windows & Mac)</b> — bản Pro siêu mượt (<code>&lt;150ms</code>, hiệu ứng pháo hoa, tự lưu nhiều Tháng/Ngày/Năm, <code>Ctrl+Z</code> Undo), bản Offline không Macro cho mọi đời Excel 2016–365, kèm bản thử nghiệm cho Google Sheets & Điện thoại.</p>
       <p>🌟 Nếu bộ template giúp bạn duy trì thói quen đều đặn & vui hơn mỗi ngày, hãy bấm tặng repo một nút <b>⭐ Star</b> ở góc trên bên phải để tiếp thêm động lực cho Dyu chia sẻ thêm nhiều mẫu dễ thương mới nhé!</p>
     </td>
@@ -40,7 +41,7 @@ Không cần biết kỹ thuật — chỉ cần xem máy tính của bạn đan
 - **Phù hợp với:** **Microsoft 365 (Excel 365 bản mới trên Windows & Mac)**.
 - **Có gì xịn nhất:**
   - Hoạt ảnh 6–8 giai đoạn siêu mượt (**25–54 ms** khi đổi tháng, **4–26 ms** khi đổi ngày), không giật lag!
-  - Đầy đủ hiệu ứng **Hero Bounce** (linh vật nảy vui), **Sparkle/Heart Burst** (bắn pháo hoa khi đạt 100% hoặc chuỗi 7/14/21/30 ngày), **Toast Banner** (thông báo nổi tiếng Việt góc phải, bật/tắt 1 chạm).
+  - Đầy đủ hiệu ứng **Hero Bounce** (linh vật nảy vui), **Sparkle/Heart Burst** (bắn pháo hoa khi đạt 100% hoặc chuỗi 7/14/21/30 ngày), **Toast Banner** (thông báo nổi tiếng Việt **góc trái dưới** gọn gàng gần bảng tick, bật/tắt 1 chạm).
   - Nút **`◀ Tháng` / `Tháng ▶`**, **`◀ Hôm qua` / `Hôm nay` / `Ngày mai ▶`** 1 chạm — **tự động lưu lịch sử từng Tháng / Năm / Ngày** ngay trong file (100% Offline!).
   - Hỗ trợ **`Ctrl+Z` / nút `↩ Undo`** thực thụ & tự động khóa bảo vệ dòng công thức `TOTAL` chống kéo đè, dấu tick ô vuông màu pastel chuẩn từng theme!
 - **⚠️ Lưu ý quan trọng cho người mới tải `.xlsm`:**
@@ -68,8 +69,8 @@ Không cần biết kỹ thuật — chỉ cần xem máy tính của bạn đan
 
 > **Người dùng KHÔNG cần cài Python, KHÔNG cần đăng nhập GitHub!** Bạn chọn 1 trong 2 cách dưới đây:
 
-### Cách 1 (Khuyên dùng — Tải tự động 1 dòng lệnh, chọn theo số `1–60` hoặc tải hết)
-Trình tải tương tác sẽ hỏi bạn muốn bản nào (`[1]`–`[4]`) và mẫu số mấy (`48`, `48-60`, `36-47`, hoặc `A` tải toàn bộ 60 mẫu), rồi tự tải sạch đẹp vào thư mục `template/` trên máy bạn:
+### Cách 1 (Khuyên dùng — Tải tự động 1 dòng lệnh, chọn theo số `1–80` hoặc tải hết)
+Trình tải tương tác sẽ hỏi bạn muốn bản nào (`[1]`–`[4]`) và mẫu số mấy (`71`, `61-70`, `71-80`, `48-60`, hoặc `A` tải toàn bộ 80 mẫu), rồi tự tải sạch đẹp vào thư mục `template/` trên máy bạn:
 
 - **🪟 Windows:** Nhấn phím **Windows** → gõ **`PowerShell`** → mở *Windows PowerShell* → dán dòng lệnh dưới đây → nhấn **Enter**:
 ```powershell
@@ -82,23 +83,23 @@ curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-ev
 
 ### Cách 2 (Tải thủ công trực tiếp trên web GitHub — Không cần gõ lệnh!)
 Nếu bạn không quen mở PowerShell/Terminal, tải trực tiếp ngay trên trình duyệt chỉ với **3 bước**:
-1. Kéo xuống **[Bảng Tải Trực Tiếp 60 Mẫu Template](#-bảng-tải-trực-tiếp-toàn-bộ-60-mẫu-template-đủ-4-phiên-bản--240-tệp)** bên dưới và **bấm vào link phiên bản bạn muốn** (vd: `_Pro.xlsm` cho Excel 365 hoặc `.xlsx` cho Excel 2016–2021).
+1. Kéo xuống **[Bảng Tải Trực Tiếp 80 Mẫu Template](#-bảng-tải-trực-tiếp-toàn-bộ-80-mẫu-template-đủ-4-phiên-bản--320-tệp)** bên dưới và **bấm vào link phiên bản bạn muốn** (vd: `_Pro.xlsm` cho Excel 365 hoặc `.xlsx` cho Excel 2016–2021).
 2. Ở trang file vừa mở ra, bấm nút **Download raw file** *(biểu tượng **mũi tên tải xuống `⬇`** ở góc trên bên phải khung xem file)*.
 3. Mở file vừa tải về bằng Microsoft Excel *(nếu là bản Pro `.xlsm`, nhớ làm theo **2 bước Unblock + Enable Content** ở mục trên)* và bắt đầu tick ngay!
 
 ---
 
-## 🎭 Xem Trước 375 Hoạt Ảnh Tiến Hóa (13 Bộ Capybara Chill • 12 Bộ Digimon 7–8 Cấp • Thú Cưng • Hoa Lá!)
+## 🎭 Xem Trước 495 Hoạt Ảnh Tiến Hóa (10 Gấu Dâu Lotso • 10 Hải Ly Loopy • 13 Capybara Chill • 12 Digimon 7–8 Cấp • Thú Cưng • Hoa Lá!)
 
-Mỗi ngày bạn tick hoàn thành thói quen từ `0% → 100%`, linh vật / Capybara / cây hoa / Digimon của ngày đó sẽ tự động lớn lên hoặc tiến hóa ngay trước mắt bạn!
+Mỗi ngày bạn tick hoàn thành thói quen từ `0% → 100%`, linh vật / Gấu Dâu Lotso / Hải Ly Loopy / Capybara / cây hoa / Digimon của ngày đó sẽ tự động lớn lên hoặc tiến hóa ngay trước mắt bạn!
 
-### 🍓🐻 Batch 9 — 10 Chủ Đề Gấu Dâu Lotso Pastel Collection (`#71`–`#80` — 60 Sprites Đồng Nhất 0% → 100%)
+### 🍓🐻 MỚI v4.0 — Batch 9: 10 Chủ Đề Gấu Dâu Lotso Pastel Collection (`#71`–`#80` — 60 Sprites Đồng Nhất 0% → 100%)
 ![60 Lotso Strawberry Bear Sprites Contact Sheet](previews/assets_contact_sheet_lotso.png)
 
-### 🎀🦫 Batch 8 — 10 Chủ Đề Hải Ly Loopy Pastel Collection (`#61`–`#70` — 60 Sprites Đồng Nhất 0% → 100%)
+### 🎀🦫 MỚI v4.0 — Batch 8: 10 Chủ Đề Hải Ly Loopy Pastel Collection (`#61`–`#70` — 60 Sprites Đồng Nhất 0% → 100%)
 ![60 Loopy Pastel Collection Sprites Contact Sheet](previews/assets_contact_sheet_loopy.png)
 
-### 🥑🍊 MỚI v3.9 — Batch 7: 13 Chủ Đề Capybara Chill Collection (`#48`–`#60` — 78 Sprites Độc Bản Từ Bé Capybara 0% → 100% Đỉnh Cao!)
+### 🥑🍊 Batch 7 — 13 Chủ Đề Capybara Chill Collection (`#48`–`#60` — 78 Sprites Độc Bản Từ Bé Capybara 0% → 100% Đỉnh Cao!)
 ![78 Capybara Chill Collection Sprites Contact Sheet](previews/assets_contact_sheet_capybara.png)
 
 ### ⚡ Batch 6 — 7 Chủ Đề Digimon 7 & 8 Cấp Tiến Hóa (`#41`–`#47` — 52 Sprites Chuẩn Canon)
@@ -127,7 +128,7 @@ Mỗi ngày bạn tick hoàn thành thói quen từ `0% → 100%`, linh vật / 
 
 ---
 
-## 🍓🐻 Showcase Bộ Sưu Tập 10 Chủ Đề Gấu Dâu Lotso (`#71` – `#80`)
+## 🍓🐻 MỚI v4.0 — Showcase Bộ Sưu Tập 10 Chủ Đề Gấu Dâu Lotso (`#71` – `#80`)
 
 <table width="100%">
   <tr>
@@ -170,12 +171,12 @@ Mỗi ngày bạn tick hoàn thành thói quen từ `0% → 100%`, linh vật / 
     <td width="50%" align="center" valign="top">
       <img src="previews/77_lotso_sweet_dreams_tracker.png" width="100%" alt="Lotso Floral Sweet Dreams Tracker"/><br/>
       <b>77. 🐑 Lotso Floral Sweet Dreams</b><br/>
-      <sub>Cành Lá → Hoa Hồng → Mây Nhỏ → Tai Cừu → Cừu Tím Giấc Mơ Bồng Bềnh!</sub>
+      <sub>Ngắm Khóm Hoa → Hái Hoa Đầu → Buộc Bó Hoa → Ôm Hoa Ngắm Mây → Mơ Cừu Tím → Giấc Mơ Cừu!</sub>
     </td>
     <td width="50%" align="center" valign="top">
       <img src="previews/78_lotso_daisy_glow_tracker.png" width="100%" alt="Lotso Daisy Cheek Glow Tracker"/><br/>
       <b>78. 🌼 Lotso Daisy Cheek Glow</b><br/>
-      <sub>Nụ Cúc → Chạm Má → Hoa Cúc Nở → Áp Má Cười Hiền → Nháy Mắt Rạng Rỡ!</sub>
+      <sub>Thấy Hoa Cúc → Cúi Nhặt Hoa → Ngắm Hoa Cúc → Cài Lên Tai → Áp Má Nháy Mắt → Hoa Cúc Rạng Rỡ!</sub>
     </td>
   </tr>
   <tr>
@@ -228,19 +229,19 @@ Mỗi ngày bạn tick hoàn thành thói quen từ `0% → 100%`, linh vật / 
 
 ---
 
-## 🎀🦫 Showcase Bộ Sưu Tập 10 Chủ Đề Hải Ly Loopy Pastel (`#61` – `#70`)
+## 🎀🦫 MỚI v4.0 — Showcase Bộ Sưu Tập 10 Chủ Đề Hải Ly Loopy Pastel (`#61` – `#70`)
 
 <table width="100%">
   <tr>
     <td width="50%" align="center" valign="top">
       <img src="previews/61_loopy_red_bow_tracker.png" width="100%" alt="Loopy Red Bow Glow-Up Tracker"/><br/>
       <b>61. 🎀 Loopy Red Bow Glow-Up</b><br/>
-      <sub>Quên Việc!! → Ôm Má Hít Thở → Buộc Nơ Đỏ → Tự Tin → Chống Cằm Nụ Hoa → Nở Rộ Glow-Up!</sub>
+      <sub>Quên Việc!! → Ôm Má Bình Tĩnh → Thắt Nơ Cầm Bút → Chăm Chú Tick → Gần Kín Bảng → Hoàn Thành 100%!</sub>
     </td>
     <td width="50%" align="center" valign="top">
       <img src="previews/62_loopy_taiyaki_tracker.png" width="100%" alt="Loopy Taiyaki Street Snack Tracker"/><br/>
       <b>62. 🐟 Loopy Taiyaki Street Snack</b><br/>
-      <sub>Túi Trống → Mũ Taiyaki → Bánh Cá Nóng → Xiên Dango → No Nê Phố Ẩm Thực!</sub>
+      <sub>Túi Giấy Trống → Đội Mũ Taiyaki → Bánh Cá Nóng → Thêm Xiên Dango → Cắn Xiên Dango → No Nê Ẩm Thực!</sub>
     </td>
   </tr>
   <tr>
@@ -288,7 +289,7 @@ Mỗi ngày bạn tick hoàn thành thói quen từ `0% → 100%`, linh vật / 
     <td width="50%" align="center" valign="top">
       <img src="previews/70_loopy_hair_roller_tracker.png" width="100%" alt="Loopy Hair Roller GRWM Tracker"/><br/>
       <b>70. 💇‍♀️ Loopy Hair Roller GRWM</b><br/>
-      <sub>Cuốn Lô Mái Ngái Ngủ → Nhấp Trà → Chấm Má Hồng → Tháo Lô → Xinh Lung Linh GRWM!</sub>
+      <sub>Cuốn Lô Ngái Ngủ → Nhấp Trà Tỉnh → Chấm Má Hồng → Tháo Lô Mái → Mái Bồng Gương → Tỏa Sáng GRWM!</sub>
     </td>
   </tr>
 </table>
@@ -329,7 +330,7 @@ Mỗi ngày bạn tick hoàn thành thói quen từ `0% → 100%`, linh vật / 
 
 ---
 
-## 🥑🍊 MỚI v3.9 — Showcase Bộ Sưu Tập 13 Chủ Đề Capybara Chill Collection (`#48` – `#60`)
+## 🥑🍊 Showcase Bộ Sưu Tập 13 Chủ Đề Capybara Chill Collection (`#48` – `#60`)
 
 Mỗi một trong **13 mẫu Capybara** đều được thiết kế **độc bản hoàn toàn (Zero Clones!)** — khác biệt từ bảng màu, kiểu biểu đồ (`Area` / `Column` / `Line`), bảng tính năng phụ riêng biệt bên dưới (Nhật ký Nước & Bữa Bơ, 5 Donut Suối Nóng, Bộ đếm Ly Boba, Giờ Học & Trang Sách, Playlist Lofi, Bảng Mở Khóa Món Ngon, Đếm Táo Thu Hoạch, 5 Điều Ước Sao, Phân Nhóm Sáng/Chiều/Tối Glow-Up, Nhật Ký Ảnh Polaroid…) cho đến **13 bộ Huy Hiệu Thành Tựu Năm** riêng biệt!
 
@@ -579,8 +580,8 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn** (`0% Digi-E
 
 <table width="100%">
   <tr>
-    <td width="50%" align="center" valign="top"><img src="previews/01_sunflower_tracker.png" width="100%" alt="Sunflower Pro v3.9 Tracker"/><br/><sub><b>01. 🌻 Sunflower Pro v3.9 Tracker</b></sub></td>
-    <td width="50%" align="center" valign="top"><img src="previews/01_sunflower_guide.png" width="100%" alt="Sunflower Pro v3.9 Guide"/><br/><sub><b>01. 🌻 Sunflower Pro v3.9 Guide</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/01_sunflower_tracker.png" width="100%" alt="Sunflower Pro Tracker"/><br/><sub><b>01. 🌻 Sunflower Pro Tracker</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/01_sunflower_guide.png" width="100%" alt="Sunflower Pro Guide"/><br/><sub><b>01. 🌻 Sunflower Pro Guide</b></sub></td>
   </tr>
 </table>
 
@@ -683,7 +684,7 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn** (`0% Digi-E
 
 ---
 
-## 📋 Bảng Tải Trực Tiếp Toàn Bộ 60 Mẫu Template (Đủ 4 Phiên Bản — 240 Tệp)
+## 📋 Bảng Tải Trực Tiếp Toàn Bộ 80 Mẫu Template (Đủ 4 Phiên Bản — 320 Tệp)
 
 > 💡 **Mẹo tải nhanh không cần gõ lệnh:** Bấm vào link bạn chọn bên dưới → bấm biểu tượng **mũi tên tải xuống (`⬇ Download raw file`)** ở góc trên bên phải!
 
@@ -749,6 +750,26 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn** (`0% Digi-E
 | **58** | 🧚 **Capybara Fairy Party Wish** *(5 Điều Ước Ngôi Sao Tự Thắp Sáng)* | [`_Pro.xlsm`](templates/pro_macro/58_Capybara_Fairy_Party_Wish_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/58_Capybara_Fairy_Party_Wish.xlsx) | [Desktop](templates/google_sheets_edition/58_Capybara_Fairy_Party_Wish.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/58_Capybara_Fairy_Party_Wish_Mobile.xlsx) |
 | **59** | 🪞 **Capybara SelfCare GlowUp** *(3 Thẻ Sáng · Chiều · Tối Glow-Up)* | [`_Pro.xlsm`](templates/pro_macro/59_Capybara_SelfCare_GlowUp_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/59_Capybara_SelfCare_GlowUp.xlsx) | [Desktop](templates/google_sheets_edition/59_Capybara_SelfCare_GlowUp.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/59_Capybara_SelfCare_GlowUp_Mobile.xlsx) |
 | **60** | 📸 **Capybara Snapshot Traveler** *(Nhật Ký Ảnh Polaroid & Dấu Hộ Chiếu)* | [`_Pro.xlsm`](templates/pro_macro/60_Capybara_Snapshot_Traveler_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/60_Capybara_Snapshot_Traveler.xlsx) | [Desktop](templates/google_sheets_edition/60_Capybara_Snapshot_Traveler.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/60_Capybara_Snapshot_Traveler_Mobile.xlsx) |
+| **61** | 🎀 **Loopy Red Bow Glow-Up** *(Checklist 0→100% & Thắt Nơ Đỏ Tự Tin)* | [`_Pro.xlsm`](templates/pro_macro/61_Loopy_Red_Bow_Glow_Up_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/61_Loopy_Red_Bow_Glow_Up.xlsx) | [Desktop](templates/google_sheets_edition/61_Loopy_Red_Bow_Glow_Up.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/61_Loopy_Red_Bow_Glow_Up_Mobile.xlsx) |
+| **62** | 🐟 **Loopy Taiyaki Street Snack** *(Mũ Bánh Cá Taiyaki & Xiên Dango 3 Màu)* | [`_Pro.xlsm`](templates/pro_macro/62_Loopy_Taiyaki_Street_Snack_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/62_Loopy_Taiyaki_Street_Snack.xlsx) | [Desktop](templates/google_sheets_edition/62_Loopy_Taiyaki_Street_Snack.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/62_Loopy_Taiyaki_Street_Snack_Mobile.xlsx) |
+| **63** | 🧁 **Loopy Piggy Dessert Cafe** *(Mũ Heo Hồng, Kem 2 Viên & Bánh Cherry)* | [`_Pro.xlsm`](templates/pro_macro/63_Loopy_Piggy_Dessert_Cafe_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/63_Loopy_Piggy_Dessert_Cafe.xlsx) | [Desktop](templates/google_sheets_edition/63_Loopy_Piggy_Dessert_Cafe.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/63_Loopy_Piggy_Dessert_Cafe_Mobile.xlsx) |
+| **64** | 🐑 **Loopy Sauna Sheep Detox** *(Khăn Cừu Yangmeori & 5 Donut Detox)* | [`_Pro.xlsm`](templates/pro_macro/64_Loopy_Sauna_Sheep_Detox_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/64_Loopy_Sauna_Sheep_Detox.xlsx) | [Desktop](templates/google_sheets_edition/64_Loopy_Sauna_Sheep_Detox.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/64_Loopy_Sauna_Sheep_Detox_Mobile.xlsx) |
+| **65** | 🐝 **Loopy Honey Bee KPI** *(Chú Ong Chăm Chỉ Deep Work & Hũ Mật)* | [`_Pro.xlsm`](templates/pro_macro/65_Loopy_Honey_Bee_KPI_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/65_Loopy_Honey_Bee_KPI.xlsx) | [Desktop](templates/google_sheets_edition/65_Loopy_Honey_Bee_KPI.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/65_Loopy_Honey_Bee_KPI_Mobile.xlsx) |
+| **66** | 🐥 **Loopy Poolside Duck Chill** *(Hồ Bơi Phao Vịt Vàng & 5 Thanh Tiến Độ)* | [`_Pro.xlsm`](templates/pro_macro/66_Loopy_Poolside_Duck_Chill_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/66_Loopy_Poolside_Duck_Chill.xlsx) | [Desktop](templates/google_sheets_edition/66_Loopy_Poolside_Duck_Chill.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/66_Loopy_Poolside_Duck_Chill_Mobile.xlsx) |
+| **67** | 🎒 **Loopy Fluffy Commuter Diary** *(Mũ Bông Trắng & Nhật Ký Tan Làm Đúng Giờ)* | [`_Pro.xlsm`](templates/pro_macro/67_Loopy_Fluffy_Commuter_Diary_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/67_Loopy_Fluffy_Commuter_Diary.xlsx) | [Desktop](templates/google_sheets_edition/67_Loopy_Fluffy_Commuter_Diary.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/67_Loopy_Fluffy_Commuter_Diary_Mobile.xlsx) |
+| **68** | 🐼 **Loopy Panda Zen Study** *(Mũ Gấu Trúc Học Tập Zen & Trang Sách)* | [`_Pro.xlsm`](templates/pro_macro/68_Loopy_Panda_Zen_Study_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/68_Loopy_Panda_Zen_Study.xlsx) | [Desktop](templates/google_sheets_edition/68_Loopy_Panda_Zen_Study.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/68_Loopy_Panda_Zen_Study_Mobile.xlsx) |
+| **69** | 🛏️ **Loopy Ruffle Sleep Routine** *(Rèm Bèo Nơ Hồng & Giấc Ngủ Ngon 8 Tiếng)* | [`_Pro.xlsm`](templates/pro_macro/69_Loopy_Ruffle_Sleep_Routine_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/69_Loopy_Ruffle_Sleep_Routine.xlsx) | [Desktop](templates/google_sheets_edition/69_Loopy_Ruffle_Sleep_Routine.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/69_Loopy_Ruffle_Sleep_Routine_Mobile.xlsx) |
+| **70** | 💇‍♀️ **Loopy Hair Roller GRWM** *(Tóc Bob Cuốn Lô Mái, Trà Ấm & Soi Gương)* | [`_Pro.xlsm`](templates/pro_macro/70_Loopy_Hair_Roller_GRWM_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/70_Loopy_Hair_Roller_GRWM.xlsx) | [Desktop](templates/google_sheets_edition/70_Loopy_Hair_Roller_GRWM.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/70_Loopy_Hair_Roller_GRWM_Mobile.xlsx) |
+| **71** | 🍓 **Lotso Strawberry Harvest** *(Giỏ Dâu Tây Thu Hoạch & Mắt Trái Tim)* | [`_Pro.xlsm`](templates/pro_macro/71_Lotso_Strawberry_Harvest_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/71_Lotso_Strawberry_Harvest.xlsx) | [Desktop](templates/google_sheets_edition/71_Lotso_Strawberry_Harvest.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/71_Lotso_Strawberry_Harvest_Mobile.xlsx) |
+| **72** | 🍓 **Lotso Strawberry Milk Cafe** *(Quán Sữa Dâu Kem Tươi & Bánh Shortcake)* | [`_Pro.xlsm`](templates/pro_macro/72_Lotso_Strawberry_Milk_Cafe_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/72_Lotso_Strawberry_Milk_Cafe.xlsx) | [Desktop](templates/google_sheets_edition/72_Lotso_Strawberry_Milk_Cafe.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/72_Lotso_Strawberry_Milk_Cafe_Mobile.xlsx) |
+| **73** | 👑 **Lotso Berry Flower Crown** *(Kết Vương Miện Hoa Cúc & Chùm Dâu Đỏ)* | [`_Pro.xlsm`](templates/pro_macro/73_Lotso_Berry_Flower_Crown_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/73_Lotso_Berry_Flower_Crown.xlsx) | [Desktop](templates/google_sheets_edition/73_Lotso_Berry_Flower_Crown.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/73_Lotso_Berry_Flower_Crown_Mobile.xlsx) |
+| **74** | 🚀 **Lotso Overalls Toy Workshop** *(Quần Yếm Kem, Sticker & Tên Lửa Xưởng)* | [`_Pro.xlsm`](templates/pro_macro/74_Lotso_Overalls_Toy_Workshop_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/74_Lotso_Overalls_Toy_Workshop.xlsx) | [Desktop](templates/google_sheets_edition/74_Lotso_Overalls_Toy_Workshop.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/74_Lotso_Overalls_Toy_Workshop_Mobile.xlsx) |
+| **75** | 🎧 **Lotso Lo-Fi Earphones Flow** *(Tai Nghe Dây Nâu, Deep Flow & Playlist)* | [`_Pro.xlsm`](templates/pro_macro/75_Lotso_LoFi_Earphones_Flow_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/75_Lotso_LoFi_Earphones_Flow.xlsx) | [Desktop](templates/google_sheets_edition/75_Lotso_LoFi_Earphones_Flow.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/75_Lotso_LoFi_Earphones_Flow_Mobile.xlsx) |
+| **76** | ⚡ **Lotso Mood Detox Comic** *(Tia Sét → Mưa Tim & 5 Đồng Hồ Donut Detox)* | [`_Pro.xlsm`](templates/pro_macro/76_Lotso_Mood_Detox_Comic_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/76_Lotso_Mood_Detox_Comic.xlsx) | [Desktop](templates/google_sheets_edition/76_Lotso_Mood_Detox_Comic.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/76_Lotso_Mood_Detox_Comic_Mobile.xlsx) |
+| **77** | 🐑 **Lotso Floral Sweet Dreams** *(Hái Hoa Hồng Đỏ & Giấc Mơ Cừu Tím Pastel)* | [`_Pro.xlsm`](templates/pro_macro/77_Lotso_Floral_Sweet_Dreams_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/77_Lotso_Floral_Sweet_Dreams.xlsx) | [Desktop](templates/google_sheets_edition/77_Lotso_Floral_Sweet_Dreams.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/77_Lotso_Floral_Sweet_Dreams_Mobile.xlsx) |
+| **78** | 🌼 **Lotso Daisy Cheek Glow** *(Nhặt Hoa Cúc Cài Tai & Áp Má Nháy Mắt)* | [`_Pro.xlsm`](templates/pro_macro/78_Lotso_Daisy_Cheek_Glow_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/78_Lotso_Daisy_Cheek_Glow.xlsx) | [Desktop](templates/google_sheets_edition/78_Lotso_Daisy_Cheek_Glow.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/78_Lotso_Daisy_Cheek_Glow_Mobile.xlsx) |
+| **79** | 🐰 **Lotso Bunny Headband Selfcare** *(Bờm Tai Thỏ Tím & 3 Thẻ Sáng · Ngày · Tối)* | [`_Pro.xlsm`](templates/pro_macro/79_Lotso_Bunny_Headband_Selfcare_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/79_Lotso_Bunny_Headband_Selfcare.xlsx) | [Desktop](templates/google_sheets_edition/79_Lotso_Bunny_Headband_Selfcare.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/79_Lotso_Bunny_Headband_Selfcare_Mobile.xlsx) |
+| **80** | 🎁 **Lotso Berry Gift Box Party** *(Hộp Quà Hồng, Bánh Cupcake & Confetti 100%)* | [`_Pro.xlsm`](templates/pro_macro/80_Lotso_Berry_Gift_Box_Party_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/80_Lotso_Berry_Gift_Box_Party.xlsx) | [Desktop](templates/google_sheets_edition/80_Lotso_Berry_Gift_Box_Party.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/80_Lotso_Berry_Gift_Box_Party_Mobile.xlsx) |
 
 ---
 
@@ -766,10 +787,10 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn** (`0% Digi-E
 ---
 
 <details>
-<summary>🛠️ Dành Cho Người Yêu Kỹ Thuật & Developer (Benchmark v3.9 Turbo & Lệnh Build)</summary>
+<summary>🛠️ Dành Cho Người Yêu Kỹ Thuật & Developer (Benchmark v4.0 Turbo & Lệnh Build)</summary>
 
-### 📊 Benchmark Tốc Độ Thực Tế Excel COM (`Linked Pictures cũ` vs `v3.9 Turbo`)
-| Thao tác thực tế | Linked Pictures cũ | `48_Capybara_Avocado` **v3.9 Turbo** | `44_Digimon_Guilmon` **v3.9 (8-Stage)** | Tăng tốc |
+### 📊 Benchmark Tốc Độ Thực Tế Excel COM (`Linked Pictures cũ` vs `v4.0 Turbo`)
+| Thao tác thực tế | Linked Pictures cũ | `48_Capybara_Avocado` **v4.0 Turbo** | `44_Digimon_Guilmon` **v4.0 (8-Stage)** | Tăng tốc |
 |---|---:|---:|---:|---:|
 | **1. Tick 1 ô Checkbox (`Monthly Tracker`)** | 347.3 ms | **< 40 ms** | **< 40 ms** | **~8–10× nhanh hơn** |
 | **2a. Đổi Tháng bằng Dropdown (`B3`)** | 4,137.1 ms | **21 – 40 ms** | **25 – 47 ms** | **~88–190× nhanh hơn!** |
@@ -779,15 +800,19 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn** (`0% Digi-E
 | **Số ảnh nén trong `xl/media/`** | 54 bản sao | **6 PNG duy nhất** | **8 PNG duy nhất** | **Siêu gọn nhẹ!** |
 
 ```powershell
-# Trích xuất & vẽ bộ 78 sprite Capybara Chill Collection (#48–#60) & xuất contact sheet:
-python scripts/extract_capybara_assets.py
-python scripts/generate_capybara_story_assets.py
+# Sinh 120 sprite v4.0 Loopy (#61–#70) & Lotso (#71–#80) + contact sheets:
+python scripts/generate_loopy_story_assets.py
+python scripts/generate_lotso_story_assets.py
 
-# Build Pro Interactive (.xlsm) theo lô với Turbo Engine v3.9:
-python scripts/excel_com_enhancer.py pro 48_capybara_avocado 50_capybara_pip_puddle
+# Build đủ 4 phiên bản theo dải chủ đề (--start 61 --end 80):
+python scripts/excel_com_enhancer.py pro --start 61 --end 80
+python scripts/excel_com_enhancer.py offline --start 61 --end 80
+python scripts/convert_offline_v30.py --start 61 --end 80
+python scripts/excel_com_enhancer.py gsheets --start 61 --end 80
+python scripts/build_mobile_templates.py --start 61 --end 80
 
-# Chạy bộ QA tự động 52 file Capybara v3.9 trên bản copy tách biệt:
-python scripts/qa_verify_capybara_v39.py
+# Chạy bộ QA tự động 80 chủ đề (320 tệp) trên bản copy tách biệt:
+python scripts/qa_verify_batch89_v40.py
 ```
 
 </details>

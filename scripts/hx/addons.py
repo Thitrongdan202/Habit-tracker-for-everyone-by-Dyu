@@ -2758,8 +2758,8 @@ def add_loopy_red_bow_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 610):
     cv.merge(rb0, C_R0, rb0, C_RE, "👑  RED BOW RANK", bold=True, font_size=8.8, align="center",
              bg_color=t.primary_dark, font_color=t.on_primary)
     cv.merge(rb0 + 1, C_R0, rb0 + 2, C_RE,
-             f'=IF({ov}>=0.9,"🌼 Hoa Vàng Nở Rộ!",IF({ov}>=0.7,"🌸 Chống Cằm Nụ Hoa",'
-             f'IF({ov}>=0.4,"🎀 Nơ Đỏ Sẵn Sàng","❗ Hít Thở Bắt Đầu")))',
+             f'=IF({ov}>=0.9,"🎀 Hoàn Thành 100%!",IF({ov}>=0.7,"📋 Gần Kín Bảng",'
+             f'IF({ov}>=0.4,"🎀 Thắt Nơ Cầm Bút","❗ Ôm Má Bình Tĩnh")))',
              bold=True, font_size=10.0, align="center", bg_color=t.soft, font_color=t.primary_dark)
     cv.merge(rb0 + 3, C_R0, rb0 + 3, C_RE,
              f'="🎀 Ngày Glow: "&{tr.s["grown"]}&"d  •  🔥 Best: "&{tr.s["best"]}&"d"',
@@ -3823,7 +3823,7 @@ def add_lotso_daisy_glow_block(wb, cv: Canvas, tr: TrackerRefs, seed: int = 780)
             "min_type": "num", "min_value": 0, "max_type": "num", "max_value": 1,
         })
         cv.merge(rb0 + 3, c1, rb0 + 3, c2,
-                 f'=IF({pct_ref}>=0.8,"🌼 Rạng Rỡ Nháy Mắt!",IF({pct_ref}>=0.5,"😊 Áp Má Cười Hiền","🌱 Nụ Cúc Hé Mở"))',
+                 f'=IF({pct_ref}>=0.8,"🌼 Rạng Rỡ Nháy Mắt!",IF({pct_ref}>=0.5,"✨ Cài Cúc Lên Tai","🌼 Nhặt Hoa Cúc"))',
                  italic=True, font_size=9.0, align="center", bg_color=t.page, font_color=fg)
     cv.grid(rb0 + 1, C_NAME, rb0 + 3, C_D31, t.line)
     cv.box(rb0, C_NAME, rb0 + 3, C_D31, t.line)

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================================
-#  Habit Tracker Collection v3.9 — Interactive Zero-Install Downloader (macOS/Linux)
+#  Habit Tracker Collection v4.0 — Interactive Zero-Install Downloader (macOS/Linux)
 #  Run in 1 line:
 #    curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu/main/install.sh | bash
 # ============================================================================
@@ -77,6 +77,26 @@ STEMS=(
   "58_Capybara_Fairy_Party_Wish"
   "59_Capybara_SelfCare_GlowUp"
   "60_Capybara_Snapshot_Traveler"
+  "61_Loopy_Red_Bow_Glow_Up"
+  "62_Loopy_Taiyaki_Street_Snack"
+  "63_Loopy_Piggy_Dessert_Cafe"
+  "64_Loopy_Sauna_Sheep_Detox"
+  "65_Loopy_Honey_Bee_KPI"
+  "66_Loopy_Poolside_Duck_Chill"
+  "67_Loopy_Fluffy_Commuter_Diary"
+  "68_Loopy_Panda_Zen_Study"
+  "69_Loopy_Ruffle_Sleep_Routine"
+  "70_Loopy_Hair_Roller_GRWM"
+  "71_Lotso_Strawberry_Harvest"
+  "72_Lotso_Strawberry_Milk_Cafe"
+  "73_Lotso_Berry_Flower_Crown"
+  "74_Lotso_Overalls_Toy_Workshop"
+  "75_Lotso_LoFi_Earphones_Flow"
+  "76_Lotso_Mood_Detox_Comic"
+  "77_Lotso_Floral_Sweet_Dreams"
+  "78_Lotso_Daisy_Cheek_Glow"
+  "79_Lotso_Bunny_Headband_Selfcare"
+  "80_Lotso_Berry_Gift_Box_Party"
 )
 
 TITLES=(
@@ -141,6 +161,26 @@ TITLES=(
   "Capybara Tiệc Tiên (5 Điều Ước Sao Tự Thắp Sáng)"
   "Capybara Self-Care GlowUp (3 Thẻ Sáng-Chiều-Tối)"
   "Capybara Lữ Hành (Nhật Ký Polaroid & Dấu Hộ Chiếu)"
+  "Loopy Nơ Đỏ Glow-Up (Checklist 0→100% & Tự Tin)"
+  "Loopy Mũ Bánh Cá Taiyaki & Xiên Dango 3 Màu"
+  "Loopy Mũ Heo Tiệm Bánh Kem Cherry & Phô Mai"
+  "Loopy Khăn Cừu Yangmeori Sauna (5 Donut Detox)"
+  "Loopy Ong Chăm Chỉ KPI (Deep Work & Hũ Mật)"
+  "Loopy Hồ Bơi Phao Vịt Vàng (Nước & 5 Thanh Hè)"
+  "Loopy Mũ Bông Nhật Ký Đi Làm & Tan Làm Đúng Giờ"
+  "Loopy Mũ Gấu Trúc Học Tập Zen (Phút & Trang Sách)"
+  "Loopy Rèm Bèo Nơ Hồng (Giấc Ngủ Ngon 8 Tiếng)"
+  "Loopy Cuốn Lô Mái GRWM (Trà Ấm & Soi Gương)"
+  "Gấu Dâu Lotso Thu Hoạch Dâu Tây (Giỏ Dâu & Mắt Tim)"
+  "Lotso Quán Sữa Dâu Kem Tươi & Bánh Shortcake"
+  "Lotso Kết Vương Miện Hoa Cúc & Chùm Dâu Đỏ"
+  "Lotso Quần Yếm Xưởng Đồ Chơi (Sticker & Tên Lửa)"
+  "Lotso Tai Nghe Lo-Fi (Phút Deep Flow & Playlist)"
+  "Lotso Giải Độc Stress Tia Sét → Mưa Tim (5 Donut)"
+  "Lotso Hái Hoa Đỏ & Giấc Mơ Cừu Tím Pastel"
+  "Lotso Hoa Cúc Trắng Cài Tai & Áp Má Nháy Mắt"
+  "Lotso Bờm Tai Thỏ Spa Self-Care (Sáng-Ngày-Tối)"
+  "Lotso Tiệc Hộp Quà Hồng, Cupcake & Confetti 100%"
 )
 
 resolve_out_dir() {
@@ -207,15 +247,15 @@ OUT_DIR="$(resolve_out_dir)"
 mkdir -p "$OUT_DIR"
 
 printf "\n%s========================================================================%s\n" "$C_MAGENTA" "$C_RESET"
-printf "%s   HABIT TRACKER COLLECTION v3.9 — BY DYU (60 THEMES × 4 EDITIONS)%s\n" "$C_YELLOW" "$C_RESET"
+printf "%s   HABIT TRACKER COLLECTION v4.0 — BY DYU (80 THEMES × 4 EDITIONS)%s\n" "$C_YELLOW" "$C_RESET"
 printf "%s   Turbo 6/7/8-Stage Native Sprite Engine • FX Suite • Ctrl+Z Undo%s\n" "$C_CYAN" "$C_RESET"
 printf "%s========================================================================%s\n" "$C_MAGENTA" "$C_RESET"
 printf "  %sThư mục lưu file:%s %s\n\n" "$C_GREEN" "$C_RESET" "$OUT_DIR"
 
 printf "  %sBƯỚC 1 — CHỌN PHIÊN BẢN PHÙ HỢP (THEO THỨ TỰ ƯU TIÊN):%s\n" "$C_BOLD" "$C_RESET"
 printf "  %s----------------------------------------------------------------------%s\n" "$C_DIM" "$C_RESET"
-printf "  %s[1] Pro Interactive (.xlsm)  [⭐ KHUYÊN DÙNG SỐ 1 — EXCEL 365 TURBO v3.9]%s\n" "$C_GREEN" "$C_RESET"
-printf "      %s-> Siêu tốc ~25–54ms + Full FX Nảy/Pháo hoa/Toast + Ctrl+Z / Nút Undo%s\n" "$C_DIM" "$C_RESET"
+printf "  %s[1] Pro Interactive (.xlsm)  [⭐ KHUYÊN DÙNG SỐ 1 — EXCEL 365 TURBO v4.0]%s\n" "$C_GREEN" "$C_RESET"
+printf "      %s-> Siêu tốc ~25–54ms + Full FX Nảy/Pháo hoa/Toast góc trái dưới + Ctrl+Z Undo%s\n" "$C_DIM" "$C_RESET"
 printf "         %s+ Khóa bảo vệ công thức + Tự lưu Đa Ngày/Tháng/Năm (100%% Offline)!%s\n" "$C_DIM" "$C_RESET"
 printf "  %s[2] Excel Universal Offline (.xlsx)  [Excel 2016/2019/2021/365]%s\n" "$C_CYAN" "$C_RESET"
 printf "      %s-> Không Macro, 0 lỗi TRUE/FALSE trên Excel cũ, đủ hoạt ảnh offline!%s\n" "$C_DIM" "$C_RESET"
@@ -245,9 +285,17 @@ case "$ED_CHOICE" in
   *) ED_CHOICE="1" ;;
 esac
 
-printf "\n  %sBƯỚC 2 — CHỌN MẪU THÓI QUEN (60 CHỦ ĐỀ CAPYBARA, DIGIMON, LINH VẬT & HOA LÁ):%s\n" "$C_BOLD" "$C_RESET"
+printf "\n  %sBƯỚC 2 — CHỌN MẪU THÓI QUEN (80 CHỦ ĐỀ LOTSO, LOOPY, CAPYBARA, DIGIMON & HOA LÁ):%s\n" "$C_BOLD" "$C_RESET"
 printf "  %s----------------------------------------------------------------------%s\n" "$C_DIM" "$C_RESET"
-printf "  %s--- 🥑 [MỚI v3.9] 13 BỘ CAPYBARA CHILL COLLECTION ĐỘC BẢN (#48–#60) ---%s\n" "$C_GREEN" "$C_RESET"
+printf "  %s--- 🍓 [MỚI v4.0] 10 BỘ GẤU DÂU LOTSO PASTEL COLLECTION (#71–#80) ---%s\n" "$C_MAGENTA" "$C_RESET"
+for i in 71 72 73 74 75 76 77 78 79 80; do
+  printf "  [%-2d] %-38s — %s\n" "$i" "${STEMS[$i]}" "${TITLES[$i]}"
+done
+printf "  %s--- 🎀 [MỚI v4.0] 10 BỘ HẢI LY LOOPY PASTEL COLLECTION (#61–#70) ---%s\n" "$C_YELLOW" "$C_RESET"
+for i in 61 62 63 64 65 66 67 68 69 70; do
+  printf "  [%-2d] %-38s — %s\n" "$i" "${STEMS[$i]}" "${TITLES[$i]}"
+done
+printf "  %s--- 🥑 13 BỘ CAPYBARA CHILL COLLECTION ĐỘC BẢN (#48–#60) ---%s\n" "$C_GREEN" "$C_RESET"
 for i in 48 49 50 51 52 53 54 55 56 57 58 59 60; do
   printf "  [%-2d] %-38s — %s\n" "$i" "${STEMS[$i]}" "${TITLES[$i]}"
 done
@@ -272,9 +320,9 @@ for i in 4 6 7 20 24; do
   printf "  [%-2d] %-38s — %s\n" "$i" "${STEMS[$i]}" "${TITLES[$i]}"
 done
 printf "  %s----------------------------------------------------------------------%s\n" "$C_DIM" "$C_RESET"
-printf "  %s[A]%s  Tải TOÀN BỘ 60 mẫu (Download All 60)\n" "$C_GREEN" "$C_RESET"
+printf "  %s[A]%s  Tải TOÀN BỘ 80 mẫu (Download All 80)\n" "$C_GREEN" "$C_RESET"
 printf "  %s[0]%s  Thoát\n\n" "$C_DIM" "$C_RESET"
-printf "  %sGợi ý: Nhập 1 số (vd: 48), nhiều số (vd: 48,50,52), dải (vd: 48-60), hoặc A%s\n" "$C_YELLOW" "$C_RESET"
+printf "  %sGợi ý: Nhập 1 số (vd: 71), nhiều số (vd: 61,70,78), dải (vd: 61-80), hoặc A%s\n" "$C_YELLOW" "$C_RESET"
 
 CHOICE=""
 if [ -n "${HABIT_CHOICE:-}" ]; then
@@ -301,12 +349,12 @@ for tok in $CLEAN; do
       if [[ "$a" =~ ^[0-9]+$ ]] && [[ "$b" =~ ^[0-9]+$ ]]; then
         [ "$a" -gt "$b" ] && { t="$a"; a="$b"; b="$t"; }
         for ((n=a; n<=b; n++)); do
-          [ "$n" -ge 1 ] && [ "$n" -le 60 ] && SEL_IDS+=("$n")
+          [ "$n" -ge 1 ] && [ "$n" -le 80 ] && SEL_IDS+=("$n")
         done
       fi
       ;;
     *)
-      if [[ "$up" =~ ^[0-9]+$ ]] && [ "$up" -ge 1 ] && [ "$up" -le 60 ]; then
+      if [[ "$up" =~ ^[0-9]+$ ]] && [ "$up" -ge 1 ] && [ "$up" -le 80 ]; then
         SEL_IDS+=("$up")
       fi
       ;;
@@ -314,7 +362,7 @@ for tok in $CLEAN; do
 done
 
 if [ "$DO_ALL" -eq 1 ]; then
-  SEL_IDS=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60)
+  SEL_IDS=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80)
 fi
 
 UNIQUE_IDS=()

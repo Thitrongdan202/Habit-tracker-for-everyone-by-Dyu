@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- *  HABIT TRACKER v3.9 TURBO — 1-CLICK GOOGLE SHEETS SETUP & ZERO-LAG STORAGE
+ *  HABIT TRACKER v4.0 TURBO — 1-CLICK GOOGLE SHEETS SETUP & ZERO-LAG STORAGE
  *  AUTO-DETECTS BOTH:
  *    - Desktop 5-Tab Google Sheets Edition (`templates/google_sheets_edition/`)
  *    - Mobile Portrait Edition (`templates/mobile_portrait_sheets/`)
@@ -165,7 +165,7 @@ function setupMobilePortrait_(ss) {
   SpreadsheetApp.flush();
   ss.toast(
     "Đã bật Checkbox Pastel (" + converted + " bảng), font Be Vietnam Pro & ẩn lưới cho bản Mobile!",
-    "Habit Tracker Mobile v3.9 — Sẵn sàng ⚡",
+    "Habit Tracker Mobile v4.0 — Sẵn sàng ⚡",
     6
   );
 }
@@ -214,7 +214,7 @@ function setupDesktopEdition_(ss) {
 
   ss.toast(
     "Đã bật Checkbox Pastel (" + converted + " bảng), font Be Vietnam Pro, ẩn lưới & khởi tạo _Database 0ms!",
-    "Habit Tracker v3.9 Turbo — Sẵn sàng ⚡✨",
+    "Habit Tracker v4.0 Turbo — Sẵn sàng ⚡✨",
     7
   );
 }
@@ -959,7 +959,7 @@ function convertBooleanCellsInRange_(sheet, a1Range, accent) {
 
 function onOpen() {
   SpreadsheetApp.getUi()
-    .createMenu("⚡ Habit Tracker v3.9 Turbo")
+    .createMenu("⚡ Habit Tracker v4.0 Turbo")
     .addItem("☑️ Bật Checkbox, Font Đẹp & Lưu 0ms (1-Click)", "setupHabitTracker")
     .addToUi();
 }
