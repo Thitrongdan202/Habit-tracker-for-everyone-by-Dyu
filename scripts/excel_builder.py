@@ -49,7 +49,17 @@ from hx.addons import (add_cactus_weekly_strip, add_rainbow_bottom_blocks,
                        add_capybara_foodie_block, add_capybara_dino_hoodie_block,
                        add_capybara_apple_orchard_block, add_capybara_pink_chill_block,
                        add_capybara_fairy_party_block, add_capybara_selfcare_block,
-                       add_capybara_traveler_block)
+                       add_capybara_traveler_block,
+                       add_loopy_red_bow_block, add_loopy_taiyaki_block,
+                       add_loopy_piggy_cafe_block, add_loopy_sauna_sheep_block,
+                       add_loopy_honey_bee_block, add_loopy_poolside_duck_block,
+                       add_loopy_fluffy_commuter_block, add_loopy_panda_study_block,
+                       add_loopy_ruffle_sleep_block, add_loopy_hair_roller_block,
+                       add_lotso_strawberry_block, add_lotso_milk_cafe_block,
+                       add_lotso_flower_crown_block, add_lotso_overalls_block,
+                       add_lotso_lofi_block, add_lotso_mood_detox_block,
+                       add_lotso_sweet_dreams_block, add_lotso_daisy_glow_block,
+                       add_lotso_bunny_selfcare_block, add_lotso_gift_box_block)
 from hx.daily_tasks import build_daily_tasks_sheet, DAILY_TASKS_SHEET
 from hx.extras import (build_reflection_notes_sheet, build_rainbow_analytics_sheet,
                        build_monthly_budget_sheet, build_life_overview_sheet,
@@ -393,6 +403,66 @@ def _addon_capy_selfcare(wb, cv, tr, seed):
 
 def _addon_capy_traveler(wb, cv, tr, seed):
     add_capybara_traveler_block(wb, cv, tr, seed=seed)
+
+def _addon_loopy_red_bow(wb, cv, tr, seed):
+    add_loopy_red_bow_block(wb, cv, tr, seed=seed)
+
+def _addon_loopy_taiyaki(wb, cv, tr, seed):
+    add_loopy_taiyaki_block(wb, cv, tr, seed=seed)
+
+def _addon_loopy_piggy_cafe(wb, cv, tr, seed):
+    add_loopy_piggy_cafe_block(wb, cv, tr, seed=seed)
+
+def _addon_loopy_sauna_sheep(wb, cv, tr, seed):
+    add_loopy_sauna_sheep_block(wb, cv, tr, seed=seed)
+
+def _addon_loopy_honey_bee(wb, cv, tr, seed):
+    add_loopy_honey_bee_block(wb, cv, tr, seed=seed)
+
+def _addon_loopy_poolside_duck(wb, cv, tr, seed):
+    add_loopy_poolside_duck_block(wb, cv, tr, seed=seed)
+
+def _addon_loopy_fluffy_commuter(wb, cv, tr, seed):
+    add_loopy_fluffy_commuter_block(wb, cv, tr, seed=seed)
+
+def _addon_loopy_panda_study(wb, cv, tr, seed):
+    add_loopy_panda_study_block(wb, cv, tr, seed=seed)
+
+def _addon_loopy_ruffle_sleep(wb, cv, tr, seed):
+    add_loopy_ruffle_sleep_block(wb, cv, tr, seed=seed)
+
+def _addon_loopy_hair_roller(wb, cv, tr, seed):
+    add_loopy_hair_roller_block(wb, cv, tr, seed=seed)
+
+def _addon_lotso_strawberry(wb, cv, tr, seed):
+    add_lotso_strawberry_block(wb, cv, tr, seed=seed)
+
+def _addon_lotso_milk_cafe(wb, cv, tr, seed):
+    add_lotso_milk_cafe_block(wb, cv, tr, seed=seed)
+
+def _addon_lotso_flower_crown(wb, cv, tr, seed):
+    add_lotso_flower_crown_block(wb, cv, tr, seed=seed)
+
+def _addon_lotso_overalls(wb, cv, tr, seed):
+    add_lotso_overalls_block(wb, cv, tr, seed=seed)
+
+def _addon_lotso_lofi(wb, cv, tr, seed):
+    add_lotso_lofi_block(wb, cv, tr, seed=seed)
+
+def _addon_lotso_mood_detox(wb, cv, tr, seed):
+    add_lotso_mood_detox_block(wb, cv, tr, seed=seed)
+
+def _addon_lotso_sweet_dreams(wb, cv, tr, seed):
+    add_lotso_sweet_dreams_block(wb, cv, tr, seed=seed)
+
+def _addon_lotso_daisy_glow(wb, cv, tr, seed):
+    add_lotso_daisy_glow_block(wb, cv, tr, seed=seed)
+
+def _addon_lotso_bunny_selfcare(wb, cv, tr, seed):
+    add_lotso_bunny_selfcare_block(wb, cv, tr, seed=seed)
+
+def _addon_lotso_gift_box(wb, cv, tr, seed):
+    add_lotso_gift_box_block(wb, cv, tr, seed=seed)
 
 
 # =========================================================================== #
@@ -2474,6 +2544,756 @@ TEMPLATES: list[TemplateDef] = [
         tracker_capture_range="A1:AN46",
         addon_fn=_addon_capy_traveler,
     ),
+    # =========================================================================
+    #  BATCH 8: 10 BESPOKE LOOPY PASTEL TEMPLATES (#61 .. #70)
+    # =========================================================================
+    TemplateDef(
+        stem="61_Loopy_Red_Bow_Glow_Up", short_key="61_loopy_red_bow",
+        theme=Theme(
+            slug="loopy_red_bow", name="LOOPY RED BOW GLOW-UP", emoji="🎀",
+            tagline_vi="Hải ly hồng Loopy Nơ Đỏ siêu đáng yêu — từ lúc quên việc cuống cuồng đến hít thở sâu, thắt nơ đỏ tự tin & nở rộ hoa vàng 100%!",
+            page="#FFF8EA", card="#FFFFFF", ink="#5A2A32", muted="#9C6B73", line="#F2D7DC",
+            primary="#D85A68", primary_dark="#A63442", on_primary="#FFFFFF", soft="#FDECEF",
+            chart_fill="#F6A6B2", chart_line="#D85A68", chart_kind="area",
+            week_head=["#D85A68", "#F6A6B2", "#8BB2C9", "#E67E8A", "#D85A68"],
+            week_tint=["#FFF5F7", "#FFF8F9", "#F3F8FB", "#FFF5F7", "#FFF7F0"],
+            week_check=["#A63442", "#C94859", "#4B7A96", "#B84050", "#A63442"],
+            week_on=["#FFFFFF", "#5A2A32", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#FFF8EA", streak_mid="#F6A6B2", streak_hi="#A63442",
+            bar="#D85A68", donut_rest="#FADCE2",
+            chart_title="LOOPY RED BOW GLOW-UP • HÀNH TRÌNH TỎA SÁNG MỖI NGÀY",
+            num_stages=6,
+            stage_names=[
+                "Quên Việc!!", "Ôm Má Hít Thở", "Buộc Nơ Đỏ",
+                "Tự Tin Vào Nhịp", "Chống Cằm Nụ Hoa", "Nở Rộ Glow-Up!",
+            ],
+        ),
+        tracker_name="🎀 Loopy Red Bow",
+        habits=[
+            Habit("Thức dậy đúng giờ & hít thở sâu 3p", goal=28, p=0.90),
+            Habit("Skincare sáng tối & thoa chống nắng", goal=30, p=0.93),
+            Habit("Uống đủ 2L nước giữ da tươi tắn", goal=30, p=0.92),
+            Habit("Hoàn thành 3 việc quan trọng sáng", goal=28, p=0.88),
+            Habit("Vận động nhẹ / giãn cơ 20 phút", goal=26, p=0.85),
+            Habit("Đọc sách / học kỹ năng mới 20 phút", goal=26, p=0.86),
+            Habit("Viết 1 lời khen dịu dàng cho bản thân", goal=28, p=0.89),
+            Habit("Ngủ đủ 8 tiếng trước 23h00", goal=28, p=0.86),
+        ],
+        seed=610, label_tag="LOOPY RED BOW GLOW", garden_label="RED BOW GARDEN",
+        grown_label="🎀 GLOW-UP DAYS\n(≥75%):",
+        tracker_capture_range="A1:AN47",
+        addon_fn=_addon_loopy_red_bow,
+    ),
+    TemplateDef(
+        stem="62_Loopy_Taiyaki_Street_Snack", short_key="62_loopy_taiyaki",
+        theme=Theme(
+            slug="loopy_taiyaki", name="LOOPY TAIYAKI STREET SNACK", emoji="🐟",
+            tagline_vi="Loopy đội mũ bánh cá Taiyaki vàng ươm tích từng chiếc bánh cá nóng & xiên Dango 3 màu cho những ngày ăn lành kỷ luật!",
+            page="#FFF9EE", card="#FFFFFF", ink="#543822", muted="#997B60", line="#F0DFC8",
+            primary="#D99B58", primary_dark="#A66D2E", on_primary="#FFFFFF", soft="#FDF0DF",
+            chart_fill="#F6CCA0", chart_line="#D99B58", chart_kind="column",
+            week_head=["#D99B58", "#A8CBB7", "#E6B178", "#8FB8A0", "#C88744"],
+            week_tint=["#FFF8EE", "#F3FAF6", "#FFF7EC", "#F1F9F4", "#FFF6E8"],
+            week_check=["#A66D2E", "#487A5E", "#B57938", "#3E6E54", "#965E22"],
+            week_on=["#FFFFFF", "#234A34", "#543822", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#FFF9EE", streak_mid="#F6CCA0", streak_hi="#A66D2E",
+            bar="#A8CBB7", donut_rest="#F5E5CF",
+            chart_title="LOOPY TAIYAKI SNACK • NHIỆT ĐỘ LÒ BÁNH KỶ LUẬT MỖI NGÀY",
+            num_stages=6,
+            stage_names=[
+                "Túi Bánh Trống", "Đội Mũ Taiyaki", "Bánh Cá Nóng Hổi",
+                "Thêm Xiên Dango", "Thưởng Thức Ngon", "No Nê Phố Ẩm Thực!",
+            ],
+        ),
+        tracker_name="🐟 Loopy Taiyaki",
+        habits=[
+            Habit("Ăn sáng đủ chất & không bỏ bữa", goal=28, p=0.90),
+            Habit("Uống đủ 2L nước lọc & trà ấm", goal=30, p=0.92),
+            Habit("Tự nấu ăn / ăn đủ rau xanh mỗi ngày", goal=26, p=0.86),
+            Habit("Hạn chế đồ ngọt & ăn vặt ngoài bữa", goal=25, p=0.83),
+            Habit("Đi bộ tiêu hóa 20 phút sau bữa", goal=26, p=0.85),
+            Habit("Hoàn thành việc ưu tiên trước 17h", goal=28, p=0.88),
+            Habit("Ghi chép chi tiêu ăn uống gọn gàng", goal=28, p=0.89),
+            Habit("Không ăn khuya sau 20h30 & ngủ sớm", goal=28, p=0.85),
+        ],
+        seed=620, label_tag="TAIYAKI STREET SNACK", garden_label="TAIYAKI STALL",
+        grown_label="🐟 TAIYAKI DAYS\n(≥75%):",
+        tracker_capture_range="A1:AN46",
+        addon_fn=_addon_loopy_taiyaki,
+    ),
+    TemplateDef(
+        stem="63_Loopy_Piggy_Dessert_Cafe", short_key="63_loopy_piggy_cafe",
+        theme=Theme(
+            slug="loopy_piggy_cafe", name="LOOPY PIGGY DESSERT CAFE", emoji="🧁",
+            tagline_vi="Tiệm bánh Piggy Loopy màu kem bơ hồng dâu & xanh trời — mở khóa phô mai cười, kem 2 viên & bánh kem cherry cực xinh!",
+            page="#FFFDF0", card="#FFFFFF", ink="#5C283B", muted="#9E6D7F", line="#F6D8E4",
+            primary="#F28FB0", primary_dark="#C4567C", on_primary="#FFFFFF", soft="#FDECF2",
+            chart_fill="#F9C5D7", chart_line="#F28FB0", chart_kind="area",
+            week_head=["#F28FB0", "#A6D8EB", "#F5A6C1", "#8CCAE0", "#E3789C"],
+            week_tint=["#FFF5F9", "#F2FAFD", "#FFF6FA", "#EFF8FC", "#FFF3F7"],
+            week_check=["#C4567C", "#2B7A96", "#B54A70", "#226882", "#AD3E65"],
+            week_on=["#FFFFFF", "#1E4C5E", "#5C283B", "#1E4C5E", "#FFFFFF"],
+            streak_lo="#FFFDF0", streak_mid="#F9C5D7", streak_hi="#C4567C",
+            bar="#A6D8EB", donut_rest="#FAE2EB",
+            chart_title="PIGGY DESSERT CAFE • TIỆC NGỌT KỶ LUẬT MỖI NGÀY",
+            num_stages=6,
+            stage_names=[
+                "Ngắm Phô Mai", "Đội Mũ Heo Hồng", "Kem 1 Viên Ngọt",
+                "Kem 2 Viên Nháy Mắt", "Bánh Kem Cherry", "Đại Tiệc Cafe Ngọt!",
+            ],
+        ),
+        tracker_name="🧁 Loopy Piggy Cafe",
+        habits=[
+            Habit("Bắt đầu ngày mới với ly nước ấm", goal=30, p=0.92),
+            Habit("Dành 15 phút skincare & chăm sóc mình", goal=30, p=0.93),
+            Habit("Tập Pilates / vận động nhẹ 25 phút", goal=25, p=0.85),
+            Habit("Hoàn thành danh sách To-Do ưu tiên", goal=28, p=0.89),
+            Habit("Đọc sách / nghe podcast truyền cảm hứng", goal=26, p=0.86),
+            Habit("Chọn đồ uống ít đường & ăn trái cây", goal=26, p=0.84),
+            Habit("Dọn gọn góc bàn xinh như quán cafe", goal=28, p=0.88),
+            Habit("Viết 3 điều ngọt ngào & ngủ sớm", goal=28, p=0.87),
+        ],
+        seed=630, label_tag="PIGGY DESSERT CAFE", garden_label="DESSERT MENU",
+        grown_label="🍒 CAFE FEAST\nDAYS (≥75%):",
+        tracker_capture_range="A1:AN46",
+        addon_fn=_addon_loopy_piggy_cafe,
+    ),
+    TemplateDef(
+        stem="64_Loopy_Sauna_Sheep_Detox", short_key="64_loopy_sauna_sheep",
+        theme=Theme(
+            slug="loopy_sauna_sheep", name="LOOPY SAUNA SHEEP DETOX", emoji="🐑",
+            tagline_vi="Tháo kính mệt mỏi, đội khăn cừu Yangmeori Hàn Quốc & thư giãn cùng 5 đồng hồ Donut Detox giúp bạn xả stress reo vui WA~!",
+            page="#FDF6E9", card="#FFFFFF", ink="#543824", muted="#997E67", line="#EEDEC9",
+            primary="#C99368", primary_dark="#96633B", on_primary="#FFFFFF", soft="#F9EFE2",
+            chart_fill="#A8C9E8", chart_line="#C99368", chart_kind="line", chart_markers=True,
+            week_head=["#C99368", "#A8C9E8", "#D6A780", "#8CB8E0", "#B57D52"],
+            week_tint=["#FDF7EE", "#F2F8FD", "#FCF6EC", "#EFF6FC", "#FAF2E6"],
+            week_check=["#96633B", "#3B70A0", "#8A5832", "#2F608C", "#7D4E2A"],
+            week_on=["#FFFFFF", "#1E4266", "#FFFFFF", "#1E4266", "#FFFFFF"],
+            streak_lo="#FDF6E9", streak_mid="#A8C9E8", streak_hi="#96633B",
+            bar="#A8C9E8", donut_rest="#F2E4D2",
+            chart_title="SAUNA SHEEP DETOX • NHỊP THƯ GIÃN & PHỤC HỒI MỖI NGÀY",
+            num_stages=6,
+            stage_names=[
+                "Kính Trễ Mệt Mỏi", "Khăn Cừu Yangmeori", "Ấm Má Thư Giãn",
+                "Xông Hơi Detox", "Reo Vui WA~", "Sảng Khoái 100%!",
+            ],
+        ),
+        tracker_name="🐑 Loopy Sauna",
+        habits=[
+            Habit("Giãn cơ cổ vai gáy 10 phút mỗi sáng", goal=28, p=0.90),
+            Habit("Uống đủ 2.2L nước ấm / trà thảo mộc", goal=30, p=0.92),
+            Habit("Nghỉ mắt quy tắc 20-20-20 khi làm việc", goal=28, p=0.87),
+            Habit("Đi bộ thư giãn hít thở khí trời 20p", goal=26, p=0.85),
+            Habit("Tắm nước ấm / đắp mặt nạ thải độc", goal=26, p=0.88),
+            Habit("Digital Detox 45p trước khi đi ngủ", goal=26, p=0.83),
+            Habit("Thiền / nghe nhạc êm dịu 10 phút", goal=26, p=0.86),
+            Habit("Ngủ sâu đủ 8 tiếng nạp pin cơ thể", goal=28, p=0.88),
+        ],
+        seed=640, label_tag="SAUNA SHEEP DETOX", garden_label="YANGMEORI SPA",
+        grown_label="♨️ DETOX DAYS\n(≥75%):",
+        tracker_capture_range="A1:AN48",
+        addon_fn=_addon_loopy_sauna_sheep,
+    ),
+    TemplateDef(
+        stem="65_Loopy_Honey_Bee_KPI", short_key="65_loopy_honey_bee",
+        theme=Theme(
+            slug="loopy_honey_bee", name="LOOPY HONEY BEE KPI", emoji="🐝",
+            tagline_vi="Chú ong chăm chỉ Loopy đội mũ vàng & hội bạn gấu pastel cổ vũ — theo dõi giờ Deep Work bằng biểu đồ cột giúp vượt mọi KPI!",
+            page="#FFFDF2", card="#FFFFFF", ink="#4A352C", muted="#8F766B", line="#F2E4BA",
+            primary="#EAB844", primary_dark="#A87A14", on_primary="#4A352C", soft="#FEF6D6",
+            chart_fill="#FCE28B", chart_line="#7A5C52", chart_kind="column",
+            week_head=["#EAB844", "#7A5C52", "#F2CA66", "#947468", "#D9A42C"],
+            week_tint=["#FFFCEB", "#F7F2F0", "#FFFBE6", "#F6F0ED", "#FFF9DE"],
+            week_check=["#A87A14", "#5C423A", "#9E7010", "#6B4E44", "#8F640C"],
+            week_on=["#4A352C", "#FFFFFF", "#4A352C", "#FFFFFF", "#4A352C"],
+            streak_lo="#FFFDF2", streak_mid="#FCE28B", streak_hi="#7A5C52",
+            bar="#7A5C52", donut_rest="#F7ECC8",
+            chart_title="HONEY BEE KPI • NĂNG SUẤT ONG CHĂM CHỈ MỖI NGÀY",
+            num_stages=6,
+            stage_names=[
+                "Cuộn Tròn Ngái Ngủ", "Nghiêng Đầu Mọc Râu", "Vỗ Cánh Bay Nhẹ",
+                "Ôm Hũ Mật Cổ Vũ", "Bay Giữa Hoa & Gấu", "Ong Chúa Mật Vàng!",
+            ],
+        ),
+        tracker_name="🐝 Loopy Honey Bee",
+        habits=[
+            Habit("Lập danh sách 3 KPI trọng tâm buổi sáng", goal=28, p=0.91),
+            Habit("Hoàn thành 2 block Deep Work 50 phút", goal=28, p=0.89),
+            Habit("Trả lời tin nhắn & email gọn trong 2 khung giờ", goal=26, p=0.86),
+            Habit("Uống đủ 2.2L nước giữ tỉnh táo", goal=30, p=0.92),
+            Habit("Học nâng cao chuyên môn 25 phút", goal=26, p=0.85),
+            Habit("Không trì hoãn việc khó nhất trong ngày", goal=26, p=0.84),
+            Habit("Cập nhật tiến độ & dọn bàn trước khi về", goal=28, p=0.88),
+            Habit("Nghỉ ngơi đúng giờ giữ sức bền dài lâu", goal=28, p=0.87),
+        ],
+        seed=650, label_tag="HONEY BEE KPI", garden_label="HONEY BEE HIVE",
+        grown_label="🍯 KPI TARGET\nDAYS (≥75%):",
+        tracker_capture_range="A1:AN49",
+        addon_fn=_addon_loopy_honey_bee,
+    ),
+    TemplateDef(
+        stem="66_Loopy_Poolside_Duck_Chill", short_key="66_loopy_poolside_duck",
+        theme=Theme(
+            slug="loopy_poolside_duck", name="LOOPY POOLSIDE DUCK CHILL", emoji="🐥",
+            tagline_vi="Tươi mát sắc xanh hồ bơi & phao vịt vàng nắng — tích ly nước lọc mỗi ngày cùng 5 thanh tiến độ tuần mùa hè cực chill!",
+            page="#F2FBFF", card="#FFFFFF", ink="#1B495E", muted="#608BA0", line="#CBE9F5",
+            primary="#6EC6E6", primary_dark="#267EA0", on_primary="#FFFFFF", soft="#E3F6FC",
+            chart_fill="#A6E0F5", chart_line="#267EA0", chart_kind="area",
+            week_head=["#6EC6E6", "#F7CF52", "#4EB3D9", "#F5BE38", "#389EC7"],
+            week_tint=["#F0FAFE", "#FFFCEB", "#ECF8FD", "#FFF9E2", "#E8F6FC"],
+            week_check=["#267EA0", "#B07D0E", "#1D6D8C", "#9E6D08", "#175E7A"],
+            week_on=["#FFFFFF", "#4A3606", "#FFFFFF", "#4A3606", "#FFFFFF"],
+            streak_lo="#F2FBFF", streak_mid="#A6E0F5", streak_hi="#267EA0",
+            bar="#F7CF52", donut_rest="#D8F0FA",
+            chart_title="POOLSIDE DUCK CHILL • LÀN SÓNG NĂNG LƯỢNG MÙA HÈ",
+            num_stages=6,
+            stage_names=[
+                "Ôm Phao Vịt Ngại", "Đeo Phao Sẵn Sàng", "Nhảy Hồ Tung Tim",
+                "Phao Sọc Vàng Trắng", "Gối Tay Nổi Chill", "Thư Thái Hồ Xanh!",
+            ],
+        ),
+        tracker_name="🐥 Loopy Poolside",
+        habits=[
+            Habit("Uống 1 ly nước mát ngay khi thức dậy", goal=30, p=0.93),
+            Habit("Vận động / bơi lội / cardio 30 phút", goal=25, p=0.86),
+            Habit("Uống đủ 8 ly nước lọc suốt cả ngày", goal=30, p=0.92),
+            Habit("Thoa kem chống nắng & chăm da tươi", goal=30, p=0.90),
+            Habit("Hoàn thành công việc chính nhẹ nhàng", goal=28, p=0.88),
+            Habit("Ăn thêm trái cây tươi giải nhiệt", goal=26, p=0.86),
+            Habit("Dành 20 phút thư giãn không lo âu", goal=28, p=0.89),
+            Habit("Ngủ ngon đủ giấc đón nắng sớm", goal=28, p=0.87),
+        ],
+        seed=660, label_tag="POOLSIDE DUCK CHILL", garden_label="AQUA POOL",
+        grown_label="🌊 POOL CHILL\nDAYS (≥75%):",
+        tracker_capture_range="A1:AN47",
+        addon_fn=_addon_loopy_poolside_duck,
+    ),
+    TemplateDef(
+        stem="67_Loopy_Fluffy_Commuter_Diary", short_key="67_loopy_fluffy_commuter",
+        theme=Theme(
+            slug="loopy_fluffy_commuter", name="LOOPY FLUFFY COMMUTER DIARY", emoji="🎒",
+            tagline_vi="Loopy mũ bông trắng mặt cười & túi chéo da nâu ấm áp — nhật ký công sở giúp bạn đi làm vui vẻ, giữ nhịp đều & tan làm đúng giờ!",
+            page="#FFFBF2", card="#FFFFFF", ink="#4A362E", muted="#8F786E", line="#EADFD4",
+            primary="#8B6B5C", primary_dark="#5E4438", on_primary="#FFFFFF", soft="#F5ECE6",
+            chart_fill="#FDE7A9", chart_line="#8B6B5C", chart_kind="column",
+            week_head=["#8B6B5C", "#FDE7A9", "#A38272", "#F7D682", "#735548"],
+            week_tint=["#FAF5F2", "#FFFDF2", "#F8F3EF", "#FFFBEB", "#F5EFEA"],
+            week_check=["#5E4438", "#9E7416", "#6E5144", "#8F6710", "#4E382E"],
+            week_on=["#FFFFFF", "#4A362E", "#FFFFFF", "#4A362E", "#FFFFFF"],
+            streak_lo="#FFFBF2", streak_mid="#FDE7A9", streak_hi="#5E4438",
+            bar="#D99B38", donut_rest="#EDE3DA",
+            chart_title="FLUFFY COMMUTER DIARY • NHỊP ĐI LÀM ĐỀU ĐẶN MỖI NGÀY",
+            num_stages=6,
+            stage_names=[
+                "Ngái Ngủ Trùm Mũ", "Khoác Túi Chỉnh Trang", "Bước Đi Tự Tin",
+                "Cầm Cà Phê Cười Tươi", "Nhún Vai Tan Làm", "Bật Nhảy Đúng Giờ!",
+            ],
+        ),
+        tracker_name="🎒 Loopy Commuter",
+        habits=[
+            Habit("Dậy đúng giờ, ăn sáng & ra khỏi nhà sớm", goal=28, p=0.90),
+            Habit("Kiểm tra lịch & 3 đầu việc chính sáng", goal=28, p=0.91),
+            Habit("Uống đủ nước & đứng dậy đi lại mỗi giờ", goal=30, p=0.89),
+            Habit("Hoàn thành công việc đúng deadline", goal=28, p=0.88),
+            Habit("Ghi chi tiêu đi lại & ăn trưa gọn gàng", goal=28, p=0.87),
+            Habit("Tan làm đúng giờ & cất gọn laptop", goal=26, p=0.85),
+            Habit("Vận động nhẹ / đi bộ 20p sau giờ làm", goal=25, p=0.84),
+            Habit("Chuẩn bị đồ cho ngày mai & ngủ trước 23h", goal=28, p=0.88),
+        ],
+        seed=670, label_tag="FLUFFY COMMUTER", garden_label="WORKDAY DIARY",
+        grown_label="🌟 ON-TIME DAYS\n(≥75%):",
+        tracker_capture_range="A1:AN46",
+        addon_fn=_addon_loopy_fluffy_commuter,
+    ),
+    TemplateDef(
+        stem="68_Loopy_Panda_Zen_Study", short_key="68_loopy_panda_study",
+        theme=Theme(
+            slug="loopy_panda_study", name="LOOPY PANDA ZEN STUDY", emoji="🐼",
+            tagline_vi="Phong cách học tập tối giản Gấu Trúc Xám Than & Bạc Hà Dịu — theo dõi phút tự học, số trang sách & giữ tâm tĩnh Zen mỗi ngày!",
+            page="#F7FBF9", card="#FFFFFF", ink="#2B3036", muted="#6F7982", line="#D6E6DD",
+            primary="#4E545C", primary_dark="#2F343A", on_primary="#FFFFFF", soft="#EDF4F0",
+            chart_fill="#B8DEC9", chart_line="#4E545C", chart_kind="area",
+            week_head=["#4E545C", "#B8DEC9", "#656D78", "#96CEB0", "#3E444C"],
+            week_tint=["#F4F6F8", "#F2FAF5", "#F5F7F9", "#EFF8F3", "#F1F3F5"],
+            week_check=["#2F343A", "#2E6B4B", "#3E454E", "#265E40", "#22262B"],
+            week_on=["#FFFFFF", "#1E4230", "#FFFFFF", "#1E4230", "#FFFFFF"],
+            streak_lo="#F7FBF9", streak_mid="#B8DEC9", streak_hi="#2F343A",
+            bar="#3E7A5B", donut_rest="#DFEAE4",
+            chart_title="PANDA ZEN STUDY • NHỊP TẬP TRUNG HỌC TẬP MỖI NGÀY",
+            num_stages=6,
+            stage_names=[
+                "Chống Cằm Bối Rối", "Bóng Đèn Ý Tưởng!", "Cầm Bút Ghi Chép",
+                "Đọc Sách Trúc Xanh", "Giơ Bảng Checklist", "Khép Sách Mãn Nguyện!",
+            ],
+        ),
+        tracker_name="🐼 Loopy Panda Zen",
+        habits=[
+            Habit("Tự học tập trung 60 phút không điện thoại", goal=28, p=0.90),
+            Habit("Đọc sách / tài liệu chuyên môn 15 trang", goal=26, p=0.87),
+            Habit("Ôn từ vựng / ngoại ngữ 20 phút", goal=28, p=0.88),
+            Habit("Ghi chép tóm tắt ý chính sau buổi học", goal=26, p=0.85),
+            Habit("Uống đủ 2L nước / trà xanh tỉnh táo", goal=30, p=0.92),
+            Habit("Nghỉ giải lao mắt & vươn vai 10 phút", goal=28, p=0.86),
+            Habit("Dọn gọn góc bàn học sạch sẽ tối giản", goal=28, p=0.89),
+            Habit("Ôn nhanh 5 phút trước khi ngủ đúng giờ", goal=28, p=0.86),
+        ],
+        seed=680, label_tag="PANDA ZEN STUDY", garden_label="ZEN LIBRARY",
+        grown_label="🎋 ZEN STUDY\nDAYS (≥75%):",
+        tracker_capture_range="A1:AN47",
+        addon_fn=_addon_loopy_panda_study,
+    ),
+    TemplateDef(
+        stem="69_Loopy_Ruffle_Sleep_Routine", short_key="69_loopy_ruffle_sleep",
+        theme=Theme(
+            slug="loopy_ruffle_sleep", name="LOOPY RUFFLE SLEEP ROUTINE", emoji="🛏️",
+            tagline_vi="Giấc ngủ công chúa Rèm Bèo Nơ Hồng & Lavender dịu mắt — theo dõi giờ ngủ mỗi đêm và 3 bước thư giãn đưa bạn vào giấc mơ hoa Zzz!",
+            page="#FDFBE9", card="#FFFFFF", ink="#5C2D3D", muted="#99717F", line="#F2DCE4",
+            primary="#E892AC", primary_dark="#B85674", on_primary="#FFFFFF", soft="#FCEEF3",
+            chart_fill="#EAE4F7", chart_line="#E892AC", chart_kind="area",
+            week_head=["#E892AC", "#C8B8E6", "#EDA6BC", "#B5A2DB", "#D97A98"],
+            week_tint=["#FFF5F8", "#F7F4FC", "#FFF6F9", "#F5F1FB", "#FFF3F7"],
+            week_check=["#B85674", "#6B529E", "#A84A67", "#5C448C", "#9E3E5C"],
+            week_on=["#FFFFFF", "#3B2860", "#FFFFFF", "#3B2860", "#FFFFFF"],
+            streak_lo="#FDFBE9", streak_mid="#EAE4F7", streak_hi="#B85674",
+            bar="#8B74B8", donut_rest="#F5E4EB",
+            chart_title="RUFFLE SLEEP ROUTINE • NHỊP NGỦ NGON & THƯ THÁI MỖI ĐÊM",
+            num_stages=6,
+            stage_names=[
+                "Chưa Chịu Ngủ", "Kéo Rèm Nơ Hồng", "Tựa Gối Buồn Ngủ",
+                "Nhắm Mắt Êm Ái", "Bong Bóng Ngủ Ngon", "Giấc Mơ Hoa Zzz!",
+            ],
+        ),
+        tracker_name="🛏️ Loopy Sleep",
+        habits=[
+            Habit("Không uống caffeine sau 15h00", goal=28, p=0.89),
+            Habit("Ăn tối nhẹ nhàng trước 19h30", goal=26, p=0.86),
+            Habit("Tắm ấm & dưỡng da tối thư giãn", goal=30, p=0.92),
+            Habit("Cất điện thoại & bật đèn ngủ dịu 22h", goal=26, p=0.84),
+            Habit("Đọc 5–10 trang sách giấy nhẹ nhàng", goal=26, p=0.86),
+            Habit("Giãn cơ nhẹ & thở sâu 4-7-8 trước ngủ", goal=28, p=0.88),
+            Habit("Lên giường đúng giờ trước 23h00", goal=28, p=0.85),
+            Habit("Ngủ sâu đủ 7.5–8 tiếng mỗi đêm", goal=28, p=0.87),
+        ],
+        seed=690, label_tag="RUFFLE SLEEP ROUTINE", garden_label="DREAMY BED",
+        grown_label="💤 SWEET SLEEP\nNIGHTS (≥75%):",
+        tracker_capture_range="A1:AN47",
+        addon_fn=_addon_loopy_ruffle_sleep,
+    ),
+    TemplateDef(
+        stem="70_Loopy_Hair_Roller_GRWM", short_key="70_loopy_hair_roller",
+        theme=Theme(
+            slug="loopy_hair_roller", name="LOOPY HAIR ROLLER GRWM", emoji="💇‍♀️",
+            tagline_vi="Loopy tóc đen cuốn lô mái hồng meme siêu cưng — từ lúc ngái ngủ đến nhấp trà tỉnh hồn, chấm má hồng & soi gương GRWM lung linh 100%!",
+            page="#FFF7FA", card="#FFFFFF", ink="#4A3B42", muted="#8C747E", line="#F2D7E1",
+            primary="#D96B8D", primary_dark="#A84264", on_primary="#FFFFFF", soft="#FDEAF1",
+            chart_fill="#F7B4C9", chart_line="#D96B8D", chart_kind="line", chart_markers=True,
+            week_head=["#D96B8D", "#4A3B42", "#E682A1", "#66525B", "#C45175"],
+            week_tint=["#FFF4F8", "#F7F2F4", "#FFF5F9", "#F5EFF2", "#FFF2F6"],
+            week_check=["#A84264", "#4A3B42", "#B84C70", "#5C4952", "#963656"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#FFF7FA", streak_mid="#F7B4C9", streak_hi="#A84264",
+            bar="#F7B4C9", donut_rest="#F5DCE6",
+            chart_title="HAIR ROLLER GRWM • NHỊP CHĂM SÓC & TỎA SÁNG MỖI NGÀY",
+            num_stages=6,
+            stage_names=[
+                "Lô Cuốn Mái Ngái Ngủ", "Nhấp Trà Tỉnh Hồn", "Chấm Má Hồng Xinh",
+                "Tháo Lô Cuốn Mái", "Mái Bồng Soi Gương", "Xinh Lung Linh GRWM!",
+            ],
+        ),
+        tracker_name="💇‍♀️ Loopy GRWM",
+        habits=[
+            Habit("Dậy đúng giờ, cuốn lô mái & uống trà ấm", goal=30, p=0.92),
+            Habit("Skincare sáng, dưỡng ẩm & thoa chống nắng", goal=30, p=0.93),
+            Habit("Uống đủ 2L nước lọc cho làn da căng bóng", goal=30, p=0.92),
+            Habit("Hoàn thành 3 ưu tiên quan trọng trong ngày", goal=28, p=0.89),
+            Habit("Vận động nhẹ / giãn cơ 20 phút tươi tắn", goal=26, p=0.86),
+            Habit("Đọc sách / trau dồi kỹ năng 20 phút", goal=26, p=0.86),
+            Habit("Tẩy trang sạch sẽ & dưỡng tóc buổi tối", goal=30, p=0.91),
+            Habit("Tổng kết ngày & ngủ làm đẹp trước 23h", goal=28, p=0.87),
+        ],
+        seed=700, label_tag="HAIR ROLLER GRWM", garden_label="GRWM VANITY",
+        grown_label="🪞 GRWM GLOW\nDAYS (≥75%):",
+        tracker_capture_range="A1:AN47",
+        addon_fn=_addon_loopy_hair_roller,
+    ),
+    # =========================================================================
+    #  BATCH 9: 10 BESPOKE LOTSO STRAWBERRY BEAR TEMPLATES (#71 .. #80)
+    # =========================================================================
+    TemplateDef(
+        stem="71_Lotso_Strawberry_Harvest", short_key="71_lotso_strawberry",
+        theme=Theme(
+            slug="lotso_strawberry", name="LOTSO STRAWBERRY HARVEST", emoji="🍓",
+            tagline_vi="Gấu Dâu Lotso từ lúc quay lưng lì lợm đến khi ôm trọn quả dâu chín mọng với đôi mắt hình trái tim siêu ngọt ngào!",
+            page="#FFF7F9", card="#FFFFFF", ink="#592234", muted="#9C6B7C", line="#F2D7DF",
+            primary="#E56B8C", primary_dark="#B53D5E", on_primary="#FFFFFF", soft="#FDECEF",
+            chart_fill="#F7B3C5", chart_line="#E56B8C", chart_kind="area",
+            week_head=["#E56B8C", "#95C799", "#EE87A3", "#7BB880", "#D45275"],
+            week_tint=["#FFF5F8", "#F3FAF4", "#FFF6F9", "#F0F8F1", "#FFF3F7"],
+            week_check=["#B53D5E", "#3B7A42", "#C44B6C", "#2F6B36", "#A32F50"],
+            week_on=["#FFFFFF", "#1F4A24", "#FFFFFF", "#1F4A24", "#FFFFFF"],
+            streak_lo="#FFF7F9", streak_mid="#F7B3C5", streak_hi="#B53D5E",
+            bar="#95C799", donut_rest="#FADCE4",
+            chart_title="LOTSO STRAWBERRY HARVEST • SẢN LƯỢNG DÂU CHÍN MỖI NGÀY",
+            num_stages=6,
+            stage_names=[
+                "Quay Lưng Lì Lợm", "Quay Lại Tò Mò", "Dâu Xanh Vừa Nhú",
+                "Ôm Dâu Chín Mọng", "Nháy Mắt Ngọt Ngào", "Mắt Tim Thu Hoạch!",
+            ],
+        ),
+        tracker_name="🍓 Lotso Strawberry",
+        habits=[
+            Habit("Thức dậy đúng giờ & không ngủ nướng", goal=28, p=0.90),
+            Habit("Ăn trái cây tươi & uống đủ 2L nước", goal=30, p=0.92),
+            Habit("Vận động / chạy bộ nhẹ 25 phút", goal=26, p=0.86),
+            Habit("Hoàn thành 3 việc quan trọng sáng", goal=28, p=0.89),
+            Habit("Đọc sách / trau dồi bản thân 20p", goal=26, p=0.86),
+            Habit("Ghi chi tiêu & tiết kiệm mỗi ngày", goal=28, p=0.88),
+            Habit("Ghi lại 1 niềm vui ngọt ngào hôm nay", goal=28, p=0.89),
+            Habit("Ngủ sớm phục hồi sức khỏe trước 23h", goal=28, p=0.87),
+        ],
+        seed=710, label_tag="STRAWBERRY HARVEST", garden_label="BERRY GARDEN",
+        grown_label="🍓 BERRY HARVEST\nDAYS (≥75%):",
+        tracker_capture_range="A1:AN46",
+        addon_fn=_addon_lotso_strawberry,
+    ),
+    TemplateDef(
+        stem="72_Lotso_Strawberry_Milk_Cafe", short_key="72_lotso_milk_cafe",
+        theme=Theme(
+            slug="lotso_milk_cafe", name="LOTSO STRAWBERRY MILK CAFE", emoji="🍓",
+            tagline_vi="Gấu Dâu Lotso đeo tạp dề dâu tây mở quán Sữa Dâu — tự tay rót sữa dâu hồng, thêm kem tươi & mở tiệc bánh Shortcake 100%!",
+            page="#FFF8F5", card="#FFFFFF", ink="#542230", muted="#996B78", line="#F0D8DF",
+            primary="#D65076", primary_dark="#A32E52", on_primary="#FFFFFF", soft="#FDEAF0",
+            chart_fill="#F7B2C4", chart_line="#D65076", chart_kind="column",
+            week_head=["#D65076", "#8CC5A3", "#E36B8D", "#73B58E", "#BF3D62"],
+            week_tint=["#FFF4F7", "#F2FAF5", "#FFF5F8", "#EFF8F3", "#FFF2F6"],
+            week_check=["#A32E52", "#2F6E4C", "#B53B60", "#265E40", "#8F2444"],
+            week_on=["#FFFFFF", "#1E4A32", "#FFFFFF", "#1E4A32", "#FFFFFF"],
+            streak_lo="#FFF8F5", streak_mid="#F7B2C4", streak_hi="#A32E52",
+            bar="#8CC5A3", donut_rest="#F5DCE4",
+            chart_title="STRAWBERRY MILK CAFE • NHỊP PHA CHẾ & KỶ LUẬT MỖI NGÀY",
+            num_stages=6,
+            stage_names=[
+                "Uể Oải Ly Rỗng", "Đeo Tạp Dề Sữa Dâu", "Rót Sữa Dâu Hồng",
+                "Thêm Kem & Dâu Tươi", "Ôm Ly Hút Ngon Lành", "Tiệc Sữa Dâu Shortcake!",
+            ],
+        ),
+        tracker_name="🍓 Lotso Milk Cafe",
+        habits=[
+            Habit("Dậy đúng giờ & uống 1 ly nước ấm sáng", goal=30, p=0.92),
+            Habit("Ăn sáng đầy đủ dinh dưỡng, không bỏ bữa", goal=28, p=0.90),
+            Habit("Uống đủ 8 ly nước / sữa hạt lành mạnh", goal=30, p=0.92),
+            Habit("Hoàn thành 3 đầu việc ưu tiên đúng hạn", goal=28, p=0.89),
+            Habit("Đi bộ / vận động nhẹ 25 phút giữ dáng", goal=25, p=0.86),
+            Habit("Đọc sách / học kỹ năng mới 20 phút", goal=26, p=0.86),
+            Habit("Ghi chi tiêu ăn uống & dọn gọn góc bàn", goal=28, p=0.88),
+            Habit("Không ăn khuya sau 20h30 & ngủ đủ 8h", goal=28, p=0.87),
+        ],
+        seed=720, label_tag="STRAWBERRY MILK CAFE", garden_label="MILK CAFE BAR",
+        grown_label="🥛 CAFE TREAT\nDAYS (≥75%):",
+        tracker_capture_range="A1:AN46",
+        addon_fn=_addon_lotso_milk_cafe,
+    ),
+    TemplateDef(
+        stem="73_Lotso_Berry_Flower_Crown", short_key="73_lotso_flower_crown",
+        theme=Theme(
+            slug="lotso_flower_crown", name="LOTSO BERRY FLOWER CROWN", emoji="👑",
+            tagline_vi="Kết từng bông cúc trắng, lá xanh & quả dâu đỏ thành chiếc Vương Miện Dâu rực rỡ cho mỗi ngày bạn sống dịu dàng và kỷ luật!",
+            page="#FFF9F5", card="#FFFFFF", ink="#592234", muted="#9C6E7C", line="#F2D9DF",
+            primary="#D94A6B", primary_dark="#A62D4B", on_primary="#FFFFFF", soft="#FDE9EE",
+            chart_fill="#F5A6BA", chart_line="#D94A6B", chart_kind="area",
+            week_head=["#D94A6B", "#78B886", "#E36884", "#64A673", "#C43B5C"],
+            week_tint=["#FFF4F7", "#F2FAF4", "#FFF5F8", "#EFF8F1", "#FFF2F5"],
+            week_check=["#A62D4B", "#2F6E3D", "#B83958", "#265E33", "#94233F"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#FFF9F5", streak_mid="#F5A6BA", streak_hi="#A62D4B",
+            bar="#78B886", donut_rest="#FADCE4",
+            chart_title="BERRY FLOWER CROWN • NHỊP KẾT VƯƠNG MIỆN HOA DÂU",
+            num_stages=6,
+            stage_names=[
+                "Vườn Trống Háo Hức", "Cài Hoa Cúc Tai", "Nửa Vòng Lá Hoa",
+                "Vương Miện Dâu Đầy", "Cầm Chùm Dâu Chín", "Hoàng Tử Vườn Dâu!",
+            ],
+        ),
+        tracker_name="👑 Lotso Crown",
+        habits=[
+            Habit("Chào sáng tươi tắn & uống 1 ly nước ấm", goal=30, p=0.92),
+            Habit("Chăm da sáng tối & thoa chống nắng", goal=30, p=0.93),
+            Habit("Đi bộ ngoài trời hít thở khí trời 20p", goal=26, p=0.86),
+            Habit("Hoàn thành 3 việc quan trọng trong ngày", goal=28, p=0.89),
+            Habit("Ăn đủ rau xanh & trái cây giàu vitamin", goal=28, p=0.87),
+            Habit("Đọc sách / nghe podcast truyền cảm hứng", goal=26, p=0.86),
+            Habit("Viết 3 điều dịu dàng đáng biết ơn", goal=28, p=0.89),
+            Habit("Ngủ sớm dưỡng nhan trước 23h00", goal=28, p=0.87),
+        ],
+        seed=730, label_tag="BERRY FLOWER CROWN", garden_label="CROWN GARDEN",
+        grown_label="👑 CROWNED DAYS\n(≥75%):",
+        tracker_capture_range="A1:AN46",
+        addon_fn=_addon_lotso_flower_crown,
+    ),
+    TemplateDef(
+        stem="74_Lotso_Overalls_Toy_Workshop", short_key="74_lotso_overalls",
+        theme=Theme(
+            slug="lotso_overalls", name="LOTSO OVERALLS TOY WORKSHOP", emoji="🚀",
+            tagline_vi="Lotso mặc quần yếm kem túi trái tim hồng phong cách sổ tay sticker handmade — vẫy chào Hi! & phóng tên lửa vượt mọi tiến độ!",
+            page="#FFFBF0", card="#FFFFFF", ink="#2E4A32", muted="#708A74", line="#D8E6D9",
+            primary="#6D9F71", primary_dark="#46754A", on_primary="#FFFFFF", soft="#EAF4EB",
+            chart_fill="#B8DBBB", chart_line="#6D9F71", chart_kind="column",
+            week_head=["#6D9F71", "#E3657B", "#82B086", "#EB8092", "#598A5D"],
+            week_tint=["#F3FAF4", "#FFF4F6", "#F4FAF5", "#FFF5F7", "#F0F8F1"],
+            week_check=["#46754A", "#B53850", "#4E7D52", "#C4465E", "#3A633E"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#FFFBF0", streak_mid="#B8DBBB", streak_hi="#46754A",
+            bar="#E3657B", donut_rest="#DCEADC",
+            chart_title="TOY WORKSHOP SPRINT • TỐC ĐỘ SÁNG TẠO XƯỞNG ĐỒ CHƠI",
+            num_stages=6,
+            stage_names=[
+                "Áo Xanh Ngái Ngủ", "Mặc Yếm Trái Tim", "Vẫy Tay Chào Hi!",
+                "Sticker Sổ Tay", "Tên Lửa Tăng Tốc", "Xưởng Đồ Chơi 100%!",
+            ],
+        ),
+        tracker_name="🚀 Lotso Workshop",
+        habits=[
+            Habit("Khởi động sáng gọn gàng & lập kế hoạch", goal=28, p=0.90),
+            Habit("Làm việc sáng tạo / dự án chính 60 phút", goal=28, p=0.89),
+            Habit("Học kỹ năng mới / thiết kế / lập trình 30p", goal=26, p=0.86),
+            Habit("Uống đủ 2L nước & ăn trưa đủ chất", goal=30, p=0.92),
+            Habit("Dọn gọn góc bàn làm việc handmade", goal=28, p=0.88),
+            Habit("Vận động / giãn cơ giữa giờ 15 phút", goal=26, p=0.85),
+            Habit("Tổng kết thành quả & dán sticker ngày", goal=28, p=0.89),
+            Habit("Nghỉ ngơi đúng giờ nạp pin sáng tạo", goal=28, p=0.87),
+        ],
+        seed=740, label_tag="OVERALLS WORKSHOP", garden_label="TOY WORKSHOP",
+        grown_label="🚀 ROCKET DAYS\n(≥75%):",
+        tracker_capture_range="A1:AN46",
+        addon_fn=_addon_lotso_overalls,
+    ),
+    TemplateDef(
+        stem="75_Lotso_LoFi_Earphones_Flow", short_key="75_lotso_lofi",
+        theme=Theme(
+            slug="lotso_lofi", name="LOTSO LO-FI EARPHONES FLOW", emoji="🎧",
+            tagline_vi="Đeo tai nghe dây nâu, đắm mình giữa làn sóng nhạc hồng – kem & tích lũy từng phút Deep Flow cực mượt cùng Lotso Lo-Fi!",
+            page="#FFF4F2", card="#FFFFFF", ink="#542822", muted="#996F69", line="#F0D5D1",
+            primary="#C84B6E", primary_dark="#962B4B", on_primary="#FFFFFF", soft="#FCE8EE",
+            chart_fill="#F2A7BC", chart_line="#6B3A2E", chart_kind="line", chart_markers=True,
+            week_head=["#C84B6E", "#6B3A2E", "#D66584", "#854D3E", "#B03A5C"],
+            week_tint=["#FFF3F6", "#FAF2F0", "#FFF5F7", "#F8F0EE", "#FFF1F4"],
+            week_check=["#962B4B", "#542B21", "#A63858", "#6B3A2E", "#852240"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#FFF4F2", streak_mid="#F2A7BC", streak_hi="#6B3A2E",
+            bar="#6B3A2E", donut_rest="#F5DCE3",
+            chart_title="LO-FI EARPHONES FLOW • SÓNG ÂM TẬP TRUNG MỖI NGÀY",
+            num_stages=6,
+            stage_names=[
+                "Dây Rối Xao Nhãng", "Đeo 1 Bên Tai", "Nốt Nhạc Bắt Nhịp",
+                "Sóng Nhạc Deep Flow", "Đung Đưa Ngân Nga", "Phiêu Nhạc 100%!",
+            ],
+        ),
+        tracker_name="🎧 Lotso Lo-Fi",
+        habits=[
+            Habit("Vào bàn học / làm việc đúng giờ sáng", goal=28, p=0.90),
+            Habit("Bật nhạc Lo-Fi & tập trung 45p không chạm máy", goal=28, p=0.89),
+            Habit("Đọc sách / ghi chú kiến thức 20 phút", goal=26, p=0.86),
+            Habit("Uống đủ 2L nước lọc & cà phê điều độ", goal=30, p=0.92),
+            Habit("Đi bộ nghe podcast / nhạc thư giãn 20p", goal=26, p=0.85),
+            Habit("Hoàn thành xong mục tiêu chính trước tối", goal=28, p=0.88),
+            Habit("Nghe nhạc nhẹ thả lỏng mắt cuối ngày", goal=28, p=0.88),
+            Habit("Tắt thiết bị sớm & ngủ ngon trước 23h", goal=28, p=0.86),
+        ],
+        seed=750, label_tag="LO-FI EARPHONES", garden_label="SOUNDWAVE FLOW",
+        grown_label="🎵 DEEP FLOW\nDAYS (≥75%):",
+        tracker_capture_range="A1:AN47",
+        addon_fn=_addon_lotso_lofi,
+    ),
+    TemplateDef(
+        stem="76_Lotso_Mood_Detox_Comic", short_key="76_lotso_mood_detox",
+        theme=Theme(
+            slug="lotso_mood_detox", name="LOTSO MOOD DETOX COMIC", emoji="⚡",
+            tagline_vi="Chuyển hóa 4 tia sét bực bội thành mưa trái tim ngọt ngào — kèm 5 đồng hồ Donut Giải Độc Cảm Xúc & thước đo tâm trạng 1–5!",
+            page="#FDF6FA", card="#FFFFFF", ink="#4F1E31", muted="#946879", line="#EED5E1",
+            primary="#B8456A", primary_dark="#8A2848", on_primary="#FFFFFF", soft="#FAE8F0",
+            chart_fill="#F4C860", chart_line="#B8456A", chart_kind="area",
+            week_head=["#B8456A", "#F4C860", "#CC5C80", "#E8B746", "#A13457"],
+            week_tint=["#FDF3F7", "#FFFCEB", "#FCF4F8", "#FFF9E0", "#FAF0F4"],
+            week_check=["#8A2848", "#9E700B", "#9E3557", "#8C6208", "#781F3D"],
+            week_on=["#FFFFFF", "#4F3604", "#FFFFFF", "#4F3604", "#FFFFFF"],
+            streak_lo="#FDF6FA", streak_mid="#F4C860", streak_hi="#8A2848",
+            bar="#F4C860", donut_rest="#F2DCE6",
+            chart_title="MOOD DETOX COMIC • HÀNH TRÌNH CHUYỂN HÓA STRESS THÀNH TIM",
+            num_stages=6,
+            stage_names=[
+                "Vỡ Bánh Tia Sét", "Dán Băng Trái Tim", "Cầm Bóng Tim Nhỏ",
+                "Ôm 2 Bóng Bay", "Bay Bổng Chùm Bóng", "Mưa Tim Detox 100%!",
+            ],
+        ),
+        tracker_name="⚡ Lotso Mood Detox",
+        habits=[
+            Habit("Hít thở sâu 5 nhịp khi thấy căng thẳng", goal=28, p=0.90),
+            Habit("Uống đủ 2L nước & ăn bữa đủ dinh dưỡng", goal=30, p=0.92),
+            Habit("Hoàn thành 1 việc nhỏ nhất trước để lấy đà", goal=28, p=0.91),
+            Habit("Vận động giải tỏa năng lượng 20 phút", goal=26, p=0.85),
+            Habit("Hạn chế đọc tin tức tiêu cực / lướt vô thức", goal=26, p=0.84),
+            Habit("Trò chuyện / chia sẻ cảm xúc tích cực", goal=26, p=0.86),
+            Habit("Viết nhật ký xả stress & chấm điểm tâm trạng", goal=28, p=0.89),
+            Habit("Ngủ đủ giấc để sáng mai nhẹ lòng hơn", goal=28, p=0.87),
+        ],
+        seed=760, label_tag="MOOD DETOX COMIC", garden_label="DETOX STUDIO",
+        grown_label="💖 CALM DETOX\nDAYS (≥75%):",
+        tracker_capture_range="A1:AN48",
+        addon_fn=_addon_lotso_mood_detox,
+    ),
+    TemplateDef(
+        stem="77_Lotso_Floral_Sweet_Dreams", short_key="77_lotso_sweet_dreams",
+        theme=Theme(
+            slug="lotso_sweet_dreams", name="LOTSO FLORAL SWEET DREAMS", emoji="🐑",
+            tagline_vi="Ôm bó hoa hồng đỏ nở rộ bên giấc mơ cừu tím pastel bồng bềnh — theo dõi giờ ngủ mỗi đêm và 3 bước khép lại ngày thật êm ái!",
+            page="#FFF7FB", card="#FFFFFF", ink="#542535", muted="#946B7A", line="#EFD8E4",
+            primary="#C25674", primary_dark="#913550", on_primary="#FFFFFF", soft="#FCEBF1",
+            chart_fill="#B89EDB", chart_line="#C25674", chart_kind="area",
+            week_head=["#C25674", "#B89EDB", "#D16D89", "#A588CF", "#AD4462"],
+            week_tint=["#FFF4F8", "#F7F3FC", "#FFF5F9", "#F5F0FA", "#FFF2F6"],
+            week_check=["#913550", "#61428F", "#A3415D", "#523580", "#822A44"],
+            week_on=["#FFFFFF", "#3B225E", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#FFF7FB", streak_mid="#B89EDB", streak_hi="#913550",
+            bar="#B89EDB", donut_rest="#F2DFE8",
+            chart_title="FLORAL SWEET DREAMS • NHỊP NGỦ NGON & BÌNH YÊN MỖI ĐÊM",
+            num_stages=6,
+            stage_names=[
+                "Ôm Cành Lá Xanh", "Hoa Hồng Đầu Tiên", "Mây Suy Nghĩ Nhỏ",
+                "Tai Cừu Lấp Ló", "Cừu Tím Cười Tít", "Giấc Mơ Cừu Bông!",
+            ],
+        ),
+        tracker_name="🐑 Lotso Dreams",
+        habits=[
+            Habit("Không uống trà đặc / cà phê sau 15h00", goal=28, p=0.89),
+            Habit("Ăn tối thanh đạm trước 19h30", goal=26, p=0.86),
+            Habit("Tắm ấm & dưỡng da tối nhẹ nhàng", goal=30, p=0.92),
+            Habit("Tổng kết thói quen & viết 1 điều biết ơn", goal=28, p=0.90),
+            Habit("Cất điện thoại xa giường trước 22h15", goal=26, p=0.84),
+            Habit("Đọc 10 trang sách êm dịu trước khi ngủ", goal=26, p=0.86),
+            Habit("Giãn cơ nhẹ & hít thở sâu thả lỏng vai", goal=28, p=0.88),
+            Habit("Ngủ sâu đủ 7.5–8 giờ mơ đẹp bên cừu tím", goal=28, p=0.87),
+        ],
+        seed=770, label_tag="FLORAL SWEET DREAMS", garden_label="DREAMY CLOUDS",
+        grown_label="🐑 SWEET DREAM\nNIGHTS (≥75%):",
+        tracker_capture_range="A1:AN47",
+        addon_fn=_addon_lotso_sweet_dreams,
+    ),
+    TemplateDef(
+        stem="78_Lotso_Daisy_Cheek_Glow", short_key="78_lotso_daisy_glow",
+        theme=Theme(
+            slug="lotso_daisy_glow", name="LOTSO DAISY CHEEK GLOW", emoji="🌼",
+            tagline_vi="Nét dịu dàng hoa cúc trắng nhụy vàng & má hồng ửng sáng — thả lỏng nụ cười chữ U hiền khô cùng 5 thanh tiến độ tuần nắng vàng!",
+            page="#FFF9F2", card="#FFFFFF", ink="#542430", muted="#966C76", line="#F0DADF",
+            primary="#B94E66", primary_dark="#8A2F44", on_primary="#FFFFFF", soft="#FCEBEF",
+            chart_fill="#F6CE55", chart_line="#B94E66", chart_kind="column",
+            week_head=["#B94E66", "#F6CE55", "#C9637A", "#EBC03D", "#A33E55"],
+            week_tint=["#FFF4F6", "#FFFCEB", "#FFF5F7", "#FFF9E0", "#FFF2F4"],
+            week_check=["#8A2F44", "#997006", "#9E3B52", "#876104", "#782438"],
+            week_on=["#FFFFFF", "#4D3702", "#FFFFFF", "#4D3702", "#FFFFFF"],
+            streak_lo="#FFF9F2", streak_mid="#F6CE55", streak_hi="#8A2F44",
+            bar="#F6CE55", donut_rest="#F5DFE4",
+            chart_title="DAISY CHEEK GLOW • ĐỘ RẠNG RỠ HOA CÚC MỖI NGÀY",
+            num_stages=6,
+            stage_names=[
+                "Nụ Cúc Ngại Ngùng", "Chạm Nhẹ Má Hồng", "Hoa Cúc Đầu Nở",
+                "Áp Má Cười Hiền", "Nháy Mắt Duyên Dáng", "Rạng Rỡ Hoa Cúc!",
+            ],
+        ),
+        tracker_name="🌼 Lotso Daisy Glow",
+        habits=[
+            Habit("Mỉm cười dịu dàng & uống nước ấm sáng", goal=30, p=0.92),
+            Habit("Skincare giữ ẩm & thoa kem chống nắng", goal=30, p=0.93),
+            Habit("Giãn cơ / Yoga nhẹ 20 phút buổi sáng", goal=26, p=0.86),
+            Habit("Hoàn thành 3 ưu tiên chính thật bình thản", goal=28, p=0.89),
+            Habit("Uống đủ 2L nước lọc cho làn da rạng rỡ", goal=30, p=0.91),
+            Habit("Đọc sách / học điều mới mẻ 20 phút", goal=26, p=0.86),
+            Habit("Gửi lời khen ấm áp đến chính mình", goal=28, p=0.89),
+            Habit("Đi ngủ sớm & nghỉ ngơi trọn vẹn 8h", goal=28, p=0.87),
+        ],
+        seed=780, label_tag="DAISY CHEEK GLOW", garden_label="DAISY FIELD",
+        grown_label="🌼 DAISY GLOW\nDAYS (≥75%):",
+        tracker_capture_range="A1:AN47",
+        addon_fn=_addon_lotso_daisy_glow,
+    ),
+    TemplateDef(
+        stem="79_Lotso_Bunny_Headband_Selfcare", short_key="79_lotso_bunny_selfcare",
+        theme=Theme(
+            slug="lotso_bunny_selfcare", name="LOTSO BUNNY HEADBAND SELFCARE", emoji="🐰",
+            tagline_vi="Chu trình Spa Self-Care phân nhóm tự động ☀️ Sáng · 🍓 Ban Ngày · 🐰 Spa Tối cùng Lotso đeo bờm tai thỏ tím viền bèo cực yêu!",
+            page="#FCF7FC", card="#FFFFFF", ink="#472644", muted="#8B6B88", line="#EBD8EA",
+            primary="#A8649E", primary_dark="#783D70", on_primary="#FFFFFF", soft="#F6EAF5",
+            chart_fill="#EB7B9B", chart_line="#A8649E", chart_kind="area",
+            week_head=["#A8649E", "#EB7B9B", "#BA79B0", "#F090AC", "#914E87"],
+            week_tint=["#FAF2FA", "#FFF4F7", "#FBF3FB", "#FFF5F8", "#F7EEF7"],
+            week_check=["#783D70", "#B53D60", "#8A4A82", "#C44B6E", "#693261"],
+            week_on=["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+            streak_lo="#FCF7FC", streak_mid="#EB7B9B", streak_hi="#783D70",
+            bar="#EB7B9B", donut_rest="#EFE0EE",
+            chart_title="BUNNY HEADBAND SELFCARE • CHU TRÌNH CHĂM SÓC BẢN THÂN",
+            num_stages=6,
+            stage_names=[
+                "Lướt Điện Thoại Thỏ", "Cầm Bờm Tai Thỏ", "Đeo Bờm Nơ Xinh",
+                "Đắp Mặt Nạ Dâu", "Tự Tin Nghiêng Đầu", "Rạng Ngời Self-Care!",
+            ],
+        ),
+        tracker_name="🐰 Lotso SelfCare",
+        habits=[
+            # Morning (0..2)
+            Habit("☀️ Rửa mặt sạch, dưỡng ẩm & chống nắng", goal=30, p=0.94),
+            Habit("☀️ Uống nước ấm & vận động 15 phút", goal=28, p=0.89),
+            Habit("☀️ Ăn sáng lành mạnh & bổ sung vitamin", goal=28, p=0.88),
+            # Daytime (3..5)
+            Habit("🍓 Uống đủ 2.2L nước giữ ẩm làn da", goal=30, p=0.92),
+            Habit("🍓 Nghỉ mắt & ngồi thẳng lưng khi làm việc", goal=28, p=0.87),
+            Habit("🍓 Ăn nhiều rau quả, hạn chế đồ ngọt", goal=26, p=0.85),
+            # Night Spa (6..8)
+            Habit("🐰 Đặt điện thoại xuống & đeo bờm thỏ spa", goal=28, p=0.88),
+            Habit("🐰 Tẩy trang, đắp mặt nạ / skincare tối", goal=30, p=0.93),
+            Habit("🐰 Ngủ sớm làm đẹp trước 23h đủ 8 tiếng", goal=28, p=0.87),
+        ],
+        seed=790, label_tag="BUNNY SELFCARE SPA", garden_label="BUNNY SPA",
+        grown_label="🐰 SPA SELF-CARE\nDAYS (≥75%):",
+        tracker_capture_range="A1:AN46",
+        addon_fn=_addon_lotso_bunny_selfcare,
+    ),
+    TemplateDef(
+        stem="80_Lotso_Berry_Gift_Box_Party", short_key="80_lotso_gift_box",
+        theme=Theme(
+            slug="lotso_gift_box", name="LOTSO BERRY GIFT BOX PARTY", emoji="🎁",
+            tagline_vi="Gấu Dâu Lotso lấp ló sau hộp quà hồng, đội mũ tiệc vàng, ôm bánh Cupcake ước nguyện & bật nhảy tung Confetti ăn mừng 100%!",
+            page="#FFF6F9", card="#FFFFFF", ink="#541C30", muted="#966374", line="#F0D4DE",
+            primary="#C43E67", primary_dark="#942449", on_primary="#FFFFFF", soft="#FCE7EF",
+            chart_fill="#F396B4", chart_line="#C43E67", chart_kind="line", chart_markers=True,
+            week_head=["#C43E67", "#F5CB69", "#D95980", "#EAB948", "#AD2E56"],
+            week_tint=["#FFF3F7", "#FFFCEB", "#FFF4F8", "#FFF9E0", "#FFF1F5"],
+            week_check=["#942449", "#8A6208", "#A83056", "#7A5404", "#821C3E"],
+            week_on=["#FFFFFF", "#4D3504", "#FFFFFF", "#4D3504", "#FFFFFF"],
+            streak_lo="#FFF6F9", streak_mid="#F396B4", streak_hi="#942449",
+            bar="#F5CB69", donut_rest="#F5DCE5",
+            chart_title="BERRY GIFT BOX PARTY • NHỊP MỞ HỘP QUÀ & ĂN MỪNG MỖI NGÀY",
+            num_stages=6,
+            stage_names=[
+                "Hộp Quà Lấp Ló", "Đẩy Nắp Tò Mò", "Chui Ra Mũ Tiệc",
+                "Ôm Bánh Cupcake", "Nhắm Mắt Ước Nguyện", "Nhảy Mừng Confetti!",
+            ],
+        ),
+        tracker_name="🎁 Lotso Gift Party",
+        habits=[
+            Habit("Khởi đầu ngày mới tích cực & đúng giờ", goal=30, p=0.92),
+            Habit("Uống đủ 2L nước giữ sức bền cả ngày", goal=30, p=0.92),
+            Habit("Tập thể dục / đi bộ sôi động 25 phút", goal=26, p=0.86),
+            Habit("Hoàn thành 3 việc quan trọng nhất ngày", goal=28, p=0.89),
+            Habit("Đọc sách / trau dồi kỹ năng 20 phút", goal=26, p=0.86),
+            Habit("Kết nối / lan tỏa năng lượng vui đến bạn bè", goal=28, p=0.88),
+            Habit("Ghi lại 1 thành tích đáng ăn mừng hôm nay", goal=28, p=0.89),
+            Habit("Tổng kết ngày & ngủ ngon trước 23h00", goal=28, p=0.87),
+        ],
+        seed=800, label_tag="BERRY GIFT PARTY", garden_label="GIFT BOX PARTY",
+        grown_label="🎁 GIFT PARTY\nDAYS (≥75%):",
+        tracker_capture_range="A1:AN47",
+        addon_fn=_addon_lotso_gift_box,
+    ),
 ]
 
 
@@ -2521,7 +3341,8 @@ def build_template(tdef: TemplateDef, out_path: Path, edition: str = "pro_xlsm")
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     wb = xlsxwriter.Workbook(str(out_path))
-    if gsheets:
+    is_batch_61_80 = tdef.short_key[:2].isdigit() and int(tdef.short_key[:2]) >= 61
+    if gsheets or is_batch_61_80:
         theme = replace(
             tdef.theme,
             font="Be Vietnam Pro",
@@ -2530,7 +3351,7 @@ def build_template(tdef: TemplateDef, out_path: Path, edition: str = "pro_xlsm")
         )
         wb.formats[0].set_font_name("Be Vietnam Pro")
         wb.formats[0].set_font_size(10)
-        styles = Styles(wb, theme, gsheets=True)
+        styles = Styles(wb, theme, gsheets=gsheets)
     else:
         theme = tdef.theme
         styles = Styles(wb, theme, gsheets=False)

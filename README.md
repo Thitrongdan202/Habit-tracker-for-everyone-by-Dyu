@@ -92,6 +92,12 @@ Nếu bạn không quen mở PowerShell/Terminal, tải trực tiếp ngay trên
 
 Mỗi ngày bạn tick hoàn thành thói quen từ `0% → 100%`, linh vật / Capybara / cây hoa / Digimon của ngày đó sẽ tự động lớn lên hoặc tiến hóa ngay trước mắt bạn!
 
+### 🍓🐻 Batch 9 — 10 Chủ Đề Gấu Dâu Lotso Pastel Collection (`#71`–`#80` — 60 Sprites Đồng Nhất 0% → 100%)
+![60 Lotso Strawberry Bear Sprites Contact Sheet](previews/assets_contact_sheet_lotso.png)
+
+### 🎀🦫 Batch 8 — 10 Chủ Đề Hải Ly Loopy Pastel Collection (`#61`–`#70` — 60 Sprites Đồng Nhất 0% → 100%)
+![60 Loopy Pastel Collection Sprites Contact Sheet](previews/assets_contact_sheet_loopy.png)
+
 ### 🥑🍊 MỚI v3.9 — Batch 7: 13 Chủ Đề Capybara Chill Collection (`#48`–`#60` — 78 Sprites Độc Bản Từ Bé Capybara 0% → 100% Đỉnh Cao!)
 ![78 Capybara Chill Collection Sprites Contact Sheet](previews/assets_contact_sheet_capybara.png)
 
@@ -116,6 +122,208 @@ Mỗi ngày bạn tick hoàn thành thói quen từ `0% → 100%`, linh vật / 
 ![72 Sprites Contact Sheet Batch 3](previews/assets_contact_sheet_batch3.png)
 ![60 Sprites Contact Sheet Batch 1](previews/assets_contact_sheet.png)
 ![54 Sprites Contact Sheet Batch 2](previews/assets_contact_sheet_batch2.png)
+
+</details>
+
+---
+
+## 🍓🐻 Showcase Bộ Sưu Tập 10 Chủ Đề Gấu Dâu Lotso (`#71` – `#80`)
+
+<table width="100%">
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/71_lotso_strawberry_tracker.png" width="100%" alt="Lotso Strawberry Harvest Tracker"/><br/>
+      <b>71. 🍓 Lotso Strawberry Harvest</b><br/>
+      <sub>Quay Lưng Lì Lợm → Dâu Xanh → Ôm Dâu Đỏ → Nháy Mắt → Mắt Tim Thu Hoạch!</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/72_lotso_milk_cafe_tracker.png" width="100%" alt="Lotso Strawberry Milk Cafe Tracker"/><br/>
+      <b>72. 🍓 Lotso Strawberry Milk Cafe</b><br/>
+      <sub>Ly Rỗng → Tạp Dề Dâu → Rót Sữa Dâu → Kem Tươi → Tiệc Sữa Dâu Shortcake!</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/73_lotso_flower_crown_tracker.png" width="100%" alt="Lotso Berry Flower Crown Tracker"/><br/>
+      <b>73. 👑 Lotso Berry Flower Crown</b><br/>
+      <sub>Vườn Trống → Cài Cúc Tai → Nửa Vòng Lá → Vương Miện Dâu → Hoàng Tử Vườn Dâu!</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/74_lotso_overalls_tracker.png" width="100%" alt="Lotso Overalls Toy Workshop Tracker"/><br/>
+      <b>74. 🚀 Lotso Overalls Toy Workshop</b><br/>
+      <sub>Áo Xanh → Yếm Trái Tim → Chào Hi! → Sticker Sổ Tay → Tên Lửa Xưởng Đồ Chơi!</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/75_lotso_lofi_tracker.png" width="100%" alt="Lotso LoFi Earphones Flow Tracker"/><br/>
+      <b>75. 🎧 Lotso Lo-Fi Earphones Flow</b><br/>
+      <sub>Dây Rối → Đeo 1 Bên → Nốt Nhạc → Sóng Nhạc Deep Flow → Phiêu Nhạc 100%!</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/76_lotso_mood_detox_tracker.png" width="100%" alt="Lotso Mood Detox Comic Tracker"/><br/>
+      <b>76. ⚡ Lotso Mood Detox Comic</b><br/>
+      <sub>Vỡ Bánh Tia Sét → Dán Băng Trái Tim → Bóng Bay Tim → Bay Bổng → Mưa Tim Detox 100%!</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/77_lotso_sweet_dreams_tracker.png" width="100%" alt="Lotso Floral Sweet Dreams Tracker"/><br/>
+      <b>77. 🐑 Lotso Floral Sweet Dreams</b><br/>
+      <sub>Cành Lá → Hoa Hồng → Mây Nhỏ → Tai Cừu → Cừu Tím Giấc Mơ Bồng Bềnh!</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/78_lotso_daisy_glow_tracker.png" width="100%" alt="Lotso Daisy Cheek Glow Tracker"/><br/>
+      <b>78. 🌼 Lotso Daisy Cheek Glow</b><br/>
+      <sub>Nụ Cúc → Chạm Má → Hoa Cúc Nở → Áp Má Cười Hiền → Nháy Mắt Rạng Rỡ!</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/79_lotso_bunny_selfcare_tracker.png" width="100%" alt="Lotso Bunny Headband Selfcare Tracker"/><br/>
+      <b>79. 🐰 Lotso Bunny Headband Selfcare</b><br/>
+      <sub>Điện Thoại Thỏ → Cầm Bờm → Đeo Bờm → Mặt Nạ Dâu → Rạng Ngời Self-Care!</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/80_lotso_gift_box_tracker.png" width="100%" alt="Lotso Berry Gift Box Party Tracker"/><br/>
+      <b>80. 🎁 Lotso Berry Gift Box Party</b><br/>
+      <sub>Hộp Quà Lấp Ló → Đẩy Nắp → Mũ Tiệc → Bánh Cupcake → Nhảy Mừng Confetti!</sub>
+    </td>
+  </tr>
+</table>
+
+<details>
+<summary>🏆 Xem giao diện Tổng Kết & Thành Tựu Năm (Excel PC Pro) của Gấu Dâu Lotso (`#71`–`#80`)</summary>
+
+<table width="100%">
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/71_lotso_strawberry_annual_achievements.png" width="100%" alt="Lotso Strawberry Annual Achievements"/><br/><sub><b>71. 🍓 Mùa Thu Hoạch Dâu Tây Lotso (Tổng Kết 12 Tháng)</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/80_lotso_gift_box_annual_achievements.png" width="100%" alt="Lotso Berry Gift Box Party Annual Achievements"/><br/><sub><b>80. 🎁 Tiệc Hộp Quà Gấu Dâu Lotso (Tổng Kết 12 Tháng)</b></sub></td>
+  </tr>
+</table>
+
+</details>
+
+<details>
+<summary>📱 Xem màn hình Mobile Portrait Gấu Dâu Lotso (`#71`–`#80`)</summary>
+
+<table>
+  <tr>
+    <td align="center"><img src="previews/mobile_71_lotso_strawberry.png" width="150" alt="Mobile Lotso Strawberry"/><br/><sub><b>🍓 Strawberry</b></sub></td>
+    <td align="center"><img src="previews/mobile_72_lotso_milk_cafe.png" width="150" alt="Mobile Lotso Milk Cafe"/><br/><sub><b>🍓 Milk Cafe</b></sub></td>
+    <td align="center"><img src="previews/mobile_73_lotso_flower_crown.png" width="150" alt="Mobile Lotso Flower Crown"/><br/><sub><b>👑 Flower Crown</b></sub></td>
+    <td align="center"><img src="previews/mobile_74_lotso_overalls.png" width="150" alt="Mobile Lotso Overalls"/><br/><sub><b>🚀 Overalls</b></sub></td>
+    <td align="center"><img src="previews/mobile_75_lotso_lofi.png" width="150" alt="Mobile Lotso LoFi"/><br/><sub><b>🎧 Lo-Fi Flow</b></sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="previews/mobile_76_lotso_mood_detox.png" width="150" alt="Mobile Lotso Mood Detox"/><br/><sub><b>⚡ Mood Detox</b></sub></td>
+    <td align="center"><img src="previews/mobile_77_lotso_sweet_dreams.png" width="150" alt="Mobile Lotso Sweet Dreams"/><br/><sub><b>🐑 Sweet Dreams</b></sub></td>
+    <td align="center"><img src="previews/mobile_78_lotso_daisy_glow.png" width="150" alt="Mobile Lotso Daisy Glow"/><br/><sub><b>🌼 Daisy Glow</b></sub></td>
+    <td align="center"><img src="previews/mobile_79_lotso_bunny_selfcare.png" width="150" alt="Mobile Lotso Bunny Selfcare"/><br/><sub><b>🐰 Bunny Spa</b></sub></td>
+    <td align="center"><img src="previews/mobile_80_lotso_gift_box.png" width="150" alt="Mobile Lotso Gift Box"/><br/><sub><b>🎁 Gift Party</b></sub></td>
+  </tr>
+</table>
+
+</details>
+
+---
+
+## 🎀🦫 Showcase Bộ Sưu Tập 10 Chủ Đề Hải Ly Loopy Pastel (`#61` – `#70`)
+
+<table width="100%">
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/61_loopy_red_bow_tracker.png" width="100%" alt="Loopy Red Bow Glow-Up Tracker"/><br/>
+      <b>61. 🎀 Loopy Red Bow Glow-Up</b><br/>
+      <sub>Quên Việc!! → Ôm Má Hít Thở → Buộc Nơ Đỏ → Tự Tin → Chống Cằm Nụ Hoa → Nở Rộ Glow-Up!</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/62_loopy_taiyaki_tracker.png" width="100%" alt="Loopy Taiyaki Street Snack Tracker"/><br/>
+      <b>62. 🐟 Loopy Taiyaki Street Snack</b><br/>
+      <sub>Túi Trống → Mũ Taiyaki → Bánh Cá Nóng → Xiên Dango → No Nê Phố Ẩm Thực!</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/63_loopy_piggy_cafe_tracker.png" width="100%" alt="Loopy Piggy Dessert Cafe Tracker"/><br/>
+      <b>63. 🧁 Loopy Piggy Dessert Cafe</b><br/>
+      <sub>Phô Mai → Mũ Heo Hồng → Kem 1–2 Viên → Bánh Cherry → Đại Tiệc Cafe!</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/64_loopy_sauna_sheep_tracker.png" width="100%" alt="Loopy Sauna Sheep Detox Tracker"/><br/>
+      <b>64. 🐑 Loopy Sauna Sheep Detox</b><br/>
+      <sub>Kính Trễ → Khăn Cừu Yangmeori → Xông Hơi → Reo Vui WA~ → Sảng Khoái!</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/65_loopy_honey_bee_tracker.png" width="100%" alt="Loopy Honey Bee KPI Tracker"/><br/>
+      <b>65. 🐝 Loopy Honey Bee KPI</b><br/>
+      <sub>Cuộn Tròn Ngủ → Mọc Râu → Vỗ Cánh Bay → Ôm Hũ Mật → Ong Chúa Mật Vàng!</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/66_loopy_poolside_duck_tracker.png" width="100%" alt="Loopy Poolside Duck Chill Tracker"/><br/>
+      <b>66. 🐥 Loopy Poolside Duck Chill</b><br/>
+      <sub>Ôm Phao Vịt → Nhảy Hồ Tung Tim → Phao Sọc → Thư Thái Hồ Xanh!</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/67_loopy_fluffy_commuter_tracker.png" width="100%" alt="Loopy Fluffy Commuter Diary Tracker"/><br/>
+      <b>67. 🎒 Loopy Fluffy Commuter Diary</b><br/>
+      <sub>Ngái Ngủ Trùm Mũ → Khoác Túi → Bước Đi Tự Tin → Cầm Cà Phê → Bật Nhảy Đúng Giờ!</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/68_loopy_panda_study_tracker.png" width="100%" alt="Loopy Panda Zen Study Tracker"/><br/>
+      <b>68. 🐼 Loopy Panda Zen Study</b><br/>
+      <sub>Chống Cằm → Bóng Đèn Ý Tưởng → Ghi Chép → Đọc Sách Trúc Xanh → Khép Sách Mãn Nguyện!</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/69_loopy_ruffle_sleep_tracker.png" width="100%" alt="Loopy Ruffle Sleep Routine Tracker"/><br/>
+      <b>69. 🛏️ Loopy Ruffle Sleep Routine</b><br/>
+      <sub>Chưa Chịu Ngủ → Kéo Rèm Nơ Hồng → Tựa Gối Bèo → Giấc Mơ Hoa Zzz!</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <img src="previews/70_loopy_hair_roller_tracker.png" width="100%" alt="Loopy Hair Roller GRWM Tracker"/><br/>
+      <b>70. 💇‍♀️ Loopy Hair Roller GRWM</b><br/>
+      <sub>Cuốn Lô Mái Ngái Ngủ → Nhấp Trà → Chấm Má Hồng → Tháo Lô → Xinh Lung Linh GRWM!</sub>
+    </td>
+  </tr>
+</table>
+
+<details>
+<summary>🏆 Xem giao diện Tổng Kết & Thành Tựu Năm (Excel PC Pro) của Hải Ly Loopy (`#61`–`#70`)</summary>
+
+<table width="100%">
+  <tr>
+    <td width="50%" align="center" valign="top"><img src="previews/61_loopy_red_bow_annual_achievements.png" width="100%" alt="Loopy Red Bow Annual Achievements"/><br/><sub><b>61. 🎀 Hành Trình Glow-Up Loopy Nơ Đỏ (Tổng Kết 12 Tháng)</b></sub></td>
+    <td width="50%" align="center" valign="top"><img src="previews/70_loopy_hair_roller_annual_achievements.png" width="100%" alt="Loopy Hair Roller GRWM Annual Achievements"/><br/><sub><b>70. 💇‍♀️ Góc Làm Đẹp Loopy Lô Cuốn Mái (Tổng Kết 12 Tháng)</b></sub></td>
+  </tr>
+</table>
+
+</details>
+
+<details>
+<summary>📱 Xem màn hình Mobile Portrait Hải Ly Loopy (`#61`–`#70`)</summary>
+
+<table>
+  <tr>
+    <td align="center"><img src="previews/mobile_61_loopy_red_bow.png" width="150" alt="Mobile Loopy Red Bow"/><br/><sub><b>🎀 Red Bow</b></sub></td>
+    <td align="center"><img src="previews/mobile_62_loopy_taiyaki.png" width="150" alt="Mobile Loopy Taiyaki"/><br/><sub><b>🐟 Taiyaki</b></sub></td>
+    <td align="center"><img src="previews/mobile_63_loopy_piggy_cafe.png" width="150" alt="Mobile Loopy Piggy Cafe"/><br/><sub><b>🧁 Piggy Cafe</b></sub></td>
+    <td align="center"><img src="previews/mobile_64_loopy_sauna_sheep.png" width="150" alt="Mobile Loopy Sauna Sheep"/><br/><sub><b>🐑 Sauna Sheep</b></sub></td>
+    <td align="center"><img src="previews/mobile_65_loopy_honey_bee.png" width="150" alt="Mobile Loopy Honey Bee"/><br/><sub><b>🐝 Honey Bee</b></sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="previews/mobile_66_loopy_poolside_duck.png" width="150" alt="Mobile Loopy Poolside Duck"/><br/><sub><b>🐥 Poolside</b></sub></td>
+    <td align="center"><img src="previews/mobile_67_loopy_fluffy_commuter.png" width="150" alt="Mobile Loopy Fluffy Commuter"/><br/><sub><b>🎒 Commuter</b></sub></td>
+    <td align="center"><img src="previews/mobile_68_loopy_panda_study.png" width="150" alt="Mobile Loopy Panda Study"/><br/><sub><b>🐼 Panda Zen</b></sub></td>
+    <td align="center"><img src="previews/mobile_69_loopy_ruffle_sleep.png" width="150" alt="Mobile Loopy Ruffle Sleep"/><br/><sub><b>🛏️ Ruffle Sleep</b></sub></td>
+    <td align="center"><img src="previews/mobile_70_loopy_hair_roller.png" width="150" alt="Mobile Loopy Hair Roller"/><br/><sub><b>💇‍♀️ Hair Roller</b></sub></td>
+  </tr>
+</table>
 
 </details>
 
