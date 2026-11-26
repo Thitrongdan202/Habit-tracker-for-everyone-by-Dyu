@@ -1,6 +1,6 @@
 """
-build_mobile_templates.py — Builds Mobile Portrait Habit Tracker templates (v3.0, 01..31)
-into `templates/mobile_portrait_sheets/01..31_*_Mobile.xlsx`.
+build_mobile_templates.py — Builds Mobile Portrait Habit Tracker templates (v4.0, 01..80)
+into `templates/mobile_portrait_sheets/01..80_*_Mobile.xlsx`.
 
 Pipeline:
   1. Generate mobile portrait `.xlsx` workbooks via `hx.mobile.build_mobile_workbook`
@@ -49,7 +49,15 @@ PREVIEW_KEYS = {"01_sunflower", "02_cactus", "07_sakura", "10_aurora",
                 "51_capybara_boba_pond", "52_capybara_bookworm", "53_capybara_lofi_picnic",
                 "54_capybara_foodie", "55_capybara_dino_hoodie", "56_capybara_apple_orchard",
                 "57_capybara_pink_chill", "58_capybara_fairy_party", "59_capybara_selfcare",
-                "60_capybara_traveler"}
+                "60_capybara_traveler",
+                "61_loopy_red_bow", "62_loopy_taiyaki", "63_loopy_piggy_cafe",
+                "64_loopy_sauna_sheep", "65_loopy_honey_bee", "66_loopy_poolside_duck",
+                "67_loopy_fluffy_commuter", "68_loopy_panda_study", "69_loopy_ruffle_sleep",
+                "70_loopy_hair_roller",
+                "71_lotso_strawberry", "72_lotso_milk_cafe", "73_lotso_flower_crown",
+                "74_lotso_overalls", "75_lotso_lofi", "76_lotso_mood_detox",
+                "77_lotso_sweet_dreams", "78_lotso_daisy_glow", "79_lotso_bunny_selfcare",
+                "80_lotso_gift_box"}
 
 
 def _com_retry(fn, retries: int = 12, delay: float = 0.25):

@@ -2551,7 +2551,7 @@ TEMPLATES: list[TemplateDef] = [
         stem="61_Loopy_Red_Bow_Glow_Up", short_key="61_loopy_red_bow",
         theme=Theme(
             slug="loopy_red_bow", name="LOOPY RED BOW GLOW-UP", emoji="🎀",
-            tagline_vi="Hải ly hồng Loopy Nơ Đỏ siêu đáng yêu — từ lúc quên việc cuống cuồng đến hít thở sâu, thắt nơ đỏ tự tin & nở rộ hoa vàng 100%!",
+            tagline_vi="Hải ly hồng Loopy Nơ Đỏ siêu đáng yêu — từ lúc quên việc cuống cuồng trước bảng trống đến bình tĩnh thắt nơ đỏ, tick chăm chú & hoàn thành 100%!",
             page="#FFF8EA", card="#FFFFFF", ink="#5A2A32", muted="#9C6B73", line="#F2D7DC",
             primary="#D85A68", primary_dark="#A63442", on_primary="#FFFFFF", soft="#FDECEF",
             chart_fill="#F6A6B2", chart_line="#D85A68", chart_kind="area",
@@ -2564,8 +2564,8 @@ TEMPLATES: list[TemplateDef] = [
             chart_title="LOOPY RED BOW GLOW-UP • HÀNH TRÌNH TỎA SÁNG MỖI NGÀY",
             num_stages=6,
             stage_names=[
-                "Quên Việc!!", "Ôm Má Hít Thở", "Buộc Nơ Đỏ",
-                "Tự Tin Vào Nhịp", "Chống Cằm Nụ Hoa", "Nở Rộ Glow-Up!",
+                "Quên Việc!!", "Ôm Má Bình Tĩnh", "Thắt Nơ Cầm Bút",
+                "Chăm Chú Tick", "Gần Kín Bảng", "Hoàn Thành 100%",
             ],
         ),
         tracker_name="🎀 Loopy Red Bow",
@@ -2601,8 +2601,8 @@ TEMPLATES: list[TemplateDef] = [
             chart_title="LOOPY TAIYAKI SNACK • NHIỆT ĐỘ LÒ BÁNH KỶ LUẬT MỖI NGÀY",
             num_stages=6,
             stage_names=[
-                "Túi Bánh Trống", "Đội Mũ Taiyaki", "Bánh Cá Nóng Hổi",
-                "Thêm Xiên Dango", "Thưởng Thức Ngon", "No Nê Phố Ẩm Thực!",
+                "Túi Giấy Trống", "Đội Mũ Taiyaki", "Bánh Cá Nóng",
+                "Thêm Xiên Dango", "Cắn Xiên Dango", "No Nê Ẩm Thực!",
             ],
         ),
         tracker_name="🐟 Loopy Taiyaki",
@@ -2897,8 +2897,8 @@ TEMPLATES: list[TemplateDef] = [
             chart_title="HAIR ROLLER GRWM • NHỊP CHĂM SÓC & TỎA SÁNG MỖI NGÀY",
             num_stages=6,
             stage_names=[
-                "Lô Cuốn Mái Ngái Ngủ", "Nhấp Trà Tỉnh Hồn", "Chấm Má Hồng Xinh",
-                "Tháo Lô Cuốn Mái", "Mái Bồng Soi Gương", "Xinh Lung Linh GRWM!",
+                "Cuốn Lô Ngái Ngủ", "Nhấp Trà Tỉnh", "Chấm Má Hồng",
+                "Tháo Lô Mái", "Mái Bồng Gương", "Tỏa Sáng GRWM!",
             ],
         ),
         tracker_name="💇‍♀️ Loopy GRWM",
@@ -3146,7 +3146,7 @@ TEMPLATES: list[TemplateDef] = [
         stem="77_Lotso_Floral_Sweet_Dreams", short_key="77_lotso_sweet_dreams",
         theme=Theme(
             slug="lotso_sweet_dreams", name="LOTSO FLORAL SWEET DREAMS", emoji="🐑",
-            tagline_vi="Ôm bó hoa hồng đỏ nở rộ bên giấc mơ cừu tím pastel bồng bềnh — theo dõi giờ ngủ mỗi đêm và 3 bước khép lại ngày thật êm ái!",
+            tagline_vi="Gấu Dâu Lotso dạo bước hái hoa hồng đỏ, bó hoa xinh & chìm vào giấc mơ cừu tím pastel bồng bềnh — theo dõi giờ ngủ mỗi đêm thật êm ái!",
             page="#FFF7FB", card="#FFFFFF", ink="#542535", muted="#946B7A", line="#EFD8E4",
             primary="#C25674", primary_dark="#913550", on_primary="#FFFFFF", soft="#FCEBF1",
             chart_fill="#B89EDB", chart_line="#C25674", chart_kind="area",
@@ -3159,8 +3159,8 @@ TEMPLATES: list[TemplateDef] = [
             chart_title="FLORAL SWEET DREAMS • NHỊP NGỦ NGON & BÌNH YÊN MỖI ĐÊM",
             num_stages=6,
             stage_names=[
-                "Ôm Cành Lá Xanh", "Hoa Hồng Đầu Tiên", "Mây Suy Nghĩ Nhỏ",
-                "Tai Cừu Lấp Ló", "Cừu Tím Cười Tít", "Giấc Mơ Cừu Bông!",
+                "Ngắm Khóm Hoa", "Hái Hoa Đầu", "Buộc Bó Hoa",
+                "Ôm Hoa Ngắm Mây", "Mơ Cừu Tím", "Giấc Mơ Cừu!",
             ],
         ),
         tracker_name="🐑 Lotso Dreams",
@@ -3183,7 +3183,7 @@ TEMPLATES: list[TemplateDef] = [
         stem="78_Lotso_Daisy_Cheek_Glow", short_key="78_lotso_daisy_glow",
         theme=Theme(
             slug="lotso_daisy_glow", name="LOTSO DAISY CHEEK GLOW", emoji="🌼",
-            tagline_vi="Nét dịu dàng hoa cúc trắng nhụy vàng & má hồng ửng sáng — thả lỏng nụ cười chữ U hiền khô cùng 5 thanh tiến độ tuần nắng vàng!",
+            tagline_vi="Lotso dạo bước bắt gặp bông cúc trắng, cúi nhặt, cài lên tai & áp má nháy mắt rạng rỡ — cùng 5 thanh tiến độ tuần nắng vàng!",
             page="#FFF9F2", card="#FFFFFF", ink="#542430", muted="#966C76", line="#F0DADF",
             primary="#B94E66", primary_dark="#8A2F44", on_primary="#FFFFFF", soft="#FCEBEF",
             chart_fill="#F6CE55", chart_line="#B94E66", chart_kind="column",
@@ -3196,8 +3196,8 @@ TEMPLATES: list[TemplateDef] = [
             chart_title="DAISY CHEEK GLOW • ĐỘ RẠNG RỠ HOA CÚC MỖI NGÀY",
             num_stages=6,
             stage_names=[
-                "Nụ Cúc Ngại Ngùng", "Chạm Nhẹ Má Hồng", "Hoa Cúc Đầu Nở",
-                "Áp Má Cười Hiền", "Nháy Mắt Duyên Dáng", "Rạng Rỡ Hoa Cúc!",
+                "Thấy Hoa Cúc", "Cúi Nhặt Hoa", "Ngắm Hoa Cúc",
+                "Cài Lên Tai", "Áp Má Nháy Mắt", "Hoa Cúc Rạng Rỡ",
             ],
         ),
         tracker_name="🌼 Lotso Daisy Glow",

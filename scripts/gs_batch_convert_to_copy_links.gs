@@ -1,22 +1,22 @@
 /**
  * ============================================================================
- *  HABIT TRACKER — STANDALONE DRIVE BATCH CONVERTER TO 1-CLICK `/copy` LINKS
+ *  HABIT TRACKER v4.0 — STANDALONE DRIVE BATCH CONVERTER TO 1-CLICK `/copy` LINKS
  *  Repo: https://github.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu
  * ============================================================================
  *
  *  MỤC ĐÍCH (ZERO-FRICTION DISTRIBUTION):
- *    Chuyển đổi hàng loạt toàn bộ 60 file `.xlsx` trong thư mục Google Drive
+ *    Chuyển đổi hàng loạt toàn bộ 80 file `.xlsx` trong thư mục Google Drive
  *    (`templates/google_sheets_edition/`) thành Google Sheets gốc đã sẵn sàng:
  *      - Đã bật sẵn Native Checkboxes (theo đúng màu pastel từng tuần & từng chủ đề)
  *      - Đã ép font tiếng Việt sắc nét `Be Vietnam Pro` trên toàn bộ tab hiển thị
  *      - Đã ẩn đường lưới mặc định (hidden gridlines) & ẩn 3 sheet hệ thống (`_Calc`, `_Database`, `_Assets`)
  *      - Đã nướng sẵn ảnh native `CellImage` vào `_Assets` (loại bỏ hoàn toàn `=IMAGE("https://...")` -> 0 lỗi `#REF!` / không cần bấm "Allow access" trên cả Điện thoại & Máy tính!)
  *      - Đã mở quyền chia sẻ "Anyone with link: Viewer"
- *      - Tự xuất bảng Markdown gồm 60 link `https://docs.google.com/spreadsheets/d/<ID>/copy`
+ *      - Tự xuất bảng Markdown gồm 80 link `https://docs.google.com/spreadsheets/d/<ID>/copy`
  *        để dán thẳng lên README.md (người dùng chỉ cần bấm 1 click -> "Make a copy" là dùng ngay!)
  *
- *  ★ NÂNG CẤP TẠI CHỖ CHO 60 FILE ĐÃ CONVERT (GIỮ NGUYÊN 100% LINK `/copy` CŨ):
- *    - Nếu bạn đã convert sẵn 60 file trên Drive, chỉ cần chọn hàm `upgradeExistingSheetsToCellImages` -> bấm Run!
+ *  ★ NÂNG CẤP TẠI CHỖ CHO 80 FILE ĐÃ CONVERT (GIỮ NGUYÊN 100% LINK `/copy` CŨ):
+ *    - Nếu bạn đã convert sẵn 80 file trên Drive, chỉ cần chọn hàm `upgradeExistingSheetsToCellImages` -> bấm Run!
  *    - Script sẽ nướng `CellImage` trực tiếp vào `_Assets` của từng file hiện có (không đổi File ID, giữ nguyên toàn bộ link `/copy` cũ & tự bỏ qua file đã nướng khi chạy lại!).
  *
  *  HƯỚNG DẪN CHẠY 1 LẦN TRÊN GOOGLE DRIVE (2 PHÚT):
@@ -27,7 +27,7 @@
  *         Sidebar bên trái -> bấm dấu `+` cạnh "Services" -> chọn "Drive API" (v3 hoặc v2 đều được!) -> Add.
  *    5. Dán Folder ID vào biến `SOURCE_FOLDER_ID` bên dưới -> nhấn Lưu (Ctrl+S).
  *    6. Chọn hàm `batchConvertToCopyLinks` -> bấm Run (Chạy) -> cấp quyền 1 lần.
- *       (Nếu chạy đủ 60 file bị quá giới hạn 6 phút của Apps Script, script tự dừng an toàn
+ *       (Nếu chạy đủ 80 file bị quá giới hạn 6 phút của Apps Script, script tự dừng an toàn
  *        ở mốc 4.5 phút; chỉ cần bấm Run thêm 1 lần nữa sẽ tự nối tiếp phần còn lại nhờ `SKIP_EXISTING = true`!)
  *    7. Mở file `COPY_LINKS_TABLE.md` được tạo tự động ngay trong thư mục output trên Drive
  *       (hoặc copy trực tiếp từ Execution Log)!

@@ -1,11 +1,11 @@
 /**
  * ============================================================================
- *  HABIT TRACKER MOBILE PORTRAIT — BATCH CONVERTER TO 1-CLICK `/copy` LINKS
+ *  HABIT TRACKER v4.0 MOBILE PORTRAIT — BATCH CONVERTER TO 1-CLICK `/copy` LINKS
  *  Repo: https://github.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu
  * ============================================================================
  *
  *  MỤC ĐÍCH (ZERO-FRICTION MOBILE DISTRIBUTION):
- *    Chuyển đổi hàng loạt toàn bộ 60 file `*_Mobile.xlsx` trong thư mục Google Drive
+ *    Chuyển đổi hàng loạt toàn bộ 80 file `*_Mobile.xlsx` trong thư mục Google Drive
  *    (`templates/mobile_portrait_sheets/`) thành Google Sheets khổ dọc gốc đã sẵn sàng
  *    mở 1 chạm trên ứng dụng Google Trang tính điện thoại (iOS / Android):
  *      - Đã bật sẵn Native Checkboxes đúng tọa độ Mobile (`C21:I35`, `B16:B30`, `B11:B22`)
@@ -15,11 +15,11 @@
  *      - Đã ẩn đường lưới mặc định (`setHiddenGridlines(true)`) & ẩn `_Calc`, `_Database`, `_Assets`
  *      - Đã nướng sẵn ảnh native `CellImage` vào `_Assets` (loại bỏ hoàn toàn `=IMAGE("https://...")` -> 0 lỗi `#REF!` trên app Google Trang tính điện thoại!)
  *      - Đã mở quyền chia sẻ RIÊNG TỪNG FILE ("Anyone with link: Viewer") — KHÔNG chia sẻ thư mục gốc
- *      - Tự xuất bảng Markdown gồm 60 link `https://docs.google.com/spreadsheets/d/<ID>/copy`
+ *      - Tự xuất bảng Markdown gồm 80 link `https://docs.google.com/spreadsheets/d/<ID>/copy`
  *        vào file `MOBILE_COPY_LINKS_TABLE.md` trong thư mục output!
  *
- *  ★ NÂNG CẤP TẠI CHỖ CHO 60 FILE MOBILE ĐÃ CONVERT (GIỮ NGUYÊN 100% LINK `/copy` CŨ):
- *    - Nếu bạn đã convert sẵn 60 file Mobile trên Drive, chỉ cần chọn hàm `upgradeExistingMobileSheetsToCellImages` -> bấm Run!
+ *  ★ NÂNG CẤP TẠI CHỖ CHO 80 FILE MOBILE ĐÃ CONVERT (GIỮ NGUYÊN 100% LINK `/copy` CŨ):
+ *    - Nếu bạn đã convert sẵn 80 file Mobile trên Drive, chỉ cần chọn hàm `upgradeExistingMobileSheetsToCellImages` -> bấm Run!
  *    - Script sẽ nướng `CellImage` trực tiếp vào `_Assets` của từng file hiện có (không đổi File ID, giữ nguyên toàn bộ link `/copy` cũ & tự bỏ qua file đã nướng khi chạy lại!).
  *
  *  HƯỚNG DẪN CHẠY 1 LẦN TRÊN GOOGLE DRIVE (2 PHÚT):
@@ -30,7 +30,7 @@
  *         Sidebar bên trái -> bấm dấu `+` cạnh "Services" -> chọn "Drive API" (v3 hoặc v2 đều được!) -> Add.
  *    5. Dán Folder ID vào biến `SOURCE_FOLDER_ID` bên dưới -> nhấn Lưu (Ctrl+S).
  *    6. Chọn hàm `batchConvertMobileToCopyLinks` -> bấm Run (Chạy) -> cấp quyền 1 lần.
- *       (Nếu chạy đủ 60 file chạm mốc 4.5 phút, script tự dừng an toàn; chỉ cần bấm Run thêm 1 lần
+ *       (Nếu chạy đủ 80 file chạm mốc 4.5 phút, script tự dừng an toàn; chỉ cần bấm Run thêm 1 lần
  *        sẽ tự động nối tiếp phần còn lại nhờ `SKIP_EXISTING = true`!)
  *    7. Mở file `MOBILE_COPY_LINKS_TABLE.md` trong thư mục output (hoặc copy từ Execution Log)!
  */

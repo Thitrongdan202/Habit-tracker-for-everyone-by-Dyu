@@ -1,24 +1,21 @@
 """
-generate_lotso_story_assets.py — v4.0 CHUBBY PLUSH BEAR Redesign for 10 Lotso Themes (#71–#80)
-Generates 60 unmistakably PLUSH TEDDY BEAR Lotso sprites (100% distinct silhouette from Loopy!) + contact sheet:
-  - assets/lotso_strawberry/stage_0..5.png       (#71 Lotso Strawberry Harvest — chubby back-view toe-beans -> heart eyes!)
-  - assets/lotso_milk_cafe/stage_0..5.png        (#72 NEW! Lotso Strawberry Milk Cafe — replaces Cane Boss!)
-  - assets/lotso_flower_crown/stage_0..5.png     (#73 Lotso Berry Flower Crown — dynamic garden poses!)
-  - assets/lotso_overalls/stage_0..5.png         (#74 Lotso Overalls Toy Workshop — dynamic craft/rocket poses!)
-  - assets/lotso_lofi/stage_0..5.png             (#75 Lotso LoFi Earphones Flow — swaying & singing!)
-  - assets/lotso_mood_detox/stage_0..5.png       (#76 Lotso Mood Detox Comic — cookie -> heart band-aid -> balloons -> float, NO bunny ears!)
-  - assets/lotso_sweet_dreams/stage_0..5.png     (#77 Lotso Floral Sweet Dreams — bouquet + pastel sheep cloud!)
-  - assets/lotso_daisy_glow/stage_0..5.png       (#78 Lotso Daisy Cheek Glow — cupping cheeks & winking!)
-  - assets/lotso_bunny_selfcare/stage_0..5.png   (#79 Lotso Bunny Headband Selfcare — phone -> headband -> sheet mask -> glow!)
-  - assets/lotso_gift_box/stage_0..5.png         (#80 NEW! Lotso Berry Gift Box Party — replaces Berry Squad!)
-  - previews/assets_contact_sheet_lotso.png      (10-row x 6-stage visual contact sheet)
+generate_lotso_story_assets.py — v4.1 Precision Plush Bear Art Overhaul for 10 Lotso Themes (#71-#80)
+Fixes ALL 3 core drawing flaws across ALL 60 Lotso sprites:
+  1. Natural Curved Chubby Teddy Arms: ZERO detached round/oval blob arms! Every single arm
+     uses seamless tapered Bezier curves smoothly flowing out of the plush bear shoulders
+     with clear elbow bend (hugging, reaching down to pick flowers, cupping cheeks, waving!).
+  2. Clean Head-Gear / Headband Fit: Snug lavender bunny headband (#79) & flower crown (#73)
+     hugging Lotso's crown neatly between his round plush bear ears.
+  3. Zero Contact Sheet Text Collision: Every label is crisp (<=16 chars), auto-measured via
+     PIL textlength/textbbox, and hard-asserted `text_right_x <= preview_44px_left_x - 10`!
 
-Character Bible (100% Distinct Chubby Plush Bear — ZERO resemblance to Loopy!):
-  - BROAD horizontal chubby teddy bear head (rx=70, ry=50) with extra-chubby wide lower cheeks!
-  - MASSIVE warm buttercream oval muzzle (rx=44, ry=27) spanning across the lower face!
-  - HUGE wide chocolate-berry oval bean nose (rx=21, ry=12) + thick friendly curved dark-brown eyebrows!
-  - WIDE chubby plush bear body (rx=62, ry=46) + broad cream belly + stubby round paws + white toe-beans!
-  - ZERO stiff repeated poses: varied tilts, sitting/leaning/pouring/floating/popping-out-of-box/jumping!
+Rebuilt Signature Storylines:
+  - #77 Floral Sweet Dreams: Strolling admiring red flowers -> bending to pick first flower ->
+    tying small bouquet -> hugging bouquet looking at cloud -> lavender sheep smiling in cloud ->
+    waving gently beside bouquet & fluffy sheep dream!
+  - #78 Daisy Cheek Glow: Walking briskly spotting tiny daisy on ground -> bending down picking up daisy ->
+    sitting admiring daisy in paws -> tucking daisy behind round ear -> cupping cheeks winking ->
+    radiant cheek-cup wink with floating daisy petals!
 """
 from __future__ import annotations
 
@@ -61,20 +58,100 @@ def render_svg(inner_svg: str, size: int = 300) -> Image.Image:
     return im.resize((size, size), Image.LANCZOS)
 
 
-def with_hero_aura(im: Image.Image, rgb: tuple[int, int, int], cy: int = 152, alpha: int = 68) -> Image.Image:
+def with_hero_aura(im: Image.Image, rgb: tuple[int, int, int], cy: int = 152, alpha: int = 64) -> Image.Image:
     aura = Image.new("RGBA", (300, 300), (0, 0, 0, 0))
     ad = ImageDraw.Draw(aura)
     r, g, b = rgb
-    ad.ellipse([36, cy - 110, 264, cy + 110], fill=(r, g, b, alpha))
-    ad.ellipse([72, cy - 76, 228, cy + 76], fill=(255, 250, 232, 92))
+    ad.ellipse([36, cy - 108, 264, cy + 108], fill=(r, g, b, alpha))
+    ad.ellipse([74, cy - 74, 226, cy + 74], fill=(255, 250, 232, 90))
     aura = aura.filter(ImageFilter.GaussianBlur(radius=22))
     return Image.alpha_composite(aura, im)
 
 
 # =========================================================================== #
+#  NATURAL CURVED CHUBBY TEDDY ARM ENGINE (ZERO DETACHED OVAL BLOBS!)
+# =========================================================================== #
+def _norm(dx: float, dy: float) -> tuple[float, float]:
+    d = math.hypot(dx, dy)
+    if d < 1e-6:
+        return (0.0, -1.0)
+    return (dx / d, dy / d)
+
+
+def bear_arm(
+    p0: tuple[float, float],
+    p1: tuple[float, float],
+    p2: tuple[float, float],
+    w0: float = 15.0,
+    w1: float = 13.0,
+    w2: float = 11.2,
+    fill: str = FUR,
+    stroke: str = OL,
+    sw: float = 3.9,
+    paw_pad: bool = False,
+    seamless_shoulder: bool = True,
+) -> str:
+    """Chubby, soft plush teddy bear arm curving naturally from shoulder P0 -> elbow P1 -> paw P2.
+    - Seamless shoulder fill merges organically into plush torso (ZERO armpit cut line!).
+    - Plump rounded teddy mitten paw with optional subtle cream plush pad dot."""
+    x0, y0 = p0
+    x1, y1 = p1
+    x2, y2 = p2
+
+    t0x, t0y = _norm(x1 - x0, y1 - y0)
+    t1x, t1y = _norm(x2 - x0, y2 - y0)
+    t2x, t2y = _norm(x2 - x1, y2 - y1)
+
+    n0x, n0y = -t0y, t0x
+    n1x, n1y = -t1y, t1x
+    n2x, n2y = -t2y, t2x
+
+    a0 = (x0 + n0x * w0, y0 + n0y * w0)
+    a1 = (x1 + n1x * w1, y1 + n1y * w1)
+    a2 = (x2 + n2x * w2, y2 + n2y * w2)
+
+    b0 = (x0 - n0x * w0, y0 - n0y * w0)
+    b1 = (x1 - n1x * w1, y1 - n1y * w1)
+    b2 = (x2 - n2x * w2, y2 - n2y * w2)
+
+    cap_ext = w2 * 1.15
+    c1 = (a2[0] + t2x * cap_ext, a2[1] + t2y * cap_ext)
+    c2 = (b2[0] + t2x * cap_ext, b2[1] + t2y * cap_ext)
+    tuck_x, tuck_y = x0 - t0x * 6.0, y0 - t0y * 6.0
+
+    fill_d = (
+        f"M {a0[0]:.1f},{a0[1]:.1f} "
+        f"Q {a1[0]:.1f},{a1[1]:.1f} {a2[0]:.1f},{a2[1]:.1f} "
+        f"C {c1[0]:.1f},{c1[1]:.1f} {c2[0]:.1f},{c2[1]:.1f} {b2[0]:.1f},{b2[1]:.1f} "
+        f"Q {b1[0]:.1f},{b1[1]:.1f} {b0[0]:.1f},{b0[1]:.1f} "
+        f"Q {tuck_x:.1f},{tuck_y:.1f} {a0[0]:.1f},{a0[1]:.1f} Z"
+    )
+
+    if seamless_shoulder:
+        stroke_d = (
+            f"M {a0[0]:.1f},{a0[1]:.1f} "
+            f"Q {a1[0]:.1f},{a1[1]:.1f} {a2[0]:.1f},{a2[1]:.1f} "
+            f"C {c1[0]:.1f},{c1[1]:.1f} {c2[0]:.1f},{c2[1]:.1f} {b2[0]:.1f},{b2[1]:.1f} "
+            f"Q {b1[0]:.1f},{b1[1]:.1f} {b0[0]:.1f},{b0[1]:.1f}"
+        )
+        out = (
+            f'<path d="{fill_d}" fill="{fill}" stroke="none"/>'
+            f'<path d="{stroke_d}" fill="none" stroke="{stroke}" stroke-width="{sw}" stroke-linecap="round" stroke-linejoin="round"/>'
+        )
+    else:
+        out = f'<path d="{fill_d}" fill="{fill}" stroke="{stroke}" stroke-width="{sw}" stroke-linejoin="round"/>'
+
+    if paw_pad:
+        px = x2 + t2x * (w2 * 0.25)
+        py = y2 + t2y * (w2 * 0.25)
+        out += f'<circle cx="{px:.1f}" cy="{py:.1f}" r="{w2 * 0.42:.1f}" fill="#FFF5E6" fill-opacity="0.72"/>'
+    return out
+
+
+# =========================================================================== #
 #  REUSABLE VECTOR DECORATIONS
 # =========================================================================== #
-def shadow(cx=150, cy=270, rx=76, ry=10, op=0.14) -> str:
+def shadow(cx=150, cy=270, rx=74, ry=9.5, op=0.14) -> str:
     return f'<ellipse cx="{cx}" cy="{cy}" rx="{rx}" ry="{ry}" fill="{OL}" fill-opacity="{op}"/>'
 
 
@@ -90,7 +167,7 @@ def soft_blush(cx: float, cy: float, rx: float, ry: float, strong: bool = False)
     )
 
 
-def sp4(cx, cy, r=11, fill="#FDE047", stroke="#D97706", sw=2.2) -> str:
+def sp4(cx, cy, r=11, fill="#FDE047", stroke="#D97706", sw=2.1) -> str:
     ir = r * 0.28
     d = (
         f"M {cx},{cy - r} Q {cx + ir},{cy - ir} {cx + r},{cy} "
@@ -174,16 +251,16 @@ def music_note(cx, cy, double=False, col="#C84B6E", s=1.0) -> str:
 
 
 # =========================================================================== #
-#  CHUBBY PLUSH BEAR LOTSO RIG (WIDE CHEEKS, BIG MUZZLE, BIG NOSE, TOE-BEANS!)
+#  CHUBBY PLUSH BEAR LOTSO RIG (SEAMLESS CURVED TEDDY ARMS + WHITE TOE-BEANS!)
 # =========================================================================== #
 def _toe_bean_foot(fx, fy, rot=0) -> str:
     return (
         f'<g transform="translate({fx},{fy}) rotate({rot})">'
-        f'<ellipse cx="0" cy="0" rx="25" ry="20" fill="{FUR}" stroke="{OL}" stroke-width="4.0"/>'
-        f'<ellipse cx="0" cy="4" rx="13" ry="9.5" fill="#FFFFFF"/>'
-        f'<circle cx="-9" cy="-8" r="3.8" fill="#FFFFFF"/>'
-        f'<circle cx="0" cy="-10.5" r="3.8" fill="#FFFFFF"/>'
-        f'<circle cx="9" cy="-8" r="3.6" fill="#FFFFFF"/>'
+        f'<ellipse cx="0" cy="0" rx="24" ry="19" fill="{FUR}" stroke="{OL}" stroke-width="3.9"/>'
+        f'<ellipse cx="0" cy="4" rx="12.5" ry="9.0" fill="#FFFFFF"/>'
+        f'<circle cx="-8.5" cy="-7.5" r="3.6" fill="#FFFFFF"/>'
+        f'<circle cx="0" cy="-10.0" r="3.6" fill="#FFFFFF"/>'
+        f'<circle cx="8.5" cy="-7.5" r="3.5" fill="#FFFFFF"/>'
         f'</g>'
     )
 
@@ -191,49 +268,48 @@ def _toe_bean_foot(fx, fy, rot=0) -> str:
 def bear_body(
     cx=150,
     cy=216,
-    rx=64,
-    ry=47,
+    rx=62,
+    ry=46,
     pose="sit",
     paws="down",
     outfit="none",
     lean=0,
+    custom_arms: str = "",
 ) -> str:
-    """Wide chubby plush teddy bear body with stubby arms & white toe-bean feet!"""
+    """Wide chubby plush teddy bear body with 100% seamless curved plush arms & white toe-bean feet!"""
     parts = [f'<g transform="translate({cx},{cy}) rotate({lean})">']
 
-    # Feet by pose (prominent chubby teddy bear soles with white toe-beans!)
     if pose == "sit":
-        parts.append(_toe_bean_foot(-44, 30, rot=-18) + _toe_bean_foot(44, 30, rot=18))
+        parts.append(_toe_bean_foot(-43, 30, rot=-18) + _toe_bean_foot(43, 30, rot=18))
     elif pose == "float":
-        parts.append(_toe_bean_foot(-36, 42, rot=-28) + _toe_bean_foot(36, 42, rot=28))
+        parts.append(_toe_bean_foot(-35, 42, rot=-28) + _toe_bean_foot(35, 42, rot=28))
     elif pose == "jump":
-        parts.append(_toe_bean_foot(-42, 38, rot=-34) + _toe_bean_foot(42, 38, rot=34))
+        parts.append(_toe_bean_foot(-40, 38, rot=-34) + _toe_bean_foot(40, 38, rot=34))
     elif pose == "walk":
         parts.append(
-            f'<ellipse cx="-30" cy="44" rx="23" ry="13" transform="rotate(-12 -30 44)" fill="{FUR_SHD}" stroke="{OL}" stroke-width="3.8"/>'
-            f'<ellipse cx="28" cy="34" rx="23" ry="13" transform="rotate(24 28 34)" fill="{FUR_SHD}" stroke="{OL}" stroke-width="3.8"/>'
+            f'<ellipse cx="-29" cy="44" rx="22" ry="12.5" transform="rotate(-12 -29 44)" fill="{FUR_SHD}" stroke="{OL}" stroke-width="3.8"/>'
+            f'<ellipse cx="27" cy="34" rx="22" ry="12.5" transform="rotate(24 27 34)" fill="{FUR_SHD}" stroke="{OL}" stroke-width="3.8"/>'
         )
     elif pose == "hidden":
         pass
-    else:  # stand
+    else:
         parts.append(
-            f'<ellipse cx="-28" cy="42" rx="23" ry="13" fill="{FUR_SHD}" stroke="{OL}" stroke-width="3.8"/>'
-            f'<ellipse cx="28" cy="42" rx="23" ry="13" fill="{FUR_SHD}" stroke="{OL}" stroke-width="3.8"/>'
+            f'<ellipse cx="-27" cy="42" rx="22" ry="12.5" fill="{FUR_SHD}" stroke="{OL}" stroke-width="3.8"/>'
+            f'<ellipse cx="27" cy="42" rx="22" ry="12.5" fill="{FUR_SHD}" stroke="{OL}" stroke-width="3.8"/>'
         )
 
-    # Extra-chubby round plush torso tucked smoothly under chin (-42)
     torso_c = "#598C5E" if outfit in ("green_shirt", "overalls") else FUR
     parts.append(
-        f'<path d="M {-rx + 12},-42 '
-        f'C {-rx - 10},6 {-rx + 8},{ry} 0,{ry} '
-        f'C {rx - 8},{ry} {rx + 10},6 {rx - 12},-42 Z" '
-        f'fill="{torso_c}" stroke="{OL}" stroke-width="4.2" stroke-linejoin="round"/>'
+        f'<path d="M {-rx + 16},-38 '
+        f'C {-rx - 10},-8 {-rx + 4},{ry} 0,{ry} '
+        f'C {rx - 4},{ry} {rx + 10},-8 {rx - 16},-38 '
+        f'Q 0,-46 {-rx + 16},-38 Z" '
+        f'fill="{torso_c}" stroke="{OL}" stroke-width="4.1" stroke-linejoin="round"/>'
     )
 
     if outfit == "none":
         parts.append(f'<ellipse cx="0" cy="11" rx="{rx * 0.62:.1f}" ry="{ry * 0.68:.1f}" fill="{CREAM}"/>')
     elif outfit == "apron":
-        # Cream cafe apron with cute red strawberry emblem!
         parts.append(
             f'<ellipse cx="0" cy="11" rx="{rx * 0.62:.1f}" ry="{ry * 0.68:.1f}" fill="{CREAM}"/>'
             f'<path d="M -32,-16 L 32,-16 L 40,38 Q 0,46 -40,38 Z" fill="#FFFDF5" stroke="#B87D8C" stroke-width="3.0" stroke-linejoin="round"/>'
@@ -251,30 +327,39 @@ def bear_body(
             + heart(0, 17, s=8.5, fill="#DE5B73", stroke=OL, sw=1.8)
         )
 
-    # Stubby chubby round plush arms!
+    # Seamless curved chubby teddy arms (ZERO detached oval blobs!)
     arm_c = "#598C5E" if outfit in ("green_shirt", "overalls") else FUR
+    sx_l, sx_r, sy = -rx + 18, rx - 18, -14
     if paws == "down":
         parts.append(
-            f'<ellipse cx="{-rx - 4}" cy="0" rx="18" ry="22" transform="rotate(20 {-rx - 4} 0)" fill="{arm_c}" stroke="{OL}" stroke-width="4.0"/>'
-            f'<ellipse cx="{rx + 4}" cy="0" rx="18" ry="22" transform="rotate(-20 {rx + 4} 0)" fill="{arm_c}" stroke="{OL}" stroke-width="4.0"/>'
+            bear_arm((sx_l, sy), (sx_l - 24, sy + 14), (sx_l - 12, sy + 36), 14.5, 12.5, 10.6, fill=arm_c)
+            + bear_arm((sx_r, sy), (sx_r + 24, sy + 14), (sx_r + 12, sy + 36), 14.5, 12.5, 10.6, fill=arm_c)
         )
     elif paws == "wide_up":
         parts.append(
-            f'<ellipse cx="{-rx - 8}" cy="-26" rx="22" ry="16" transform="rotate(34 {-rx - 8} -26)" fill="{arm_c}" stroke="{OL}" stroke-width="4.0"/>'
-            f'<ellipse cx="{rx + 8}" cy="-26" rx="22" ry="16" transform="rotate(-34 {rx + 8} -26)" fill="{arm_c}" stroke="{OL}" stroke-width="4.0"/>'
+            bear_arm((sx_l, sy), (sx_l - 26, sy - 4), (sx_l - 34, sy - 30), 14.5, 12.5, 10.8, fill=arm_c, paw_pad=(arm_c == FUR))
+            + bear_arm((sx_r, sy), (sx_r + 26, sy - 4), (sx_r + 34, sy - 30), 14.5, 12.5, 10.8, fill=arm_c, paw_pad=(arm_c == FUR))
         )
     elif paws == "wave_r":
         parts.append(
-            f'<ellipse cx="{-rx - 4}" cy="2" rx="18" ry="21" transform="rotate(18 {-rx - 4} 2)" fill="{arm_c}" stroke="{OL}" stroke-width="4.0"/>'
-            f'<ellipse cx="{rx + 10}" cy="-28" rx="22" ry="16" transform="rotate(-38 {rx + 10} -28)" fill="{arm_c}" stroke="{OL}" stroke-width="4.0"/>'
+            bear_arm((sx_l, sy), (sx_l - 22, sy + 14), (sx_l - 10, sy + 34), 14.2, 12.2, 10.4, fill=arm_c)
+            + bear_arm((sx_r, sy), (sx_r + 28, sy - 4), (sx_r + 34, sy - 32), 14.5, 12.5, 10.8, fill=arm_c, paw_pad=(arm_c == FUR))
         )
-    elif paws == "center":
+    elif paws == "walk_swing":
         parts.append(
-            f'<ellipse cx="-30" cy="-2" rx="20" ry="15" transform="rotate(18 -30 -2)" fill="{FUR}" stroke="{OL}" stroke-width="3.8"/>'
-            f'<ellipse cx="30" cy="-2" rx="20" ry="15" transform="rotate(-18 30 -2)" fill="{FUR}" stroke="{OL}" stroke-width="3.8"/>'
+            bear_arm((sx_l, sy), (sx_l - 24, sy + 16), (sx_l - 26, sy + 32), 14.2, 12.2, 10.4, fill=arm_c)
+            + bear_arm((sx_r, sy), (sx_r + 26, sy + 4), (sx_r + 16, sy + 24), 14.2, 12.2, 10.4, fill=arm_c)
+        )
+    elif paws == "hug_center":
+        parts.append(
+            bear_arm((sx_l, sy), (sx_l - 16, sy + 22), (-18, sy + 22), 14.0, 12.0, 10.4, fill=arm_c)
+            + bear_arm((sx_r, sy), (sx_r + 16, sy + 22), (18, sy + 22), 14.0, 12.0, 10.4, fill=arm_c)
         )
     elif paws == "none":
         pass
+
+    if custom_arms:
+        parts.append(custom_arms)
 
     parts.append("</g>")
     return "".join(parts)
@@ -299,16 +384,15 @@ def bear_head(
         for side in (-1, 1):
             ex, ey = side * 54, -44
             parts.append(
-                f'<circle cx="{ex}" cy="{ey}" r="21" fill="{FUR}" stroke="{OL}" stroke-width="4.2"/>'
-                f'<circle cx="{ex - side * 1.5}" cy="{ey + 1.5}" r="11.5" fill="{CREAM}" stroke="{OL}" stroke-width="2.2"/>'
+                f'<circle cx="{ex}" cy="{ey}" r="20.5" fill="{FUR}" stroke="{OL}" stroke-width="4.1"/>'
+                f'<circle cx="{ex - side * 1.5}" cy="{ey + 1.5}" r="11.0" fill="{CREAM}" stroke="{OL}" stroke-width="2.1"/>'
             )
 
-    # WIDE plush teddy bear head (distinctly broader horizontally than Loopy!)
     head_d = (
         "M -64,-12 C -64,-44 -36,-56 0,-56 C 36,-56 64,-44 64,-12 "
         "C 78,6 72,38 46,48 C 26,56 -26,56 -46,48 C -72,38 -78,6 -64,-12 Z"
     )
-    parts.append(f'<path d="{head_d}" fill="{FUR}" stroke="{OL}" stroke-width="4.2" stroke-linejoin="round"/>')
+    parts.append(f'<path d="{head_d}" fill="{FUR}" stroke="{OL}" stroke-width="4.1" stroke-linejoin="round"/>')
 
     if sheet_mask:
         parts.append(
@@ -317,10 +401,8 @@ def bear_head(
             'fill="#FFFFFF" stroke="#E5D5E8" stroke-width="2.8"/>'
         )
     else:
-        # MASSIVE buttercream horizontal oval muzzle!
         parts.append(f'<ellipse cx="0" cy="20" rx="44" ry="27" fill="{CREAM}" stroke="{CREAM_SHD}" stroke-width="1.6"/>')
 
-    # Wide rosy plush cheeks + 2 cute hatch lines
     parts.append(soft_blush(-49, 10, 18, 12, strong=strong_blush))
     parts.append(soft_blush(49, 10, 18, 12, strong=strong_blush))
     parts.append(
@@ -330,7 +412,6 @@ def bear_head(
         '<line x1="50" y1="7" x2="54" y2="12" stroke="#C23B64" stroke-width="2.2" stroke-linecap="round"/>'
     )
 
-    # Thick soft curved FRIENDLY dark-brown eyebrows (NEVER villainous!)
     if brows == "pout_sad":
         parts.append(
             f'<ellipse cx="-25" cy="-29" rx="13" ry="5.5" transform="rotate(-14 -25 -29)" fill="{BROW}" stroke="{OL}" stroke-width="1.8"/>'
@@ -341,13 +422,12 @@ def bear_head(
             f'<ellipse cx="-24" cy="-28" rx="13" ry="5.5" transform="rotate(12 -24 -28)" fill="{BROW}" stroke="{OL}" stroke-width="1.8"/>'
             f'<ellipse cx="24" cy="-28" rx="13" ry="5.5" transform="rotate(-12 24 -28)" fill="{BROW}" stroke="{OL}" stroke-width="1.8"/>'
         )
-    else:  # friendly soft arch!
+    else:
         parts.append(
             f'<ellipse cx="-25" cy="-30" rx="13.5" ry="5.6" transform="rotate(-8 -25 -30)" fill="{BROW}" stroke="{OL}" stroke-width="1.8"/>'
             f'<ellipse cx="25" cy="-30" rx="13.5" ry="5.6" transform="rotate(8 25 -30)" fill="{BROW}" stroke="{OL}" stroke-width="1.8"/>'
         )
 
-    # Eyes
     if expr in ("smile", "big_smile", "curious", "grumpy", "tongue", "calm_smile"):
         parts.append(
             f'<ellipse cx="-23" cy="-11" rx="6.6" ry="7.4" fill="{EYE}"/><circle cx="-25" cy="-13.5" r="2.4" fill="#FFFFFF"/>'
@@ -385,13 +465,11 @@ def bear_head(
             f'<ellipse cx="23" cy="-9" rx="6.2" ry="4.0" fill="{EYE}"/><path d="M 15,-14 Q 23,-11 31,-14" fill="none" stroke="{OL}" stroke-width="3.0" stroke-linecap="round"/>'
         )
 
-    # HUGE WIDE DARK-CHOCOLATE BEAR NOSE!
     parts.append(
         f'<ellipse cx="0" cy="6" rx="21" ry="12.5" fill="{NOSE}" stroke="{OL}" stroke-width="2.8"/>'
         f'<ellipse cx="-6.5" cy="2" rx="6.5" ry="2.8" transform="rotate(-14 -6.5 2)" fill="{NOSE_HI}" fill-opacity="0.6"/>'
     )
 
-    # Warm Plush Mouth (NO bucktooth!)
     if expr in ("smile", "wink", "calm_closed", "calm_smile", "sparkle_eyes"):
         parts.append(f'<path d="M -11,26 Q 0,36 11,26" fill="none" stroke="{OL}" stroke-width="3.4" stroke-linecap="round"/>')
     elif expr in ("big_smile", "happy_squint"):
@@ -406,7 +484,7 @@ def bear_head(
         )
     elif expr == "grumpy":
         parts.append(f'<path d="M -12,33 Q 0,24 12,33" fill="none" stroke="{OL}" stroke-width="3.4" stroke-linecap="round"/>')
-    else:  # curious / sleepy
+    else:
         parts.append(f'<path d="M -8,30 Q 0,34 8,29" fill="none" stroke="{OL}" stroke-width="3.0" stroke-linecap="round"/>')
 
     parts.append("</g>")
@@ -414,16 +492,16 @@ def bear_head(
 
 
 # =========================================================================== #
-#  #71 — LOTSO STRAWBERRY HARVEST (CHUBBY BACK VIEW -> PEEK -> REACH -> HUG -> WINK -> JUMP HEART-EYES!)
+#  #71 — LOTSO STRAWBERRY HARVEST (NATURAL HUGGING CURVED ARMS!)
 # =========================================================================== #
 def _lotso_chubby_back() -> str:
     return (
-        shadow(150, 270, 82, 10)
-        + f'<circle cx="96" cy="80" r="20" fill="{FUR}" stroke="{OL}" stroke-width="4.2"/>'
-        + f'<circle cx="204" cy="80" r="20" fill="{FUR}" stroke="{OL}" stroke-width="4.2"/>'
-        + f'<ellipse cx="150" cy="208" rx="68" ry="52" fill="{FUR}" stroke="{OL}" stroke-width="4.2"/>'
-        + f'<ellipse cx="150" cy="124" rx="68" ry="52" fill="{FUR}" stroke="{OL}" stroke-width="4.2"/>'
-        + f'<circle cx="150" cy="238" r="17" fill="{FUR_LT}" stroke="{OL}" stroke-width="3.6"/>'
+        shadow(150, 270, 80, 10)
+        + f'<circle cx="96" cy="80" r="20" fill="{FUR}" stroke="{OL}" stroke-width="4.1"/>'
+        + f'<circle cx="204" cy="80" r="20" fill="{FUR}" stroke="{OL}" stroke-width="4.1"/>'
+        + f'<ellipse cx="150" cy="208" rx="66" ry="51" fill="{FUR}" stroke="{OL}" stroke-width="4.1"/>'
+        + f'<ellipse cx="150" cy="124" rx="67" ry="51" fill="{FUR}" stroke="{OL}" stroke-width="4.1"/>'
+        + f'<circle cx="150" cy="238" r="16.5" fill="{FUR_LT}" stroke="{OL}" stroke-width="3.5"/>'
         + _toe_bean_foot(92, 242, rot=-22) + _toe_bean_foot(208, 242, rot=22)
         + '<path d="M 222,82 L 238,72 M 228,94 L 246,92" stroke="#E56B8C" stroke-width="3.4" stroke-linecap="round"/>'
     )
@@ -435,54 +513,54 @@ def build_71_strawberry() -> list[tuple[str, Image.Image]]:
         shadow()
         + '<path d="M 38,158 Q 22,112 56,78 M 262,158 Q 278,112 244,78" fill="none" stroke="#E56B8C" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="8,6"/>'
         + bear_body(150, 218, pose="sit", paws="down", lean=6)
-        + bear_head(154, 124, expr="curious", rot=12)
+        + bear_head(154, 124, expr="curious", rot=11)
     )
     s2 = render_svg(
-        shadow(140, 270, 78, 10)
-        + bear_body(140, 216, pose="sit", paws="wide_up", lean=-5)
-        + bear_head(136, 122, expr="sparkle_eyes", rot=-8)
-        + strawberry(242, 232, s=1.08, ripe=False, rot=14)
-        + sp4(244, 192, r=8, fill="#8AC48E", stroke="#46754A")
+        shadow(140, 270, 76, 10)
+        + bear_body(140, 216, pose="sit", paws="wave_r", lean=-5)
+        + bear_head(136, 122, expr="sparkle_eyes", rot=-7)
+        + strawberry(240, 232, s=1.08, ripe=False, rot=14)
+        + sp4(242, 192, r=8, fill="#8AC48E", stroke="#46754A")
     )
     s3 = render_svg(
         shadow()
         + bear_body(150, 216, pose="sit", paws="none")
-        + strawberry(150, 214, s=1.72, ripe=True)
-        + f'<ellipse cx="114" cy="214" rx="20" ry="15" transform="rotate(18 114 214)" fill="{FUR}" stroke="{OL}" stroke-width="3.8"/>'
-        + f'<ellipse cx="186" cy="214" rx="20" ry="15" transform="rotate(-18 186 214)" fill="{FUR}" stroke="{OL}" stroke-width="3.8"/>'
+        + strawberry(150, 214, s=1.70, ripe=True)
+        + bear_arm((102, 198), (94, 224), (128, 218), 14.0, 12.0, 10.4)
+        + bear_arm((198, 198), (206, 224), (172, 218), 14.0, 12.0, 10.4)
         + bear_head(150, 122, expr="smile", rot=4)
     )
     s4 = render_svg(
         shadow()
-        + bear_body(150, 216, pose="sit", paws="none", lean=-6)
-        + strawberry(146, 214, s=1.75, ripe=True, rot=-6)
-        + f'<ellipse cx="110" cy="212" rx="20" ry="15" transform="rotate(14 110 212)" fill="{FUR}" stroke="{OL}" stroke-width="3.8"/>'
-        + f'<ellipse cx="184" cy="216" rx="20" ry="15" transform="rotate(-22 184 216)" fill="{FUR}" stroke="{OL}" stroke-width="3.8"/>'
-        + bear_head(144, 122, expr="wink", strong_blush=True, rot=-10)
+        + bear_body(150, 216, pose="sit", paws="none", lean=-5)
+        + strawberry(146, 214, s=1.72, ripe=True, rot=-6)
+        + bear_arm((100, 198), (92, 224), (124, 218), 14.0, 12.0, 10.4)
+        + bear_arm((196, 198), (206, 224), (170, 220), 14.0, 12.0, 10.4)
+        + bear_head(144, 122, expr="wink", strong_blush=True, rot=-9)
         + star5(242, 84, r=12) + sp4(52, 102, r=9)
     )
     s5 = with_hero_aura(render_svg(
         shadow(150, 272, 62, 8, op=0.12)
         + bear_body(150, 206, pose="jump", paws="none")
-        + strawberry(150, 204, s=1.78, ripe=True)
-        + f'<ellipse cx="112" cy="202" rx="20" ry="15" transform="rotate(18 112 202)" fill="{FUR}" stroke="{OL}" stroke-width="3.8"/>'
-        + f'<ellipse cx="188" cy="202" rx="20" ry="15" transform="rotate(-18 188 202)" fill="{FUR}" stroke="{OL}" stroke-width="3.8"/>'
+        + strawberry(150, 204, s=1.75, ripe=True)
+        + bear_arm((102, 188), (94, 214), (126, 206), 14.0, 12.0, 10.4)
+        + bear_arm((198, 188), (206, 214), (174, 206), 14.0, 12.0, 10.4)
         + bear_head(150, 114, expr="heart_eyes", strong_blush=True, rot=5)
         + heart(48, 84, s=14, fill="#FF6E94", rot=-12) + heart(252, 88, s=13, fill="#E56B8C", rot=12)
         + sp4(52, 174, r=10) + sp4(250, 174, r=10)
     ), (229, 107, 140))
     return [
-        ("Quay Lưng Lì Lợm", s0),
+        ("Quay Lưng Lì", s0),
         ("Quay Lại Tò Mò", s1),
-        ("Dâu Xanh Vừa Nhú", s2),
-        ("Ôm Dâu Chín Mọng", s3),
-        ("Nháy Mắt Ngọt Ngào", s4),
-        ("Mắt Tim Thu Hoạch!", s5),
+        ("Dâu Xanh Nhú", s2),
+        ("Ôm Dâu Chín", s3),
+        ("Nháy Mắt Ngọt", s4),
+        ("Mắt Tim Dâu!", s5),
     ]
 
 
 # =========================================================================== #
-#  #72 NEW — LOTSO STRAWBERRY MILK CAFE (REPLACES CANE BOSS!)
+#  #72 — LOTSO STRAWBERRY MILK CAFE (CURVED ARMS POURING, SIPPING & CHEERING!)
 # =========================================================================== #
 def _wood_table(y=248) -> str:
     return f'<rect x="28" y="{y}" width="244" height="18" rx="8" fill="#D4A373" stroke="{OL}" stroke-width="3.2"/>'
@@ -526,47 +604,54 @@ def _shortcake_slice(cx=64, cy=224) -> str:
 
 
 def build_72_milk_cafe() -> list[tuple[str, Image.Image]]:
-    # S0: Sitting resting chin on wooden table beside empty glass, slightly sluggish
+    # S0: Slouched on wooden counter propping chin with natural curved arm beside empty glass
     s0 = render_svg(
         bear_body(134, 218, pose="sit", paws="none", lean=-6)
-        + bear_head(130, 128, expr="sleepy", brows="pout_sad", rot=-10)
+        + bear_head(130, 128, expr="sleepy", brows="pout_sad", rot=-9)
         + _wood_table(246)
-        + f'<ellipse cx="102" cy="182" rx="18" ry="14" transform="rotate(-16 102 182)" fill="{FUR}" stroke="{OL}" stroke-width="3.6"/>'
+        + bear_arm((86, 200), (64, 228), (94, 178), 13.5, 11.8, 10.2)
+        + bear_arm((178, 206), (192, 232), (170, 236), 13.5, 11.8, 10.2)
         + _milk_glass(228, 220, filled=False)
     )
-    # S1: Putting on strawberry cafe apron holding pink strawberry milk carton excitedly!
+    # S1: Putting on strawberry apron holding milk carton with curved right arm
     s1 = render_svg(
-        shadow() + bear_body(142, 216, pose="stand", paws="wave_r", outfit="apron", lean=5)
+        shadow() + bear_body(142, 216, pose="stand", paws="none", outfit="apron", lean=4)
+        + bear_arm((94, 198), (74, 218), (88, 236), 14.0, 12.0, 10.4)
+        + _milk_carton(228, 184, rot=10)
+        + bear_arm((190, 198), (218, 202), (216, 186), 14.0, 12.0, 10.4)
         + bear_head(146, 122, expr="curious", rot=6)
-        + _milk_carton(230, 184, rot=12)
     )
-    # S2: Pouring pink strawberry milk into glass with striped straw!
+    # S2: Pouring pink strawberry milk cleanly into glass!
     s2 = render_svg(
-        bear_body(134, 216, pose="sit", paws="wave_r", outfit="apron", lean=8)
-        + bear_head(140, 122, expr="smile", rot=8)
+        bear_body(132, 216, pose="sit", paws="none", outfit="apron", lean=6)
+        + bear_arm((84, 200), (68, 224), (86, 236), 13.8, 11.8, 10.2)
         + _wood_table(246)
         + '<path d="M 206,174 Q 222,190 224,206" fill="none" stroke="#F9B4C8" stroke-width="7.0" stroke-linecap="round"/>'
-        + _milk_carton(196, 160, rot=54)
+        + _milk_carton(198, 160, rot=54)
+        + bear_arm((178, 198), (206, 188), (194, 164), 13.8, 11.8, 10.2)
         + _milk_glass(228, 220, filled=True, cream_top=False)
+        + bear_head(138, 122, expr="smile", rot=7)
     )
-    # S3: Topping glass with fresh strawberry & whipped cream, starry eyes!
+    # S3: Topping glass with whipped cream & fresh strawberry!
     s3 = render_svg(
-        bear_body(138, 216, pose="sit", paws="center", outfit="apron", lean=-4)
-        + bear_head(136, 122, expr="sparkle_eyes", strong_blush=True, rot=-6)
+        bear_body(136, 216, pose="sit", paws="none", outfit="apron", lean=-4)
+        + bear_arm((88, 200), (74, 224), (96, 234), 13.8, 11.8, 10.2)
         + _wood_table(246)
         + _milk_glass(226, 220, filled=True, cream_top=True)
+        + bear_arm((182, 198), (204, 202), (214, 184), 13.8, 11.8, 10.2)
+        + bear_head(134, 122, expr="sparkle_eyes", strong_blush=True, rot=-6)
         + sp4(248, 166, r=10) + sp4(60, 108, r=9)
     )
-    # S4: Chubby paws hugging full strawberry milk glass sipping happily, rosy cheeks!
+    # S4: Curved chubby arms hugging strawberry milk glass sipping happily!
     s4 = render_svg(
         shadow() + bear_body(150, 216, pose="sit", paws="none", outfit="apron", lean=5)
         + _milk_glass(154, 212, filled=True, cream_top=True, s=1.12)
-        + f'<ellipse cx="116" cy="214" rx="20" ry="15" transform="rotate(18 116 214)" fill="{FUR}" stroke="{OL}" stroke-width="3.8"/>'
-        + f'<ellipse cx="192" cy="214" rx="20" ry="15" transform="rotate(-18 192 214)" fill="{FUR}" stroke="{OL}" stroke-width="3.8"/>'
-        + bear_head(152, 122, expr="happy_squint", strong_blush=True, rot=8)
+        + bear_arm((102, 198), (94, 226), (132, 220), 14.0, 12.0, 10.4)
+        + bear_arm((198, 198), (206, 226), (176, 220), 14.0, 12.0, 10.4)
+        + bear_head(152, 122, expr="happy_squint", strong_blush=True, rot=7)
         + heart(242, 102, s=13, fill="#F7B2C4", stroke="#D65076")
     )
-    # S5: Sitting joyfully beside full-topping strawberry milk & shortcake slice + floating hearts!
+    # S5: Celebrating beside strawberry milk & shortcake slice with curved cheering arms!
     s5 = with_hero_aura(render_svg(
         bear_body(150, 212, pose="sit", paws="wide_up", outfit="apron")
         + bear_head(150, 118, expr="big_smile", strong_blush=True, rot=-4)
@@ -578,16 +663,16 @@ def build_72_milk_cafe() -> list[tuple[str, Image.Image]]:
     ), (214, 80, 118))
     return [
         ("Uể Oải Ly Rỗng", s0),
-        ("Đeo Tạp Dề Sữa Dâu", s1),
-        ("Rót Sữa Dâu Hồng", s2),
-        ("Thêm Kem & Dâu Tươi", s3),
-        ("Ôm Ly Hút Ngon Lành", s4),
-        ("Tiệc Sữa Dâu Shortcake!", s5),
+        ("Đeo Tạp Dề Dâu", s1),
+        ("Rót Sữa Dâu", s2),
+        ("Thêm Kem Tươi", s3),
+        ("Ôm Ly Hút Ngon", s4),
+        ("Tiệc Sữa Dâu!", s5),
     ]
 
 
 # =========================================================================== #
-#  #73 — LOTSO BERRY FLOWER CROWN (CHUBBY BEAR + DYNAMIC POSES!)
+#  #73 — LOTSO BERRY FLOWER CROWN (CURVED ARMS + SNUG CROWN!)
 # =========================================================================== #
 def _berry_crown(cx=150, cy=66, level="full", rot=0) -> str:
     if level == "half":
@@ -624,46 +709,50 @@ def build_73_flower_crown() -> list[tuple[str, Image.Image]]:
         + '<ellipse cx="72" cy="266" rx="18" ry="5" fill="#C4E3C9"/><ellipse cx="228" cy="266" rx="18" ry="5" fill="#C4E3C9"/>'
     )
     s1 = render_svg(
-        shadow() + bear_body(150, 216, pose="stand", paws="wave_r", lean=5)
-        + bear_head(154, 122, expr="smile", rot=8)
-        + daisy(208, 72, r=13)
+        shadow() + bear_body(150, 216, pose="stand", paws="none", lean=4)
+        + bear_arm((102, 198), (80, 216), (92, 234), 14.0, 12.0, 10.4)
+        + bear_head(154, 122, expr="smile", rot=7)
+        + daisy(208, 74, r=13)
+        + bear_arm((198, 196), (236, 152), (212, 92), 14.0, 12.0, 10.4)
     )
     s2 = render_svg(
-        shadow() + bear_body(150, 216, pose="walk", paws="down", lean=-6)
-        + bear_head(146, 122, expr="smile", strong_blush=True, rot=-8)
-        + _berry_crown(142, 66, level="half", rot=-8)
+        shadow() + bear_body(150, 216, pose="walk", paws="walk_swing", lean=-6)
+        + bear_head(146, 122, expr="smile", strong_blush=True, rot=-7)
+        + _berry_crown(142, 66, level="half", rot=-7)
     )
     s3 = render_svg(
-        shadow() + bear_body(150, 216, pose="sit", paws="center")
+        shadow() + bear_body(150, 216, pose="sit", paws="hug_center")
         + bear_head(150, 122, expr="wink", strong_blush=True, rot=5)
         + _berry_crown(152, 66, level="full", rot=5) + sp4(52, 92, r=9)
     )
     s4 = render_svg(
-        shadow() + bear_body(146, 216, pose="walk", paws="wave_r", lean=-4)
+        shadow() + bear_body(146, 216, pose="walk", paws="none", lean=-4)
+        + bear_arm((98, 198), (76, 216), (90, 234), 14.0, 12.0, 10.4)
+        + _berry_cluster(232, 184, s=0.98)
+        + bear_arm((194, 196), (220, 194), (222, 174), 14.0, 12.0, 10.4)
         + bear_head(144, 122, expr="big_smile", strong_blush=True, rot=-6)
         + _berry_crown(140, 66, level="full", rot=-6)
-        + _berry_cluster(236, 184, s=0.98)
     )
     s5 = with_hero_aura(render_svg(
         shadow(150, 272, 62, 8, op=0.12)
         + bear_body(150, 204, pose="jump", paws="wide_up")
         + bear_head(150, 114, expr="happy_squint", strong_blush=True, rot=4)
         + _berry_crown(152, 58, level="full", rot=4)
-        + _berry_cluster(242, 148, s=1.02)
+        + _berry_cluster(240, 148, s=1.0)
         + daisy(48, 88, r=12) + daisy(254, 78, r=11) + daisy(52, 200, r=10) + sp4(248, 224, r=10)
     ), (217, 74, 107))
     return [
-        ("Vườn Trống Háo Hức", s0),
-        ("Cài Hoa Cúc Tai", s1),
-        ("Bước Đi Vòng Lá", s2),
-        ("Vương Miện Dâu Đầy", s3),
-        ("Cầm Chùm Dâu Chín", s4),
-        ("Nhảy Mừng Vườn Dâu!", s5),
+        ("Vườn Trống Chờ", s0),
+        ("Cài Cúc Lên Tai", s1),
+        ("Bước Đi Kết Lá", s2),
+        ("Vương Miện Dâu", s3),
+        ("Cầm Chùm Dâu", s4),
+        ("Hoàng Tử Dâu!", s5),
     ]
 
 
 # =========================================================================== #
-#  #74 — LOTSO OVERALLS TOY WORKSHOP (CHUBBY BEAR + DYNAMIC POSES!)
+#  #74 — LOTSO OVERALLS TOY WORKSHOP (CURVED SLEEVE ARMS!)
 # =========================================================================== #
 def _pizza_slice(cx=238, cy=236) -> str:
     return (
@@ -709,15 +798,15 @@ def _hi_badge(x=242, y=90) -> str:
 def build_74_overalls() -> list[tuple[str, Image.Image]]:
     s0 = render_svg(
         shadow(136, 270, 72, 10) + bear_body(136, 218, pose="sit", paws="down", outfit="green_shirt", lean=-6)
-        + bear_head(132, 124, expr="sleepy", rot=-10) + _pizza_slice(238, 236)
+        + bear_head(132, 124, expr="sleepy", rot=-9) + _pizza_slice(238, 236)
     )
     s1 = render_svg(
-        shadow() + bear_body(150, 216, pose="stand", paws="center", outfit="overalls", lean=5)
+        shadow() + bear_body(150, 216, pose="stand", paws="hug_center", outfit="overalls", lean=5)
         + bear_head(154, 122, expr="curious", rot=6)
     )
     s2 = render_svg(
         shadow() + bear_body(146, 216, pose="walk", paws="wave_r", outfit="overalls", lean=-5)
-        + bear_head(144, 122, expr="smile", strong_blush=True, rot=-8) + _hi_badge(244, 88)
+        + bear_head(144, 122, expr="smile", strong_blush=True, rot=-7) + _hi_badge(244, 88)
     )
     s3 = render_svg(
         shadow() + bear_body(150, 216, pose="sit", paws="wide_up", outfit="overalls", lean=4)
@@ -745,12 +834,12 @@ def build_74_overalls() -> list[tuple[str, Image.Image]]:
         ("Vẫy Tay Chào Hi!", s2),
         ("Sticker Sổ Tay", s3),
         ("Tên Lửa Tăng Tốc", s4),
-        ("Xưởng Đồ Chơi 100%!", s5),
+        ("Xưởng Đồ Chơi!", s5),
     ]
 
 
 # =========================================================================== #
-#  #75 — LOTSO LO-FI EARPHONES FLOW (CHUBBY BEAR + SWAYING/SINGING POSES!)
+#  #75 — LOTSO LO-FI EARPHONES FLOW (CURVED ARMS SWAYING TO BEATS!)
 # =========================================================================== #
 def _earphones(mode="both", cx=150, cy=122) -> str:
     if mode == "tangled":
@@ -782,7 +871,7 @@ def _soundwaves(bright=False) -> str:
 
 def build_75_lofi() -> list[tuple[str, Image.Image]]:
     s0 = render_svg(
-        shadow() + bear_body(150, 218, pose="sit", paws="center", lean=-6)
+        shadow() + bear_body(150, 218, pose="sit", paws="hug_center", lean=-6)
         + _earphones("tangled") + bear_head(146, 124, expr="curious", brows="pout_sad", rot=-8)
     )
     s1 = render_svg(
@@ -795,34 +884,34 @@ def build_75_lofi() -> list[tuple[str, Image.Image]]:
         + music_note(240, 92, double=False, col="#B83E62")
     )
     s3 = render_svg(
-        _soundwaves(False) + shadow() + bear_body(150, 218, pose="sit", paws="center")
+        _soundwaves(False) + shadow() + bear_body(150, 218, pose="sit", paws="hug_center")
         + bear_head(150, 124, expr="calm_closed", strong_blush=True, rot=6) + _earphones("both", 150, 124)
         + music_note(54, 92, double=False, col="#B83E62")
     )
     s4 = render_svg(
-        _soundwaves(False) + shadow() + bear_body(150, 214, pose="walk", paws="wave_r", lean=-9)
-        + bear_head(142, 120, expr="happy_squint", strong_blush=True, rot=-14) + _earphones("both", 142, 120)
+        _soundwaves(False) + shadow() + bear_body(150, 214, pose="walk", paws="wave_r", lean=-8)
+        + bear_head(142, 120, expr="happy_squint", strong_blush=True, rot=-12) + _earphones("both", 142, 120)
         + music_note(242, 92, double=True, col="#B83E62", s=1.05) + music_note(52, 102, double=False, col="#E56B8C", s=0.9)
     )
     s5 = with_hero_aura(render_svg(
         _soundwaves(True) + shadow(150, 272, 62, 8, op=0.12)
-        + bear_body(150, 204, pose="jump", paws="wide_up", lean=6)
-        + bear_head(154, 114, expr="big_smile", strong_blush=True, rot=8) + _earphones("both", 154, 114)
+        + bear_body(150, 204, pose="jump", paws="wide_up", lean=5)
+        + bear_head(154, 114, expr="big_smile", strong_blush=True, rot=7) + _earphones("both", 154, 114)
         + music_note(48, 84, double=True, col="#B83E62", s=1.05) + music_note(250, 88, double=True, col="#E56B8C", s=1.05)
         + sp4(52, 204, r=10) + sp4(250, 204, r=10)
     ), (184, 62, 98))
     return [
-        ("Dây Rối Xao Nhãng", s0),
+        ("Gỡ Dây Rối", s0),
         ("Đeo 1 Bên Tai", s1),
-        ("Nốt Nhạc Bắt Nhịp", s2),
-        ("Sóng Nhạc Deep Flow", s3),
-        ("Đung Đưa Ngân Nga", s4),
-        ("Phiêu Nhạc 100%!", s5),
+        ("Nốt Nhạc Vui", s2),
+        ("Sóng Nhạc Flow", s3),
+        ("Đung Đưa Hát", s4),
+        ("Phiêu Nhạc 100%", s5),
     ]
 
 
 # =========================================================================== #
-#  #76 — LOTSO MOOD DETOX COMIC (COOKIE -> HEART BAND-AID -> 1 BALLOON -> 2 -> FLOAT -> HEART RAIN, NO BUNNY EARS!)
+#  #76 — LOTSO MOOD DETOX COMIC (COOKIE -> BAND-AID -> BALLOONS -> FLOAT -> HEART RAIN!)
 # =========================================================================== #
 def _lightning(cx, cy, rot=0, s=0.95) -> str:
     return (
@@ -840,7 +929,6 @@ def _cookie_state(cx=150, cy=214, mended=False) -> str:
             f'<path d="M 30,0 A 20,20 0 0,0 5,-18 L 9,-6 L 3,4 L 9,18 A 20,20 0 0,0 30,0 Z" fill="#FDE08B" stroke="#B45309" stroke-width="2.6"/>'
             f'<circle cx="17" cy="-4" r="2.2" fill="{OL}"/></g>'
         )
-    # Mended smiley cookie with a cute pink heart band-aid across the crack!
     return (
         f'<g transform="translate({cx},{cy})">'
         f'<circle cx="0" cy="0" r="22" fill="#FDE08B" stroke="#B45309" stroke-width="2.6"/>'
@@ -856,18 +944,17 @@ def _cookie_state(cx=150, cy=214, mended=False) -> str:
 def _balloon_bunch(count=1) -> str:
     if count == 1:
         return (
-            '<path d="M 218,186 Q 232,140 240,104" fill="none" stroke="#8C5266" stroke-width="2.4"/>'
-            + heart(242, 86, s=22, fill="#FF85A6", stroke=OL, sw=2.6, rot=12)
+            '<path d="M 222,172 Q 232,132 240,100" fill="none" stroke="#8C5266" stroke-width="2.4"/>'
+            + heart(242, 84, s=22, fill="#FF85A6", stroke=OL, sw=2.6, rot=12)
         )
     if count == 2:
         return (
-            '<path d="M 90,188 Q 70,142 60,96 M 210,188 Q 230,142 240,96" fill="none" stroke="#8C5266" stroke-width="2.4"/>'
+            '<path d="M 76,174 Q 68,134 60,96 M 224,174 Q 232,134 240,96" fill="none" stroke="#8C5266" stroke-width="2.4"/>'
             + heart(58, 80, s=23, fill="#FF85A6", stroke=OL, sw=2.6, rot=-14)
             + heart(242, 80, s=23, fill="#F47294", stroke=OL, sw=2.6, rot=14)
         )
-    # Bunch of 4 floating heart balloons lifting Lotso off the ground!
     return (
-        '<path d="M 96,174 Q 76,120 68,72 M 102,174 Q 108,116 112,56 M 198,174 Q 192,116 188,56 M 204,174 Q 224,120 232,72" fill="none" stroke="#8C5266" stroke-width="2.2"/>'
+        '<path d="M 80,158 Q 74,112 68,72 M 84,158 Q 100,112 112,56 M 216,158 Q 200,112 188,56 M 220,158 Q 226,112 232,72" fill="none" stroke="#8C5266" stroke-width="2.2"/>'
         + heart(66, 62, s=21, fill="#F7B2C4", stroke=OL, sw=2.4, rot=-16)
         + heart(112, 46, s=22, fill="#FF85A6", stroke=OL, sw=2.4, rot=-6)
         + heart(188, 46, s=22, fill="#F47294", stroke=OL, sw=2.4, rot=6)
@@ -876,38 +963,36 @@ def _balloon_bunch(count=1) -> str:
 
 
 def build_76_mood_detox() -> list[tuple[str, Image.Image]]:
-    # S0: Frowning snapping smiley cookie amid 4 yellow lightning zaps
     s0 = render_svg(
-        shadow() + bear_body(150, 218, pose="sit", paws="center")
+        shadow() + bear_body(150, 218, pose="sit", paws="none")
         + _cookie_state(150, 214, mended=False)
+        + bear_arm((102, 200), (96, 224), (126, 218), 13.8, 11.8, 10.2)
+        + bear_arm((198, 200), (204, 224), (174, 218), 13.8, 11.8, 10.2)
         + bear_head(150, 124, expr="grumpy", brows="grump_cute", rot=-6)
         + _lightning(46, 72, -16) + _lightning(254, 72, 16) + _lightning(42, 178, -22, 0.85) + _lightning(258, 178, 22, 0.85)
     )
-    # S1: Sitting calmly sticking a pink heart band-aid to mend the cookie!
     s1 = render_svg(
-        shadow() + bear_body(150, 218, pose="sit", paws="center", lean=5)
+        shadow() + bear_body(150, 218, pose="sit", paws="none", lean=4)
         + _cookie_state(152, 216, mended=True)
-        + bear_head(154, 124, expr="calm_smile", brows="pout_sad", rot=8)
+        + bear_arm((102, 200), (96, 224), (132, 218), 13.8, 11.8, 10.2)
+        + bear_arm((198, 200), (204, 224), (170, 218), 13.8, 11.8, 10.2)
+        + bear_head(154, 124, expr="calm_smile", brows="pout_sad", rot=7)
     )
-    # S2: Relieved gentle smile holding 1 small pink heart balloon!
     s2 = render_svg(
         shadow() + _balloon_bunch(1)
         + bear_body(146, 216, pose="stand", paws="wave_r", lean=-4)
         + bear_head(144, 122, expr="smile", rot=-6)
     )
-    # S3: Cheering up hugging 2 swaying heart balloons!
     s3 = render_svg(
         shadow() + _balloon_bunch(2)
-        + bear_body(150, 216, pose="walk", paws="wide_up", lean=6)
-        + bear_head(154, 122, expr="smile", strong_blush=True, rot=8)
+        + bear_body(150, 216, pose="walk", paws="wide_up", lean=5)
+        + bear_head(154, 122, expr="smile", strong_blush=True, rot=7)
     )
-    # S4: Floating lightly off ground holding bunch of heart balloons (toe-beans lifted!)
     s4 = render_svg(
         shadow(150, 278, 46, 6, op=0.10) + _balloon_bunch(4)
         + bear_body(150, 200, pose="float", paws="wide_up", lean=-5)
-        + bear_head(146, 114, expr="wink", strong_blush=True, rot=-8)
+        + bear_head(146, 114, expr="wink", strong_blush=True, rot=-7)
     )
-    # S5: Blissful radiant smile amidst pastel heart rain — 100% stress detox!
     s5 = with_hero_aura(render_svg(
         shadow(150, 272, 62, 8, op=0.12)
         + bear_body(150, 206, pose="jump", paws="wide_up")
@@ -918,59 +1003,69 @@ def build_76_mood_detox() -> list[tuple[str, Image.Image]]:
     ), (170, 58, 96))
     return [
         ("Vỡ Bánh Tia Sét", s0),
-        ("Dán Băng Trái Tim", s1),
-        ("Cầm Bóng Tim Nhỏ", s2),
+        ("Dán Băng Tim", s1),
+        ("Cầm Bóng Tim", s2),
         ("Ôm 2 Bóng Bay", s3),
-        ("Bay Bổng Chùm Bóng", s4),
-        ("Mưa Tim Detox 100%!", s5),
+        ("Bay Bổng Bóng", s4),
+        ("Mưa Tim Detox!", s5),
     ]
 
 
 # =========================================================================== #
-#  #77 — LOTSO FLORAL SWEET DREAMS (CHUBBY BEAR + BOUQUET + PASTEL SHEEP CLOUD!)
+#  #77 — LOTSO FLORAL SWEET DREAMS (REBUILT: STROLL -> PICK -> TIE -> HUG -> SHEEP -> WAVE!)
 # =========================================================================== #
 def _rose(cx, cy, s=1.0) -> str:
     return (
         f'<g transform="translate({cx},{cy}) scale({s})">'
-        f'<circle cx="-7" cy="-4" r="8" fill="#E11D48" stroke="{OL}" stroke-width="2.0"/>'
-        f'<circle cx="7" cy="-4" r="8" fill="#E11D48" stroke="{OL}" stroke-width="2.0"/>'
-        f'<circle cx="0" cy="-10" r="8" fill="#F43F5E" stroke="{OL}" stroke-width="2.0"/>'
-        f'<circle cx="0" cy="2" r="8" fill="#E11D48" stroke="{OL}" stroke-width="2.0"/>'
-        f'<circle cx="0" cy="-4" r="5" fill="#FDE047" stroke="#C98A1A" stroke-width="1.6"/></g>'
+        f'<circle cx="-7" cy="-4" r="7.5" fill="#E11D48" stroke="{OL}" stroke-width="2.0"/>'
+        f'<circle cx="7" cy="-4" r="7.5" fill="#E11D48" stroke="{OL}" stroke-width="2.0"/>'
+        f'<circle cx="0" cy="-10" r="7.5" fill="#F43F5E" stroke="{OL}" stroke-width="2.0"/>'
+        f'<circle cx="0" cy="2" r="7.5" fill="#E11D48" stroke="{OL}" stroke-width="2.0"/>'
+        f'<circle cx="0" cy="-4" r="4.8" fill="#FDE047" stroke="#C98A1A" stroke-width="1.6"/></g>'
     )
 
 
-def _bouquet(cx=150, cy=214, blooms=0) -> str:
+def _roadside_flowers(cx=238, cy=246, picked=False) -> str:
     parts = [
         f'<g transform="translate({cx},{cy})">'
-        '<path d="M -8,28 L -20,-12 M 0,30 L 0,-18 M 8,28 L 20,-12" stroke="#4D8B58" stroke-width="4.2" stroke-linecap="round"/>'
-        '<ellipse cx="-22" cy="4" rx="12" ry="6" transform="rotate(-30 -22 4)" fill="#78B886" stroke="#3D6E46" stroke-width="2.0"/>'
-        '<ellipse cx="22" cy="4" rx="12" ry="6" transform="rotate(30 22 4)" fill="#78B886" stroke="#3D6E46" stroke-width="2.0"/>'
-        '<path d="M -12,12 L 12,12" stroke="#E892AC" stroke-width="5.5" stroke-linecap="round"/>'
+        f'<ellipse cx="0" cy="14" rx="34" ry="12" fill="#A6D8B0" stroke="#4D8B58" stroke-width="2.4"/>'
+        f'<path d="M -16,10 L -20,-12 M 0,10 L 0,-18 M 14,10 L 18,-10" stroke="#4D8B58" stroke-width="3.4" stroke-linecap="round"/>'
+        + _rose(-20, -14, 0.85) + _rose(18, -12, 0.80)
     ]
-    if blooms >= 1:
-        parts.append(_rose(0, -18, 1.0))
-    if blooms >= 2:
-        parts.append(_rose(-18, -10, 0.9) + _rose(18, -10, 0.9))
-    if blooms >= 3:
-        parts.append(_rose(-10, -24, 0.85) + _rose(10, -24, 0.85))
+    if not picked:
+        parts.append(_rose(0, -20, 0.92))
     parts.append("</g>")
     return "".join(parts)
 
 
-def _dream_cloud(mode="small") -> str:
-    if mode == "small":
-        return (
-            '<circle cx="206" cy="94" r="6" fill="#FCEEF3" stroke="#9D82C9" stroke-width="2.2"/>'
-            '<path d="M 218,74 C 210,74 206,62 214,56 C 216,46 232,44 238,52 C 248,48 258,58 254,68 C 258,76 246,82 236,78 Z" fill="#FFF2F7" stroke="#9D82C9" stroke-width="2.4"/>'
+def _bouquet(cx=150, cy=214, blooms=3, ribbon=True) -> str:
+    parts = [
+        f'<g transform="translate({cx},{cy})">'
+        '<path d="M -8,28 L -18,-12 M 0,30 L 0,-18 M 8,28 L 18,-12" stroke="#4D8B58" stroke-width="4.0" stroke-linecap="round"/>'
+        '<ellipse cx="-20" cy="4" rx="11" ry="5.5" transform="rotate(-30 -20 4)" fill="#78B886" stroke="#3D6E46" stroke-width="2.0"/>'
+        '<ellipse cx="20" cy="4" rx="11" ry="5.5" transform="rotate(30 20 4)" fill="#78B886" stroke="#3D6E46" stroke-width="2.0"/>'
+    ]
+    if ribbon:
+        parts.append(
+            '<path d="M -12,12 L 12,12" stroke="#E892AC" stroke-width="5.5" stroke-linecap="round"/>'
+            '<path d="M -2,12 C -14,4 -18,16 -10,20 C -5,22 -2,16 -2,12 Z M 2,12 C 14,4 18,16 10,20 C 5,22 2,16 2,12 Z" fill="#F49CB5" stroke="#5A1F33" stroke-width="1.9"/>'
         )
+    if blooms >= 1:
+        parts.append(_rose(0, -18, 0.96))
+    if blooms >= 2:
+        parts.append(_rose(-17, -10, 0.88) + _rose(17, -10, 0.88))
+    if blooms >= 3:
+        parts.append(_rose(-10, -24, 0.84) + _rose(10, -24, 0.84))
+    parts.append("</g>")
+    return "".join(parts)
+
+
+def _dream_cloud(mode="empty") -> str:
     parts = [
         '<circle cx="198" cy="94" r="6.5" fill="#FFF2F7" stroke="#9D82C9" stroke-width="2.2"/>',
         '<path d="M 192,70 C 178,70 174,52 186,44 C 188,28 214,22 228,34 C 244,24 268,36 264,54 C 272,68 256,82 238,76 C 224,82 204,80 192,70 Z" fill="#FFF2F7" stroke="#9D82C9" stroke-width="2.6"/>',
     ]
-    if mode == "ear":
-        parts.append('<ellipse cx="222" cy="54" rx="16" ry="9" transform="rotate(-16 222 54)" fill="#C4B5FD" stroke="#6D4C9E" stroke-width="2.4"/>')
-    elif mode == "sheep":
+    if mode == "sheep":
         parts.append(
             '<ellipse cx="206" cy="56" rx="11" ry="6" transform="rotate(-24 206 56)" fill="#B89EDB" stroke="#6D4C9E" stroke-width="2.0"/>'
             '<ellipse cx="242" cy="56" rx="11" ry="6" transform="rotate(24 242 56)" fill="#B89EDB" stroke="#6D4C9E" stroke-width="2.0"/>'
@@ -983,89 +1078,164 @@ def _dream_cloud(mode="small") -> str:
 
 
 def build_77_sweet_dreams() -> list[tuple[str, Image.Image]]:
-    s0 = render_svg(shadow() + bear_body(150, 218, pose="sit", paws="center", lean=-5) + _bouquet(148, 214, 0) + bear_head(146, 124, expr="calm_smile", rot=-8))
-    s1 = render_svg(shadow() + bear_body(150, 216, pose="sit", paws="center", lean=4) + _bouquet(152, 214, 1) + bear_head(154, 122, expr="smile", rot=6))
-    s2 = render_svg(shadow() + bear_body(146, 216, pose="stand", paws="center", lean=-4) + _bouquet(144, 214, 2) + bear_head(144, 122, expr="smile", strong_blush=True, rot=-6) + _dream_cloud("small"))
-    s3 = render_svg(shadow() + bear_body(144, 216, pose="sit", paws="center", lean=5) + _bouquet(146, 214, 3) + bear_head(148, 122, expr="smile", strong_blush=True, rot=8) + _dream_cloud("ear"))
-    s4 = render_svg(shadow() + bear_body(144, 216, pose="sit", paws="center", lean=-5) + _bouquet(142, 214, 3) + bear_head(140, 124, expr="calm_closed", strong_blush=True, rot=-8) + _dream_cloud("sheep"))
+    # S0 (0%): Strolling beside roadside flower patch, leaning curiously admiring blooming red flowers!
+    s0 = render_svg(
+        shadow(122, 270, 70, 9)
+        + _roadside_flowers(236, 248, picked=False)
+        + bear_body(118, 218, pose="walk", paws="walk_swing", lean=9)
+        + bear_head(126, 124, expr="curious", rot=12)
+    )
+    # S1 (20%): Reaching curved right arm gently down to pick first red rose with warm smile!
+    s1 = render_svg(
+        shadow(124, 270, 72, 9)
+        + _roadside_flowers(240, 250, picked=True)
+        + bear_body(122, 218, pose="stand", paws="none", lean=11)
+        + bear_arm((88, 200), (62, 218), (76, 234), 13.6, 11.8, 10.2)
+        + '<path d="M 218,228 L 226,204" stroke="#4D8B58" stroke-width="3.6" stroke-linecap="round"/>'
+        + _rose(228, 200, 0.96)
+        + bear_arm((156, 204), (192, 218), (218, 220), 13.6, 11.8, 10.2)
+        + bear_head(132, 124, expr="smile", strong_blush=True, rot=12)
+    )
+    # S2 (40%): Sitting cleanly tying several red roses into a neat pink-ribbon bouquet!
+    s2 = render_svg(
+        shadow()
+        + bear_body(150, 218, pose="sit", paws="none", lean=-3)
+        + _bouquet(150, 214, blooms=2, ribbon=True)
+        + bear_arm((102, 198), (94, 224), (132, 220), 13.8, 11.8, 10.2)
+        + bear_arm((198, 198), (206, 224), (168, 220), 13.8, 11.8, 10.2)
+        + bear_head(148, 122, expr="smile", strong_blush=True, rot=-5)
+    )
+    # S3 (60%): Hugging full red bouquet looking up at dreamy cream-pink thought cloud appearing!
+    s3 = render_svg(
+        shadow()
+        + bear_body(142, 216, pose="sit", paws="none", lean=4)
+        + _bouquet(144, 214, blooms=3, ribbon=True)
+        + bear_arm((94, 198), (88, 224), (126, 220), 13.8, 11.8, 10.2)
+        + bear_arm((190, 198), (196, 224), (162, 220), 13.8, 11.8, 10.2)
+        + bear_head(144, 122, expr="sparkle_eyes", strong_blush=True, rot=7)
+        + _dream_cloud("empty")
+    )
+    # S4 (80%): Lavender pastel sheep smiling peacefully inside dream cloud, Lotso blushing dreamy!
+    s4 = render_svg(
+        shadow()
+        + bear_body(142, 216, pose="sit", paws="none", lean=-5)
+        + _bouquet(140, 214, blooms=3, ribbon=True)
+        + bear_arm((94, 198), (88, 224), (122, 220), 13.8, 11.8, 10.2)
+        + bear_arm((190, 198), (196, 224), (158, 220), 13.8, 11.8, 10.2)
+        + bear_head(138, 124, expr="calm_closed", strong_blush=True, rot=-7)
+        + _dream_cloud("sheep")
+    )
+    # S5 (100%): Soft pink cloud backdrop, hugging vibrant bouquet & gently waving hello to sheep dream!
     s5 = with_hero_aura(render_svg(
         '<ellipse cx="150" cy="160" rx="124" ry="96" fill="#FCECF3"/>'
-        + shadow() + bear_body(134, 214, pose="sit", paws="wave_r", lean=4)
-        + _bouquet(114, 212, 3)
-        + bear_head(138, 124, expr="happy_squint", strong_blush=True, rot=5)
-        + _dream_cloud("sheep") + sp4(46, 84, r=11, fill="#FDE047", stroke="#9D82C9") + sp4(48, 198, r=9, fill="#E9DDFB", stroke="#8B6BB8")
+        + shadow()
+        + bear_body(134, 214, pose="sit", paws="none", lean=3)
+        + _bouquet(112, 214, blooms=3, ribbon=True)
+        + bear_arm((86, 196), (76, 220), (104, 220), 13.8, 11.8, 10.2)
+        + bear_arm((182, 196), (218, 188), (226, 152), 14.0, 12.0, 10.4, paw_pad=True)
+        + bear_head(136, 124, expr="happy_squint", strong_blush=True, rot=5)
+        + _dream_cloud("sheep")
+        + sp4(46, 84, r=11, fill="#FDE047", stroke="#9D82C9") + sp4(48, 198, r=9, fill="#E9DDFB", stroke="#8B6BB8")
     ), (184, 158, 219))
     return [
-        ("Ôm Cành Lá Xanh", s0),
-        ("Hoa Hồng Đầu Tiên", s1),
-        ("Mây Suy Nghĩ Nhỏ", s2),
-        ("Tai Cừu Lấp Ló", s3),
-        ("Cừu Tím Cười Tít", s4),
-        ("Giấc Mơ Cừu Bông!", s5),
+        ("Ngắm Khóm Hoa", s0),
+        ("Hái Hoa Đầu", s1),
+        ("Buộc Bó Hoa", s2),
+        ("Ôm Hoa Ngắm Mây", s3),
+        ("Mơ Cừu Tím", s4),
+        ("Giấc Mơ Cừu!", s5),
     ]
 
 
 # =========================================================================== #
-#  #78 — LOTSO DAISY CHEEK GLOW (CHUBBY BEAR CUPPING CHEEKS & WINKING!)
+#  #78 — LOTSO DAISY CHEEK GLOW (REBUILT: WALK -> BEND PICK -> SIT ADMIRE -> TUCK EAR -> WINK -> GLOW!)
 # =========================================================================== #
-def _daisy_bud(cx=240, cy=244) -> str:
+def _ground_daisy(cx=238, cy=252) -> str:
     return (
         f'<g transform="translate({cx},{cy})">'
-        f'<path d="M 0,18 Q 2,6 0,-4" fill="none" stroke="#6D9F71" stroke-width="3.6" stroke-linecap="round"/>'
-        f'<ellipse cx="-7" cy="8" rx="7" ry="3.5" transform="rotate(-24 -7 8)" fill="#8AC48E" stroke="{OL}" stroke-width="1.8"/>'
-        f'<circle cx="0" cy="-6" r="8" fill="#FFFFFF" stroke="#A67C52" stroke-width="2.0"/><circle cx="0" cy="-6" r="3.5" fill="#EFC143"/></g>'
+        f'<ellipse cx="0" cy="10" rx="22" ry="6" fill="#C9E6CE"/>'
+        f'<path d="M 0,8 Q 2,-2 0,-12" fill="none" stroke="#6D9F71" stroke-width="3.6" stroke-linecap="round"/>'
+        f'<ellipse cx="-7" cy="0" rx="7" ry="3.5" transform="rotate(-24 -7 0)" fill="#8AC48E" stroke="{OL}" stroke-width="1.8"/>'
+        + daisy(0, -16, r=13, rot=12) + '</g>'
     )
 
 
 def build_78_daisy_glow() -> list[tuple[str, Image.Image]]:
-    s0 = render_svg(shadow() + bear_body(150, 218, pose="sit", paws="down", lean=-6) + bear_head(146, 124, expr="curious", rot=-10) + _daisy_bud(240, 244))
+    # S0 (0%): Walking cheerfully (natural stride + swinging curved arms) spotting tiny white daisy on ground!
+    s0 = render_svg(
+        shadow(120, 270, 70, 9)
+        + _ground_daisy(238, 252)
+        + bear_body(118, 218, pose="walk", paws="walk_swing", lean=8)
+        + bear_head(126, 124, expr="curious", rot=12)
+        + '<path d="M 212,216 L 222,208 M 224,224 L 234,218" stroke="#EAB308" stroke-width="2.6" stroke-linecap="round"/>'
+    )
+    # S1 (20%): Bending forward reaching curved right arm down to gently pick up the daisy!
     s1 = render_svg(
-        shadow() + bear_body(150, 218, pose="sit", paws="none", lean=5)
-        + bear_head(154, 124, expr="calm_smile", strong_blush=True, rot=8)
-        + f'<ellipse cx="206" cy="154" rx="20" ry="15" transform="rotate(24 206 154)" fill="{FUR}" stroke="{OL}" stroke-width="3.8"/>'
-        + _daisy_bud(240, 244)
+        shadow(126, 270, 72, 9)
+        + '<ellipse cx="238" cy="262" rx="20" ry="5" fill="#C9E6CE"/>'
+        + bear_body(124, 218, pose="stand", paws="none", lean=14)
+        + bear_arm((92, 200), (64, 218), (76, 234), 13.6, 11.8, 10.2)
+        + '<path d="M 222,238 L 236,222" stroke="#6D9F71" stroke-width="3.6" stroke-linecap="round"/>'
+        + daisy(238, 218, r=14, rot=14)
+        + bear_arm((158, 206), (194, 224), (218, 234), 13.6, 11.8, 10.2)
+        + bear_head(138, 126, expr="smile", strong_blush=True, rot=15)
     )
+    # S2 (40%): Sitting down cradling the white daisy tenderly in both curved paws, gentle smile!
     s2 = render_svg(
-        shadow() + bear_body(150, 216, pose="stand", paws="none", lean=-5)
-        + bear_head(146, 122, expr="smile", strong_blush=True, rot=-8)
-        + f'<ellipse cx="200" cy="154" rx="20" ry="15" transform="rotate(24 200 154)" fill="{FUR}" stroke="{OL}" stroke-width="3.8"/>'
-        + daisy(56, 184, r=19, rot=10)
+        shadow()
+        + bear_body(150, 218, pose="sit", paws="none")
+        + '<path d="M 150,234 L 150,210" stroke="#6D9F71" stroke-width="3.8" stroke-linecap="round"/>'
+        + daisy(150, 204, r=16, rot=8)
+        + bear_arm((102, 198), (94, 226), (132, 222), 13.8, 11.8, 10.2)
+        + bear_arm((198, 198), (206, 226), (168, 222), 13.8, 11.8, 10.2)
+        + bear_head(150, 122, expr="calm_smile", strong_blush=True, rot=-4)
     )
+    # S3 (60%): Raising curved right arm to tuck the daisy neatly behind his round bear ear, cheeks blushing!
     s3 = render_svg(
-        shadow() + bear_body(150, 218, pose="sit", paws="none")
-        + bear_head(150, 122, expr="smile", strong_blush=True, rot=4)
-        + f'<ellipse cx="94" cy="154" rx="20" ry="15" transform="rotate(-24 94 154)" fill="{FUR}" stroke="{OL}" stroke-width="3.8"/>'
-        + f'<ellipse cx="206" cy="154" rx="20" ry="15" transform="rotate(24 206 154)" fill="{FUR}" stroke="{OL}" stroke-width="3.8"/>'
-        + daisy(52, 194, r=18, rot=14)
+        shadow()
+        + bear_body(150, 218, pose="sit", paws="none", lean=-4)
+        + bear_arm((102, 198), (82, 218), (98, 234), 13.8, 11.8, 10.2)
+        + bear_head(148, 122, expr="smile", strong_blush=True, rot=-6)
+        + daisy(202, 74, r=16, rot=18)
+        + bear_arm((196, 198), (236, 152), (210, 92), 13.8, 11.8, 10.2)
+        + sp4(56, 94, r=9, fill="#F6CE55", stroke="#C98A1A")
     )
+    # S4 (80%): Daisy tucked behind ear, BOTH curved arms lifting naturally to cup chubby cheeks, charming wink!
     s4 = render_svg(
-        shadow() + bear_body(150, 216, pose="sit", paws="none", lean=-6)
-        + bear_head(146, 122, expr="wink", strong_blush=True, rot=-10)
-        + f'<ellipse cx="90" cy="156" rx="20" ry="15" transform="rotate(-28 90 156)" fill="{FUR}" stroke="{OL}" stroke-width="3.8"/>'
-        + f'<ellipse cx="202" cy="150" rx="20" ry="15" transform="rotate(20 202 150)" fill="{FUR}" stroke="{OL}" stroke-width="3.8"/>'
-        + daisy(52, 198, r=18, rot=14) + daisy(244, 72, r=19, rot=22)
+        shadow()
+        + bear_body(150, 216, pose="sit", paws="none", lean=-5)
+        + bear_head(146, 122, expr="wink", strong_blush=True, rot=-8)
+        + daisy(196, 70, r=16, rot=18)
+        + bear_arm((110, 200), (64, 186), (86, 146), 13.6, 11.8, 10.2)
+        + bear_arm((190, 196), (232, 182), (204, 142), 13.6, 11.8, 10.2)
     )
+    # S5 (100%): Radiant cheek-cup wink with ear daisy + gently floating white petals & warm sunshine glow!
     s5 = with_hero_aura(render_svg(
         shadow(150, 272, 66, 9, op=0.12)
         + bear_body(150, 210, pose="jump", paws="none")
-        + bear_head(150, 118, expr="wink", strong_blush=True, rot=6)
-        + f'<ellipse cx="94" cy="150" rx="20" ry="15" transform="rotate(-24 94 150)" fill="{FUR}" stroke="{OL}" stroke-width="3.8"/>'
-        + f'<ellipse cx="206" cy="150" rx="20" ry="15" transform="rotate(24 206 150)" fill="{FUR}" stroke="{OL}" stroke-width="3.8"/>'
-        + daisy(48, 84, r=17, rot=8) + daisy(250, 78, r=20, rot=24) + daisy(48, 206, r=18, rot=16) + daisy(248, 208, r=16, rot=6)
-        + sp4(150, 34, r=11, fill="#EFC143", stroke="#C98A1A")
+        + bear_head(150, 118, expr="wink", strong_blush=True, rot=5)
+        + daisy(206, 74, r=17, rot=22)
+        + bear_arm((102, 192), (64, 180), (90, 142), 13.8, 11.8, 10.2)
+        + bear_arm((198, 192), (236, 180), (210, 142), 13.8, 11.8, 10.2)
+        # Floating soft white daisy petals + golden sparkles
+        + '<ellipse cx="52" cy="94" rx="10" ry="5.5" transform="rotate(-28 52 94)" fill="#FFFFFF" stroke="#C99A6B" stroke-width="1.8"/>'
+        + '<ellipse cx="254" cy="116" rx="10" ry="5.5" transform="rotate(32 254 116)" fill="#FFFFFF" stroke="#C99A6B" stroke-width="1.8"/>'
+        + '<ellipse cx="56" cy="206" rx="9" ry="5" transform="rotate(18 56 206)" fill="#FFFFFF" stroke="#C99A6B" stroke-width="1.8"/>'
+        + '<ellipse cx="248" cy="212" rx="9" ry="5" transform="rotate(-24 248 212)" fill="#FFFFFF" stroke="#C99A6B" stroke-width="1.8"/>'
+        + sp4(150, 34, r=11, fill="#EFC143", stroke="#C98A1A") + sp4(62, 146, r=8, fill="#EFC143", stroke="#C98A1A")
     ), (239, 193, 67))
     return [
-        ("Nụ Cúc Ngại Ngùng", s0),
-        ("Chạm Nhẹ Má Hồng", s1),
-        ("Hoa Cúc Đầu Nở", s2),
-        ("Áp Má Cười Hiền", s3),
-        ("Nháy Mắt Duyên Dáng", s4),
-        ("Rạng Rỡ Hoa Cúc!", s5),
+        ("Thấy Hoa Cúc", s0),
+        ("Cúi Nhặt Hoa", s1),
+        ("Ngắm Hoa Cúc", s2),
+        ("Cài Lên Tai", s3),
+        ("Áp Má Nháy Mắt", s4),
+        ("Hoa Cúc Rạng Rỡ", s5),
     ]
 
 
 # =========================================================================== #
-#  #79 — LOTSO BUNNY HEADBAND SELFCARE (CHUBBY BEAR + BUNNY SPA ROUTINE!)
+#  #79 — LOTSO BUNNY HEADBAND SELFCARE (SNUG HEADBAND + CURVED ARMS!)
 # =========================================================================== #
 def _bunny_phone(cx=150, cy=212, s=1.0) -> str:
     return (
@@ -1079,58 +1249,75 @@ def _bunny_phone(cx=150, cy=212, s=1.0) -> str:
     )
 
 
-def _lavender_headband(cx=150, cy=68, bouncy=False, rot=0) -> str:
-    ang = 28 if bouncy else 16
+def _lavender_headband(cx=150, cy=70, bouncy=False, rot=0) -> str:
+    """Snug plush lavender bunny headband hugging Lotso's crown neatly between his bear ears!"""
+    ang = 26 if bouncy else 16
     return (
         f'<g transform="translate({cx},{cy}) rotate({rot})">'
-        f'<ellipse cx="-26" cy="-26" rx="13" ry="30" transform="rotate(-{ang} -26 -26)" fill="#CFA0CB" stroke="{OL}" stroke-width="3.4"/>'
-        f'<ellipse cx="-26" cy="-24" rx="6.5" ry="19" transform="rotate(-{ang} -26 -24)" fill="#FBCFE8"/>'
-        f'<ellipse cx="26" cy="-26" rx="13" ry="30" transform="rotate({ang} 26 -26)" fill="#CFA0CB" stroke="{OL}" stroke-width="3.4"/>'
-        f'<ellipse cx="26" cy="-24" rx="6.5" ry="19" transform="rotate({ang} 26 -24)" fill="#FBCFE8"/>'
-        f'<path d="M -56,14 Q -36,-8 0,-10 Q 36,-8 56,14 Q 30,2 0,2 Q -30,2 -56,14 Z" fill="#E3C7F0" stroke="#7A4C9E" stroke-width="3.0"/>'
-        f'<path d="M -2,-4 C -16,-16 -26,-6 -18,4 C -12,10 -4,6 -2,2 Z M 2,-4 C 16,-16 26,-6 18,4 C 12,10 4,6 2,2 Z" fill="#E57294" stroke="{OL}" stroke-width="2.2"/>'
-        f'<circle cx="0" cy="-1" r="5" fill="#F49CB5" stroke="{OL}" stroke-width="2.2"/></g>'
+        f'<ellipse cx="-24" cy="-24" rx="12.5" ry="29" transform="rotate(-{ang} -24 -24)" fill="#CFA0CB" stroke="{OL}" stroke-width="3.3"/>'
+        f'<ellipse cx="-24" cy="-22" rx="6.0" ry="18" transform="rotate(-{ang} -24 -22)" fill="#FBCFE8"/>'
+        f'<ellipse cx="24" cy="-24" rx="12.5" ry="29" transform="rotate({ang} 24 -24)" fill="#CFA0CB" stroke="{OL}" stroke-width="3.3"/>'
+        f'<ellipse cx="24" cy="-22" rx="6.0" ry="18" transform="rotate({ang} 24 -22)" fill="#FBCFE8"/>'
+        f'<path d="M -58,20 C -42,-12 42,-12 58,20 C 34,2 -34,2 -58,20 Z" fill="#E3C7F0" stroke="#7A4C9E" stroke-width="3.0" stroke-linejoin="round"/>'
+        f'<path d="M -2,-2 C -16,-14 -26,-4 -18,6 C -12,12 -4,8 -2,4 Z M 2,-2 C 16,-14 26,-4 18,6 C 12,12 4,8 2,4 Z" fill="#E57294" stroke="{OL}" stroke-width="2.2"/>'
+        f'<circle cx="0" cy="1" r="5" fill="#F49CB5" stroke="{OL}" stroke-width="2.2"/></g>'
     )
 
 
 def build_79_bunny_selfcare() -> list[tuple[str, Image.Image]]:
-    s0 = render_svg(shadow() + bear_body(150, 218, pose="sit", paws="center", lean=-5) + _bunny_phone(148, 212) + bear_head(146, 124, expr="curious", rot=-8))
-    s1 = render_svg(shadow() + bear_body(150, 218, pose="sit", paws="center", lean=5) + bear_head(154, 122, expr="smile", rot=6) + '<g transform="translate(152,218) scale(0.66)">' + _lavender_headband(0, 0) + '</g>')
-    s2 = render_svg(shadow() + bear_body(150, 216, pose="stand", paws="wide_up", lean=-4) + bear_head(148, 124, expr="smile", strong_blush=True, rot=-6) + _lavender_headband(144, 68, rot=-6))
+    s0 = render_svg(
+        shadow() + bear_body(150, 218, pose="sit", paws="none", lean=-4)
+        + _bunny_phone(148, 212)
+        + bear_arm((102, 198), (94, 224), (132, 220), 13.8, 11.8, 10.2)
+        + bear_arm((198, 198), (206, 224), (166, 220), 13.8, 11.8, 10.2)
+        + bear_head(146, 124, expr="curious", rot=-7)
+    )
+    s1 = render_svg(
+        shadow() + bear_body(150, 218, pose="sit", paws="none", lean=4)
+        + '<g transform="translate(152,218) scale(0.64)">' + _lavender_headband(0, 0) + '</g>'
+        + bear_arm((102, 198), (94, 224), (126, 222), 13.8, 11.8, 10.2)
+        + bear_arm((198, 198), (206, 224), (176, 222), 13.8, 11.8, 10.2)
+        + bear_head(154, 122, expr="smile", rot=6)
+    )
+    s2 = render_svg(
+        shadow() + bear_body(150, 216, pose="stand", paws="none", lean=-4)
+        + bear_head(148, 124, expr="smile", strong_blush=True, rot=-6)
+        + _lavender_headband(144, 72, rot=-6)
+        + bear_arm((102, 196), (68, 146), (92, 86), 13.8, 11.8, 10.2)
+        + bear_arm((198, 196), (232, 146), (204, 86), 13.8, 11.8, 10.2)
+    )
     s3 = render_svg(
         shadow() + bear_body(150, 218, pose="sit", paws="down")
-        + bear_head(150, 124, expr="calm_closed", sheet_mask=True) + _lavender_headband(150, 68)
+        + bear_head(150, 124, expr="calm_closed", sheet_mask=True) + _lavender_headband(150, 72)
         + strawberry(46, 134, s=0.76, rot=-14) + strawberry(254, 134, s=0.76, rot=14) + strawberry(250, 224, s=0.72, rot=10)
     )
     s4 = render_svg(
-        shadow() + bear_body(150, 216, pose="walk", paws="wave_r", lean=-8)
-        + bear_head(144, 122, expr="wink", strong_blush=True, rot=-12) + _lavender_headband(136, 68, rot=-12)
+        shadow() + bear_body(150, 216, pose="walk", paws="wave_r", lean=-7)
+        + bear_head(144, 122, expr="wink", strong_blush=True, rot=-10) + _lavender_headband(138, 72, rot=-10)
         + heart(46, 114, s=13, fill="#E11D48", rot=-12) + heart(252, 108, s=13, fill="#E57294", rot=12)
     )
     s5 = with_hero_aura(render_svg(
         shadow(150, 272, 62, 8, op=0.12)
         + bear_body(150, 206, pose="jump", paws="wide_up")
-        + bear_head(150, 116, expr="happy_squint", strong_blush=True, rot=5) + _lavender_headband(152, 60, bouncy=True, rot=5)
+        + bear_head(150, 116, expr="happy_squint", strong_blush=True, rot=5) + _lavender_headband(152, 64, bouncy=True, rot=5)
         + heart(44, 86, s=15, fill="#E57294", rot=-14) + heart(256, 86, s=15, fill="#E11D48", rot=14)
         + heart(48, 198, s=12, fill="#F47294", rot=-10) + sp4(252, 196, r=11, fill="#FDE047", stroke="#93528B")
     ), (147, 82, 139))
     return [
-        ("Lướt Điện Thoại Thỏ", s0),
+        ("Lướt Điện Thoại", s0),
         ("Cầm Bờm Tai Thỏ", s1),
         ("Đeo Bờm Nơ Xinh", s2),
         ("Đắp Mặt Nạ Dâu", s3),
-        ("Nghiêng Đầu Tự Tin", s4),
-        ("Rạng Ngời Self-Care!", s5),
+        ("Tự Tin Nghiêng", s4),
+        ("Rạng Ngời Spa!", s5),
     ]
 
 
 # =========================================================================== #
-#  #80 NEW — LOTSO BERRY GIFT BOX PARTY (REPLACES BERRY SQUAD!)
+#  #80 — LOTSO BERRY GIFT BOX PARTY (CURVED ARMS POPPING OUT & HUGGING CUPCAKE!)
 # =========================================================================== #
 def _gift_box(cx=150, cy=218, lid_mode="closed", s=1.0) -> str:
-    """Blush-pink gift box with cream ribbon bow (closed / ajar / open!)."""
     parts = [f'<g transform="translate({cx},{cy}) scale({s})">']
-    # Box base
     parts.append(
         f'<rect x="-66" y="-22" width="132" height="72" rx="10" fill="#F9B4C8" stroke="{OL}" stroke-width="3.8"/>'
         f'<rect x="-14" y="-22" width="28" height="72" fill="#FFF3DC" stroke="{OL}" stroke-width="2.4"/>'
@@ -1139,7 +1326,6 @@ def _gift_box(cx=150, cy=218, lid_mode="closed", s=1.0) -> str:
         parts.append(
             f'<rect x="-74" y="-44" width="148" height="24" rx="7" fill="#F396B4" stroke="{OL}" stroke-width="3.8"/>'
             f'<rect x="-14" y="-44" width="28" height="24" fill="#FFF3DC" stroke="{OL}" stroke-width="2.4"/>'
-            # Cream ribbon bow on top!
             f'<path d="M -2,-44 C -24,-68 -44,-54 -34,-42 C -26,-34 -10,-40 -2,-44 Z M 2,-44 C 24,-68 44,-54 34,-42 C 26,-34 10,-40 2,-44 Z" fill="#FFF3DC" stroke="{OL}" stroke-width="3.0"/>'
             f'<circle cx="0" cy="-44" r="7" fill="#FDE7A9" stroke="{OL}" stroke-width="2.6"/>'
         )
@@ -1176,9 +1362,8 @@ def _strawberry_cupcake(cx=150, cy=212, s=1.0) -> str:
 
 
 def build_80_gift_box() -> list[tuple[str, Image.Image]]:
-    # S0: Closed blush-pink gift box with cream ribbon — just 2 plush bear ears & eyes peeking out!
     s0 = render_svg(
-        shadow(150, 270, 82, 10)
+        shadow(150, 270, 80, 10)
         + f'<circle cx="108" cy="144" r="19" fill="{FUR}" stroke="{OL}" stroke-width="4.0"/><circle cx="109" cy="145" r="10" fill="{CREAM}"/>'
         + f'<circle cx="192" cy="144" r="19" fill="{FUR}" stroke="{OL}" stroke-width="4.0"/><circle cx="191" cy="145" r="10" fill="{CREAM}"/>'
         + f'<ellipse cx="150" cy="170" rx="54" ry="26" fill="{FUR}" stroke="{OL}" stroke-width="4.0"/>'
@@ -1186,43 +1371,38 @@ def build_80_gift_box() -> list[tuple[str, Image.Image]]:
         + f'<circle cx="168" cy="166" r="5.5" fill="{EYE}"/><circle cx="166" cy="164" r="2.0" fill="#FFFFFF"/>'
         + _gift_box(150, 218, lid_mode="closed")
     )
-    # S1: Pushing box lid ajar, chubby paws gripping box rim curiously!
     s1 = render_svg(
-        shadow(150, 270, 82, 10)
+        shadow(150, 270, 80, 10)
         + bear_head(150, 148, scale=0.88, expr="curious", rot=6)
         + _gift_box(150, 218, lid_mode="tilted")
-        + f'<ellipse cx="104" cy="194" rx="18" ry="13" fill="{FUR}" stroke="{OL}" stroke-width="3.6"/>'
-        + f'<ellipse cx="196" cy="194" rx="18" ry="13" fill="{FUR}" stroke="{OL}" stroke-width="3.6"/>'
+        + bear_arm((106, 188), (94, 198), (112, 198), 12.5, 11.0, 9.8, seamless_shoulder=False)
+        + bear_arm((194, 188), (206, 198), (188, 198), 12.5, 11.0, 9.8, seamless_shoulder=False)
     )
-    # S2: Popping halfway out of gift box wearing pastel party hat!
     s2 = render_svg(
-        shadow(150, 270, 82, 10)
+        shadow(150, 270, 80, 10)
         + bear_body(150, 194, pose="hidden", paws="wide_up", lean=-4)
         + bear_head(146, 122, scale=0.92, expr="smile", strong_blush=True, rot=-6)
         + _party_hat(140, 62, rot=-8)
         + _gift_box(150, 224, lid_mode="open")
         + sp4(56, 86, r=9) + sp4(246, 90, r=9)
     )
-    # S3: Stepping completely out hugging strawberry cupcake with lit candle!
     s3 = render_svg(
         shadow() + bear_body(150, 216, pose="sit", paws="none")
         + _strawberry_cupcake(150, 216, s=1.08)
-        + f'<ellipse cx="110" cy="214" rx="20" ry="15" transform="rotate(18 110 214)" fill="{FUR}" stroke="{OL}" stroke-width="3.8"/>'
-        + f'<ellipse cx="190" cy="214" rx="20" ry="15" transform="rotate(-18 190 214)" fill="{FUR}" stroke="{OL}" stroke-width="3.8"/>'
+        + bear_arm((102, 198), (94, 224), (128, 220), 13.8, 11.8, 10.2)
+        + bear_arm((198, 198), (206, 224), (172, 220), 13.8, 11.8, 10.2)
         + bear_head(150, 122, expr="sparkle_eyes", strong_blush=True, rot=4)
         + _party_hat(154, 62, rot=6)
     )
-    # S4: Making a wish with happy squint eyes as gold stars & hearts pop!
     s4 = render_svg(
-        shadow() + bear_body(150, 216, pose="sit", paws="none", lean=-5)
+        shadow() + bear_body(150, 216, pose="sit", paws="none", lean=-4)
         + _strawberry_cupcake(148, 216, s=1.10)
-        + f'<ellipse cx="108" cy="214" rx="20" ry="15" transform="rotate(16 108 214)" fill="{FUR}" stroke="{OL}" stroke-width="3.8"/>'
-        + f'<ellipse cx="188" cy="214" rx="20" ry="15" transform="rotate(-16 188 214)" fill="{FUR}" stroke="{OL}" stroke-width="3.8"/>'
-        + bear_head(146, 122, expr="happy_squint", strong_blush=True, rot=-8)
-        + _party_hat(138, 62, rot=-10)
+        + bear_arm((102, 198), (94, 224), (126, 220), 13.8, 11.8, 10.2)
+        + bear_arm((198, 198), (206, 224), (170, 220), 13.8, 11.8, 10.2)
+        + bear_head(146, 122, expr="happy_squint", strong_blush=True, rot=-7)
+        + _party_hat(138, 62, rot=-9)
         + star5(52, 82, r=12) + star5(248, 86, r=13) + heart(50, 178, s=11, fill="#F396B4") + heart(250, 178, s=11, fill="#C43E67")
     )
-    # S5: Jumping arms wide celebrating beside open gift box, cupcake & confetti shower!
     s5 = with_hero_aura(render_svg(
         shadow(150, 272, 74, 9, op=0.12)
         + _gift_box(66, 242, lid_mode="open", s=0.58)
@@ -1238,14 +1418,50 @@ def build_80_gift_box() -> list[tuple[str, Image.Image]]:
         ("Đẩy Nắp Tò Mò", s1),
         ("Chui Ra Mũ Tiệc", s2),
         ("Ôm Bánh Cupcake", s3),
-        ("Nhắm Mắt Ước Nguyện", s4),
-        ("Nhảy Mừng Confetti!", s5),
+        ("Ước Nguyện Xinh", s4),
+        ("Nhảy Confetti!", s5),
     ]
 
 
 # =========================================================================== #
-#  MAIN GENERATOR + CONTACT SHEET (`previews/assets_contact_sheet_lotso.png`)
+#  CONTACT SHEET RENDERER WITH HARD 10PX NON-OVERLAP BOUNDING-BOX ASSERTION!
 # =========================================================================== #
+def _draw_fitted_label(
+    draw: ImageDraw.ImageDraw,
+    x: int,
+    y: int,
+    text: str,
+    max_right_x: int,
+    fill: tuple[int, int, int],
+    font_path: str = "C:/Windows/Fonts/segoeuib.ttf",
+) -> None:
+    max_w = max_right_x - x
+    for sz in (13, 12, 11, 10):
+        try:
+            f = ImageFont.truetype(font_path, sz)
+        except Exception:
+            f = ImageFont.load_default()
+        w = draw.textlength(text, font=f)
+        if w <= max_w:
+            draw.text((x, y), text, fill=fill, font=f)
+            bbox = draw.textbbox((x, y), text, font=f)
+            assert bbox[2] <= max_right_x, f"Text {text!r} right={bbox[2]} > max_right={max_right_x}"
+            return
+
+    try:
+        f = ImageFont.truetype(font_path, 11)
+    except Exception:
+        f = ImageFont.load_default()
+    words = text.split()
+    mid = max(1, len(words) // 2)
+    l1, l2 = " ".join(words[:mid]), " ".join(words[mid:])
+    for i, line in enumerate((l1, l2)):
+        ly = y - 3 + i * 14
+        draw.text((x, ly), line, fill=fill, font=f)
+        bbox = draw.textbbox((x, ly), line, font=f)
+        assert bbox[2] <= max_right_x, f"Wrapped text {line!r} right={bbox[2]} > max_right={max_right_x}"
+
+
 def main():
     builders = [
         ("lotso_strawberry",     build_71_strawberry),
@@ -1280,7 +1496,7 @@ def main():
             hashes.add(h)
             total += 1
         results[slug] = stages
-        print(f"  [LOTSO v4] {slug:24s} -> 6 chubby dynamic 300x300 RGBA PNGs saved")
+        print(f"  [LOTSO v4.1] {slug:24s} -> 6 natural-arm 300x300 RGBA PNGs saved")
 
     print(f"Total Lotso sprites saved: {total}/60 (100% unique SHA-256 hashes!)")
 
@@ -1297,8 +1513,8 @@ def main():
         ("80. Berry Gift Box Party",  "lotso_gift_box",       (255, 246, 249), (196, 62, 103)),
     ]
 
-    cell_w, cell_h = 204, 272
-    left_w, pad, hdr_h = 248, 18, 84
+    cell_w, cell_h = 228, 276
+    left_w, pad, hdr_h = 246, 18, 84
     W = pad * 2 + left_w + cell_w * 6
     H = pad * 2 + hdr_h + cell_h * len(rows)
 
@@ -1308,20 +1524,20 @@ def main():
         f_title = ImageFont.truetype("C:/Windows/Fonts/segoeuib.ttf", 27)
         f_sub = ImageFont.truetype("C:/Windows/Fonts/segoeui.ttf", 15.5)
         f_row = ImageFont.truetype("C:/Windows/Fonts/segoeuib.ttf", 15)
-        f_lbl = ImageFont.truetype("C:/Windows/Fonts/segoeuib.ttf", 13)
         f_tiny = ImageFont.truetype("C:/Windows/Fonts/segoeui.ttf", 11)
     except Exception:
-        f_title = f_sub = f_row = f_lbl = f_tiny = ImageFont.load_default()
+        f_title = f_sub = f_row = f_tiny = ImageFont.load_default()
 
     draw.rectangle([0, 0, W, hdr_h], fill=(196, 62, 103))
-    draw.text((pad, 14), "LOTSO CHUBBY PLUSH BEAR COLLECTION — #71–#80 (DYNAMIC • 60 UNIQUE SPRITES)", fill=(255, 255, 255), font=f_title)
-    draw.text((pad, 50), "Chubby Plush Teddy Bear Silhouette • New #72 Milk Cafe & #80 Gift Box Party • Transparent 300x300 RGBA • 162px + 44px Preview", fill=(255, 243, 220), font=f_sub)
+    draw.text((pad, 14), "LOTSO CHUBBY PLUSH BEAR COLLECTION — #71–#80 (v4.1 NATURAL ARMS • 60 SPRITES)", fill=(255, 255, 255), font=f_title)
+    draw.text((pad, 50), "Seamless Curved Plush Bear Arms • Rebuilt #77 Flower Picking & #78 Daisy Walk • Transparent 300x300 RGBA • 0/60 Overlaps", fill=(255, 243, 220), font=f_sub)
 
     pcts = ["0%", "20%", "40%", "60%", "80%", "100% MAX"]
+    verified_cells = 0
     for r_i, (title, slug, bg_c, acc_c) in enumerate(rows):
         y0 = hdr_h + pad + r_i * cell_h
         draw.rounded_rectangle([pad, y0 + 4, W - pad, y0 + cell_h - 6], radius=14, fill=bg_c, outline=acc_c, width=2)
-        draw.text((pad + 14, y0 + 114), title, fill=acc_c, font=f_row)
+        draw.text((pad + 14, y0 + 116), title, fill=acc_c, font=f_row)
         for s_i, (lbl, im) in enumerate(results[slug]):
             x0 = pad + left_w + s_i * cell_w
             is_f = (s_i == 5)
@@ -1334,18 +1550,27 @@ def main():
             sheet.paste(big, (x0 + (cell_w - 162) // 2, y0 + 16), big)
 
             small = im.resize((44, 44), Image.LANCZOS)
-            sx, sy = x0 + cell_w - 56, y0 + 182
-            draw.rounded_rectangle([sx - 3, sy - 3, sx + 47, sy + 47], radius=6, fill=(255, 250, 252), outline=(230, 214, 220), width=1)
+            sx, sy = x0 + cell_w - 58, y0 + 184
+            frame_left_x = sx - 4
+            draw.rounded_rectangle([frame_left_x, sy - 4, sx + 48, sy + 48], radius=6, fill=(255, 250, 252), outline=(230, 214, 220), width=1)
             sheet.paste(small, (sx, sy), small)
 
-            draw.text((x0 + 12, y0 + 184), f"S{s_i} • {pcts[s_i]}", fill=acc_c, font=f_tiny)
-            draw.text((x0 + 12, y0 + 206), lbl, fill=(87, 34, 52), font=f_lbl)
-            draw.text((sx + 6, sy + 49), "44px", fill=(160, 138, 146), font=f_tiny)
+            # Strict minimum 10px clearance between right edge of text and left edge of 44px preview frame!
+            max_text_right = frame_left_x - 10
+            stage_tag = f"S{s_i} • {pcts[s_i]}"
+            draw.text((x0 + 14, y0 + 186), stage_tag, fill=acc_c, font=f_tiny)
+            tb_tag = draw.textbbox((x0 + 14, y0 + 186), stage_tag, font=f_tiny)
+            assert tb_tag[2] <= max_text_right, f"Stage tag overlap on {slug} S{s_i}"
 
+            _draw_fitted_label(draw, x0 + 14, y0 + 208, lbl, max_text_right, (87, 34, 52))
+            draw.text((sx + 7, sy + 50), "44px", fill=(160, 138, 146), font=f_tiny)
+            verified_cells += 1
+
+    assert verified_cells == 60
     PREVIEWS_DIR.mkdir(parents=True, exist_ok=True)
     out_path = PREVIEWS_DIR / "assets_contact_sheet_lotso.png"
     sheet.save(out_path, "PNG", optimize=True)
-    print(f"  [PREVIEW] Saved {out_path} ({sheet.size[0]}x{sheet.size[1]})")
+    print(f"  [PREVIEW] Saved {out_path} ({sheet.size[0]}x{sheet.size[1]}) | 0/60 label overlaps verified (>=10px gap)!")
 
 
 if __name__ == "__main__":
