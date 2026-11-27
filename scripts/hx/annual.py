@@ -86,19 +86,19 @@ def build_yearly_goals_v21(wb, styles: Styles, ws_calc, year: int = 2026,
 
     ty = t.typo
     en_opt = ty.en_optics
-    disp_f = ty.display_en if universal else t.font_title
+    disp_f = ty.display_caps if universal else t.font_title
     vn_f = ty.title_vn if universal else t.font_title
     num_f = ty.num_font if universal else t.font_title
 
     cv.row(0, 10)
-    cv.row(1, 38 + en_opt.rh_boost if universal else 36)   # Title banner + Year selector pill (I2)
+    cv.row(1, 40 if universal else 36)   # Title banner + Year selector pill (I2)
     cv.row(2, 10)
     cv.row(3, 28 if universal else 26)
     cv.row(4, 24)
 
     cv.merge(1, 1, 1, 5, f"{t.emoji}  YEARLY GOALS & HABITS PLANNER", font_name=disp_f,
-             font_size=(min(21.0, 16.0 + en_opt.size_delta * 0.75) if universal else 15),
-             bold=(en_opt.bold if universal else True), italic=(en_opt.italic if universal else False),
+             font_size=(16.5 if universal else 15),
+             bold=True, italic=(ty.caps_italic if universal else False),
              align="center", bg_color=t.primary, font_color=t.on_primary)
     cv.box(1, 1, 1, 5, t.line)
 
@@ -195,8 +195,8 @@ def build_yearly_goals_v21(wb, styles: Styles, ws_calc, year: int = 2026,
     # Sidebar: DYNAMIC `YOU HAVE PLANTED:` hero card
     rp = r_cur + 1
     cv.merge(rp, 7, rp, 8, f"{t.emoji}  YOU HAVE PLANTED:", font_name=disp_f,
-             bold=(en_opt.bold if universal else True), italic=(en_opt.italic if universal else False),
-             font_size=(min(13.5, 10.5 + en_opt.size_delta * 0.5) if universal else 10), align="center",
+             bold=True, italic=(ty.caps_italic if universal else False),
+             font_size=(10.5 if universal else 10), align="center",
              bg_color=t.primary, font_color=t.on_primary)
     cv.merge(rp + 1, 7, rp + 3, 7, f"={yg_done_ref}", bold=True,
              font_size=28, align="center", bg_color=t.card, font_color=t.primary_dark,
@@ -661,10 +661,10 @@ def build_annual_achievements_sheet(
     })
 
     # Right Achievements Counter Card (L33:N42 -> cols 11..13, rows 32..41)
-    cnt_f = vn_f if (universal and has_vietnamese(lore["counter"])) else disp_f
+    cnt_f = vn_f if (universal and has_vietnamese(lore["counter"])) else (ty.display_caps if universal else t.font_title)
     cv.merge(r_b0, 11, r_b0, 13, lore["counter"], font_name=(cnt_f if universal else None),
-             bold=(en_opt.bold if (universal and cnt_f == disp_f) else True),
-             italic=(en_opt.italic if (universal and cnt_f == disp_f) else False),
+             bold=True,
+             italic=(ty.caps_italic if (universal and cnt_f == ty.display_caps) else False),
              font_size=(10 if universal else 9.5), align="center",
              bg_color=t.primary, font_color=t.on_primary)
     unlocked_expr = f'COUNTIF($H${r_b_first + 1}:$H${r_b_last + 1},">=1")'

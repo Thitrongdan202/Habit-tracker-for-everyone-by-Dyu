@@ -443,14 +443,15 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
     ty = t.typo
     en_opt = ty.en_optics
     disp_f = ty.display_en if spec.universal else t.font_title
+    caps_f = ty.display_caps if spec.universal else t.font_title
     num_f = ty.num_font if spec.universal else t.font_title
     vn_f = ty.title_vn if spec.universal else t.font_title
     cv.box(R_BAND0, C_NAME, R_BAND1, C_NAME, t.line, fill=t.card)
-    tag_f = vn_f if (spec.universal and has_vietnamese(spec.label_tag)) else disp_f
-    cv.put(R_BAND0, C_NAME, f"{t.emoji}  {spec.label_tag}", bold=(en_opt.bold if tag_f == disp_f else True),
-           italic=(en_opt.italic if tag_f == disp_f else False),
+    tag_f = vn_f if (spec.universal and has_vietnamese(spec.label_tag)) else caps_f
+    cv.put(R_BAND0, C_NAME, f"{t.emoji}  {spec.label_tag}", bold=True,
+           italic=(ty.caps_italic if spec.universal and tag_f == caps_f else False),
            font_name=(tag_f if spec.universal else None),
-           font_size=(min(11.5, 9.0 + en_opt.size_delta * 0.4) if spec.universal else 8.5),
+           font_size=(9.5 if spec.universal else 8.5),
            align="center", font_color=t.primary_dark, bg_color=t.card)
 
     month_name_disp = MONTHS_EN[spec.fixed_month - 1] if spec.fixed_month else spec.month
@@ -617,11 +618,11 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
 
     # ------------------------------------------------------------------ growth row
     cv.box(R_IMG, C_NAME, R_PCT, C_NAME, t.line, fill=t.card)
-    g_f = vn_f if (spec.universal and has_vietnamese(spec.garden_label)) else disp_f
-    g_sz = min(15.5, 11.5 + en_opt.size_delta * 0.55) if (spec.universal and g_f == disp_f) else (12.0 if spec.universal else 11)
+    g_f = vn_f if (spec.universal and has_vietnamese(spec.garden_label)) else caps_f
+    g_sz = 11.5 if spec.universal else 11
     cv.put(R_IMG, C_NAME, f"{t.emoji}  {spec.garden_label}",
-           bold=(en_opt.bold if (spec.universal and g_f == disp_f) else True),
-           italic=(en_opt.italic if (spec.universal and g_f == disp_f) else (ty.title_vn_italic if spec.universal else False)),
+           bold=True,
+           italic=(ty.caps_italic if (spec.universal and g_f == caps_f) else (ty.title_vn_italic if spec.universal else False)),
            font_size=g_sz, align="center", bg_color=t.card, font_color=t.primary_dark, font_name=g_f)
     for r, lab, is_b in ((R_DONE, "COMPLETED  ✓", True), (R_NOT, "NOT COMPLETED", False), (R_PCT, "% COMPLETED", True)):
         cv.put(r, C_NAME, lab, align="right", font_size=8.5, bold=is_b,

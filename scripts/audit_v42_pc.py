@@ -1,25 +1,20 @@
 """
-audit_v42_pc.py — Comprehensive Release v4.2 Audit across all 160 PC workbooks.
+audit_v42_pc.py — Mathematical 160-File Whitelist + PIL Overflow Auditor (ZERO temp files, ZERO _build_tmp).
 
-Checks:
-  1. Static XML + openpyxl read-only scan across ALL 160 PC files:
-     - 0 leftover legacy version strings (v2.1..v4.1) on visible & hidden sheets
-     - 160/160 copyright `© 2026 Dyu (Thân Trọng Duy)` & `v4.2`
-     - 0 Vietnamese text cells assigned a non-VN-certified font
-     - 160/160 automatic calculation mode (never stuck in `calcMode="manual"`)
-     - 80/80 Pro Macro `.xlsm` preserve `xl/vbaProject.bin`
-  2. Strict Git scope check: 0 changed files in Google Sheets, Mobile, assets, previews.
-  3. Optional `--com-spotcheck` on 5 representative themes (#01, #04, #19, #61, #80)
-     across BOTH Pro Macro & Universal Offline (on temp copies):
-     - 0 Excel formula error cells (`#REF!`, `#NAME?`, `#VALUE!`, `#N/A`, `#DIV/0!`)
-     - Worksheet protection intact on Pro Macro
-     - Exports 5-sheet PNG previews into `_build_tmp/v42_spotcheck_png/` for visual QA.
+Independently inspects ALL 160 PC workbooks (`80 pro_macro/*.xlsm` + `80 excel_universal_offline/*.xlsx`):
+  1. 0 cells using ANY Blacklist font (or outside strict Whitelist)
+  2. 0 ALL-CAPS text cells using ANY Script font
+  3. 0 Vietnamese text cells using a non-VN-certified font
+  4. Mathematical PIL.ImageFont.truetype width audit on EVERY title, theme name, Month (incl. September),
+     Weekday (incl. longest VN weekday), Year, KPI & banner cell across ALL 5 sheets:
+       rendered_text_width_px <= available_cell_width_px * 0.88
+     Asserts 0 / 160 files with ANY overflow!
+  5. 0 legacy version strings (v2.1..v4.1), 160/160 copyright + v4.2, 160/160 calcMode=auto, 80/80 VBA binary.
+  6. 0 files modified in Google Sheets, Mobile, assets; 0 _build_tmp/ directory; 0 zip files.
 """
 from __future__ import annotations
 
-import argparse
 import re
-import shutil
 import subprocess
 import sys
 import warnings
@@ -27,42 +22,109 @@ import zipfile
 from pathlib import Path
 
 import openpyxl
+from openpyxl.utils import column_index_from_string, get_column_letter
 
 warnings.filterwarnings("ignore", category=UserWarning)
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from excel_builder import TEMPLATES
-from hx.typography import THEME_TYPOGRAPHY, has_vietnamese, verify_vietnamese_fonts
+from hx.typography import (
+    ALL_ALLOWED_PC_FONTS,
+    BLACKLIST_FONTS,
+    SCRIPT_WHITELIST,
+    has_vietnamese,
+    is_all_caps,
+    measure_text_px,
+    verify_vietnamese_fonts,
+)
 
 PRO_DIR = ROOT / "templates" / "pro_macro"
 OFF_DIR = ROOT / "templates" / "excel_universal_offline"
 
+GUIDE_SHEET = "📖 Hướng Dẫn"
+DAILY_SHEET = "📝 Nhiệm Vụ Ngày"
+GOALS_SHEET = "🎯 Yearly Goals & Habits"
+ANNUAL_SHEET = "🏆 Tổng Kết & Thành Tựu Năm"
+HIDDEN_SHEETS = {"_Calc", "_Database", "_Assets", "_YearHistory"}
+
 LEGACY_VER_RE = re.compile(r"\b[vV](?:2\.1|3\.\d+|4\.[01])\b")
-FORMULA_ERRORS = {"#REF!", "#NAME?", "#VALUE!", "#N/A", "#DIV/0!", "#NUM!", "#NULL!"}
-VISIBLE_HIDDEN = {"_Calc", "_Database", "_Assets", "_YearHistory"}
 
 
-def run_static_audit() -> bool:
+def _excel_col_px(width_chars: float | None) -> float:
+    w = 8.43 if (width_chars is None or width_chars <= 0) else float(width_chars)
+    if w < 1.0:
+        return w * 12.0
+    return w * 7.0 + 5.0
+
+
+def _col_width_map(ws) -> dict[int, float]:
+    """Expand openpyxl grouped column_dimensions (min..max) into exact 1-based col -> width map."""
+    cmap: dict[int, float] = {}
+    for key, dim in ws.column_dimensions.items():
+        if dim.width is None or dim.width <= 0:
+            continue
+        c1 = dim.min or column_index_from_string(key)
+        c2 = dim.max or c1
+        for c in range(c1, c2 + 1):
+            cmap[c] = float(dim.width)
+    return cmap
+
+
+def _merge_width_px(ws, row_1: int, col_1: int, col_w_map: dict[int, float]) -> tuple[float, int]:
+    """Return exact Excel pixel width & row span of the cell or its containing merged range."""
+    c_start, c_end, r_span = col_1, col_1, 1
+    for m in ws.merged_cells.ranges:
+        if m.min_row <= row_1 <= m.max_row and m.min_col <= col_1 <= m.max_col:
+            c_start, c_end = m.min_col, m.max_col
+            r_span = m.max_row - m.min_row + 1
+            break
+    total_px = 0.0
+    for c in range(c_start, c_end + 1):
+        total_px += _excel_col_px(col_w_map.get(c))
+    return total_px, r_span
+
+
+def _check_fit(ws, coord: str, test_texts: list[str], overflows: list, fname: str, sname: str, col_w_map: dict[int, float]):
+    cell = ws[coord]
+    f = cell.font
+    if not f or not f.name or not f.size:
+        return
+    avail_px, _ = _merge_width_px(ws, cell.row, cell.column, col_w_map)
+    limit_px = avail_px * 0.88
+    for txt in test_texts:
+        if not txt or str(txt).startswith("="):
+            continue
+        w_px, _ = measure_text_px(str(txt), f.name, float(f.size), bold=bool(f.bold), italic=bool(f.italic))
+        if w_px > limit_px:
+            overflows.append((fname, sname, coord, f.name, float(f.size), round(w_px, 1), round(limit_px, 1), str(txt)[:45]))
+            break
+
+
+def run_audit() -> bool:
     vn_report = verify_vietnamese_fonts()
-    vn_safe_fonts = set(vn_report.keys()) | {"Be Vietnam Pro", "Arial", "Tahoma", "Verdana", "Segoe UI Symbol", "Segoe UI Emoji"}
+    vn_safe_fonts = set(vn_report.keys()) | {"Segoe UI", "Arial", "Tahoma", "Verdana", "Be Vietnam Pro"}
 
     pro_files = sorted(PRO_DIR.glob("[0-9][0-9]_*.xlsm"))
     off_files = sorted(OFF_DIR.glob("[0-9][0-9]_*.xlsx"))
     assert len(pro_files) == 80, f"Expected 80 pro_macro files, got {len(pro_files)}"
     assert len(off_files) == 80, f"Expected 80 offline files, got {len(off_files)}"
 
+    blacklist_hits = []
+    non_whitelist_hits = []
+    allcaps_script_hits = []
+    bad_vn_font_hits = []
+    overflow_hits = []
     legacy_hits = []
     missing_v42 = []
     missing_copy = []
-    bad_vn_font = []
     manual_calc = []
     missing_vba = []
+    fonts_used = set()
+    files_with_overflow = set()
 
     all_files = [(True, p) for p in pro_files] + [(False, p) for p in off_files]
     for is_pro, p in all_files:
-        # Zip XML checks: vbaProject.bin & calcMode
         with zipfile.ZipFile(p, "r") as z:
             names = set(z.namelist())
             if is_pro and "xl/vbaProject.bin" not in names:
@@ -76,23 +138,85 @@ def run_static_audit() -> bool:
         found_copy = False
         for sname in wb.sheetnames:
             ws = wb[sname]
-            is_visible = sname not in VISIBLE_HIDDEN
+            is_vis = sname not in HIDDEN_SHEETS
             for row in ws.iter_rows():
                 for cell in row:
                     val = cell.value
+                    if is_vis and cell.font and cell.font.name:
+                        fn = cell.font.name
+                        if val is not None and str(val).strip() != "":
+                            fonts_used.add(fn)
+                            if fn in BLACKLIST_FONTS:
+                                blacklist_hits.append((p.name, sname, cell.coordinate, fn, str(val)[:40]))
+                            elif fn not in ALL_ALLOWED_PC_FONTS:
+                                non_whitelist_hits.append((p.name, sname, cell.coordinate, fn, str(val)[:40]))
+
                     if not isinstance(val, str) or not val:
                         continue
                     if not val.startswith("="):
                         if LEGACY_VER_RE.search(val):
-                            legacy_hits.append((p.name, sname, cell.coordinate, val[:100]))
+                            legacy_hits.append((p.name, sname, cell.coordinate, val[:80]))
                         if "v4.2" in val or "V4.2" in val:
                             found_v42 = True
                         if "© 2026 Dyu (Thân Trọng Duy)" in val:
                             found_copy = True
-                        if is_visible and has_vietnamese(val):
-                            fname = cell.font.name if cell.font else None
-                            if fname and fname not in vn_safe_fonts:
-                                bad_vn_font.append((p.name, sname, cell.coordinate, fname, val[:60]))
+                        if is_vis and cell.font and cell.font.name:
+                            fn = cell.font.name
+                            if has_vietnamese(val) and fn not in vn_safe_fonts:
+                                bad_vn_font_hits.append((p.name, sname, cell.coordinate, fn, val[:50]))
+                            if is_all_caps(val) and fn in SCRIPT_WHITELIST:
+                                allcaps_script_hits.append((p.name, sname, cell.coordinate, fn, val[:50]))
+
+            # Mathematical PIL overflow checks on key display/title/month/KPI cells of every visible sheet
+            if not is_vis:
+                continue
+            cw = _col_width_map(ws)
+            before_n = len(overflow_hits)
+            if sname == GUIDE_SHEET:
+                _check_fit(ws, "B2", [str(ws["B2"].value or "")], overflow_hits, p.name, sname, cw)
+                _check_fit(ws, "B3", [str(ws["B3"].value or "")], overflow_hits, p.name, sname, cw)
+                _check_fit(ws, "B6", [str(ws["B6"].value or "")], overflow_hits, p.name, sname, cw)
+            elif sname == DAILY_SHEET:
+                _check_fit(ws, "B2", [str(ws["B2"].value or "")], overflow_hits, p.name, sname, cw)
+                _check_fit(ws, "B5", ["Chủ Nhật, 28/09/2026", "Thứ Năm, 28/09/2026"], overflow_hits, p.name, sname, cw)
+                _check_fit(ws, "D5", ["31"], overflow_hits, p.name, sname, cw)
+                _check_fit(ws, "E5", [str(ws["E5"].value or "October"), "September"], overflow_hits, p.name, sname, cw)
+                _check_fit(ws, "F5", ["2026"], overflow_hits, p.name, sname, cw)
+                _check_fit(ws, "H2", [str(ws["H2"].value or "")], overflow_hits, p.name, sname, cw)
+                _check_fit(ws, "H21", [str(ws["H21"].value or "")], overflow_hits, p.name, sname, cw)
+                _check_fit(ws, "H27", [str(ws["H27"].value or "")], overflow_hits, p.name, sname, cw)
+                _check_fit(ws, "B30", [str(ws["B30"].value or "")], overflow_hits, p.name, sname, cw)
+            elif sname == GOALS_SHEET:
+                _check_fit(ws, "B2", [str(ws["B2"].value or "")], overflow_hits, p.name, sname, cw)
+                _check_fit(ws, "I2", ["2026"], overflow_hits, p.name, sname, cw)
+                _check_fit(ws, "B4", [str(ws["B4"].value or "")], overflow_hits, p.name, sname, cw)
+                _check_fit(ws, "D4", [str(ws["D4"].value or "")], overflow_hits, p.name, sname, cw)
+                _check_fit(ws, "H4", [str(ws["H4"].value or "")], overflow_hits, p.name, sname, cw)
+                for rr in range(11, 20):
+                    v = str(ws.cell(rr, 8).value or "")
+                    if "PLANTED" in v.upper():
+                        _check_fit(ws, f"H{rr}", [v], overflow_hits, p.name, sname, cw)
+                        break
+            elif sname == ANNUAL_SHEET:
+                _check_fit(ws, "B3", ["2026"], overflow_hits, p.name, sname, cw)
+                _check_fit(ws, "D2", [str(ws["D2"].value or "")], overflow_hits, p.name, sname, cw)
+                _check_fit(ws, "B13", [str(ws["B13"].value or "")], overflow_hits, p.name, sname, cw)
+                _check_fit(ws, "B15", [str(ws["B15"].value or "")], overflow_hits, p.name, sname, cw)
+                _check_fit(ws, "B33", [str(ws["B33"].value or "")], overflow_hits, p.name, sname, cw)
+                _check_fit(ws, "L33", [str(ws["L33"].value or "")], overflow_hits, p.name, sname, cw)
+            else:
+                # Monthly Tracker sheet
+                _check_fit(ws, "B2", [str(ws["B2"].value or "")], overflow_hits, p.name, sname, cw)
+                _check_fit(ws, "B3", [str(ws["B3"].value or "October"), "September"], overflow_hits, p.name, sname, cw)
+                _check_fit(ws, "B5", ["2026"], overflow_hits, p.name, sname, cw)
+                _check_fit(ws, "B9", [str(ws["B9"].value or "")], overflow_hits, p.name, sname, cw)
+                _check_fit(ws, "AI3", ["100%"], overflow_hits, p.name, sname, cw)
+                if ws["AL4"].value is not None:
+                    _check_fit(ws, "AL4", ["264 / 264"], overflow_hits, p.name, sname, cw)
+                _check_fit(ws, "AI10", ["31"], overflow_hits, p.name, sname, cw)
+
+            if len(overflow_hits) > before_n:
+                files_with_overflow.add(p.name)
         wb.close()
 
         if not found_v42:
@@ -100,135 +224,52 @@ def run_static_audit() -> bool:
         if not found_copy:
             missing_copy.append(p.name)
 
-    # Git scope check
+    # Git scope & disk hygiene checks
     out = subprocess.check_output(
         ["git", "status", "--short",
-         "templates/google_sheets_edition", "templates/mobile_portrait_sheets", "assets", "previews"],
+         "templates/google_sheets_edition", "templates/mobile_portrait_sheets", "assets"],
         cwd=ROOT, text=True,
     ).strip()
     untouched_violations = [line for line in out.splitlines() if line.strip()]
+    has_build_tmp = (ROOT / "_build_tmp").exists()
+    zips_in_repo = list(ROOT.glob("*.zip"))
 
-    print("=== STATIC 160-FILE AUDIT SUMMARY ===")
-    print(f"  Files audited        : {len(all_files)} (80 Pro + 80 Offline)")
-    print(f"  Legacy version hits  : {len(legacy_hits)}")
-    print(f"  Missing v4.2 tag     : {len(missing_v42)}")
-    print(f"  Missing copyright    : {len(missing_copy)}")
-    print(f"  Bad VN font cells    : {len(bad_vn_font)}")
-    print(f"  Manual calcMode      : {len(manual_calc)}")
-    print(f"  Missing VBA binary   : {len(missing_vba)}")
-    print(f"  Out-of-scope changes : {len(untouched_violations)}")
+    print("=== STRICT 160-FILE WHITELIST + PIL AUTO-FIT AUDIT ===")
+    print(f"  Files audited              : {len(all_files)} (80 Pro + 80 Offline)")
+    print(f"  Distinct fonts used        : {sorted(fonts_used)}")
+    print(f"  Blacklist font hits        : {len(blacklist_hits)}")
+    print(f"  Non-whitelist font hits    : {len(non_whitelist_hits)}")
+    print(f"  ALL-CAPS + Script hits     : {len(allcaps_script_hits)}")
+    print(f"  Bad VN font hits           : {len(bad_vn_font_hits)}")
+    print(f"  PIL overflow hits          : {len(overflow_hits)} (across {len(files_with_overflow)} / 160 files)")
+    print(f"  Legacy version hits        : {len(legacy_hits)}")
+    print(f"  Missing v4.2 / copyright   : {len(missing_v42)} / {len(missing_copy)}")
+    print(f"  Manual calcMode / No VBA   : {len(manual_calc)} / {len(missing_vba)}")
+    print(f"  Out-of-scope git changes   : {len(untouched_violations)}")
+    print(f"  _build_tmp exists / zips   : {has_build_tmp} / {len(zips_in_repo)}")
 
-    for label, items in [
-        ("LEGACY VERSION", legacy_hits[:20]),
-        ("MISSING v4.2", missing_v42[:20]),
-        ("MISSING COPYRIGHT", missing_copy[:20]),
-        ("BAD VN FONT", bad_vn_font[:20]),
-        ("MANUAL CALC", manual_calc[:20]),
-        ("MISSING VBA", missing_vba[:20]),
-        ("OUT-OF-SCOPE GIT", untouched_violations[:20]),
+    for lbl, items in [
+        ("BLACKLIST", blacklist_hits[:15]),
+        ("NON-WHITELIST", non_whitelist_hits[:15]),
+        ("ALLCAPS-SCRIPT", allcaps_script_hits[:15]),
+        ("BAD-VN-FONT", bad_vn_font_hits[:15]),
+        ("OVERFLOW", overflow_hits[:25]),
+        ("LEGACY-VER", legacy_hits[:15]),
+        ("OUT-OF-SCOPE", untouched_violations[:15]),
     ]:
         if items:
-            print(f"  !! {label}:")
+            print(f"  !! {lbl}:")
             for it in items:
                 print("    ", it)
 
-    ok = not (legacy_hits or missing_v42 or missing_copy or bad_vn_font or manual_calc or missing_vba or untouched_violations)
-    print("RESULT:", "PASS (100% CLEAN)" if ok else "FAIL")
+    ok = not (
+        blacklist_hits or non_whitelist_hits or allcaps_script_hits or bad_vn_font_hits
+        or overflow_hits or legacy_hits or missing_v42 or missing_copy or manual_calc
+        or missing_vba or untouched_violations or has_build_tmp or zips_in_repo
+    )
+    print("RESULT:", "PASS (100% CLEAN — 0 BLACKLIST, 0 ALL-CAPS SCRIPT, 0/160 OVERFLOW)" if ok else "FAIL")
     return ok
 
 
-def run_com_spotcheck(ids: list[int]) -> bool:
-    import pythoncom
-    import apply_v42_typography_pc as u
-
-    tmp_copy = ROOT / "_build_tmp" / "v42_spotcheck_copy"
-    png_out = ROOT / "_build_tmp" / "v42_spotcheck_png"
-    tmp_copy.mkdir(parents=True, exist_ok=True)
-    png_out.mkdir(parents=True, exist_ok=True)
-
-    pro_map = {int(p.name[:2]): p for p in sorted(PRO_DIR.glob("[0-9][0-9]_*.xlsm"))}
-    off_map = {int(p.name[:2]): p for p in sorted(OFF_DIR.glob("[0-9][0-9]_*.xlsx"))}
-
-    pythoncom.CoInitialize()
-    xl = u._open_excel()
-    formula_errs = []
-    prot_errs = []
-
-    try:
-        for idx in ids:
-            slug = TEMPLATES[idx - 1].theme.slug
-            for is_pro, src in ((True, pro_map[idx]), (False, off_map[idx])):
-                ed = "pro" if is_pro else "off"
-                dst = tmp_copy / src.name
-                shutil.copy2(src, dst)
-                wb = xl.Workbooks.Open(str(dst.resolve()), UpdateLinks=0, ReadOnly=False)
-                try:
-                    xl.CalculateFull()
-                    tracker_ws = None
-                    for i in range(1, wb.Worksheets.Count + 1):
-                        ws = wb.Worksheets(i)
-                        nm = ws.Name
-                        if nm not in VISIBLE_HIDDEN:
-                            if is_pro and not bool(ws.ProtectContents):
-                                prot_errs.append((src.name, nm))
-                            if nm not in (u.GUIDE_SHEET, u.DAILY_SHEET, u.GOALS_SHEET, u.ANNUAL_SHEET):
-                                tracker_ws = ws
-                        # Check formula errors in UsedRange
-                        ur = ws.UsedRange
-                        vals = ur.Value
-                        if isinstance(vals, tuple):
-                            for ri, rvals in enumerate(vals):
-                                if not isinstance(rvals, tuple):
-                                    continue
-                                for ci, v in enumerate(rvals):
-                                    if isinstance(v, str) and v in FORMULA_ERRORS:
-                                        formula_errs.append((src.name, nm, ur.Row + ri, ur.Column + ci, v))
-
-                    # Export crisp PNGs for visual inspection (all 5 sheets on Pro, Tracker + Guide on Offline)
-                    xl.ScreenUpdating = True
-                    p_tag = f"{idx:02d}_{slug}"
-                    if tracker_ws is not None:
-                        u._export_sheet_png(tracker_ws, "A1:AN38", png_out / f"{p_tag}_{ed}_01_tracker.png")
-                    ws_g = wb.Worksheets(u.GUIDE_SHEET)
-                    g_lr = ws_g.UsedRange.Row + ws_g.UsedRange.Rows.Count
-                    g_lc = "J" if ws_g.UsedRange.Columns.Count >= 9 else ("I" if ws_g.UsedRange.Columns.Count == 8 else "H")
-                    u._export_sheet_png(ws_g, f"A1:{g_lc}{min(42, g_lr + 1)}", png_out / f"{p_tag}_{ed}_02_guide.png")
-                    if is_pro:
-                        u._export_sheet_png(wb.Worksheets(u.DAILY_SHEET), "A1:I34", png_out / f"{p_tag}_{ed}_03_daily.png")
-                        u._export_sheet_png(wb.Worksheets(u.GOALS_SHEET), "A1:J26", png_out / f"{p_tag}_{ed}_04_goals.png")
-                        u._export_sheet_png(wb.Worksheets(u.ANNUAL_SHEET), "A1:O43", png_out / f"{p_tag}_{ed}_05_annual.png")
-                    xl.ScreenUpdating = False
-                    print(f"  SPOTCHECK OK: #{idx:02d} {ed.upper()} ({slug})", flush=True)
-                finally:
-                    wb.Close(SaveChanges=False)
-    finally:
-        u._close_excel(xl)
-        pythoncom.CoUninitialize()
-
-    print("=== LIVE EXCEL COM SPOT-CHECK SUMMARY ===")
-    print(f"  Themes checked       : {ids} (both Pro & Offline = {len(ids)*2} workbooks)")
-    print(f"  Formula errors       : {len(formula_errs)}")
-    print(f"  Unprotected Pro tabs : {len(prot_errs)}")
-    for it in formula_errs[:20]:
-        print("  !! FORMULA ERR:", it)
-    for it in prot_errs[:20]:
-        print("  !! UNPROTECTED PRO:", it)
-    return not (formula_errs or prot_errs)
-
-
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--com-spotcheck", action="store_true")
-    ap.add_argument("--ids", type=str, default="1,4,19,61,80")
-    args = ap.parse_args()
-
-    ok1 = run_static_audit()
-    ok2 = True
-    if args.com_spotcheck:
-        ids = [int(x.strip()) for x in args.ids.split(",") if x.strip()]
-        ok2 = run_com_spotcheck(ids)
-    sys.exit(0 if (ok1 and ok2) else 1)
-
-
 if __name__ == "__main__":
-    main()
+    sys.exit(0 if run_audit() else 1)

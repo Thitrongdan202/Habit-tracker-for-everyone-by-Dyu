@@ -26,6 +26,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import xlsxwriter
 
 from hx.core import Theme, Styles, Canvas, acell, colname, MONTHS_EN
+from hx.typography import THEME_TYPOGRAPHY, get_typography
 from hx.guide import build_guide, GUIDE_SHEET
 from hx.tracker import (Habit, TrackerSpec, TrackerRefs, build_tracker, init_calc_sheet,
                         _sample_matrix_v2, CALC_SHEET, R_IMG, R_TOT, day_col,
