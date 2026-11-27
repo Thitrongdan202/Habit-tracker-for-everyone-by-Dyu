@@ -64,13 +64,256 @@ def with_hero_aura(im: Image.Image, rgb: tuple[int, int, int], cy: int = 152, al
 
 
 # =========================================================================== #
-#  NATURAL TAPERED BEZIER ARM ENGINE (ZERO OVAL BLOBS, ZERO ARMPIT SEAM!)
+#  v4.1 3-LAYER SEAMLESS SILHOUETTE ARM ENGINE (48-STEP CURVATURE-CLAMPED)
 # =========================================================================== #
 def _norm(dx: float, dy: float) -> tuple[float, float]:
     d = math.hypot(dx, dy)
     if d < 1e-6:
         return (0.0, -1.0)
     return (dx / d, dy / d)
+
+
+def _to_local(pt: tuple[float, float], cx: float, cy: float, lean_deg: float) -> tuple[float, float]:
+    dx, dy = pt[0] - cx, pt[1] - cy
+    rad = math.radians(-lean_deg)
+    ca, sa = math.cos(rad), math.sin(rad)
+    return (dx * ca - dy * sa, dx * sa + dy * ca)
+
+
+def _clamp_shoulder_local(
+    p0: tuple[float, float],
+    p1: tuple[float, float],
+    p2: tuple[float, float],
+    rx: float,
+    ry: float,
+) -> tuple[tuple[float, float], tuple[float, float], tuple[float, float]]:
+    """Pulls arm shoulder anchor deep inside upper torso interior (ZERO shoulder bumps/horns/gaps)."""
+    lx, ly = p0
+    side = -1.0 if lx < 0 else 1.0
+    nx0 = side * max(rx * 0.24, min(abs(lx), rx * 0.46))
+    ny0 = max(-ry * 0.34, min(ly, -ry * 0.10))
+    np0 = (nx0, ny0)
+    # Prevent degenerate zero-length shoulder-to-elbow segment
+    np1 = p1
+    if math.hypot(p1[0] - nx0, p1[1] - ny0) < 12.0:
+        np1 = (nx0 + side * 14.0, ny0 + 12.0)
+    return np0, np1, p2
+
+
+def _smooth_poly(pts: list[tuple[float, float]], passes: int = 3) -> list[tuple[float, float]]:
+    cur = list(pts)
+    n = len(cur)
+    for _ in range(passes):
+        nxt = [cur[0]]
+        for i in range(1, n - 1):
+            nxt.append((
+                0.25 * cur[i - 1][0] + 0.5 * cur[i][0] + 0.25 * cur[i + 1][0],
+                0.25 * cur[i - 1][1] + 0.5 * cur[i][1] + 0.25 * cur[i + 1][1],
+            ))
+        nxt.append(cur[-1])
+        cur = nxt
+    return cur
+
+
+def _enforce_monotonic(
+    pts: list[tuple[float, float]],
+    tangents: list[tuple[float, float]],
+) -> list[tuple[float, float]]:
+    """Prevents concave inner-offset self-intersection loops on tight elbow bends."""
+    out = [pts[0]]
+    for i in range(1, len(pts)):
+        px, py = out[-1]
+        cx, cy = pts[i]
+        tx, ty = tangents[i]
+        dot = (cx - px) * tx + (cy - py) * ty
+        if dot < 0.0:
+            # Project forward gently along tangent to eliminate any backward cusp
+            cx = cx - dot * tx + 0.35 * tx
+            cy = cy - dot * ty + 0.35 * ty
+        out.append((cx, cy))
+    return out
+
+
+def _sample_arm_mesh(
+    p0: tuple[float, float],
+    p1: tuple[float, float],
+    p2: tuple[float, float],
+    w0: float,
+    w1: float,
+    w2: float,
+    steps: int = 48,
+    body_ref: tuple[float, float] = (0.0, 4.0),
+) -> dict:
+    """Builds a high-density 48-step curvature-clamped tapered Bezier tube."""
+    x0, y0 = p0
+    x1, y1 = p1
+    x2, y2 = p2
+    centers: list[tuple[float, float]] = []
+    tangents: list[tuple[float, float]] = []
+    normals: list[tuple[float, float]] = []
+    left_pts: list[tuple[float, float]] = []
+    right_pts: list[tuple[float, float]] = []
+
+    ddx = 2.0 * (x0 - 2.0 * x1 + x2)
+    ddy = 2.0 * (y0 - 2.0 * y1 + y2)
+
+    for i in range(steps + 1):
+        t = i / steps
+        omt = 1.0 - t
+        bx = omt * omt * x0 + 2.0 * omt * t * x1 + t * t * x2
+        by = omt * omt * y0 + 2.0 * omt * t * y1 + t * t * y2
+        dx = 2.0 * omt * (x1 - x0) + 2.0 * t * (x2 - x1)
+        dy = 2.0 * omt * (y1 - y0) + 2.0 * t * (y2 - y1)
+        spd = math.hypot(dx, dy)
+        tx, ty = _norm(dx, dy)
+        nx, ny = -ty, tx
+        # Quadratic width taper
+        w = omt * omt * w0 + 2.0 * omt * t * w1 + t * t * w2
+        # Signed curvature kappa; clamp concave inner offset so elbow NEVER pinches
+        kappa = (dx * ddy - dy * ddx) / max(spd ** 3, 1e-5)
+        w_left = w
+        w_right = w
+        if abs(kappa) > 1e-4:
+            max_r = 0.78 / abs(kappa)
+            if kappa > 0:
+                w_left = min(w_left, max_r)
+            else:
+                w_right = min(w_right, max_r)
+        centers.append((bx, by))
+        tangents.append((tx, ty))
+        normals.append((nx, ny))
+        left_pts.append((bx + nx * w_left, by + ny * w_left))
+        right_pts.append((bx - nx * w_right, by - ny * w_right))
+
+    left_pts = _smooth_poly(_enforce_monotonic(left_pts, tangents), passes=4)
+    right_pts = _smooth_poly(_enforce_monotonic(right_pts, tangents), passes=4)
+
+    # Rounded mitten paw cap at t = 1.0 (14 smooth arc samples, left -> tip -> right)
+    tx2, ty2 = tangents[-1]
+    nx2, ny2 = normals[-1]
+    tip_cap: list[tuple[float, float]] = []
+    cap_steps = 14
+    for k in range(1, cap_steps):
+        ang = math.pi * (k / cap_steps)  # 0 = +N (left), pi/2 = +T (tip), pi = -N (right)
+        cn = math.cos(ang)
+        ct = math.sin(ang) * 1.08
+        tip_cap.append((x2 + nx2 * cn * w2 + tx2 * ct * w2, y2 + ny2 * cn * w2 + ty2 * ct * w2))
+
+    # Rounded shoulder root cap at t = 0.0 (8 smooth arc samples, compact inside torso!)
+    tx0, ty0 = tangents[0]
+    nx0, ny0 = normals[0]
+    root_cap: list[tuple[float, float]] = []
+    root_steps = 8
+    for k in range(1, root_steps):
+        ang = math.pi * (k / root_steps)  # 0 = -N (right), pi/2 = -T (back), pi = +N (left)
+        cn = -math.cos(ang)
+        ct = -math.sin(ang) * 0.62
+        root_cap.append((x0 + nx0 * cn * w0 + tx0 * ct * w0, y0 + ny0 * cn * w0 + ty0 * ct * w0))
+
+    # Determine which side is INNER (closer to torso center) vs OUTER (shoulder/elbow side)
+    chk = steps // 4
+    dl = math.hypot(left_pts[chk][0] - body_ref[0], left_pts[chk][1] - body_ref[1])
+    dr = math.hypot(right_pts[chk][0] - body_ref[0], right_pts[chk][1] - body_ref[1])
+    inner_is_right = dr < dl
+
+    def _pts_d(pts: list[tuple[float, float]], close: bool = False) -> str:
+        segs = [f"M {pts[0][0]:.1f},{pts[0][1]:.1f}"]
+        segs.extend(f"L {px:.1f},{py:.1f}" for px, py in pts[1:])
+        if close:
+            segs.append("Z")
+        return " ".join(segs)
+
+    full_poly = left_pts + tip_cap + list(reversed(right_pts)) + root_cap
+    full_d = _pts_d(full_poly, close=True)
+
+    def sub_fill_d(t_start: float) -> str:
+        idx = max(1, min(steps - 2, int(round(t_start * steps))))
+        # Gentle inward-rounded back cap across the tube at idx so fill blends invisibly
+        cx_i, cy_i = centers[idx]
+        tx_i, ty_i = tangents[idx]
+        l_i, r_i = left_pts[idx], right_pts[idx]
+        mid_back = (
+            0.5 * (l_i[0] + r_i[0]) - tx_i * 4.5,
+            0.5 * (l_i[1] + r_i[1]) - ty_i * 4.5,
+        )
+        poly = left_pts[idx:] + tip_cap + list(reversed(right_pts[idx:])) + [mid_back]
+        return _pts_d(poly, close=True)
+
+    def sub_stroke_d(t_in: float, t_out: float) -> str:
+        i_in = max(1, min(steps - 1, int(round(t_in * steps))))
+        i_out = max(1, min(steps - 1, int(round(t_out * steps))))
+        if inner_is_right:
+            # Start on inner (right) -> tip (reversed) -> outer (left) back to i_out
+            pts = right_pts[i_in:] + list(reversed(tip_cap)) + list(reversed(left_pts[i_out:]))
+        else:
+            # Start on inner (left) -> tip -> outer (right) back to i_out
+            pts = left_pts[i_in:] + tip_cap + list(reversed(right_pts[i_out:]))
+        return _pts_d(pts, close=False)
+
+    return {
+        "full_d": full_d,
+        "sub_fill_d": sub_fill_d,
+        "sub_stroke_d": sub_stroke_d,
+        "p2": p2,
+        "t2": tangents[-1],
+        "n2": normals[-1],
+        "w2": w2,
+    }
+
+
+def _fingers_svg(mesh: dict) -> str:
+    x2, y2 = mesh["p2"]
+    t2x, t2y = mesh["t2"]
+    n2x, n2y = mesh["n2"]
+    w2 = mesh["w2"]
+    fx1 = x2 + t2x * (w2 * 0.62) + n2x * (w2 * 0.30)
+    fy1 = y2 + t2y * (w2 * 0.62) + n2y * (w2 * 0.30)
+    fx2 = x2 + t2x * (w2 * 0.62) - n2x * (w2 * 0.30)
+    fy2 = y2 + t2y * (w2 * 0.62) - n2y * (w2 * 0.30)
+    return (
+        f'<circle cx="{fx1:.1f}" cy="{fy1:.1f}" r="1.9" fill="{PAW}"/>'
+        f'<circle cx="{fx2:.1f}" cy="{fy2:.1f}" r="1.9" fill="{PAW}"/>'
+    )
+
+
+def arm_spec(
+    p0: tuple[float, float],
+    p1: tuple[float, float],
+    p2: tuple[float, float],
+    w0: float = 11.0,
+    w1: float = 9.2,
+    w2: float = 7.6,
+    fill: str | None = None,
+    stroke: str = OL,
+    sw: float = 3.8,
+    fingers: bool = False,
+    layer: str = "front",
+    local: bool = False,
+    t_fill: float = 0.24,
+    t_in: float = 0.28,
+    t_out: float = 0.48,
+    t_oh: float = 0.32,
+) -> dict:
+    return {
+        "p0": p0, "p1": p1, "p2": p2,
+        "w0": w0, "w1": w1, "w2": w2,
+        "fill": fill, "stroke": stroke, "sw": sw,
+        "fingers": fingers, "layer": layer, "local": local,
+        "t_fill": t_fill, "t_in": t_in, "t_out": t_out, "t_oh": t_oh,
+    }
+
+
+def _torso_pear_d(rx: float, ry: float) -> str:
+    """100% C1-continuous plump pear torso (ZERO upper-shoulder corners under chin!)."""
+    top_y = -ry + 4.0
+    mid_y = ry * 0.16
+    return (
+        f"M 0,{top_y:.1f} "
+        f"C {rx * 0.66:.1f},{top_y:.1f} {rx * 1.02:.1f},{-ry * 0.34:.1f} {rx * 1.02:.1f},{mid_y:.1f} "
+        f"C {rx * 1.02:.1f},{ry * 0.68:.1f} {rx * 0.62:.1f},{ry:.1f} 0,{ry:.1f} "
+        f"C {-rx * 0.62:.1f},{ry:.1f} {-rx * 1.02:.1f},{ry * 0.68:.1f} {-rx * 1.02:.1f},{mid_y:.1f} "
+        f"C {-rx * 1.02:.1f},{-ry * 0.34:.1f} {-rx * 0.66:.1f},{top_y:.1f} 0,{top_y:.1f} Z"
+    )
 
 
 def curved_arm(
@@ -82,78 +325,25 @@ def curved_arm(
     w2: float = 8.2,
     fill: str = PINK,
     stroke: str = OL,
-    sw: float = 3.7,
+    sw: float = 3.8,
     fingers: bool = False,
     seamless_shoulder: bool = True,
 ) -> str:
-    """Draws a smooth, organic tapered cartoon arm along Quadratic Bezier P0->P1->P2.
-    - Filled silhouette seamlessly merges into torso when `seamless_shoulder=True`.
-    - Stroked ONLY along upper edge, round hand cap, and lower edge (NO harsh armpit cut!).
-    - Optional tiny soft curved beaver fingers at hand tip!
-    """
-    x0, y0 = p0
-    x1, y1 = p1
-    x2, y2 = p2
-
-    # Sample smooth normals along curve
-    t0x, t0y = _norm(x1 - x0, y1 - y0)
-    t1x, t1y = _norm(x2 - x0, y2 - y0)
-    t2x, t2y = _norm(x2 - x1, y2 - y1)
-
-    n0x, n0y = -t0y, t0x
-    n1x, n1y = -t1y, t1x
-    n2x, n2y = -t2y, t2x
-
-    # Left/outer offset points & right/inner offset points
-    a0 = (x0 + n0x * w0, y0 + n0y * w0)
-    a1 = (x1 + n1x * w1, y1 + n1y * w1)
-    a2 = (x2 + n2x * w2, y2 + n2y * w2)
-
-    b0 = (x0 - n0x * w0, y0 - n0y * w0)
-    b1 = (x1 - n1x * w1, y1 - n1y * w1)
-    b2 = (x2 - n2x * w2, y2 - n2y * w2)
-
-    # Rounded mitten tip cap extending slightly forward along tangent t2
-    cap_ext = w2 * 1.18
-    c1 = (a2[0] + t2x * cap_ext, a2[1] + t2y * cap_ext)
-    c2 = (b2[0] + t2x * cap_ext, b2[1] + t2y * cap_ext)
-
-    # Shoulder tuck point slightly behind p0 so fill never gaps against torso
-    tuck_x, tuck_y = x0 - t0x * 5.0, y0 - t0y * 5.0
-
-    fill_d = (
-        f"M {a0[0]:.1f},{a0[1]:.1f} "
-        f"Q {a1[0]:.1f},{a1[1]:.1f} {a2[0]:.1f},{a2[1]:.1f} "
-        f"C {c1[0]:.1f},{c1[1]:.1f} {c2[0]:.1f},{c2[1]:.1f} {b2[0]:.1f},{b2[1]:.1f} "
-        f"Q {b1[0]:.1f},{b1[1]:.1f} {b0[0]:.1f},{b0[1]:.1f} "
-        f"Q {tuck_x:.1f},{tuck_y:.1f} {a0[0]:.1f},{a0[1]:.1f} Z"
-    )
-
+    """Standalone high-density 48-step curved arm fallback (for non-body callers)."""
+    mesh = _sample_arm_mesh(p0, p1, p2, w0, w1, w2)
     if seamless_shoulder:
-        # Open-base outline: smoothly hugs outside of arm & fingertip without cutting across shoulder!
-        stroke_d = (
-            f"M {a0[0]:.1f},{a0[1]:.1f} "
-            f"Q {a1[0]:.1f},{a1[1]:.1f} {a2[0]:.1f},{a2[1]:.1f} "
-            f"C {c1[0]:.1f},{c1[1]:.1f} {c2[0]:.1f},{c2[1]:.1f} {b2[0]:.1f},{b2[1]:.1f} "
-            f"Q {b1[0]:.1f},{b1[1]:.1f} {b0[0]:.1f},{b0[1]:.1f}"
-        )
         out = (
-            f'<path d="{fill_d}" fill="{fill}" stroke="none"/>'
-            f'<path d="{stroke_d}" fill="none" stroke="{stroke}" stroke-width="{sw}" stroke-linecap="round" stroke-linejoin="round"/>'
+            f'<path d="{mesh["full_d"]}" fill="{fill}" stroke="none"/>'
+            f'<path d="{mesh["sub_stroke_d"](0.24, 0.24)}" fill="none" stroke="{stroke}" '
+            f'stroke-width="{sw}" stroke-linecap="round" stroke-linejoin="round"/>'
         )
     else:
-        out = f'<path d="{fill_d}" fill="{fill}" stroke="{stroke}" stroke-width="{sw}" stroke-linejoin="round"/>'
-
-    if fingers:
-        # Cute subtle tiny dark-berry beaver paw tips (2 small soft dots/ticks)
-        fx1 = x2 + t2x * (w2 * 0.65) + n2x * (w2 * 0.32)
-        fy1 = y2 + t2y * (w2 * 0.65) + n2y * (w2 * 0.32)
-        fx2 = x2 + t2x * (w2 * 0.65) - n2x * (w2 * 0.32)
-        fy2 = y2 + t2y * (w2 * 0.65) - n2y * (w2 * 0.32)
-        out += (
-            f'<circle cx="{fx1:.1f}" cy="{fy1:.1f}" r="1.9" fill="{PAW}"/>'
-            f'<circle cx="{fx2:.1f}" cy="{fy2:.1f}" r="1.9" fill="{PAW}"/>'
+        out = (
+            f'<path d="{mesh["full_d"]}" fill="{fill}" stroke="{stroke}" '
+            f'stroke-width="{sw}" stroke-linejoin="round"/>'
         )
+    if fingers:
+        out += _fingers_svg(mesh)
     return out
 
 
@@ -302,85 +492,157 @@ def loopy_body(
     lean=0,
     coat=PINK,
     belly=True,
+    arms: list[dict] | None = None,
+    mid_props: str = "",
+    head_svg: str = "",
     custom_arms: str = "",
 ) -> str:
-    """Dynamic multi-pose Loopy body with 100% seamless curved Bezier arms!"""
-    parts = [f'<g transform="translate({cx},{cy}) rotate({lean})">']
-    # Feet by pose
-    if pose == "sit":
-        parts.append(_loopy_foot(-33, 34, -18, sit=True) + _loopy_foot(33, 34, 18, sit=True))
-    elif pose == "jump":
-        parts.append(_loopy_foot(-28, 40, -28) + _loopy_foot(28, 40, 28))
-    elif pose == "walk":
-        parts.append(_loopy_foot(-26, 44, -12) + _loopy_foot(26, 36, 22))
-    elif pose == "hover":
-        parts.append(_loopy_foot(-18, 42, 16) + _loopy_foot(18, 42, -16))
-    elif pose == "none_feet":
-        pass
-    else:
-        parts.append(_loopy_foot(-22, 42, -4) + _loopy_foot(22, 42, 4))
+    """v4.1 3-Layer Seamless Silhouette Loopy Body:
+      Layer 1: Unified dark outline (2*sw round join) of C1 pear torso + ALL arms.
+      Layer 2: Unified seamless fill fusing shoulders 100% into torso + cream belly.
+      Mid-Layer: World-space props held in front of torso (`mid_props`).
+      Layer 3: Foreground forearm fill + smooth inner forearm crease (ZERO shoulder spikes!).
+      Head + Over-Head Pass: `head_svg` followed by upper forearms (`layer == 'over_head'`)."""
+    sx_l, sx_r = -rx * 0.54, rx * 0.54
+    sy = -ry * 0.34
+    spec_list: list[dict] = []
 
-    # Plump pear torso tucked smoothly under chin (smooth rounded shoulders, zero square corners)
-    parts.append(
-        f'<path d="M {-rx + 16},-38 '
-        f'C {-rx - 8},-8 {-rx + 6},{ry} 0,{ry} '
-        f'C {rx - 6},{ry} {rx + 8},-8 {rx - 16},-38 '
-        f'Q 0,-46 {-rx + 16},-38 Z" '
-        f'fill="{coat}" stroke="{OL}" stroke-width="3.9" stroke-linejoin="round"/>'
-    )
-    if belly:
-        parts.append(f'<ellipse cx="0" cy="12" rx="{rx * 0.56:.1f}" ry="{ry * 0.66:.1f}" fill="{CREAM}"/>')
-
-    # Natural curved seamless arms (NO detached ellipses!)
-    sx_l, sx_r = -rx + 15, rx - 15
-    sy = -16
     if paws == "down":
-        parts.append(
-            curved_arm((sx_l, sy), (sx_l - 22, sy + 14), (sx_l - 12, sy + 36), 11.5, 9.5, 7.6, fill=coat, fingers=True)
-            + curved_arm((sx_r, sy), (sx_r + 22, sy + 14), (sx_r + 12, sy + 36), 11.5, 9.5, 7.6, fill=coat, fingers=True)
-        )
+        spec_list += [
+            arm_spec((sx_l, sy), (sx_l - 22, sy + 14), (sx_l - 12, sy + 36), 11.4, 9.4, 7.6, fill=coat, fingers=True, layer="front", local=True, t_fill=0.30, t_in=0.30, t_out=0.54),
+            arm_spec((sx_r, sy), (sx_r + 22, sy + 14), (sx_r + 12, sy + 36), 11.4, 9.4, 7.6, fill=coat, fingers=True, layer="front", local=True, t_fill=0.30, t_in=0.30, t_out=0.54),
+        ]
     elif paws == "wide_up":
-        parts.append(
-            curved_arm((sx_l, sy), (sx_l - 26, sy - 6), (sx_l - 34, sy - 32), 11.5, 9.4, 7.6, fill=coat, fingers=True)
-            + curved_arm((sx_r, sy), (sx_r + 26, sy - 6), (sx_r + 34, sy - 32), 11.5, 9.4, 7.6, fill=coat, fingers=True)
-        )
+        spec_list += [
+            arm_spec((sx_l, sy), (sx_l - 26, sy - 6), (sx_l - 34, sy - 32), 11.4, 9.4, 7.6, fill=coat, fingers=True, layer="out", local=True),
+            arm_spec((sx_r, sy), (sx_r + 26, sy - 6), (sx_r + 34, sy - 32), 11.4, 9.4, 7.6, fill=coat, fingers=True, layer="out", local=True),
+        ]
     elif paws == "wave_r":
-        parts.append(
-            curved_arm((sx_l, sy), (sx_l - 20, sy + 16), (sx_l - 10, sy + 34), 11.2, 9.2, 7.5, fill=coat, fingers=True)
-            + curved_arm((sx_r, sy), (sx_r + 28, sy - 6), (sx_r + 34, sy - 34), 11.5, 9.4, 7.6, fill=coat, fingers=True)
-        )
+        spec_list += [
+            arm_spec((sx_l, sy), (sx_l - 20, sy + 16), (sx_l - 10, sy + 34), 11.2, 9.2, 7.5, fill=coat, fingers=True, layer="front", local=True, t_fill=0.30, t_in=0.30, t_out=0.54),
+            arm_spec((sx_r, sy), (sx_r + 28, sy - 6), (sx_r + 34, sy - 34), 11.4, 9.4, 7.6, fill=coat, fingers=True, layer="out", local=True),
+        ]
     elif paws == "wave_l":
-        parts.append(
-            curved_arm((sx_l, sy), (sx_l - 28, sy - 6), (sx_l - 34, sy - 34), 11.5, 9.4, 7.6, fill=coat, fingers=True)
-            + curved_arm((sx_r, sy), (sx_r + 20, sy + 16), (sx_r + 10, sy + 34), 11.2, 9.2, 7.5, fill=coat, fingers=True)
-        )
+        spec_list += [
+            arm_spec((sx_l, sy), (sx_l - 28, sy - 6), (sx_l - 34, sy - 34), 11.4, 9.4, 7.6, fill=coat, fingers=True, layer="out", local=True),
+            arm_spec((sx_r, sy), (sx_r + 20, sy + 16), (sx_r + 10, sy + 34), 11.2, 9.2, 7.5, fill=coat, fingers=True, layer="front", local=True, t_fill=0.30, t_in=0.30, t_out=0.54),
+        ]
     elif paws == "walk_swing":
-        parts.append(
-            curved_arm((sx_l, sy), (sx_l - 22, sy + 14), (sx_l - 24, sy + 30), 11.2, 9.2, 7.5, fill=coat, fingers=True)
-            + curved_arm((sx_r, sy), (sx_r + 26, sy + 2), (sx_r + 16, sy + 24), 11.2, 9.2, 7.5, fill=coat, fingers=True)
-        )
+        spec_list += [
+            arm_spec((sx_l, sy), (sx_l - 22, sy + 14), (sx_l - 24, sy + 30), 11.2, 9.2, 7.5, fill=coat, fingers=True, layer="out", local=True),
+            arm_spec((sx_r, sy), (sx_r + 26, sy + 2), (sx_r + 16, sy + 24), 11.2, 9.2, 7.5, fill=coat, fingers=True, layer="front", local=True, t_fill=0.30, t_in=0.30, t_out=0.54),
+        ]
     elif paws == "shrug":
-        parts.append(
-            curved_arm((sx_l, sy), (sx_l - 24, sy + 8), (sx_l - 30, sy - 14), 11.2, 9.2, 7.6, fill=coat, fingers=True)
-            + curved_arm((sx_r, sy), (sx_r + 24, sy + 8), (sx_r + 30, sy - 14), 11.2, 9.2, 7.6, fill=coat, fingers=True)
-        )
+        spec_list += [
+            arm_spec((sx_l, sy), (sx_l - 24, sy + 8), (sx_l - 30, sy - 14), 11.2, 9.2, 7.6, fill=coat, fingers=True, layer="out", local=True),
+            arm_spec((sx_r, sy), (sx_r + 24, sy + 8), (sx_r + 30, sy - 14), 11.2, 9.2, 7.6, fill=coat, fingers=True, layer="out", local=True),
+        ]
     elif paws == "hug_center":
-        parts.append(
-            curved_arm((sx_l, sy), (sx_l - 16, sy + 20), (-14, sy + 20), 11.0, 9.2, 7.6, fill=coat)
-            + curved_arm((sx_r, sy), (sx_r + 16, sy + 20), (14, sy + 20), 11.0, 9.2, 7.6, fill=coat)
-        )
+        spec_list += [
+            arm_spec((sx_l, sy), (sx_l - 16, sy + 20), (-14, sy + 20), 11.0, 9.2, 7.6, fill=coat, layer="front", local=True, t_fill=0.24, t_in=0.28, t_out=0.48),
+            arm_spec((sx_r, sy), (sx_r + 16, sy + 20), (14, sy + 20), 11.0, 9.2, 7.6, fill=coat, layer="front", local=True, t_fill=0.24, t_in=0.28, t_out=0.48),
+        ]
     elif paws == "panic_flail":
-        parts.append(
-            curved_arm((sx_l, sy), (sx_l - 28, sy - 14), (sx_l - 18, sy - 42), 11.2, 9.2, 7.6, fill=coat, fingers=True)
-            + curved_arm((sx_r, sy), (sx_r + 28, sy + 8), (sx_r + 36, sy - 12), 11.2, 9.2, 7.6, fill=coat, fingers=True)
-        )
-    elif paws == "none":
-        pass
+        spec_list += [
+            arm_spec((sx_l, sy), (sx_l - 28, sy - 14), (sx_l - 18, sy - 42), 11.2, 9.2, 7.6, fill=coat, fingers=True, layer="out", local=True),
+            arm_spec((sx_r, sy), (sx_r + 28, sy + 8), (sx_r + 36, sy - 12), 11.2, 9.2, 7.6, fill=coat, fingers=True, layer="out", local=True),
+        ]
 
+    if arms:
+        spec_list.extend(arms)
+
+    # Convert all arm specs to body-local space, pull shoulders inside torso, build 48-step meshes
+    built_arms: list[tuple[dict, dict]] = []
+    for sp in spec_list:
+        if sp["local"]:
+            lp0, lp1, lp2 = sp["p0"], sp["p1"], sp["p2"]
+        else:
+            lp0 = _to_local(sp["p0"], cx, cy, lean)
+            lp1 = _to_local(sp["p1"], cx, cy, lean)
+            lp2 = _to_local(sp["p2"], cx, cy, lean)
+        lp0, lp1, lp2 = _clamp_shoulder_local(lp0, lp1, lp2, rx, ry)
+        mesh = _sample_arm_mesh(lp0, lp1, lp2, sp["w0"], sp["w1"], sp["w2"])
+        built_arms.append((sp, mesh))
+
+    tf = f'translate({cx},{cy}) rotate({lean})'
+    torso_d = _torso_pear_d(rx, ry)
+    torso_sw = 3.9
+
+    # Group 0: Feet (behind torso)
+    feet_svg = ""
+    if pose == "sit":
+        feet_svg = _loopy_foot(-33, 34, -18, sit=True) + _loopy_foot(33, 34, 18, sit=True)
+    elif pose == "jump":
+        feet_svg = _loopy_foot(-28, 40, -28) + _loopy_foot(28, 40, 28)
+    elif pose == "walk":
+        feet_svg = _loopy_foot(-26, 44, -12) + _loopy_foot(26, 36, 22)
+    elif pose == "hover":
+        feet_svg = _loopy_foot(-18, 42, 16) + _loopy_foot(18, 42, -16)
+    elif pose == "none_feet":
+        feet_svg = ""
+    else:
+        feet_svg = _loopy_foot(-22, 42, -4) + _loopy_foot(22, 42, 4)
+
+    parts: list[str] = []
+    if feet_svg:
+        parts.append(f'<g transform="{tf}">{feet_svg}</g>')
+
+    # Group 1 (Layer 1 — Unified 2*sw Outline) + Group 2 (Layer 2 — Unified Seamless Fill)
+    l1 = [f'<path d="{torso_d}" fill="none" stroke="{OL}" stroke-width="{torso_sw * 2:.1f}" stroke-linejoin="round" stroke-linecap="round"/>']
+    l2 = [f'<path d="{torso_d}" fill="{coat}" stroke="none"/>']
+    for sp, mesh in built_arms:
+        a_fill = sp["fill"] if sp["fill"] is not None else coat
+        l1.append(f'<path d="{mesh["full_d"]}" fill="none" stroke="{sp["stroke"]}" stroke-width="{sp["sw"] * 2:.1f}" stroke-linejoin="round" stroke-linecap="round"/>')
+        l2.append(f'<path d="{mesh["full_d"]}" fill="{a_fill}" stroke="none"/>')
+    if belly:
+        l2.append(f'<ellipse cx="0" cy="12" rx="{rx * 0.56:.1f}" ry="{ry * 0.66:.1f}" fill="{CREAM}"/>')
+
+    parts.append(f'<g transform="{tf}">{"".join(l1)}{"".join(l2)}</g>')
+
+    # Mid-Layer (World Space Props in front of torso/belly)
+    if mid_props:
+        parts.append(mid_props)
+
+    # Group 3 (Layer 3 — Foreground Forearm Fill + Smooth Inner Forearm Crease + Fingers)
+    l3: list[str] = []
+    for sp, mesh in built_arms:
+        a_fill = sp["fill"] if sp["fill"] is not None else coat
+        if sp["layer"] == "front":
+            l3.append(f'<path d="{mesh["sub_fill_d"](sp["t_fill"])}" fill="{a_fill}" stroke="none"/>')
+            l3.append(
+                f'<path d="{mesh["sub_stroke_d"](sp["t_in"], sp["t_out"])}" fill="none" '
+                f'stroke="{sp["stroke"]}" stroke-width="{sp["sw"]:.1f}" stroke-linecap="round" stroke-linejoin="round"/>'
+            )
+            if sp["fingers"]:
+                l3.append(_fingers_svg(mesh))
+        elif sp["layer"] == "out":
+            if sp["fingers"]:
+                l3.append(_fingers_svg(mesh))
     if custom_arms:
-        parts.append(custom_arms)
+        l3.append(custom_arms)
+    if l3:
+        parts.append(f'<g transform="{tf}">{"".join(l3)}</g>')
 
-    parts.append("</g>")
+    # Head Layer (World Space)
+    if head_svg:
+        parts.append(head_svg)
+
+    # Group 4 (Over-Head Pass — Forearm & Paw overlapping cheek/head/hood)
+    l4: list[str] = []
+    for sp, mesh in built_arms:
+        if sp["layer"] == "over_head":
+            a_fill = sp["fill"] if sp["fill"] is not None else coat
+            t_oh = sp["t_oh"]
+            l4.append(f'<path d="{mesh["sub_fill_d"](t_oh)}" fill="{a_fill}" stroke="none"/>')
+            l4.append(
+                f'<path d="{mesh["sub_stroke_d"](t_oh, t_oh)}" fill="none" '
+                f'stroke="{sp["stroke"]}" stroke-width="{sp["sw"]:.1f}" stroke-linecap="round" stroke-linejoin="round"/>'
+            )
+            if sp["fingers"]:
+                l4.append(_fingers_svg(mesh))
+    if l4:
+        parts.append(f'<g transform="{tf}">{"".join(l4)}</g>')
+
     return "".join(parts)
 
 
@@ -596,64 +858,80 @@ def build_61_red_bow() -> list[tuple[str, Image.Image]]:
     # S0 (0%): Meme tilted panic before blank checklist + yellow !!
     s0 = render_svg(
         shadow(150, 268, 66, 9)
-        + loopy_body(142, 218, pose="sit", paws="panic_flail", lean=9)
-        + loopy_head(158, 126, expr="meme_scream", strong_blush=True, rot=16)
+        + loopy_body(
+            142, 218, pose="sit", paws="panic_flail", lean=9,
+            head_svg=loopy_head(158, 126, expr="meme_scream", strong_blush=True, rot=16),
+        )
         + _todo_board(236, 232, checked=0, total=4, rot=10, s=0.82)
         + excl_marks(54, 108, rot=-18, s=1.12)
     )
-    # S1 (20%): Sitting upright, natural curved arms lifting up to cup both cheeks taking deep breath, blank checklist in front
+    # S1 (20%): Sitting upright, natural curved arms lifting up to cup both cheeks taking deep breath
     s1 = render_svg(
         shadow(150, 268, 68, 9)
-        + loopy_body(146, 218, pose="sit", paws="none")
-        + loopy_head(146, 128, expr="calm_closed", blush_hatch=True)
-        + curved_arm((108, 198), (76, 188), (98, 152), 11.2, 9.4, 7.8, fingers=True)
-        + curved_arm((184, 198), (216, 188), (194, 152), 11.2, 9.4, 7.8, fingers=True)
+        + loopy_body(
+            146, 218, pose="sit", paws="none",
+            arms=[
+                arm_spec((118, 202), (76, 188), (98, 152), 11.2, 9.4, 7.8, fingers=True, layer="over_head", t_oh=0.24),
+                arm_spec((174, 202), (216, 188), (194, 152), 11.2, 9.4, 7.8, fingers=True, layer="over_head", t_oh=0.24),
+            ],
+            head_svg=loopy_head(146, 128, expr="calm_closed", blush_hatch=True),
+        )
         + _todo_board(238, 236, checked=0, total=4, rot=8, s=0.76)
         + '<path d="M 224,108 Q 238,100 250,108 M 228,120 Q 242,114 254,120" fill="none" stroke="#7EAAC8" stroke-width="2.8" stroke-linecap="round"/>'
     )
     # S2 (40%): Left curved arm tying big red bow neatly on head, right curved arm holding pen ready!
     s2 = render_svg(
         shadow()
-        + loopy_body(150, 218, pose="stand", paws="none")
-        + loopy_head(150, 128, expr="focused", show_tuft=False)
-        + _red_bow(150, 64, s=1.06)
-        + curved_arm((118, 198), (78, 152), (106, 86), 11.0, 9.0, 7.5, fingers=True)
-        + _pink_pen(218, 166, 246, 140)
-        + curved_arm((182, 198), (220, 192), (222, 162), 11.0, 9.0, 7.5, fingers=True)
+        + loopy_body(
+            150, 218, pose="stand", paws="none",
+            mid_props=_pink_pen(218, 166, 246, 140),
+            arms=[
+                arm_spec((122, 200), (76, 152), (106, 86), 11.0, 9.0, 7.5, fingers=True, layer="over_head", t_oh=0.58),
+                arm_spec((178, 200), (216, 192), (222, 162), 11.0, 9.0, 7.5, fingers=True, layer="front", t_fill=0.34, t_in=0.34, t_out=0.34),
+            ],
+            head_svg=loopy_head(150, 128, expr="focused", show_tuft=False) + _red_bow(150, 64, s=1.06),
+        )
     )
-    # S3 (60%): Leaning focused, ticking items on small checklist board with pen!
+    # S3 (60%): Leaning focused, ticking items on small checklist board with pen (crisp arm over clipboard!)
     s3 = render_svg(
         shadow(144, 268, 66, 9)
-        + loopy_body(142, 218, pose="sit", paws="none", lean=5)
-        + loopy_head(146, 128, expr="sparkle", strong_blush=True, show_tuft=False, rot=6)
-        + _red_bow(152, 64, s=1.02, rot=6)
-        + _todo_board(184, 220, checked=2, total=4, rot=-8, s=0.92)
-        + curved_arm((108, 198), (112, 224), (150, 222), 11.0, 9.2, 7.6)
-        + _pink_pen(176, 216, 212, 192)
-        + curved_arm((182, 196), (218, 212), (200, 200), 11.0, 9.2, 7.6)
+        + loopy_body(
+            142, 218, pose="sit", paws="none", lean=5,
+            mid_props=_todo_board(182, 224, checked=2, total=4, rot=-8, s=0.92) + _pink_pen(172, 218, 210, 194),
+            arms=[
+                arm_spec((116, 200), (106, 226), (144, 224), 11.0, 9.2, 7.6, layer="front", t_fill=0.24, t_in=0.28, t_out=0.48),
+                arm_spec((168, 198), (214, 192), (206, 208), 10.6, 8.8, 7.4, layer="front", t_fill=0.34, t_in=0.34, t_out=0.34),
+            ],
+            head_svg=loopy_head(146, 128, expr="sparkle", strong_blush=True, show_tuft=False, rot=6) + _red_bow(152, 64, s=1.02, rot=6),
+        )
         + sp4(56, 102, r=8)
     )
     # S4 (80%): Rosy joyful smile holding up nearly-completed checklist board, stars popping!
     s4 = render_svg(
         shadow(146, 268, 66, 9)
-        + loopy_body(142, 218, pose="walk", paws="none", lean=-5)
-        + loopy_head(138, 128, expr="wink", strong_blush=True, blush_hatch=True, show_tuft=False, rot=-7)
-        + _red_bow(130, 64, s=1.04, rot=-7)
-        + _todo_board(222, 186, checked=4, total=4, rot=8, s=0.96)
-        + curved_arm((106, 196), (82, 180), (74, 152), 11.0, 9.2, 7.6, fingers=True)
-        + curved_arm((178, 196), (196, 204), (200, 190), 11.0, 9.2, 7.6)
+        + loopy_body(
+            142, 218, pose="walk", paws="none", lean=-5,
+            mid_props=_todo_board(224, 186, checked=4, total=4, rot=8, s=0.96),
+            arms=[
+                arm_spec((114, 198), (82, 180), (74, 152), 11.0, 9.2, 7.6, fingers=True, layer="out"),
+                arm_spec((170, 198), (194, 206), (202, 190), 11.0, 9.2, 7.6, layer="front", t_fill=0.28, t_in=0.30, t_out=0.52),
+            ],
+            head_svg=loopy_head(138, 128, expr="wink", strong_blush=True, blush_hatch=True, show_tuft=False, rot=-7) + _red_bow(130, 64, s=1.04, rot=-7),
+        )
         + sp4(54, 92, r=10) + sp4(250, 114, r=9)
     )
     # S5 (100%): Neat red bow, beaming bucktooth grin raising 100% board + small reward flower & rays!
     s5 = with_hero_aura(render_svg(
         shadow(150, 272, 56, 8, op=0.12)
-        + loopy_body(150, 206, pose="jump", paws="none")
-        + loopy_head(150, 118, expr="big_smile", strong_blush=True, blush_hatch=True, show_tuft=False, rot=-4)
-        + _red_bow(146, 54, s=1.08, rot=-4)
-        + _todo_board(68, 166, rot=-10, s=0.88, badge_100=True)
-        + curved_arm((114, 184), (96, 188), (88, 172), 11.2, 9.2, 7.6)
-        + _small_reward_flower(232, 154, s=1.05, rot=16)
-        + curved_arm((186, 184), (212, 184), (222, 168), 11.2, 9.2, 7.6)
+        + loopy_body(
+            150, 206, pose="jump", paws="none",
+            mid_props=_todo_board(68, 166, rot=-10, s=0.88, badge_100=True) + _small_reward_flower(232, 154, s=1.05, rot=16),
+            arms=[
+                arm_spec((122, 186), (96, 190), (88, 172), 11.2, 9.2, 7.6, layer="front", t_fill=0.30, t_in=0.32, t_out=0.54),
+                arm_spec((178, 186), (210, 184), (222, 168), 11.2, 9.2, 7.6, layer="front", t_fill=0.30, t_in=0.32, t_out=0.54),
+            ],
+            head_svg=loopy_head(150, 118, expr="big_smile", strong_blush=True, blush_hatch=True, show_tuft=False, rot=-4) + _red_bow(146, 54, s=1.08, rot=-4),
+        )
         + sp4(52, 74, r=11) + sp4(248, 76, r=11) + heart(246, 224, s=10, fill="#F6A6B2", stroke="#D85A68")
     ), (246, 166, 178))
     return [
@@ -740,59 +1018,81 @@ def build_62_taiyaki() -> list[tuple[str, Image.Image]]:
     # S0: Hungry holding empty paper bag
     s0 = render_svg(
         shadow(138, 268, 64, 9)
-        + loopy_body(134, 220, pose="sit", paws="none", lean=7)
-        + loopy_head(140, 130, expr="puzzled", rot=10)
-        + curved_arm((100, 202), (82, 220), (114, 228), 10.8, 9.0, 7.4)
-        + _taiyaki_bag(234, 232, has_fish=False, s=0.92)
-        + curved_arm((170, 198), (196, 212), (210, 212), 11.0, 9.0, 7.5)
+        + loopy_body(
+            134, 220, pose="sit", paws="none", lean=7,
+            mid_props=_taiyaki_bag(234, 232, has_fish=False, s=0.92),
+            arms=[
+                arm_spec((106, 202), (86, 220), (114, 228), 10.8, 9.0, 7.4, layer="front", t_fill=0.26, t_in=0.28, t_out=0.48),
+                arm_spec((162, 200), (194, 212), (210, 212), 11.0, 9.0, 7.5, layer="front", t_fill=0.30, t_in=0.32, t_out=0.54),
+            ],
+            head_svg=loopy_head(140, 130, expr="puzzled", rot=10),
+        )
         + '<text x="230" y="192" font-family="Segoe UI" font-weight="bold" font-size="22" fill="#B67638">?</text>'
     )
     # S1: Adjusting Taiyaki fish hat neatly with both curved arms
     s1 = render_svg(
         shadow()
-        + loopy_body(150, 218, pose="stand", paws="none", lean=-4)
-        + _taiyaki_head_in_hood(146, 126, rot=-6, expr="curious")
-        + curved_arm((114, 196), (72, 162), (96, 114), 11.0, 9.0, 7.4, fingers=True)
-        + curved_arm((184, 196), (222, 162), (198, 118), 11.0, 9.0, 7.4, fingers=True)
+        + loopy_body(
+            150, 218, pose="stand", paws="none", lean=-4,
+            arms=[
+                arm_spec((122, 200), (74, 162), (96, 114), 11.0, 9.0, 7.4, fingers=True, layer="over_head", t_oh=0.52),
+                arm_spec((178, 200), (222, 162), (198, 118), 11.0, 9.0, 7.4, fingers=True, layer="over_head", t_oh=0.52),
+            ],
+            head_svg=_taiyaki_head_in_hood(146, 126, rot=-6, expr="curious"),
+        )
     )
     # S2: Walking happily carrying bag with steaming hot Taiyaki!
     s2 = render_svg(
         shadow(136, 268, 64, 9)
-        + loopy_body(134, 216, pose="walk", paws="none", lean=5)
-        + _taiyaki_head_in_hood(138, 124, rot=5, expr="smile")
-        + curved_arm((100, 196), (78, 214), (86, 228), 11.0, 9.0, 7.5, fingers=True)
-        + _taiyaki_bag(234, 226, has_fish=True, s=0.94)
-        + curved_arm((172, 196), (196, 206), (208, 212), 11.0, 9.0, 7.5)
+        + loopy_body(
+            134, 216, pose="walk", paws="none", lean=5,
+            mid_props=_taiyaki_bag(234, 226, has_fish=True, s=0.94),
+            arms=[
+                arm_spec((106, 200), (80, 214), (86, 228), 11.0, 9.0, 7.5, fingers=True, layer="out"),
+                arm_spec((162, 200), (194, 206), (208, 212), 11.0, 9.0, 7.5, layer="front", t_fill=0.34, t_in=0.34, t_out=0.34),
+            ],
+            head_svg=_taiyaki_head_in_hood(138, 124, rot=5, expr="smile"),
+        )
     )
     # S3: Sitting holding steaming bag & 3-color Dango skewer!
     s3 = render_svg(
         shadow(142, 268, 66, 9)
-        + loopy_body(140, 218, pose="sit", paws="none", lean=-3)
-        + _taiyaki_head_in_hood(138, 124, rot=-4, expr="smile")
-        + _dango(108, 192, rot=-18, s=0.95)
-        + curved_arm((106, 198), (94, 218), (112, 212), 10.8, 9.0, 7.5)
-        + _taiyaki_bag(238, 232, has_fish=True, s=0.88)
-        + curved_arm((174, 198), (196, 216), (212, 222), 10.8, 9.0, 7.5)
+        + loopy_body(
+            140, 218, pose="sit", paws="none", lean=-3,
+            mid_props=_dango(88, 194, rot=-18, s=0.95) + _taiyaki_bag(238, 232, has_fish=True, s=0.88),
+            arms=[
+                arm_spec((116, 200), (96, 220), (86, 204), 10.6, 8.8, 7.4, layer="front", t_fill=0.34, t_in=0.34, t_out=0.34),
+                arm_spec((166, 200), (196, 216), (212, 222), 10.8, 9.0, 7.5, layer="front", t_fill=0.34, t_in=0.34, t_out=0.34),
+            ],
+            head_svg=_taiyaki_head_in_hood(138, 124, rot=-4, expr="smile"),
+        )
     )
     # S4: Winking rosy cheeks lifting Dango skewer to nibble!
     s4 = render_svg(
         shadow(148, 268, 66, 9)
-        + loopy_body(148, 218, pose="sit", paws="none", lean=5)
-        + _taiyaki_head_in_hood(152, 124, rot=8, expr="wink", strong_blush=True)
-        + _dango(142, 174, rot=24, s=0.96)
-        + curved_arm((124, 202), (104, 218), (132, 196), 10.6, 9.0, 7.5)
-        + curved_arm((174, 200), (202, 214), (186, 228), 10.6, 9.0, 7.4, fingers=True)
+        + loopy_body(
+            148, 218, pose="sit", paws="none", lean=5,
+            arms=[
+                arm_spec((122, 200), (106, 230), (140, 206), 10.4, 8.6, 7.2, layer="over_head", t_oh=0.46),
+                arm_spec((174, 202), (202, 214), (188, 228), 10.6, 9.0, 7.4, fingers=True, layer="front", t_fill=0.30, t_in=0.34, t_out=0.54),
+            ],
+            head_svg=_taiyaki_head_in_hood(152, 124, rot=8, expr="wink", strong_blush=True) + _dango(146, 174, rot=20, s=0.96),
+        )
         + heart(246, 176, s=11, fill="#93C5FD", stroke="#3B82F6", rot=12)
         + sp4(48, 178, r=10)
     )
     # S5: Beaming happy-squint feast with Dango & full Taiyaki bag!
     s5 = with_hero_aura(render_svg(
         shadow(142, 272, 58, 8, op=0.12)
-        + loopy_body(140, 206, pose="jump", paws="none")
-        + _taiyaki_head_in_hood(140, 114, rot=-5, expr="happy_squint", strong_blush=True)
-        + _dango(82, 160, rot=-22, s=0.96)
-        + curved_arm((106, 186), (88, 192), (88, 176), 11.0, 9.0, 7.5)
-        + curved_arm((176, 186), (206, 176), (216, 152), 11.0, 9.0, 7.5, fingers=True)
+        + loopy_body(
+            140, 206, pose="jump", paws="none",
+            mid_props=_dango(82, 160, rot=-22, s=0.96),
+            arms=[
+                arm_spec((112, 186), (88, 192), (86, 174), 11.0, 9.0, 7.5, layer="front", t_fill=0.30, t_in=0.32, t_out=0.54),
+                arm_spec((168, 186), (204, 176), (216, 152), 11.0, 9.0, 7.5, fingers=True, layer="out"),
+            ],
+            head_svg=_taiyaki_head_in_hood(140, 114, rot=-5, expr="happy_squint", strong_blush=True),
+        )
         + _taiyaki_bag(242, 232, has_fish=True, extra_fish=True, s=0.90)
         + heart(248, 134, s=11, fill="#93C5FD", stroke="#3B82F6", rot=12)
         + sp4(44, 78, r=11) + sp4(248, 72, r=10)
@@ -885,35 +1185,51 @@ def build_63_piggy_cafe() -> list[tuple[str, Image.Image]]:
     )
     s1 = render_svg(
         shadow()
-        + loopy_body(150, 218, pose="stand", paws="none", lean=-4)
-        + _piggy_head_in_hood(146, 120, rot=-5, expr="smile")
-        + curved_arm((114, 196), (76, 166), (92, 124), 11.0, 9.0, 7.4, fingers=True)
-        + curved_arm((184, 196), (220, 166), (202, 124), 11.0, 9.0, 7.4, fingers=True)
+        + loopy_body(
+            150, 218, pose="stand", paws="none", lean=-4,
+            arms=[
+                arm_spec((122, 200), (78, 166), (92, 124), 11.0, 9.0, 7.4, fingers=True, layer="over_head", t_oh=0.54),
+                arm_spec((178, 200), (220, 166), (202, 124), 11.0, 9.0, 7.4, fingers=True, layer="over_head", t_oh=0.54),
+            ],
+            head_svg=_piggy_head_in_hood(146, 120, rot=-5, expr="smile"),
+        )
     )
     s2 = render_svg(
         shadow()
-        + loopy_body(146, 216, pose="walk", paws="none", lean=5)
-        + _piggy_head_in_hood(150, 120, rot=6, expr="smile")
-        + curved_arm((110, 196), (92, 214), (96, 228), 11.0, 9.0, 7.5, fingers=True)
-        + _ice_cream(216, 168, scoops=1, s=1.0, rot=14)
-        + curved_arm((182, 196), (208, 196), (212, 178), 11.0, 9.0, 7.5)
+        + loopy_body(
+            146, 216, pose="walk", paws="none", lean=5,
+            mid_props=_ice_cream(216, 168, scoops=1, s=1.0, rot=14),
+            arms=[
+                arm_spec((118, 198), (94, 214), (96, 228), 11.0, 9.0, 7.5, fingers=True, layer="out"),
+                arm_spec((174, 198), (204, 196), (212, 178), 11.0, 9.0, 7.5, layer="front", t_fill=0.30, t_in=0.32, t_out=0.54),
+            ],
+            head_svg=_piggy_head_in_hood(150, 120, rot=6, expr="smile"),
+        )
     )
     s3 = render_svg(
         shadow()
-        + loopy_body(150, 218, pose="sit", paws="none", lean=-5)
-        + _piggy_head_in_hood(146, 120, rot=-7, expr="wink", strong_blush=True)
-        + _ice_cream(156, 198, scoops=2, s=1.0, rot=-8)
-        + curved_arm((114, 198), (112, 222), (144, 218), 11.0, 9.0, 7.5)
-        + curved_arm((184, 198), (186, 222), (166, 218), 11.0, 9.0, 7.5)
+        + loopy_body(
+            150, 218, pose="sit", paws="none", lean=-5,
+            mid_props=_ice_cream(156, 198, scoops=2, s=1.0, rot=-8),
+            arms=[
+                arm_spec((122, 198), (110, 222), (144, 218), 11.0, 9.0, 7.5, layer="front", t_fill=0.24, t_in=0.28, t_out=0.48),
+                arm_spec((178, 198), (190, 222), (166, 218), 11.0, 9.0, 7.5, layer="front", t_fill=0.24, t_in=0.28, t_out=0.48),
+            ],
+            head_svg=_piggy_head_in_hood(146, 120, rot=-7, expr="wink", strong_blush=True),
+        )
         + sp4(56, 128, r=10, fill="#A6D8EB", stroke="#5EA9C7")
     )
     s4 = render_svg(
         shadow(136, 268, 66, 9)
-        + loopy_body(136, 216, pose="stand", paws="none", lean=5)
-        + _piggy_head_in_hood(140, 120, rot=7, expr="big_smile", strong_blush=True)
-        + _ice_cream(102, 186, scoops=2, s=0.96, rot=-18)
-        + curved_arm((102, 196), (86, 206), (98, 200), 11.0, 9.0, 7.5)
-        + curved_arm((174, 196), (206, 184), (216, 150), 11.0, 9.0, 7.5, fingers=True)
+        + loopy_body(
+            136, 216, pose="stand", paws="none", lean=5,
+            mid_props=_ice_cream(98, 186, scoops=2, s=0.96, rot=-18),
+            arms=[
+                arm_spec((108, 196), (86, 206), (98, 200), 11.0, 9.0, 7.5, layer="front", t_fill=0.26, t_in=0.28, t_out=0.50),
+                arm_spec((164, 196), (204, 184), (216, 150), 11.0, 9.0, 7.5, fingers=True, layer="out"),
+            ],
+            head_svg=_piggy_head_in_hood(140, 120, rot=7, expr="big_smile", strong_blush=True),
+        )
         + _cherry_cake(242, 110, s=0.92)
         + sp4(248, 178, r=10)
     )
@@ -979,18 +1295,24 @@ def build_64_sauna_sheep() -> list[tuple[str, Image.Image]]:
         + _black_glasses_slid(144, 140, rot=-6)
     )
     s1 = render_svg(
-        shadow() + loopy_body(150, 218, pose="stand", paws="none")
-        + loopy_head(150, 126, expr="curious", show_ears=False, show_tuft=False, rot=5)
-        + _sheep_towel(150, 122, rot=5)
-        + curved_arm((114, 196), (76, 164), (92, 128), 11.0, 9.0, 7.5, fingers=True)
-        + curved_arm((186, 196), (224, 164), (208, 128), 11.0, 9.0, 7.5, fingers=True)
+        shadow() + loopy_body(
+            150, 218, pose="stand", paws="none",
+            arms=[
+                arm_spec((122, 200), (78, 164), (92, 128), 11.0, 9.0, 7.5, fingers=True, layer="over_head", t_oh=0.52),
+                arm_spec((178, 200), (222, 164), (208, 128), 11.0, 9.0, 7.5, fingers=True, layer="over_head", t_oh=0.52),
+            ],
+            head_svg=loopy_head(150, 126, expr="curious", show_ears=False, show_tuft=False, rot=5) + _sheep_towel(150, 122, rot=5),
+        )
     )
     s2 = render_svg(
-        shadow() + loopy_body(150, 218, pose="sit", paws="none")
-        + loopy_head(150, 126, expr="calm_closed", strong_blush=True, blush_hatch=True, show_ears=False, show_tuft=False, rot=-5)
-        + _sheep_towel(150, 122, rot=-5)
-        + curved_arm((112, 198), (78, 190), (102, 156), 11.0, 9.2, 7.6, fingers=True)
-        + curved_arm((188, 198), (222, 190), (198, 156), 11.0, 9.2, 7.6, fingers=True)
+        shadow() + loopy_body(
+            150, 218, pose="sit", paws="none",
+            arms=[
+                arm_spec((122, 202), (78, 190), (102, 156), 11.0, 9.2, 7.6, fingers=True, layer="over_head", t_oh=0.24),
+                arm_spec((178, 202), (222, 190), (198, 156), 11.0, 9.2, 7.6, fingers=True, layer="over_head", t_oh=0.24),
+            ],
+            head_svg=loopy_head(150, 126, expr="calm_closed", strong_blush=True, blush_hatch=True, show_ears=False, show_tuft=False, rot=-5) + _sheep_towel(150, 122, rot=-5),
+        )
     )
     s3 = render_svg(
         shadow() + _steam_curls()
@@ -1068,7 +1390,34 @@ def _bee_character(cx=150, cy=150, antennae=False, wings=False, stripes=False, p
         parts.append(_loopy_foot(-20, 96, 18) + _loopy_foot(20, 96, -18))
 
     body_c = "#FDE068" if stripes else "#FEF5B8"
-    parts.append(f'<path d="M -44,24 C -54,66 -36,100 0,100 C 36,100 54,66 44,24 Z" fill="{body_c}" stroke="#7A5C52" stroke-width="3.8"/>')
+    bee_d = (
+        "M 0,18 C 32,18 49,40 48,66 C 47,88 28,100 0,100 "
+        "C -28,100 -47,88 -48,66 C -49,40 -32,18 0,18 Z"
+    )
+    if paws == "up":
+        bee_arms = [
+            _sample_arm_mesh((-30, 42), (-60, 32), (-68, 6), 10.6, 8.8, 7.2, body_ref=(0.0, 62.0)),
+            _sample_arm_mesh((30, 42), (60, 32), (68, 6), 10.6, 8.8, 7.2, body_ref=(0.0, 62.0)),
+        ]
+    elif paws == "hug":
+        bee_arms = [
+            _sample_arm_mesh((-26, 46), (-42, 66), (-18, 66), 10.2, 8.6, 7.4, body_ref=(0.0, 62.0)),
+            _sample_arm_mesh((26, 46), (42, 66), (18, 66), 10.2, 8.6, 7.4, body_ref=(0.0, 62.0)),
+        ]
+    else:
+        bee_arms = [
+            _sample_arm_mesh((-30, 42), (-56, 54), (-46, 74), 10.6, 8.8, 7.2, body_ref=(0.0, 62.0)),
+            _sample_arm_mesh((30, 42), (56, 54), (46, 74), 10.6, 8.8, 7.2, body_ref=(0.0, 62.0)),
+        ]
+
+    # Layer 1: Unified outline of bee body + both pink arms (ZERO shoulder horns/gaps!)
+    parts.append(f'<path d="{bee_d}" fill="none" stroke="#7A5C52" stroke-width="7.6" stroke-linejoin="round" stroke-linecap="round"/>')
+    if paws != "hug":
+        for m in bee_arms:
+            parts.append(f'<path d="{m["full_d"]}" fill="none" stroke="{OL}" stroke-width="7.4" stroke-linejoin="round" stroke-linecap="round"/>')
+        for m in bee_arms:
+            parts.append(f'<path d="{m["full_d"]}" fill="{PINK}" stroke="none"/>')
+    parts.append(f'<path d="{bee_d}" fill="{body_c}" stroke="none"/>')
     if stripes:
         parts.append(
             '<path d="M -45,46 Q 0,58 45,46 L 45,62 Q 0,74 -45,62 Z" fill="#7A5C52"/>'
@@ -1076,23 +1425,14 @@ def _bee_character(cx=150, cy=150, antennae=False, wings=False, stripes=False, p
         )
     if front_prop:
         parts.append(front_prop)
-
-    # Seamless curved arms
-    if paws == "up":
-        parts.append(
-            curved_arm((-36, 40), (-62, 32), (-68, 6), 10.6, 8.8, 7.2, fill=PINK, fingers=True)
-            + curved_arm((36, 40), (62, 32), (68, 6), 10.6, 8.8, 7.2, fill=PINK, fingers=True)
-        )
-    elif paws == "hug":
-        parts.append(
-            curved_arm((-38, 42), (-46, 66), (-18, 66), 10.6, 8.8, 7.4, fill=PINK)
-            + curved_arm((38, 42), (46, 66), (18, 66), 10.6, 8.8, 7.4, fill=PINK)
-        )
+    # Layer 3: For hugging arms, smooth pink forearm + inner crease cleanly tucked inside yellow bee suit!
+    if paws == "hug":
+        for m in bee_arms:
+            parts.append(f'<path d="{m["sub_fill_d"](0.24)}" fill="{PINK}" stroke="none"/>')
+            parts.append(f'<path d="{m["sub_stroke_d"](0.26, 0.34)}" fill="none" stroke="{OL}" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>')
     else:
-        parts.append(
-            curved_arm((-38, 40), (-58, 54), (-48, 74), 10.6, 8.8, 7.2, fill=PINK, fingers=True)
-            + curved_arm((38, 40), (58, 54), (48, 74), 10.6, 8.8, 7.2, fill=PINK, fingers=True)
-        )
+        for m in bee_arms:
+            parts.append(_fingers_svg(m))
 
     # 3-Layer Snug Bee Hood (face completely nested inside rim!)
     parts.append(
@@ -1206,11 +1546,15 @@ def _striped_pool_tube(cx=150, cy=158) -> str:
 
 def build_66_poolside_duck() -> list[tuple[str, Image.Image]]:
     s0 = render_svg(
-        shadow() + loopy_body(144, 218, pose="sit", paws="none", lean=-5)
-        + _duck_float(178, 224, s=0.66, rot=12)
-        + curved_arm((110, 198), (112, 224), (144, 222), 10.8, 9.0, 7.5)
-        + curved_arm((178, 198), (206, 214), (194, 226), 10.8, 9.0, 7.5)
-        + loopy_head(140, 130, expr="curious", rot=-8)
+        shadow() + loopy_body(
+            144, 218, pose="sit", paws="none", lean=-5,
+            mid_props=_duck_float(178, 224, s=0.66, rot=12),
+            arms=[
+                arm_spec((116, 198), (110, 224), (144, 222), 10.8, 9.0, 7.5, layer="front", t_fill=0.24, t_in=0.28, t_out=0.48),
+                arm_spec((172, 198), (206, 214), (194, 226), 10.8, 9.0, 7.5, layer="front", t_fill=0.26, t_in=0.30, t_out=0.50),
+            ],
+            head_svg=loopy_head(140, 130, expr="curious", rot=-8),
+        )
     )
     s1 = render_svg(
         shadow() + loopy_body(150, 214, pose="walk", paws="wide_up", lean=5)
@@ -1234,18 +1578,26 @@ def build_66_poolside_duck() -> list[tuple[str, Image.Image]]:
     # S4 & S5: Curved arms bending naturally behind head lounging on pool ring!
     s4 = render_svg(
         _striped_pool_tube(150, 162)
-        + loopy_body(150, 196, rx=42, ry=36, pose="hover", paws="none", lean=-5)
-        + curved_arm((118, 178), (78, 162), (104, 128), 10.6, 8.8, 7.4)
-        + curved_arm((182, 178), (222, 162), (196, 128), 10.6, 8.8, 7.4)
-        + loopy_head(146, 130, scale=0.82, expr="wink", strong_blush=True, blush_hatch=True, rot=-7)
+        + loopy_body(
+            150, 196, rx=42, ry=36, pose="hover", paws="none", lean=-5,
+            arms=[
+                arm_spec((124, 180), (80, 162), (104, 128), 10.6, 8.8, 7.4, layer="out"),
+                arm_spec((176, 180), (220, 162), (196, 128), 10.6, 8.8, 7.4, layer="out"),
+            ],
+            head_svg=loopy_head(146, 130, scale=0.82, expr="wink", strong_blush=True, blush_hatch=True, rot=-7),
+        )
         + sp4(64, 58, r=12, fill="#FFFFFF", stroke="#6EC6E6") + sp4(242, 64, r=10, fill="#FFFFFF", stroke="#6EC6E6")
     )
     s5 = with_hero_aura(render_svg(
         _striped_pool_tube(150, 158)
-        + loopy_body(150, 194, rx=42, ry=36, pose="hover", paws="none")
-        + curved_arm((118, 176), (78, 158), (106, 124), 10.6, 8.8, 7.4)
-        + curved_arm((182, 176), (222, 158), (194, 124), 10.6, 8.8, 7.4)
-        + loopy_head(150, 128, scale=0.82, expr="calm_closed", strong_blush=True, blush_hatch=True)
+        + loopy_body(
+            150, 194, rx=42, ry=36, pose="hover", paws="none",
+            arms=[
+                arm_spec((124, 178), (80, 158), (106, 124), 10.6, 8.8, 7.4, layer="out"),
+                arm_spec((176, 178), (220, 158), (194, 124), 10.6, 8.8, 7.4, layer="out"),
+            ],
+            head_svg=loopy_head(150, 128, scale=0.82, expr="calm_closed", strong_blush=True, blush_hatch=True),
+        )
         + sp4(62, 54, r=14, fill="#FFFFFF", stroke="#38BDF8") + sp4(240, 58, r=11, fill="#FFFFFF", stroke="#38BDF8")
         + star5(234, 246, r=13, fill="#FFFFFF", stroke="#6EC6E6") + sp4(56, 236, r=10, fill="#FEF08A", stroke="#EAB308")
     ), (110, 198, 230))
@@ -1313,41 +1665,54 @@ def build_67_fluffy_commuter() -> list[tuple[str, Image.Image]]:
         + _fluffy_head_in_hood(144, 128, smiley=False, rot=-8, expr="sleepy")
     )
     s1 = render_svg(
-        shadow() + loopy_body(150, 218, pose="stand", paws="none", lean=4)
-        + _crossbody_bag(150, 218, rot=4)
-        + curved_arm((114, 198), (92, 198), (124, 198), 10.8, 9.0, 7.5)
-        + curved_arm((186, 198), (206, 212), (196, 230), 10.8, 9.0, 7.5, fingers=True)
-        + _fluffy_head_in_hood(152, 124, smiley=True, rot=5, expr="curious")
+        shadow() + loopy_body(
+            150, 218, pose="stand", paws="none", lean=4,
+            mid_props=_crossbody_bag(150, 218, rot=4),
+            arms=[
+                arm_spec((122, 200), (104, 226), (136, 220), 10.8, 9.0, 7.5, layer="front", t_fill=0.26, t_in=0.30, t_out=0.48),
+                arm_spec((178, 200), (206, 212), (196, 230), 10.8, 9.0, 7.5, fingers=True, layer="front", t_fill=0.30, t_in=0.32, t_out=0.54),
+            ],
+            head_svg=_fluffy_head_in_hood(152, 124, smiley=True, rot=5, expr="curious"),
+        )
     )
     s2 = render_svg(
         shadow(150, 268, 66, 9)
-        + loopy_body(150, 216, pose="walk", paws="walk_swing", lean=8)
-        + _crossbody_bag(152, 216, rot=8)
-        + _fluffy_head_in_hood(156, 122, smiley=True, rot=7, expr="focused")
+        + loopy_body(
+            150, 216, pose="walk", paws="walk_swing", lean=8,
+            mid_props=_crossbody_bag(152, 216, rot=8),
+            head_svg=_fluffy_head_in_hood(156, 122, smiley=True, rot=7, expr="focused"),
+        )
         + '<path d="M 46,238 L 68,238 M 54,250 L 72,250" stroke="#D4B499" stroke-width="3.2" stroke-linecap="round"/>'
     )
     s3 = render_svg(
         shadow(150, 268, 66, 9)
-        + loopy_body(150, 216, pose="walk", paws="none", lean=-4)
-        + _crossbody_bag(148, 216, rot=-4)
-        + _coffee_cup(80, 206)
-        + curved_arm((114, 196), (96, 214), (92, 208), 10.8, 9.0, 7.5)
-        + curved_arm((186, 196), (208, 210), (198, 228), 10.8, 9.0, 7.5, fingers=True)
-        + _fluffy_head_in_hood(146, 122, smiley=True, rot=-5, expr="smile", strong_blush=True)
+        + loopy_body(
+            150, 216, pose="walk", paws="none", lean=-4,
+            mid_props=_crossbody_bag(148, 216, rot=-4) + _coffee_cup(78, 206),
+            arms=[
+                arm_spec((122, 196), (96, 216), (88, 208), 10.8, 9.0, 7.5, layer="front", t_fill=0.28, t_in=0.30, t_out=0.52),
+                arm_spec((178, 196), (208, 210), (198, 228), 10.8, 9.0, 7.5, fingers=True, layer="front", t_fill=0.30, t_in=0.32, t_out=0.54),
+            ],
+            head_svg=_fluffy_head_in_hood(146, 122, smiley=True, rot=-5, expr="smile", strong_blush=True),
+        )
     )
     s4 = render_svg(
         '<circle cx="150" cy="150" r="118" fill="#FEF6D8"/><circle cx="150" cy="150" r="92" fill="#FDEBB8"/>'
-        + shadow() + loopy_body(150, 216, pose="stand", paws="shrug", lean=5)
-        + _crossbody_bag(152, 216, rot=5)
-        + _fluffy_head_in_hood(154, 122, smiley=True, rot=7, expr="wink", strong_blush=True)
+        + shadow() + loopy_body(
+            150, 216, pose="stand", paws="shrug", lean=5,
+            mid_props=_crossbody_bag(152, 216, rot=5),
+            head_svg=_fluffy_head_in_hood(154, 122, smiley=True, rot=7, expr="wink", strong_blush=True),
+        )
         + star5(50, 112, r=12) + star5(250, 124, r=14)
     )
     s5 = with_hero_aura(render_svg(
         '<circle cx="150" cy="150" r="120" fill="#FEF6D8"/><circle cx="150" cy="150" r="94" fill="#FDEBB8"/>'
         + shadow(150, 272, 52, 7, op=0.12)
-        + loopy_body(150, 204, pose="jump", paws="wide_up")
-        + _crossbody_bag(150, 204, rot=-5)
-        + _fluffy_head_in_hood(150, 114, smiley=True, rot=-4, expr="big_smile", strong_blush=True)
+        + loopy_body(
+            150, 204, pose="jump", paws="wide_up",
+            mid_props=_crossbody_bag(150, 204, rot=-5),
+            head_svg=_fluffy_head_in_hood(150, 114, smiley=True, rot=-4, expr="big_smile", strong_blush=True),
+        )
         + star5(46, 102, r=13) + star5(254, 118, r=15) + sp4(56, 178, r=10) + sp4(248, 62, r=11)
     ), (253, 231, 169))
     return [
@@ -1392,19 +1757,81 @@ def _panda_head_in_hood(cx=150, cy=124, sprout=False, perked=False, rot=0, expr=
     return "".join(parts)
 
 
-def _ruffled_collar(cx=150, cy=188, sit=False, lean=0) -> str:
+def _ruffled_collar(
+    cx=150,
+    cy=188,
+    sit=False,
+    lean=0,
+    arms: list[dict] | None = None,
+    mid_props: str = "",
+    head_svg: str = "",
+) -> str:
+    """v4.1 3-Layer Seamless Panda Outfit Body + White Ruffled Collar + Smooth Curved Pink Arms."""
     feet = (
         _loopy_foot(-30, 64, -14, sit=True) + _loopy_foot(30, 64, 14, sit=True)
         if sit else
         _loopy_foot(-22, 70, -4) + _loopy_foot(22, 70, 4)
     )
-    return (
-        f'<g transform="translate({cx},{cy}) rotate({lean})">'
-        f'{feet}'
-        f'<path d="M -45,-14 C -53,28 -38,68 0,68 C 38,68 53,28 45,-14 Z" fill="#3C4148" stroke="#25282E" stroke-width="3.8"/>'
-        f'<path d="M -39,-10 Q -29,12 -18,2 Q -8,15 0,4 Q 8,15 18,2 Q 29,12 39,-10 Z" fill="#FFFFFF" stroke="#363B42" stroke-width="2.9"/>'
-        f'</g>'
+    tf = f'translate({cx},{cy}) rotate({lean})'
+    torso_d = (
+        "M 0,-18 C 32,-18 49,4 48,30 C 47,54 28,68 0,68 "
+        "C -28,68 -47,54 -48,30 C -49,4 -32,-18 0,-18 Z"
     )
+    built_arms: list[tuple[dict, dict]] = []
+    for sp in (arms or []):
+        lp0 = sp["p0"] if sp["local"] else _to_local(sp["p0"], cx, cy, lean)
+        lp1 = sp["p1"] if sp["local"] else _to_local(sp["p1"], cx, cy, lean)
+        lp2 = sp["p2"] if sp["local"] else _to_local(sp["p2"], cx, cy, lean)
+        side = -1.0 if lp0[0] < 0 else 1.0
+        lp0 = (side * max(14.0, min(abs(lp0[0]), 28.0)), max(-4.0, min(lp0[1], 14.0)))
+        mesh = _sample_arm_mesh(lp0, lp1, lp2, sp["w0"], sp["w1"], sp["w2"], body_ref=(0.0, 26.0))
+        built_arms.append((sp, mesh))
+
+    parts: list[str] = [f'<g transform="{tf}">{feet}</g>']
+    # Layer 1: Unified outline of charcoal panda torso + all pink arms
+    l1 = [f'<path d="{torso_d}" fill="none" stroke="#25282E" stroke-width="7.6" stroke-linejoin="round" stroke-linecap="round"/>']
+    l2 = [f'<path d="{torso_d}" fill="#3C4148" stroke="none"/>']
+    for sp, mesh in built_arms:
+        l1.append(f'<path d="{mesh["full_d"]}" fill="none" stroke="{sp["stroke"]}" stroke-width="{sp["sw"] * 2:.1f}" stroke-linejoin="round" stroke-linecap="round"/>')
+        l2.append(f'<path d="{mesh["full_d"]}" fill="{sp["fill"] or PINK}" stroke="none"/>')
+    parts.append(f'<g transform="{tf}">{"".join(l1)}{"".join(l2)}</g>')
+
+    if mid_props:
+        parts.append(mid_props)
+
+    l3: list[str] = []
+    for sp, mesh in built_arms:
+        if sp["layer"] == "front":
+            l3.append(f'<path d="{mesh["full_d"]}" fill="{sp["fill"] or PINK}" stroke="none"/>')
+            l3.append(
+                f'<path d="{mesh["sub_stroke_d"](0.18, 0.24)}" fill="none" '
+                f'stroke="{sp["stroke"]}" stroke-width="{sp["sw"]:.1f}" stroke-linecap="round" stroke-linejoin="round"/>'
+            )
+            if sp["fingers"]:
+                l3.append(_fingers_svg(mesh))
+        elif sp["layer"] == "out" and sp["fingers"]:
+            l3.append(_fingers_svg(mesh))
+    # Draw crisp white ruffled collar ON TOP of arm shoulders so pink arms emerge cleanly under the ruffle!
+    l3.append('<path d="M -39,-10 Q -29,12 -18,2 Q -8,15 0,4 Q 8,15 18,2 Q 29,12 39,-10 Z" fill="#FFFFFF" stroke="#363B42" stroke-width="2.9"/>')
+    parts.append(f'<g transform="{tf}">{"".join(l3)}</g>')
+
+    if head_svg:
+        parts.append(head_svg)
+
+    l4: list[str] = []
+    for sp, mesh in built_arms:
+        if sp["layer"] == "over_head":
+            t_oh = sp["t_oh"]
+            l4.append(f'<path d="{mesh["sub_fill_d"](t_oh)}" fill="{sp["fill"] or PINK}" stroke="none"/>')
+            l4.append(
+                f'<path d="{mesh["sub_stroke_d"](t_oh, t_oh)}" fill="none" '
+                f'stroke="{sp["stroke"]}" stroke-width="{sp["sw"]:.1f}" stroke-linecap="round" stroke-linejoin="round"/>'
+            )
+            if sp["fingers"]:
+                l4.append(_fingers_svg(mesh))
+    if l4:
+        parts.append(f'<g transform="{tf}">{"".join(l4)}</g>')
+    return "".join(parts)
 
 
 def _mint_book(cx=150, cy=238, closed=False) -> str:
@@ -1457,44 +1884,59 @@ def _bamboo_aura() -> str:
 
 def build_68_panda_study() -> list[tuple[str, Image.Image]]:
     s0 = render_svg(
-        shadow() + _ruffled_collar(150, 192, sit=True, lean=-7)
-        + _panda_head_in_hood(144, 126, sprout=False, rot=-8, expr="puzzled")
-        + curved_arm((180, 196), (212, 188), (186, 166), 10.6, 8.8, 7.4, fill=PINK)
-        + _mint_book(146, 240, closed=False)
+        shadow() + _ruffled_collar(
+            150, 192, sit=True, lean=-7,
+            mid_props=_mint_book(146, 240, closed=False),
+            arms=[arm_spec((176, 198), (212, 188), (186, 166), 10.6, 8.8, 7.4, fill=PINK, layer="over_head", t_oh=0.32)],
+            head_svg=_panda_head_in_hood(144, 126, sprout=False, rot=-8, expr="puzzled"),
+        )
     )
     s1 = render_svg(
-        shadow() + _ruffled_collar(150, 190, sit=True, lean=5)
-        + _panda_head_in_hood(152, 124, sprout=True, rot=6, expr="curious")
-        + curved_arm((184, 194), (218, 180), (222, 148), 10.6, 8.8, 7.4, fill=PINK, fingers=True)
+        shadow() + _ruffled_collar(
+            150, 190, sit=True, lean=5,
+            arms=[arm_spec((176, 196), (218, 180), (222, 148), 10.6, 8.8, 7.4, fill=PINK, fingers=True, layer="out")],
+            head_svg=_panda_head_in_hood(152, 124, sprout=True, rot=6, expr="curious"),
+        )
         + _lightbulb(242, 76)
     )
     s2 = render_svg(
-        shadow() + _ruffled_collar(150, 190, sit=True)
-        + _panda_head_in_hood(150, 124, sprout=True, expr="focused")
-        + _mint_book(150, 238, closed=False)
-        + '<line x1="170" y1="228" x2="206" y2="202" stroke="#3B82F6" stroke-width="5.0" stroke-linecap="round"/>'
-        + curved_arm((184, 196), (210, 212), (190, 216), 10.4, 8.8, 7.4, fill=PINK)
+        shadow() + _ruffled_collar(
+            150, 190, sit=True,
+            mid_props=_mint_book(150, 238, closed=False) + '<line x1="170" y1="230" x2="208" y2="204" stroke="#3B82F6" stroke-width="5.0" stroke-linecap="round"/>',
+            arms=[arm_spec((172, 196), (212, 210), (192, 222), 10.4, 8.8, 7.4, fill=PINK, layer="front")],
+            head_svg=_panda_head_in_hood(150, 124, sprout=True, expr="focused"),
+        )
     )
     s3 = render_svg(
-        _bamboo_aura() + shadow() + _ruffled_collar(150, 190, sit=True, lean=-4)
-        + _panda_head_in_hood(148, 124, sprout=True, rot=-4, expr="calm_closed")
-        + _mint_book(148, 236, closed=False)
-        + curved_arm((114, 198), (108, 224), (126, 230), 10.4, 8.8, 7.4, fill=PINK)
-        + curved_arm((184, 198), (190, 224), (170, 230), 10.4, 8.8, 7.4, fill=PINK)
+        _bamboo_aura() + shadow() + _ruffled_collar(
+            150, 190, sit=True, lean=-4,
+            mid_props=_mint_book(148, 236, closed=False),
+            arms=[
+                arm_spec((124, 198), (108, 224), (126, 230), 10.4, 8.8, 7.4, fill=PINK, layer="front", t_fill=0.26, t_in=0.28, t_out=0.50),
+                arm_spec((176, 198), (192, 224), (170, 230), 10.4, 8.8, 7.4, fill=PINK, layer="front", t_fill=0.26, t_in=0.28, t_out=0.50),
+            ],
+            head_svg=_panda_head_in_hood(148, 124, sprout=True, rot=-4, expr="calm_closed"),
+        )
     )
     s4 = render_svg(
-        _bamboo_aura() + shadow() + _ruffled_collar(142, 188, sit=False, lean=5)
-        + _panda_head_in_hood(146, 124, sprout=True, perked=True, rot=7, expr="smile", strong_blush=True)
-        + _checklist_card(236, 184)
-        + curved_arm((176, 192), (200, 198), (212, 190), 10.4, 8.8, 7.4, fill=PINK)
+        _bamboo_aura() + shadow() + _ruffled_collar(
+            142, 188, sit=False, lean=5,
+            mid_props=_checklist_card(236, 184),
+            arms=[arm_spec((168, 194), (198, 200), (212, 190), 10.4, 8.8, 7.4, fill=PINK, layer="front", t_fill=0.30, t_in=0.32, t_out=0.54)],
+            head_svg=_panda_head_in_hood(146, 124, sprout=True, perked=True, rot=7, expr="smile", strong_blush=True),
+        )
         + sp4(56, 76, r=10, fill="#B8DEC9", stroke="#3E7A5B")
     )
     s5 = with_hero_aura(render_svg(
-        _bamboo_aura() + shadow() + _ruffled_collar(150, 186, sit=False)
-        + _panda_head_in_hood(150, 122, sprout=True, perked=True, rot=-4, expr="happy_squint", strong_blush=True)
-        + _mint_book(150, 236, closed=True)
-        + curved_arm((114, 196), (112, 224), (132, 228), 10.4, 8.8, 7.4, fill=PINK)
-        + curved_arm((186, 196), (188, 224), (168, 228), 10.4, 8.8, 7.4, fill=PINK)
+        _bamboo_aura() + shadow() + _ruffled_collar(
+            150, 186, sit=False,
+            mid_props=_mint_book(150, 236, closed=True),
+            arms=[
+                arm_spec((124, 196), (110, 224), (132, 228), 10.4, 8.8, 7.4, fill=PINK, layer="front", t_fill=0.26, t_in=0.28, t_out=0.50),
+                arm_spec((176, 196), (190, 224), (168, 228), 10.4, 8.8, 7.4, fill=PINK, layer="front", t_fill=0.26, t_in=0.28, t_out=0.50),
+            ],
+            head_svg=_panda_head_in_hood(150, 122, sprout=True, perked=True, rot=-4, expr="happy_squint", strong_blush=True),
+        )
         + sp4(50, 68, r=12) + sp4(250, 68, r=12) + sp4(250, 200, r=9, fill="#B8DEC9", stroke="#3E7A5B")
     ), (184, 222, 201))
     return [
@@ -1542,12 +1984,18 @@ def _canopy_bow() -> str:
 
 
 def _sleeping_loopy(expr="calm_closed", bubble=False) -> str:
+    m = _sample_arm_mesh((10, -14), (26, 2), (8, 22), 10.2, 8.6, 7.0, body_ref=(0.0, 2.0))
     parts = [
         f'<g transform="translate(138,208) rotate(-26)">'
-        f'<ellipse cx="0" cy="0" rx="44" ry="34" fill="{PINK}" stroke="{OL}" stroke-width="3.8"/>'
-        f'<ellipse cx="4" cy="6" rx="22" ry="18" fill="{CREAM}"/>'
         + _loopy_foot(-40, 10, 0) + _loopy_foot(-30, 24, 0)
-        + curved_arm((12, -16), (26, 2), (8, 22), 10.2, 8.6, 7.0, fingers=True)
+        + f'<ellipse cx="0" cy="0" rx="44" ry="34" fill="none" stroke="{OL}" stroke-width="7.6"/>'
+        + f'<path d="{m["full_d"]}" fill="none" stroke="{OL}" stroke-width="7.4" stroke-linejoin="round" stroke-linecap="round"/>'
+        + f'<ellipse cx="0" cy="0" rx="44" ry="34" fill="{PINK}" stroke="none"/>'
+        + f'<path d="{m["full_d"]}" fill="{PINK}" stroke="none"/>'
+        + f'<ellipse cx="4" cy="6" rx="22" ry="18" fill="{CREAM}"/>'
+        + f'<path d="{m["sub_fill_d"](0.26)}" fill="{PINK}" stroke="none"/>'
+        + f'<path d="{m["sub_stroke_d"](0.28, 0.48)}" fill="none" stroke="{OL}" stroke-width="3.7" stroke-linecap="round" stroke-linejoin="round"/>'
+        + _fingers_svg(m)
         + '</g>',
         f'<g transform="translate(184,166) rotate(18)">' + loopy_head(0, 0, scale=0.78, expr=expr, strong_blush=True, show_tuft=False) + '</g>',
     ]
@@ -1656,56 +2104,72 @@ def build_70_hair_roller() -> list[tuple[str, Image.Image]]:
         + _pink_hair_roller(150, 80, rot=-5, s=1.04)
     )
     # S1: Still wearing pink roller, both curved arms cradling steaming warm tea mug!
+    mug_svg = '<g transform="translate(154,206)"><rect x="-15" y="-14" width="30" height="28" rx="7" fill="#FFFDF5" stroke="#5C343A" stroke-width="2.8"/><path d="M 15,-6 Q 24,-6 24,2 Q 24,10 15,10" fill="none" stroke="#5C343A" stroke-width="2.8"/><path d="M -5,-22 Q -9,-28 -4,-34 M 5,-22 Q 1,-28 6,-34" fill="none" stroke="#F48FB1" stroke-width="2.4" stroke-linecap="round"/></g>'
     s1 = render_svg(
         shadow() + _shoulder_bob_hair_back(148, 134, rot=-4)
-        + loopy_body(150, 220, pose="sit", paws="none", lean=-4)
-        + loopy_head(148, 134, expr="sleepy", show_tuft=False, rot=-4)
-        + _pink_hair_roller(144, 80, rot=-9, s=1.0)
-        + '<g transform="translate(154,206)"><rect x="-15" y="-14" width="30" height="28" rx="7" fill="#FFFDF5" stroke="#5C343A" stroke-width="2.8"/><path d="M 15,-6 Q 24,-6 24,2 Q 24,10 15,10" fill="none" stroke="#5C343A" stroke-width="2.8"/><path d="M -5,-22 Q -9,-28 -4,-34 M 5,-22 Q 1,-28 6,-34" fill="none" stroke="#F48FB1" stroke-width="2.4" stroke-linecap="round"/></g>'
-        + curved_arm((114, 198), (112, 222), (138, 212), 10.8, 9.0, 7.5)
-        + curved_arm((184, 198), (190, 222), (170, 212), 10.8, 9.0, 7.5)
+        + loopy_body(
+            150, 220, pose="sit", paws="none", lean=-4,
+            mid_props=mug_svg,
+            arms=[
+                arm_spec((122, 200), (112, 222), (138, 212), 10.8, 9.0, 7.5, layer="front", t_fill=0.24, t_in=0.28, t_out=0.48),
+                arm_spec((178, 200), (190, 222), (170, 212), 10.8, 9.0, 7.5, layer="front", t_fill=0.24, t_in=0.28, t_out=0.48),
+            ],
+            head_svg=loopy_head(148, 134, expr="sleepy", show_tuft=False, rot=-4) + _pink_hair_roller(144, 80, rot=-9, s=1.0),
+        )
     )
     # S2: Waking up bright, left curved arm dabbing blush puff on cheek, right holding small mirror!
     s2 = render_svg(
         shadow() + _shoulder_bob_hair_back(144, 134, rot=4)
-        + loopy_body(142, 218, pose="sit", paws="none", lean=4)
-        + loopy_head(144, 134, expr="curious", strong_blush=True, show_tuft=False, rot=4)
-        + _pink_hair_roller(148, 80, rot=-2, s=0.98)
-        + curved_arm((108, 198), (74, 184), (102, 156), 10.8, 9.0, 7.5)
+        + loopy_body(
+            142, 218, pose="sit", paws="none", lean=4,
+            mid_props=_hand_mirror(230, 196, rot=14),
+            arms=[
+                arm_spec((114, 198), (74, 184), (102, 156), 10.8, 9.0, 7.5, layer="over_head", t_oh=0.30),
+                arm_spec((170, 198), (200, 218), (220, 214), 10.8, 9.0, 7.5, layer="front", t_fill=0.30, t_in=0.32, t_out=0.54),
+            ],
+            head_svg=loopy_head(144, 134, expr="curious", strong_blush=True, show_tuft=False, rot=4) + _pink_hair_roller(148, 80, rot=-2, s=0.98),
+        )
         + '<circle cx="110" cy="150" r="8" fill="#FCE7F3" stroke="#D96B8D" stroke-width="2.0"/>'
-        + _hand_mirror(230, 196, rot=14)
-        + curved_arm((178, 198), (200, 218), (220, 214), 10.8, 9.0, 7.5)
     )
-    # S3: Both curved arms reaching up smoothly to hold both ends of the pink roller & unroll it!
+    # S3: Both curved arms reaching up smoothly outside cheeks to hold both ends of the pink roller & unroll it!
     s3 = render_svg(
         shadow() + _shoulder_bob_hair_back(150, 134)
-        + loopy_body(150, 218, pose="stand", paws="none")
-        + loopy_head(150, 136, expr="smile", strong_blush=True, show_tuft=False)
-        + _pink_hair_roller(150, 62, rot=-10, s=1.0)
-        + curved_arm((114, 196), (68, 136), (104, 70), 10.8, 9.0, 7.5, fingers=True)
-        + curved_arm((186, 196), (232, 136), (196, 62), 10.8, 9.0, 7.5, fingers=True)
+        + loopy_body(
+            150, 218, pose="stand", paws="none",
+            arms=[
+                arm_spec((122, 200), (54, 132), (104, 70), 10.8, 9.0, 7.5, fingers=True, layer="over_head", t_oh=0.58),
+                arm_spec((178, 200), (246, 132), (196, 62), 10.8, 9.0, 7.5, fingers=True, layer="over_head", t_oh=0.58),
+            ],
+            head_svg=loopy_head(150, 136, expr="smile", strong_blush=True, show_tuft=False) + _pink_hair_roller(150, 62, rot=-10, s=1.0),
+        )
         + sp4(52, 68, r=9)
     )
     # S4: Bouncy bangs pop out! Tilted head winking happily into hand mirror!
     s4 = render_svg(
         shadow() + _shoulder_bob_hair_back(142, 134, rot=-6)
-        + loopy_body(142, 218, pose="stand", paws="none", lean=-5)
-        + loopy_head(140, 134, expr="wink", strong_blush=True, blush_hatch=True, show_tuft=False, rot=-6)
-        + _bouncy_bangs(136, 86, rot=-6, clip=False)
-        + curved_arm((106, 196), (82, 212), (96, 224), 10.8, 9.0, 7.5, fingers=True)
-        + _hand_mirror(230, 190, rot=16)
-        + curved_arm((178, 196), (202, 214), (220, 208), 10.8, 9.0, 7.5)
+        + loopy_body(
+            142, 218, pose="stand", paws="none", lean=-5,
+            mid_props=_hand_mirror(230, 190, rot=16),
+            arms=[
+                arm_spec((114, 198), (82, 212), (96, 224), 10.8, 9.0, 7.5, fingers=True, layer="out"),
+                arm_spec((170, 198), (202, 214), (220, 208), 10.8, 9.0, 7.5, layer="front", t_fill=0.30, t_in=0.32, t_out=0.54),
+            ],
+            head_svg=loopy_head(140, 134, expr="wink", strong_blush=True, blush_hatch=True, show_tuft=False, rot=-6) + _bouncy_bangs(136, 86, rot=-6, clip=False),
+        )
         + sp4(52, 94, r=10) + sp4(236, 98, r=9)
     )
     # S5: Smooth shoulder-length black hair with pink bow clip, sassy pose & radiant sparkles!
     s5 = with_hero_aura(render_svg(
         shadow(150, 272, 56, 8, op=0.12)
         + _shoulder_bob_hair_back(150, 126, rot=4)
-        + loopy_body(150, 208, pose="jump", paws="none")
-        + loopy_head(150, 126, expr="big_smile", strong_blush=True, blush_hatch=True, show_tuft=False, rot=4)
-        + _bouncy_bangs(152, 78, rot=4, clip=True)
-        + curved_arm((114, 188), (82, 198), (104, 216), 10.8, 9.0, 7.5)
-        + curved_arm((186, 188), (218, 178), (226, 148), 11.0, 9.0, 7.5, fingers=True)
+        + loopy_body(
+            150, 208, pose="jump", paws="none",
+            arms=[
+                arm_spec((122, 188), (86, 200), (108, 216), 10.8, 9.0, 7.5, layer="front", t_fill=0.28, t_in=0.30, t_out=0.52),
+                arm_spec((178, 188), (216, 178), (226, 148), 11.0, 9.0, 7.5, fingers=True, layer="out"),
+            ],
+            head_svg=loopy_head(150, 126, expr="big_smile", strong_blush=True, blush_hatch=True, show_tuft=False, rot=4) + _bouncy_bangs(152, 78, rot=4, clip=True),
+        )
         + sp4(50, 82, r=12) + sp4(250, 82, r=12) + heart(52, 196, s=11, fill="#F7B4C9", stroke="#D96B8D")
         + heart(248, 194, s=11, fill="#D96B8D", stroke=OL)
     ), (217, 107, 141))
@@ -1827,8 +2291,8 @@ def main():
         f_title = f_sub = f_row = f_tiny = ImageFont.load_default()
 
     draw.rectangle([0, 0, W, hdr_h], fill=(216, 90, 104))
-    draw.text((pad, 14), "LOOPY PASTEL COLLECTION — #61–#70 (v4.1 NATURAL ARMS & SNUG HOODS • 60 SPRITES)", fill=(255, 255, 255), font=f_title)
-    draw.text((pad, 50), "Seamless Bezier Arms • Snug Head-in-Hood Framing • New #61 Checklist, #62 Taiyaki & #70 Hair Roller • 0/60 Text Overlaps", fill=(255, 248, 234), font=f_sub)
+    draw.text((pad, 14), "LOOPY PASTEL COLLECTION — #61–#70 (v4.1 SEAMLESS ARMS & SNUG HOODS • 60 SPRITES)", fill=(255, 255, 255), font=f_title)
+    draw.text((pad, 50), "3-Layer Seamless Silhouette Arms • Smooth Elbows • Snug Head-in-Hood Framing • 0/60 Text Overlaps", fill=(255, 248, 234), font=f_sub)
 
     pcts = ["0%", "20%", "40%", "60%", "80%", "100% MAX"]
     verified_cells = 0

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================================
-#  Habit Tracker Collection v4.0 — Interactive Zero-Install Downloader (macOS/Linux)
+#  Habit Tracker Collection v4.1 — Interactive Zero-Install Downloader (macOS/Linux)
 #  Run in 1 line:
 #    curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu/main/install.sh | bash
 # ============================================================================
@@ -247,14 +247,14 @@ OUT_DIR="$(resolve_out_dir)"
 mkdir -p "$OUT_DIR"
 
 printf "\n%s========================================================================%s\n" "$C_MAGENTA" "$C_RESET"
-printf "%s   HABIT TRACKER COLLECTION v4.0 — BY DYU (80 THEMES × 4 EDITIONS)%s\n" "$C_YELLOW" "$C_RESET"
+printf "%s   HABIT TRACKER COLLECTION v4.1 — BY DYU (80 THEMES × 4 EDITIONS)%s\n" "$C_YELLOW" "$C_RESET"
 printf "%s   Turbo 6/7/8-Stage Native Sprite Engine • FX Suite • Ctrl+Z Undo%s\n" "$C_CYAN" "$C_RESET"
 printf "%s========================================================================%s\n" "$C_MAGENTA" "$C_RESET"
 printf "  %sThư mục lưu file:%s %s\n\n" "$C_GREEN" "$C_RESET" "$OUT_DIR"
 
 printf "  %sBƯỚC 1 — CHỌN PHIÊN BẢN PHÙ HỢP (THEO THỨ TỰ ƯU TIÊN):%s\n" "$C_BOLD" "$C_RESET"
 printf "  %s----------------------------------------------------------------------%s\n" "$C_DIM" "$C_RESET"
-printf "  %s[1] Pro Interactive (.xlsm)  [⭐ KHUYÊN DÙNG SỐ 1 — EXCEL 365 TURBO v4.0]%s\n" "$C_GREEN" "$C_RESET"
+printf "  %s[1] Pro Interactive (.xlsm)  [⭐ KHUYÊN DÙNG SỐ 1 — EXCEL 365 TURBO v4.1]%s\n" "$C_GREEN" "$C_RESET"
 printf "      %s-> Siêu tốc ~25–54ms + Full FX Nảy/Pháo hoa/Toast góc trái dưới + Ctrl+Z Undo%s\n" "$C_DIM" "$C_RESET"
 printf "         %s+ Khóa bảo vệ công thức + Tự lưu Đa Ngày/Tháng/Năm (100%% Offline)!%s\n" "$C_DIM" "$C_RESET"
 printf "  %s[2] Excel Universal Offline (.xlsx)  [Excel 2016/2019/2021/365]%s\n" "$C_CYAN" "$C_RESET"
@@ -287,11 +287,11 @@ esac
 
 printf "\n  %sBƯỚC 2 — CHỌN MẪU THÓI QUEN (80 CHỦ ĐỀ LOTSO, LOOPY, CAPYBARA, DIGIMON & HOA LÁ):%s\n" "$C_BOLD" "$C_RESET"
 printf "  %s----------------------------------------------------------------------%s\n" "$C_DIM" "$C_RESET"
-printf "  %s--- 🍓 [MỚI v4.0] 10 BỘ GẤU DÂU LOTSO PASTEL COLLECTION (#71–#80) ---%s\n" "$C_MAGENTA" "$C_RESET"
+printf "  %s--- 🍓 [v4.1] 10 BỘ GẤU DÂU LOTSO PASTEL COLLECTION (#71–#80) ---%s\n" "$C_MAGENTA" "$C_RESET"
 for i in 71 72 73 74 75 76 77 78 79 80; do
   printf "  [%-2d] %-38s — %s\n" "$i" "${STEMS[$i]}" "${TITLES[$i]}"
 done
-printf "  %s--- 🎀 [MỚI v4.0] 10 BỘ HẢI LY LOOPY PASTEL COLLECTION (#61–#70) ---%s\n" "$C_YELLOW" "$C_RESET"
+printf "  %s--- 🎀 [v4.1] 10 BỘ HẢI LY LOOPY PASTEL COLLECTION (#61–#70) ---%s\n" "$C_YELLOW" "$C_RESET"
 for i in 61 62 63 64 65 66 67 68 69 70; do
   printf "  [%-2d] %-38s — %s\n" "$i" "${STEMS[$i]}" "${TITLES[$i]}"
 done

@@ -69,13 +69,238 @@ def with_hero_aura(im: Image.Image, rgb: tuple[int, int, int], cy: int = 152, al
 
 
 # =========================================================================== #
-#  NATURAL CURVED CHUBBY TEDDY ARM ENGINE (ZERO DETACHED OVAL BLOBS!)
+#  v4.1 3-LAYER SEAMLESS SILHOUETTE TEDDY ARM ENGINE (48-STEP CURVATURE-CLAMPED)
 # =========================================================================== #
 def _norm(dx: float, dy: float) -> tuple[float, float]:
     d = math.hypot(dx, dy)
     if d < 1e-6:
         return (0.0, -1.0)
     return (dx / d, dy / d)
+
+
+def _to_local(pt: tuple[float, float], cx: float, cy: float, lean_deg: float) -> tuple[float, float]:
+    dx, dy = pt[0] - cx, pt[1] - cy
+    rad = math.radians(-lean_deg)
+    ca, sa = math.cos(rad), math.sin(rad)
+    return (dx * ca - dy * sa, dx * sa + dy * ca)
+
+
+def _clamp_shoulder_local(
+    p0: tuple[float, float],
+    p1: tuple[float, float],
+    p2: tuple[float, float],
+    rx: float,
+    ry: float,
+) -> tuple[tuple[float, float], tuple[float, float], tuple[float, float]]:
+    """Pulls teddy shoulder anchor deep inside upper torso interior (ZERO shoulder bumps/horns/gaps)."""
+    lx, ly = p0
+    side = -1.0 if lx < 0 else 1.0
+    nx0 = side * max(rx * 0.24, min(abs(lx), rx * 0.46))
+    ny0 = max(-ry * 0.34, min(ly, -ry * 0.10))
+    np0 = (nx0, ny0)
+    np1 = p1
+    if math.hypot(p1[0] - nx0, p1[1] - ny0) < 14.0:
+        np1 = (nx0 + side * 16.0, ny0 + 14.0)
+    return np0, np1, p2
+
+
+def _smooth_poly(pts: list[tuple[float, float]], passes: int = 3) -> list[tuple[float, float]]:
+    cur = list(pts)
+    n = len(cur)
+    for _ in range(passes):
+        nxt = [cur[0]]
+        for i in range(1, n - 1):
+            nxt.append((
+                0.25 * cur[i - 1][0] + 0.5 * cur[i][0] + 0.25 * cur[i + 1][0],
+                0.25 * cur[i - 1][1] + 0.5 * cur[i][1] + 0.25 * cur[i + 1][1],
+            ))
+        nxt.append(cur[-1])
+        cur = nxt
+    return cur
+
+
+def _enforce_monotonic(
+    pts: list[tuple[float, float]],
+    tangents: list[tuple[float, float]],
+) -> list[tuple[float, float]]:
+    out = [pts[0]]
+    for i in range(1, len(pts)):
+        px, py = out[-1]
+        cx, cy = pts[i]
+        tx, ty = tangents[i]
+        dot = (cx - px) * tx + (cy - py) * ty
+        if dot < 0.0:
+            cx = cx - dot * tx + 0.35 * tx
+            cy = cy - dot * ty + 0.35 * ty
+        out.append((cx, cy))
+    return out
+
+
+def _sample_arm_mesh(
+    p0: tuple[float, float],
+    p1: tuple[float, float],
+    p2: tuple[float, float],
+    w0: float,
+    w1: float,
+    w2: float,
+    steps: int = 48,
+    body_ref: tuple[float, float] = (0.0, 4.0),
+) -> dict:
+    """High-density 48-step curvature-clamped chubby plush teddy arm tube."""
+    x0, y0 = p0
+    x1, y1 = p1
+    x2, y2 = p2
+    centers: list[tuple[float, float]] = []
+    tangents: list[tuple[float, float]] = []
+    normals: list[tuple[float, float]] = []
+    left_pts: list[tuple[float, float]] = []
+    right_pts: list[tuple[float, float]] = []
+
+    ddx = 2.0 * (x0 - 2.0 * x1 + x2)
+    ddy = 2.0 * (y0 - 2.0 * y1 + y2)
+
+    for i in range(steps + 1):
+        t = i / steps
+        omt = 1.0 - t
+        bx = omt * omt * x0 + 2.0 * omt * t * x1 + t * t * x2
+        by = omt * omt * y0 + 2.0 * omt * t * y1 + t * t * y2
+        dx = 2.0 * omt * (x1 - x0) + 2.0 * t * (x2 - x1)
+        dy = 2.0 * omt * (y1 - y0) + 2.0 * t * (y2 - y1)
+        spd = math.hypot(dx, dy)
+        tx, ty = _norm(dx, dy)
+        nx, ny = -ty, tx
+        w = omt * omt * w0 + 2.0 * omt * t * w1 + t * t * w2
+        kappa = (dx * ddy - dy * ddx) / max(spd ** 3, 1e-5)
+        w_left = w
+        w_right = w
+        if abs(kappa) > 1e-4:
+            max_r = 0.78 / abs(kappa)
+            if kappa > 0:
+                w_left = min(w_left, max_r)
+            else:
+                w_right = min(w_right, max_r)
+        centers.append((bx, by))
+        tangents.append((tx, ty))
+        normals.append((nx, ny))
+        left_pts.append((bx + nx * w_left, by + ny * w_left))
+        right_pts.append((bx - nx * w_right, by - ny * w_right))
+
+    left_pts = _smooth_poly(_enforce_monotonic(left_pts, tangents), passes=4)
+    right_pts = _smooth_poly(_enforce_monotonic(right_pts, tangents), passes=4)
+
+    tx2, ty2 = tangents[-1]
+    nx2, ny2 = normals[-1]
+    tip_cap: list[tuple[float, float]] = []
+    cap_steps = 14
+    for k in range(1, cap_steps):
+        ang = math.pi * (k / cap_steps)
+        cn = math.cos(ang)
+        ct = math.sin(ang) * 1.08
+        tip_cap.append((x2 + nx2 * cn * w2 + tx2 * ct * w2, y2 + ny2 * cn * w2 + ty2 * ct * w2))
+
+    tx0, ty0 = tangents[0]
+    nx0, ny0 = normals[0]
+    root_cap: list[tuple[float, float]] = []
+    root_steps = 8
+    for k in range(1, root_steps):
+        ang = math.pi * (k / root_steps)
+        cn = -math.cos(ang)
+        ct = -math.sin(ang) * 0.62
+        root_cap.append((x0 + nx0 * cn * w0 + tx0 * ct * w0, y0 + ny0 * cn * w0 + ty0 * ct * w0))
+
+    chk = steps // 4
+    dl = math.hypot(left_pts[chk][0] - body_ref[0], left_pts[chk][1] - body_ref[1])
+    dr = math.hypot(right_pts[chk][0] - body_ref[0], right_pts[chk][1] - body_ref[1])
+    inner_is_right = dr < dl
+
+    def _pts_d(pts: list[tuple[float, float]], close: bool = False) -> str:
+        segs = [f"M {pts[0][0]:.1f},{pts[0][1]:.1f}"]
+        segs.extend(f"L {px:.1f},{py:.1f}" for px, py in pts[1:])
+        if close:
+            segs.append("Z")
+        return " ".join(segs)
+
+    full_poly = left_pts + tip_cap + list(reversed(right_pts)) + root_cap
+    full_d = _pts_d(full_poly, close=True)
+
+    def sub_fill_d(t_start: float) -> str:
+        idx = max(1, min(steps - 2, int(round(t_start * steps))))
+        tx_i, ty_i = tangents[idx]
+        l_i, r_i = left_pts[idx], right_pts[idx]
+        mid_back = (
+            0.5 * (l_i[0] + r_i[0]) - tx_i * 5.0,
+            0.5 * (l_i[1] + r_i[1]) - ty_i * 5.0,
+        )
+        poly = left_pts[idx:] + tip_cap + list(reversed(right_pts[idx:])) + [mid_back]
+        return _pts_d(poly, close=True)
+
+    def sub_stroke_d(t_in: float, t_out: float) -> str:
+        i_in = max(1, min(steps - 1, int(round(t_in * steps))))
+        i_out = max(1, min(steps - 1, int(round(t_out * steps))))
+        if inner_is_right:
+            pts = right_pts[i_in:] + list(reversed(tip_cap)) + list(reversed(left_pts[i_out:]))
+        else:
+            pts = left_pts[i_in:] + tip_cap + list(reversed(right_pts[i_out:]))
+        return _pts_d(pts, close=False)
+
+    return {
+        "full_d": full_d,
+        "sub_fill_d": sub_fill_d,
+        "sub_stroke_d": sub_stroke_d,
+        "p2": p2,
+        "t2": tangents[-1],
+        "n2": normals[-1],
+        "w2": w2,
+    }
+
+
+def _paw_pad_svg(mesh: dict) -> str:
+    x2, y2 = mesh["p2"]
+    t2x, t2y = mesh["t2"]
+    w2 = mesh["w2"]
+    px = x2 + t2x * (w2 * 0.25)
+    py = y2 + t2y * (w2 * 0.25)
+    return f'<circle cx="{px:.1f}" cy="{py:.1f}" r="{w2 * 0.42:.1f}" fill="#FFF5E6" fill-opacity="0.72"/>'
+
+
+def arm_spec(
+    p0: tuple[float, float],
+    p1: tuple[float, float],
+    p2: tuple[float, float],
+    w0: float = 13.8,
+    w1: float = 11.8,
+    w2: float = 10.2,
+    fill: str | None = None,
+    stroke: str = OL,
+    sw: float = 4.0,
+    paw_pad: bool = False,
+    layer: str = "front",
+    local: bool = False,
+    t_fill: float = 0.24,
+    t_in: float = 0.28,
+    t_out: float = 0.48,
+    t_oh: float = 0.32,
+) -> dict:
+    return {
+        "p0": p0, "p1": p1, "p2": p2,
+        "w0": w0, "w1": w1, "w2": w2,
+        "fill": fill, "stroke": stroke, "sw": sw,
+        "paw_pad": paw_pad, "layer": layer, "local": local,
+        "t_fill": t_fill, "t_in": t_in, "t_out": t_out, "t_oh": t_oh,
+    }
+
+
+def _bear_torso_d(rx: float, ry: float) -> str:
+    """100% C1-continuous chubby plush teddy pear torso (ZERO upper-shoulder corners!)."""
+    top_y = -ry + 4.0
+    mid_y = ry * 0.16
+    return (
+        f"M 0,{top_y:.1f} "
+        f"C {rx * 0.66:.1f},{top_y:.1f} {rx * 1.04:.1f},{-ry * 0.32:.1f} {rx * 1.04:.1f},{mid_y:.1f} "
+        f"C {rx * 1.04:.1f},{ry * 0.68:.1f} {rx * 0.64:.1f},{ry:.1f} 0,{ry:.1f} "
+        f"C {-rx * 0.64:.1f},{ry:.1f} {-rx * 1.04:.1f},{ry * 0.68:.1f} {-rx * 1.04:.1f},{mid_y:.1f} "
+        f"C {-rx * 1.04:.1f},{-ry * 0.32:.1f} {-rx * 0.66:.1f},{top_y:.1f} 0,{top_y:.1f} Z"
+    )
 
 
 def bear_arm(
@@ -87,64 +312,25 @@ def bear_arm(
     w2: float = 11.2,
     fill: str = FUR,
     stroke: str = OL,
-    sw: float = 3.9,
+    sw: float = 4.0,
     paw_pad: bool = False,
     seamless_shoulder: bool = True,
 ) -> str:
-    """Chubby, soft plush teddy bear arm curving naturally from shoulder P0 -> elbow P1 -> paw P2.
-    - Seamless shoulder fill merges organically into plush torso (ZERO armpit cut line!).
-    - Plump rounded teddy mitten paw with optional subtle cream plush pad dot."""
-    x0, y0 = p0
-    x1, y1 = p1
-    x2, y2 = p2
-
-    t0x, t0y = _norm(x1 - x0, y1 - y0)
-    t1x, t1y = _norm(x2 - x0, y2 - y0)
-    t2x, t2y = _norm(x2 - x1, y2 - y1)
-
-    n0x, n0y = -t0y, t0x
-    n1x, n1y = -t1y, t1x
-    n2x, n2y = -t2y, t2x
-
-    a0 = (x0 + n0x * w0, y0 + n0y * w0)
-    a1 = (x1 + n1x * w1, y1 + n1y * w1)
-    a2 = (x2 + n2x * w2, y2 + n2y * w2)
-
-    b0 = (x0 - n0x * w0, y0 - n0y * w0)
-    b1 = (x1 - n1x * w1, y1 - n1y * w1)
-    b2 = (x2 - n2x * w2, y2 - n2y * w2)
-
-    cap_ext = w2 * 1.15
-    c1 = (a2[0] + t2x * cap_ext, a2[1] + t2y * cap_ext)
-    c2 = (b2[0] + t2x * cap_ext, b2[1] + t2y * cap_ext)
-    tuck_x, tuck_y = x0 - t0x * 6.0, y0 - t0y * 6.0
-
-    fill_d = (
-        f"M {a0[0]:.1f},{a0[1]:.1f} "
-        f"Q {a1[0]:.1f},{a1[1]:.1f} {a2[0]:.1f},{a2[1]:.1f} "
-        f"C {c1[0]:.1f},{c1[1]:.1f} {c2[0]:.1f},{c2[1]:.1f} {b2[0]:.1f},{b2[1]:.1f} "
-        f"Q {b1[0]:.1f},{b1[1]:.1f} {b0[0]:.1f},{b0[1]:.1f} "
-        f"Q {tuck_x:.1f},{tuck_y:.1f} {a0[0]:.1f},{a0[1]:.1f} Z"
-    )
-
+    """Standalone high-density 48-step curved teddy arm (for box-rim paws etc.)."""
+    mesh = _sample_arm_mesh(p0, p1, p2, w0, w1, w2)
     if seamless_shoulder:
-        stroke_d = (
-            f"M {a0[0]:.1f},{a0[1]:.1f} "
-            f"Q {a1[0]:.1f},{a1[1]:.1f} {a2[0]:.1f},{a2[1]:.1f} "
-            f"C {c1[0]:.1f},{c1[1]:.1f} {c2[0]:.1f},{c2[1]:.1f} {b2[0]:.1f},{b2[1]:.1f} "
-            f"Q {b1[0]:.1f},{b1[1]:.1f} {b0[0]:.1f},{b0[1]:.1f}"
-        )
         out = (
-            f'<path d="{fill_d}" fill="{fill}" stroke="none"/>'
-            f'<path d="{stroke_d}" fill="none" stroke="{stroke}" stroke-width="{sw}" stroke-linecap="round" stroke-linejoin="round"/>'
+            f'<path d="{mesh["full_d"]}" fill="{fill}" stroke="none"/>'
+            f'<path d="{mesh["sub_stroke_d"](0.24, 0.24)}" fill="none" stroke="{stroke}" '
+            f'stroke-width="{sw}" stroke-linecap="round" stroke-linejoin="round"/>'
         )
     else:
-        out = f'<path d="{fill_d}" fill="{fill}" stroke="{stroke}" stroke-width="{sw}" stroke-linejoin="round"/>'
-
+        out = (
+            f'<path d="{mesh["full_d"]}" fill="{fill}" stroke="{stroke}" '
+            f'stroke-width="{sw}" stroke-linejoin="round"/>'
+        )
     if paw_pad:
-        px = x2 + t2x * (w2 * 0.25)
-        py = y2 + t2y * (w2 * 0.25)
-        out += f'<circle cx="{px:.1f}" cy="{py:.1f}" r="{w2 * 0.42:.1f}" fill="#FFF5E6" fill-opacity="0.72"/>'
+        out += _paw_pad_svg(mesh)
     return out
 
 
@@ -274,50 +460,111 @@ def bear_body(
     paws="down",
     outfit="none",
     lean=0,
+    arms: list[dict] | None = None,
+    mid_props: str = "",
+    head_svg: str = "",
     custom_arms: str = "",
 ) -> str:
-    """Wide chubby plush teddy bear body with 100% seamless curved plush arms & white toe-bean feet!"""
-    parts = [f'<g transform="translate({cx},{cy}) rotate({lean})">']
+    """v4.1 3-Layer Seamless Silhouette Plush Bear Body:
+      Layer 1: Unified dark outline (2*sw round join) of C1 pear teddy torso + ALL arms.
+      Layer 2: Unified seamless fill fusing shoulders 100% into torso + belly/outfit.
+      Mid-Layer: World-space props held in front of torso (`mid_props`).
+      Layer 3: Foreground forearm fill + smooth inner forearm crease (ZERO shoulder horns!).
+      Head + Over-Head Pass: `head_svg` followed by upper forearms (`layer == 'over_head'`)."""
+    torso_c = "#598C5E" if outfit in ("green_shirt", "overalls") else FUR
+    arm_c = torso_c
+    sx_l, sx_r = -rx * 0.54, rx * 0.54
+    sy = -ry * 0.32
+    spec_list: list[dict] = []
 
+    if paws == "down":
+        spec_list += [
+            arm_spec((sx_l, sy), (sx_l - 24, sy + 14), (sx_l - 12, sy + 36), 14.2, 12.2, 10.4, fill=arm_c, layer="front", local=True, t_fill=0.30, t_in=0.30, t_out=0.54),
+            arm_spec((sx_r, sy), (sx_r + 24, sy + 14), (sx_r + 12, sy + 36), 14.2, 12.2, 10.4, fill=arm_c, layer="front", local=True, t_fill=0.30, t_in=0.30, t_out=0.54),
+        ]
+    elif paws == "wide_up":
+        spec_list += [
+            arm_spec((sx_l, sy), (sx_l - 26, sy - 4), (sx_l - 34, sy - 30), 14.2, 12.2, 10.6, fill=arm_c, paw_pad=(arm_c == FUR), layer="out", local=True),
+            arm_spec((sx_r, sy), (sx_r + 26, sy - 4), (sx_r + 34, sy - 30), 14.2, 12.2, 10.6, fill=arm_c, paw_pad=(arm_c == FUR), layer="out", local=True),
+        ]
+    elif paws == "wave_r":
+        spec_list += [
+            arm_spec((sx_l, sy), (sx_l - 22, sy + 14), (sx_l - 10, sy + 34), 14.0, 12.0, 10.2, fill=arm_c, layer="front", local=True, t_fill=0.30, t_in=0.30, t_out=0.54),
+            arm_spec((sx_r, sy), (sx_r + 28, sy - 4), (sx_r + 34, sy - 32), 14.2, 12.2, 10.6, fill=arm_c, paw_pad=(arm_c == FUR), layer="out", local=True),
+        ]
+    elif paws == "walk_swing":
+        spec_list += [
+            arm_spec((sx_l, sy), (sx_l - 24, sy + 16), (sx_l - 26, sy + 32), 14.0, 12.0, 10.2, fill=arm_c, layer="out", local=True),
+            arm_spec((sx_r, sy), (sx_r + 26, sy + 4), (sx_r + 16, sy + 24), 14.0, 12.0, 10.2, fill=arm_c, layer="front", local=True, t_fill=0.30, t_in=0.30, t_out=0.54),
+        ]
+    elif paws == "hug_center":
+        spec_list += [
+            arm_spec((sx_l, sy), (sx_l - 18, sy + 22), (-18, sy + 22), 13.8, 11.8, 10.2, fill=arm_c, layer="front", local=True, t_fill=0.24, t_in=0.28, t_out=0.48),
+            arm_spec((sx_r, sy), (sx_r + 18, sy + 22), (18, sy + 22), 13.8, 11.8, 10.2, fill=arm_c, layer="front", local=True, t_fill=0.24, t_in=0.28, t_out=0.48),
+        ]
+
+    if arms:
+        spec_list.extend(arms)
+
+    built_arms: list[tuple[dict, dict]] = []
+    for sp in spec_list:
+        if sp["local"]:
+            lp0, lp1, lp2 = sp["p0"], sp["p1"], sp["p2"]
+        else:
+            lp0 = _to_local(sp["p0"], cx, cy, lean)
+            lp1 = _to_local(sp["p1"], cx, cy, lean)
+            lp2 = _to_local(sp["p2"], cx, cy, lean)
+        lp0, lp1, lp2 = _clamp_shoulder_local(lp0, lp1, lp2, rx, ry)
+        mesh = _sample_arm_mesh(lp0, lp1, lp2, sp["w0"], sp["w1"], sp["w2"])
+        built_arms.append((sp, mesh))
+
+    tf = f'translate({cx},{cy}) rotate({lean})'
+    torso_d = _bear_torso_d(rx, ry)
+    torso_sw = 4.1
+
+    feet_svg = ""
     if pose == "sit":
-        parts.append(_toe_bean_foot(-43, 30, rot=-18) + _toe_bean_foot(43, 30, rot=18))
+        feet_svg = _toe_bean_foot(-43, 30, rot=-18) + _toe_bean_foot(43, 30, rot=18)
     elif pose == "float":
-        parts.append(_toe_bean_foot(-35, 42, rot=-28) + _toe_bean_foot(35, 42, rot=28))
+        feet_svg = _toe_bean_foot(-35, 42, rot=-28) + _toe_bean_foot(35, 42, rot=28)
     elif pose == "jump":
-        parts.append(_toe_bean_foot(-40, 38, rot=-34) + _toe_bean_foot(40, 38, rot=34))
+        feet_svg = _toe_bean_foot(-40, 38, rot=-34) + _toe_bean_foot(40, 38, rot=34)
     elif pose == "walk":
-        parts.append(
+        feet_svg = (
             f'<ellipse cx="-29" cy="44" rx="22" ry="12.5" transform="rotate(-12 -29 44)" fill="{FUR_SHD}" stroke="{OL}" stroke-width="3.8"/>'
             f'<ellipse cx="27" cy="34" rx="22" ry="12.5" transform="rotate(24 27 34)" fill="{FUR_SHD}" stroke="{OL}" stroke-width="3.8"/>'
         )
     elif pose == "hidden":
-        pass
+        feet_svg = ""
     else:
-        parts.append(
+        feet_svg = (
             f'<ellipse cx="-27" cy="42" rx="22" ry="12.5" fill="{FUR_SHD}" stroke="{OL}" stroke-width="3.8"/>'
             f'<ellipse cx="27" cy="42" rx="22" ry="12.5" fill="{FUR_SHD}" stroke="{OL}" stroke-width="3.8"/>'
         )
 
-    torso_c = "#598C5E" if outfit in ("green_shirt", "overalls") else FUR
-    parts.append(
-        f'<path d="M {-rx + 16},-38 '
-        f'C {-rx - 10},-8 {-rx + 4},{ry} 0,{ry} '
-        f'C {rx - 4},{ry} {rx + 10},-8 {rx - 16},-38 '
-        f'Q 0,-46 {-rx + 16},-38 Z" '
-        f'fill="{torso_c}" stroke="{OL}" stroke-width="4.1" stroke-linejoin="round"/>'
-    )
+    parts: list[str] = []
+    if feet_svg:
+        parts.append(f'<g transform="{tf}">{feet_svg}</g>')
+
+    # Layer 1 (Unified 2*sw Outline) + Layer 2 (Unified Seamless Fill) + Belly/Outfit
+    l1 = [f'<path d="{torso_d}" fill="none" stroke="{OL}" stroke-width="{torso_sw * 2:.1f}" stroke-linejoin="round" stroke-linecap="round"/>']
+    l2 = [f'<path d="{torso_d}" fill="{torso_c}" stroke="none"/>']
+    for sp, mesh in built_arms:
+        a_fill = sp["fill"] if sp["fill"] is not None else arm_c
+        l1.append(f'<path d="{mesh["full_d"]}" fill="none" stroke="{sp["stroke"]}" stroke-width="{sp["sw"] * 2:.1f}" stroke-linejoin="round" stroke-linecap="round"/>')
+        l2.append(f'<path d="{mesh["full_d"]}" fill="{a_fill}" stroke="none"/>')
 
     if outfit == "none":
-        parts.append(f'<ellipse cx="0" cy="11" rx="{rx * 0.62:.1f}" ry="{ry * 0.68:.1f}" fill="{CREAM}"/>')
+        l2.append(f'<ellipse cx="0" cy="11" rx="{rx * 0.62:.1f}" ry="{ry * 0.68:.1f}" fill="{CREAM}"/>')
     elif outfit == "apron":
-        parts.append(
+        l2.append(
             f'<ellipse cx="0" cy="11" rx="{rx * 0.62:.1f}" ry="{ry * 0.68:.1f}" fill="{CREAM}"/>'
             f'<path d="M -32,-16 L 32,-16 L 40,38 Q 0,46 -40,38 Z" fill="#FFFDF5" stroke="#B87D8C" stroke-width="3.0" stroke-linejoin="round"/>'
             f'<path d="M -26,-16 L -22,-34 M 26,-16 L 22,-34" stroke="#B87D8C" stroke-width="4.0" stroke-linecap="round"/>'
             + strawberry(0, 14, s=0.65, ripe=True)
         )
     elif outfit == "overalls":
-        parts.append(
+        l2.append(
             f'<path d="M -38,-28 L -24,-28 L -24,-4 L 24,-4 L 24,-28 L 38,-28 L 46,12 '
             f'C 48,{ry - 4} 28,{ry} 0,{ry} C -28,{ry} -48,{ry - 4} -46,12 Z" '
             f'fill="{CREAM}" stroke="{OL}" stroke-width="3.6" stroke-linejoin="round"/>'
@@ -327,41 +574,51 @@ def bear_body(
             + heart(0, 17, s=8.5, fill="#DE5B73", stroke=OL, sw=1.8)
         )
 
-    # Seamless curved chubby teddy arms (ZERO detached oval blobs!)
-    arm_c = "#598C5E" if outfit in ("green_shirt", "overalls") else FUR
-    sx_l, sx_r, sy = -rx + 18, rx - 18, -14
-    if paws == "down":
-        parts.append(
-            bear_arm((sx_l, sy), (sx_l - 24, sy + 14), (sx_l - 12, sy + 36), 14.5, 12.5, 10.6, fill=arm_c)
-            + bear_arm((sx_r, sy), (sx_r + 24, sy + 14), (sx_r + 12, sy + 36), 14.5, 12.5, 10.6, fill=arm_c)
-        )
-    elif paws == "wide_up":
-        parts.append(
-            bear_arm((sx_l, sy), (sx_l - 26, sy - 4), (sx_l - 34, sy - 30), 14.5, 12.5, 10.8, fill=arm_c, paw_pad=(arm_c == FUR))
-            + bear_arm((sx_r, sy), (sx_r + 26, sy - 4), (sx_r + 34, sy - 30), 14.5, 12.5, 10.8, fill=arm_c, paw_pad=(arm_c == FUR))
-        )
-    elif paws == "wave_r":
-        parts.append(
-            bear_arm((sx_l, sy), (sx_l - 22, sy + 14), (sx_l - 10, sy + 34), 14.2, 12.2, 10.4, fill=arm_c)
-            + bear_arm((sx_r, sy), (sx_r + 28, sy - 4), (sx_r + 34, sy - 32), 14.5, 12.5, 10.8, fill=arm_c, paw_pad=(arm_c == FUR))
-        )
-    elif paws == "walk_swing":
-        parts.append(
-            bear_arm((sx_l, sy), (sx_l - 24, sy + 16), (sx_l - 26, sy + 32), 14.2, 12.2, 10.4, fill=arm_c)
-            + bear_arm((sx_r, sy), (sx_r + 26, sy + 4), (sx_r + 16, sy + 24), 14.2, 12.2, 10.4, fill=arm_c)
-        )
-    elif paws == "hug_center":
-        parts.append(
-            bear_arm((sx_l, sy), (sx_l - 16, sy + 22), (-18, sy + 22), 14.0, 12.0, 10.4, fill=arm_c)
-            + bear_arm((sx_r, sy), (sx_r + 16, sy + 22), (18, sy + 22), 14.0, 12.0, 10.4, fill=arm_c)
-        )
-    elif paws == "none":
-        pass
+    parts.append(f'<g transform="{tf}">{"".join(l1)}{"".join(l2)}</g>')
 
+    # Mid-Layer (World Space Props)
+    if mid_props:
+        parts.append(mid_props)
+
+    # Layer 3 (Foreground Forearms + Smooth Inner Forearm Creases + Paw Pads)
+    l3: list[str] = []
+    for sp, mesh in built_arms:
+        a_fill = sp["fill"] if sp["fill"] is not None else arm_c
+        if sp["layer"] == "front":
+            l3.append(f'<path d="{mesh["sub_fill_d"](sp["t_fill"])}" fill="{a_fill}" stroke="none"/>')
+            l3.append(
+                f'<path d="{mesh["sub_stroke_d"](sp["t_in"], sp["t_out"])}" fill="none" '
+                f'stroke="{sp["stroke"]}" stroke-width="{sp["sw"]:.1f}" stroke-linecap="round" stroke-linejoin="round"/>'
+            )
+            if sp["paw_pad"]:
+                l3.append(_paw_pad_svg(mesh))
+        elif sp["layer"] == "out" and sp["paw_pad"]:
+            l3.append(_paw_pad_svg(mesh))
     if custom_arms:
-        parts.append(custom_arms)
+        l3.append(custom_arms)
+    if l3:
+        parts.append(f'<g transform="{tf}">{"".join(l3)}</g>')
 
-    parts.append("</g>")
+    # Head Layer (World Space)
+    if head_svg:
+        parts.append(head_svg)
+
+    # Group 4 (Over-Head Pass — Forearm & Paw overlapping cheek/ear/headband)
+    l4: list[str] = []
+    for sp, mesh in built_arms:
+        if sp["layer"] == "over_head":
+            a_fill = sp["fill"] if sp["fill"] is not None else arm_c
+            t_oh = sp["t_oh"]
+            l4.append(f'<path d="{mesh["sub_fill_d"](t_oh)}" fill="{a_fill}" stroke="none"/>')
+            l4.append(
+                f'<path d="{mesh["sub_stroke_d"](t_oh, t_oh)}" fill="none" '
+                f'stroke="{sp["stroke"]}" stroke-width="{sp["sw"]:.1f}" stroke-linecap="round" stroke-linejoin="round"/>'
+            )
+            if sp["paw_pad"]:
+                l4.append(_paw_pad_svg(mesh))
+    if l4:
+        parts.append(f'<g transform="{tf}">{"".join(l4)}</g>')
+
     return "".join(parts)
 
 
@@ -524,28 +781,40 @@ def build_71_strawberry() -> list[tuple[str, Image.Image]]:
     )
     s3 = render_svg(
         shadow()
-        + bear_body(150, 216, pose="sit", paws="none")
-        + strawberry(150, 214, s=1.70, ripe=True)
-        + bear_arm((102, 198), (94, 224), (128, 218), 14.0, 12.0, 10.4)
-        + bear_arm((198, 198), (206, 224), (172, 218), 14.0, 12.0, 10.4)
-        + bear_head(150, 122, expr="smile", rot=4)
+        + bear_body(
+            150, 216, pose="sit", paws="none",
+            mid_props=strawberry(150, 216, s=1.70, ripe=True),
+            arms=[
+                arm_spec((114, 198), (94, 224), (128, 220), 14.0, 12.0, 10.4, layer="front"),
+                arm_spec((186, 198), (206, 224), (172, 220), 14.0, 12.0, 10.4, layer="front"),
+            ],
+            head_svg=bear_head(150, 122, expr="smile", rot=4),
+        )
     )
     s4 = render_svg(
         shadow()
-        + bear_body(150, 216, pose="sit", paws="none", lean=-5)
-        + strawberry(146, 214, s=1.72, ripe=True, rot=-6)
-        + bear_arm((100, 198), (92, 224), (124, 218), 14.0, 12.0, 10.4)
-        + bear_arm((196, 198), (206, 224), (170, 220), 14.0, 12.0, 10.4)
-        + bear_head(144, 122, expr="wink", strong_blush=True, rot=-9)
+        + bear_body(
+            150, 216, pose="sit", paws="none", lean=-5,
+            mid_props=strawberry(146, 216, s=1.72, ripe=True, rot=-6),
+            arms=[
+                arm_spec((114, 198), (92, 224), (124, 220), 14.0, 12.0, 10.4, layer="front"),
+                arm_spec((186, 198), (206, 224), (170, 220), 14.0, 12.0, 10.4, layer="front"),
+            ],
+            head_svg=bear_head(144, 122, expr="wink", strong_blush=True, rot=-9),
+        )
         + star5(242, 84, r=12) + sp4(52, 102, r=9)
     )
     s5 = with_hero_aura(render_svg(
         shadow(150, 272, 62, 8, op=0.12)
-        + bear_body(150, 206, pose="jump", paws="none")
-        + strawberry(150, 204, s=1.75, ripe=True)
-        + bear_arm((102, 188), (94, 214), (126, 206), 14.0, 12.0, 10.4)
-        + bear_arm((198, 188), (206, 214), (174, 206), 14.0, 12.0, 10.4)
-        + bear_head(150, 114, expr="heart_eyes", strong_blush=True, rot=5)
+        + bear_body(
+            150, 206, pose="jump", paws="none",
+            mid_props=strawberry(150, 206, s=1.75, ripe=True),
+            arms=[
+                arm_spec((114, 188), (94, 214), (126, 208), 14.0, 12.0, 10.4, layer="front"),
+                arm_spec((186, 188), (206, 214), (174, 208), 14.0, 12.0, 10.4, layer="front"),
+            ],
+            head_svg=bear_head(150, 114, expr="heart_eyes", strong_blush=True, rot=5),
+        )
         + heart(48, 84, s=14, fill="#FF6E94", rot=-12) + heart(252, 88, s=13, fill="#E56B8C", rot=12)
         + sp4(52, 174, r=10) + sp4(250, 174, r=10)
     ), (229, 107, 140))
@@ -580,9 +849,9 @@ def _milk_glass(cx=224, cy=218, filled=False, cream_top=False, s=1.0) -> str:
     return "".join(parts)
 
 
-def _milk_carton(cx=226, cy=188, rot=-18) -> str:
+def _milk_carton(cx=226, cy=188, rot=-18, s=1.0) -> str:
     return (
-        f'<g transform="translate({cx},{cy}) rotate({rot})">'
+        f'<g transform="translate({cx},{cy}) rotate({rot}) scale({s})">'
         f'<polygon points="-16,-14 0,-28 16,-14" fill="#FDECEF" stroke="{OL}" stroke-width="2.6" stroke-linejoin="round"/>'
         f'<rect x="-16" y="-14" width="32" height="40" rx="4" fill="#F9B4C8" stroke="{OL}" stroke-width="2.8"/>'
         f'<rect x="-16" y="-2" width="32" height="16" fill="#FFFFFF"/>'
@@ -606,49 +875,68 @@ def _shortcake_slice(cx=64, cy=224) -> str:
 def build_72_milk_cafe() -> list[tuple[str, Image.Image]]:
     # S0: Slouched on wooden counter propping chin with natural curved arm beside empty glass
     s0 = render_svg(
-        bear_body(134, 218, pose="sit", paws="none", lean=-6)
-        + bear_head(130, 128, expr="sleepy", brows="pout_sad", rot=-9)
-        + _wood_table(246)
-        + bear_arm((86, 200), (64, 228), (94, 178), 13.5, 11.8, 10.2)
-        + bear_arm((178, 206), (192, 232), (170, 236), 13.5, 11.8, 10.2)
-        + _milk_glass(228, 220, filled=False)
+        bear_body(
+            134, 218, pose="sit", paws="none", lean=-6,
+            mid_props=_wood_table(246) + _milk_glass(228, 220, filled=False),
+            arms=[
+                arm_spec((98, 202), (68, 208), (98, 174), 13.5, 11.8, 10.2, layer="over_head", t_oh=0.38),
+                arm_spec((168, 202), (192, 228), (166, 234), 13.5, 11.8, 10.2, layer="front", t_fill=0.30, t_in=0.34, t_out=0.52),
+            ],
+            head_svg=bear_head(130, 128, expr="sleepy", brows="pout_sad", rot=-9),
+        )
     )
     # S1: Putting on strawberry apron holding milk carton with curved right arm
     s1 = render_svg(
-        shadow() + bear_body(142, 216, pose="stand", paws="none", outfit="apron", lean=4)
-        + bear_arm((94, 198), (74, 218), (88, 236), 14.0, 12.0, 10.4)
-        + _milk_carton(228, 184, rot=10)
-        + bear_arm((190, 198), (218, 202), (216, 186), 14.0, 12.0, 10.4)
-        + bear_head(146, 122, expr="curious", rot=6)
+        shadow() + bear_body(
+            142, 216, pose="stand", paws="none", outfit="apron", lean=4,
+            mid_props=_milk_carton(228, 184, rot=10),
+            arms=[
+                arm_spec((106, 198), (76, 218), (88, 236), 14.0, 12.0, 10.4, layer="out"),
+                arm_spec((178, 198), (214, 202), (216, 186), 14.0, 12.0, 10.4, layer="front", t_fill=0.30, t_in=0.32, t_out=0.54),
+            ],
+            head_svg=bear_head(146, 122, expr="curious", rot=6),
+        )
     )
-    # S2: Pouring pink strawberry milk cleanly into glass!
+    # S2: Pouring pink strawberry milk cleanly into glass (carton shifted clear of right cheek!)
+    pour_stream = (
+        '<path d="M 227,178 Q 240,192 241,208" fill="none" stroke="#F9B4C8" stroke-width="7.2" stroke-linecap="round"/>'
+        '<path d="M 228,179 Q 238,191 239,205" fill="none" stroke="#FFF1F5" stroke-width="2.2" stroke-linecap="round"/>'
+    )
     s2 = render_svg(
-        bear_body(132, 216, pose="sit", paws="none", outfit="apron", lean=6)
-        + bear_arm((84, 200), (68, 224), (86, 236), 13.8, 11.8, 10.2)
-        + _wood_table(246)
-        + '<path d="M 206,174 Q 222,190 224,206" fill="none" stroke="#F9B4C8" stroke-width="7.0" stroke-linecap="round"/>'
-        + _milk_carton(198, 160, rot=54)
-        + bear_arm((178, 198), (206, 188), (194, 164), 13.8, 11.8, 10.2)
-        + _milk_glass(228, 220, filled=True, cream_top=False)
-        + bear_head(138, 122, expr="smile", rot=7)
+        bear_body(
+            118, 216, pose="sit", paws="none", outfit="apron", lean=5,
+            mid_props=_wood_table(246) + pour_stream + _milk_carton(214, 168, rot=46, s=0.90) + _milk_glass(242, 220, filled=True, cream_top=False),
+            arms=[
+                arm_spec((84, 200), (64, 224), (82, 236), 13.8, 11.8, 10.2, layer="front", t_fill=0.28, t_in=0.30, t_out=0.52),
+                arm_spec((154, 198), (186, 196), (202, 178), 13.8, 11.8, 10.2, layer="front", t_fill=0.28, t_in=0.30, t_out=0.52),
+            ],
+            head_svg=bear_head(122, 122, expr="smile", rot=6),
+        )
     )
     # S3: Topping glass with whipped cream & fresh strawberry!
     s3 = render_svg(
-        bear_body(136, 216, pose="sit", paws="none", outfit="apron", lean=-4)
-        + bear_arm((88, 200), (74, 224), (96, 234), 13.8, 11.8, 10.2)
-        + _wood_table(246)
-        + _milk_glass(226, 220, filled=True, cream_top=True)
-        + bear_arm((182, 198), (204, 202), (214, 184), 13.8, 11.8, 10.2)
-        + bear_head(134, 122, expr="sparkle_eyes", strong_blush=True, rot=-6)
+        bear_body(
+            136, 216, pose="sit", paws="none", outfit="apron", lean=-4,
+            mid_props=_wood_table(246) + _milk_glass(226, 220, filled=True, cream_top=True),
+            arms=[
+                arm_spec((100, 202), (76, 224), (98, 234), 13.8, 11.8, 10.2, layer="front", t_fill=0.30, t_in=0.34, t_out=0.52),
+                arm_spec((172, 200), (200, 202), (214, 184), 13.8, 11.8, 10.2, layer="front", t_fill=0.34, t_in=0.34, t_out=0.34),
+            ],
+            head_svg=bear_head(134, 122, expr="sparkle_eyes", strong_blush=True, rot=-6),
+        )
         + sp4(248, 166, r=10) + sp4(60, 108, r=9)
     )
     # S4: Curved chubby arms hugging strawberry milk glass sipping happily!
     s4 = render_svg(
-        shadow() + bear_body(150, 216, pose="sit", paws="none", outfit="apron", lean=5)
-        + _milk_glass(154, 212, filled=True, cream_top=True, s=1.12)
-        + bear_arm((102, 198), (94, 226), (132, 220), 14.0, 12.0, 10.4)
-        + bear_arm((198, 198), (206, 226), (176, 220), 14.0, 12.0, 10.4)
-        + bear_head(152, 122, expr="happy_squint", strong_blush=True, rot=7)
+        shadow() + bear_body(
+            150, 216, pose="sit", paws="none", outfit="apron", lean=5,
+            mid_props=_milk_glass(154, 212, filled=True, cream_top=True, s=1.12),
+            arms=[
+                arm_spec((114, 198), (94, 226), (132, 220), 14.0, 12.0, 10.4, layer="front"),
+                arm_spec((186, 198), (206, 226), (176, 220), 14.0, 12.0, 10.4, layer="front"),
+            ],
+            head_svg=bear_head(152, 122, expr="happy_squint", strong_blush=True, rot=7),
+        )
         + heart(242, 102, s=13, fill="#F7B2C4", stroke="#D65076")
     )
     # S5: Celebrating beside strawberry milk & shortcake slice with curved cheering arms!
@@ -709,11 +997,14 @@ def build_73_flower_crown() -> list[tuple[str, Image.Image]]:
         + '<ellipse cx="72" cy="266" rx="18" ry="5" fill="#C4E3C9"/><ellipse cx="228" cy="266" rx="18" ry="5" fill="#C4E3C9"/>'
     )
     s1 = render_svg(
-        shadow() + bear_body(150, 216, pose="stand", paws="none", lean=4)
-        + bear_arm((102, 198), (80, 216), (92, 234), 14.0, 12.0, 10.4)
-        + bear_head(154, 122, expr="smile", rot=7)
-        + daisy(208, 74, r=13)
-        + bear_arm((198, 196), (236, 152), (212, 92), 14.0, 12.0, 10.4)
+        shadow() + bear_body(
+            150, 216, pose="stand", paws="none", lean=4,
+            arms=[
+                arm_spec((114, 200), (82, 216), (92, 234), 14.0, 12.0, 10.4, layer="out"),
+                arm_spec((186, 200), (236, 152), (212, 92), 14.0, 12.0, 10.4, layer="over_head", t_oh=0.56),
+            ],
+            head_svg=bear_head(154, 122, expr="smile", rot=7) + daisy(208, 74, r=13),
+        )
     )
     s2 = render_svg(
         shadow() + bear_body(150, 216, pose="walk", paws="walk_swing", lean=-6)
@@ -726,12 +1017,15 @@ def build_73_flower_crown() -> list[tuple[str, Image.Image]]:
         + _berry_crown(152, 66, level="full", rot=5) + sp4(52, 92, r=9)
     )
     s4 = render_svg(
-        shadow() + bear_body(146, 216, pose="walk", paws="none", lean=-4)
-        + bear_arm((98, 198), (76, 216), (90, 234), 14.0, 12.0, 10.4)
-        + _berry_cluster(232, 184, s=0.98)
-        + bear_arm((194, 196), (220, 194), (222, 174), 14.0, 12.0, 10.4)
-        + bear_head(144, 122, expr="big_smile", strong_blush=True, rot=-6)
-        + _berry_crown(140, 66, level="full", rot=-6)
+        shadow() + bear_body(
+            146, 216, pose="walk", paws="none", lean=-4,
+            mid_props=_berry_cluster(232, 184, s=0.98),
+            arms=[
+                arm_spec((110, 198), (78, 216), (90, 234), 14.0, 12.0, 10.4, layer="out"),
+                arm_spec((182, 196), (218, 194), (222, 174), 14.0, 12.0, 10.4, layer="front", t_fill=0.30, t_in=0.32, t_out=0.54),
+            ],
+            head_svg=bear_head(144, 122, expr="big_smile", strong_blush=True, rot=-6) + _berry_crown(140, 66, level="full", rot=-6),
+        )
     )
     s5 = with_hero_aura(render_svg(
         shadow(150, 272, 62, 8, op=0.12)
@@ -871,8 +1165,11 @@ def _soundwaves(bright=False) -> str:
 
 def build_75_lofi() -> list[tuple[str, Image.Image]]:
     s0 = render_svg(
-        shadow() + bear_body(150, 218, pose="sit", paws="hug_center", lean=-6)
-        + _earphones("tangled") + bear_head(146, 124, expr="curious", brows="pout_sad", rot=-8)
+        shadow() + bear_body(
+            150, 218, pose="sit", paws="hug_center", lean=-6,
+            mid_props=_earphones("tangled"),
+            head_svg=bear_head(146, 124, expr="curious", brows="pout_sad", rot=-8),
+        )
     )
     s1 = render_svg(
         shadow() + bear_body(150, 216, pose="sit", paws="down", lean=5)
@@ -964,19 +1261,27 @@ def _balloon_bunch(count=1) -> str:
 
 def build_76_mood_detox() -> list[tuple[str, Image.Image]]:
     s0 = render_svg(
-        shadow() + bear_body(150, 218, pose="sit", paws="none")
-        + _cookie_state(150, 214, mended=False)
-        + bear_arm((102, 200), (96, 224), (126, 218), 13.8, 11.8, 10.2)
-        + bear_arm((198, 200), (204, 224), (174, 218), 13.8, 11.8, 10.2)
-        + bear_head(150, 124, expr="grumpy", brows="grump_cute", rot=-6)
+        shadow() + bear_body(
+            150, 218, pose="sit", paws="none",
+            mid_props=_cookie_state(150, 216, mended=False),
+            arms=[
+                arm_spec((114, 200), (96, 224), (126, 218), 13.8, 11.8, 10.2, layer="front"),
+                arm_spec((186, 200), (204, 224), (174, 218), 13.8, 11.8, 10.2, layer="front"),
+            ],
+            head_svg=bear_head(150, 124, expr="grumpy", brows="grump_cute", rot=-6),
+        )
         + _lightning(46, 72, -16) + _lightning(254, 72, 16) + _lightning(42, 178, -22, 0.85) + _lightning(258, 178, 22, 0.85)
     )
     s1 = render_svg(
-        shadow() + bear_body(150, 218, pose="sit", paws="none", lean=4)
-        + _cookie_state(152, 216, mended=True)
-        + bear_arm((102, 200), (96, 224), (132, 218), 13.8, 11.8, 10.2)
-        + bear_arm((198, 200), (204, 224), (170, 218), 13.8, 11.8, 10.2)
-        + bear_head(154, 124, expr="calm_smile", brows="pout_sad", rot=7)
+        shadow() + bear_body(
+            150, 218, pose="sit", paws="none", lean=4,
+            mid_props=_cookie_state(152, 218, mended=True),
+            arms=[
+                arm_spec((114, 200), (96, 224), (132, 218), 13.8, 11.8, 10.2, layer="front"),
+                arm_spec((186, 200), (204, 224), (170, 218), 13.8, 11.8, 10.2, layer="front"),
+            ],
+            head_svg=bear_head(154, 124, expr="calm_smile", brows="pout_sad", rot=7),
+        )
     )
     s2 = render_svg(
         shadow() + _balloon_bunch(1)
@@ -1089,51 +1394,70 @@ def build_77_sweet_dreams() -> list[tuple[str, Image.Image]]:
     s1 = render_svg(
         shadow(124, 270, 72, 9)
         + _roadside_flowers(240, 250, picked=True)
-        + bear_body(122, 218, pose="stand", paws="none", lean=11)
-        + bear_arm((88, 200), (62, 218), (76, 234), 13.6, 11.8, 10.2)
-        + '<path d="M 218,228 L 226,204" stroke="#4D8B58" stroke-width="3.6" stroke-linecap="round"/>'
-        + _rose(228, 200, 0.96)
-        + bear_arm((156, 204), (192, 218), (218, 220), 13.6, 11.8, 10.2)
-        + bear_head(132, 124, expr="smile", strong_blush=True, rot=12)
+        + bear_body(
+            122, 218, pose="stand", paws="none", lean=11,
+            mid_props='<path d="M 218,228 L 226,204" stroke="#4D8B58" stroke-width="3.6" stroke-linecap="round"/>' + _rose(228, 200, 0.96),
+            arms=[
+                arm_spec((88, 200), (64, 218), (76, 234), 13.6, 11.8, 10.2, layer="out"),
+                arm_spec((156, 204), (192, 218), (218, 220), 13.6, 11.8, 10.2, layer="front", t_fill=0.30, t_in=0.32, t_out=0.54),
+            ],
+            head_svg=bear_head(132, 124, expr="smile", strong_blush=True, rot=12),
+        )
     )
     # S2 (40%): Sitting cleanly tying several red roses into a neat pink-ribbon bouquet!
     s2 = render_svg(
         shadow()
-        + bear_body(150, 218, pose="sit", paws="none", lean=-3)
-        + _bouquet(150, 214, blooms=2, ribbon=True)
-        + bear_arm((102, 198), (94, 224), (132, 220), 13.8, 11.8, 10.2)
-        + bear_arm((198, 198), (206, 224), (168, 220), 13.8, 11.8, 10.2)
-        + bear_head(148, 122, expr="smile", strong_blush=True, rot=-5)
+        + bear_body(
+            150, 218, pose="sit", paws="none", lean=-3,
+            mid_props=_bouquet(150, 216, blooms=2, ribbon=True),
+            arms=[
+                arm_spec((114, 198), (94, 224), (132, 220), 13.8, 11.8, 10.2, layer="front"),
+                arm_spec((186, 198), (206, 224), (168, 220), 13.8, 11.8, 10.2, layer="front"),
+            ],
+            head_svg=bear_head(148, 122, expr="smile", strong_blush=True, rot=-5),
+        )
     )
     # S3 (60%): Hugging full red bouquet looking up at dreamy cream-pink thought cloud appearing!
     s3 = render_svg(
         shadow()
-        + bear_body(142, 216, pose="sit", paws="none", lean=4)
-        + _bouquet(144, 214, blooms=3, ribbon=True)
-        + bear_arm((94, 198), (88, 224), (126, 220), 13.8, 11.8, 10.2)
-        + bear_arm((190, 198), (196, 224), (162, 220), 13.8, 11.8, 10.2)
-        + bear_head(144, 122, expr="sparkle_eyes", strong_blush=True, rot=7)
+        + bear_body(
+            142, 216, pose="sit", paws="none", lean=4,
+            mid_props=_bouquet(144, 216, blooms=3, ribbon=True),
+            arms=[
+                arm_spec((106, 198), (88, 224), (126, 220), 13.8, 11.8, 10.2, layer="front"),
+                arm_spec((178, 198), (196, 224), (162, 220), 13.8, 11.8, 10.2, layer="front"),
+            ],
+            head_svg=bear_head(144, 122, expr="sparkle_eyes", strong_blush=True, rot=7),
+        )
         + _dream_cloud("empty")
     )
     # S4 (80%): Lavender pastel sheep smiling peacefully inside dream cloud, Lotso blushing dreamy!
     s4 = render_svg(
         shadow()
-        + bear_body(142, 216, pose="sit", paws="none", lean=-5)
-        + _bouquet(140, 214, blooms=3, ribbon=True)
-        + bear_arm((94, 198), (88, 224), (122, 220), 13.8, 11.8, 10.2)
-        + bear_arm((190, 198), (196, 224), (158, 220), 13.8, 11.8, 10.2)
-        + bear_head(138, 124, expr="calm_closed", strong_blush=True, rot=-7)
+        + bear_body(
+            142, 216, pose="sit", paws="none", lean=-5,
+            mid_props=_bouquet(140, 216, blooms=3, ribbon=True),
+            arms=[
+                arm_spec((106, 198), (88, 224), (122, 220), 13.8, 11.8, 10.2, layer="front"),
+                arm_spec((178, 198), (196, 224), (158, 220), 13.8, 11.8, 10.2, layer="front"),
+            ],
+            head_svg=bear_head(138, 124, expr="calm_closed", strong_blush=True, rot=-7),
+        )
         + _dream_cloud("sheep")
     )
     # S5 (100%): Soft pink cloud backdrop, hugging vibrant bouquet & gently waving hello to sheep dream!
     s5 = with_hero_aura(render_svg(
         '<ellipse cx="150" cy="160" rx="124" ry="96" fill="#FCECF3"/>'
         + shadow()
-        + bear_body(134, 214, pose="sit", paws="none", lean=3)
-        + _bouquet(112, 214, blooms=3, ribbon=True)
-        + bear_arm((86, 196), (76, 220), (104, 220), 13.8, 11.8, 10.2)
-        + bear_arm((182, 196), (218, 188), (226, 152), 14.0, 12.0, 10.4, paw_pad=True)
-        + bear_head(136, 124, expr="happy_squint", strong_blush=True, rot=5)
+        + bear_body(
+            134, 214, pose="sit", paws="none", lean=3,
+            mid_props=_bouquet(112, 216, blooms=3, ribbon=True),
+            arms=[
+                arm_spec((98, 196), (76, 220), (104, 220), 13.8, 11.8, 10.2, layer="front"),
+                arm_spec((170, 196), (216, 188), (226, 152), 14.0, 12.0, 10.4, paw_pad=True, layer="out"),
+            ],
+            head_svg=bear_head(136, 124, expr="happy_squint", strong_blush=True, rot=5),
+        )
         + _dream_cloud("sheep")
         + sp4(46, 84, r=11, fill="#FDE047", stroke="#9D82C9") + sp4(48, 198, r=9, fill="#E9DDFB", stroke="#8B6BB8")
     ), (184, 158, 219))
@@ -1173,50 +1497,65 @@ def build_78_daisy_glow() -> list[tuple[str, Image.Image]]:
     s1 = render_svg(
         shadow(126, 270, 72, 9)
         + '<ellipse cx="238" cy="262" rx="20" ry="5" fill="#C9E6CE"/>'
-        + bear_body(124, 218, pose="stand", paws="none", lean=14)
-        + bear_arm((92, 200), (64, 218), (76, 234), 13.6, 11.8, 10.2)
-        + '<path d="M 222,238 L 236,222" stroke="#6D9F71" stroke-width="3.6" stroke-linecap="round"/>'
-        + daisy(238, 218, r=14, rot=14)
-        + bear_arm((158, 206), (194, 224), (218, 234), 13.6, 11.8, 10.2)
-        + bear_head(138, 126, expr="smile", strong_blush=True, rot=15)
+        + bear_body(
+            124, 218, pose="stand", paws="none", lean=14,
+            mid_props='<path d="M 222,238 L 236,222" stroke="#6D9F71" stroke-width="3.6" stroke-linecap="round"/>' + daisy(238, 218, r=14, rot=14),
+            arms=[
+                arm_spec((92, 200), (66, 218), (76, 234), 13.6, 11.8, 10.2, layer="out"),
+                arm_spec((158, 206), (194, 224), (218, 234), 13.6, 11.8, 10.2, layer="front", t_fill=0.30, t_in=0.32, t_out=0.54),
+            ],
+            head_svg=bear_head(138, 126, expr="smile", strong_blush=True, rot=15),
+        )
     )
     # S2 (40%): Sitting down cradling the white daisy tenderly in both curved paws, gentle smile!
     s2 = render_svg(
         shadow()
-        + bear_body(150, 218, pose="sit", paws="none")
-        + '<path d="M 150,234 L 150,210" stroke="#6D9F71" stroke-width="3.8" stroke-linecap="round"/>'
-        + daisy(150, 204, r=16, rot=8)
-        + bear_arm((102, 198), (94, 226), (132, 222), 13.8, 11.8, 10.2)
-        + bear_arm((198, 198), (206, 226), (168, 222), 13.8, 11.8, 10.2)
-        + bear_head(150, 122, expr="calm_smile", strong_blush=True, rot=-4)
+        + bear_body(
+            150, 218, pose="sit", paws="none",
+            mid_props='<path d="M 150,236 L 150,212" stroke="#6D9F71" stroke-width="3.8" stroke-linecap="round"/>' + daisy(150, 206, r=16, rot=8),
+            arms=[
+                arm_spec((114, 198), (94, 226), (132, 222), 13.8, 11.8, 10.2, layer="front"),
+                arm_spec((186, 198), (206, 226), (168, 222), 13.8, 11.8, 10.2, layer="front"),
+            ],
+            head_svg=bear_head(150, 122, expr="calm_smile", strong_blush=True, rot=-4),
+        )
     )
     # S3 (60%): Raising curved right arm to tuck the daisy neatly behind his round bear ear, cheeks blushing!
     s3 = render_svg(
         shadow()
-        + bear_body(150, 218, pose="sit", paws="none", lean=-4)
-        + bear_arm((102, 198), (82, 218), (98, 234), 13.8, 11.8, 10.2)
-        + bear_head(148, 122, expr="smile", strong_blush=True, rot=-6)
-        + daisy(202, 74, r=16, rot=18)
-        + bear_arm((196, 198), (236, 152), (210, 92), 13.8, 11.8, 10.2)
+        + bear_body(
+            150, 218, pose="sit", paws="none", lean=-4,
+            arms=[
+                arm_spec((114, 200), (82, 218), (98, 234), 13.8, 11.8, 10.2, layer="out"),
+                arm_spec((186, 200), (236, 152), (210, 92), 13.8, 11.8, 10.2, layer="over_head", t_oh=0.56),
+            ],
+            head_svg=bear_head(148, 122, expr="smile", strong_blush=True, rot=-6) + daisy(202, 74, r=16, rot=18),
+        )
         + sp4(56, 94, r=9, fill="#F6CE55", stroke="#C98A1A")
     )
     # S4 (80%): Daisy tucked behind ear, BOTH curved arms lifting naturally to cup chubby cheeks, charming wink!
     s4 = render_svg(
         shadow()
-        + bear_body(150, 216, pose="sit", paws="none", lean=-5)
-        + bear_head(146, 122, expr="wink", strong_blush=True, rot=-8)
-        + daisy(196, 70, r=16, rot=18)
-        + bear_arm((110, 200), (64, 186), (86, 146), 13.6, 11.8, 10.2)
-        + bear_arm((190, 196), (232, 182), (204, 142), 13.6, 11.8, 10.2)
+        + bear_body(
+            150, 216, pose="sit", paws="none", lean=-5,
+            arms=[
+                arm_spec((116, 202), (64, 186), (86, 146), 13.6, 11.8, 10.2, layer="over_head", t_oh=0.22),
+                arm_spec((184, 198), (234, 182), (204, 142), 13.6, 11.8, 10.2, layer="over_head", t_oh=0.22),
+            ],
+            head_svg=bear_head(146, 122, expr="wink", strong_blush=True, rot=-8) + daisy(196, 70, r=16, rot=18),
+        )
     )
     # S5 (100%): Radiant cheek-cup wink with ear daisy + gently floating white petals & warm sunshine glow!
     s5 = with_hero_aura(render_svg(
         shadow(150, 272, 66, 9, op=0.12)
-        + bear_body(150, 210, pose="jump", paws="none")
-        + bear_head(150, 118, expr="wink", strong_blush=True, rot=5)
-        + daisy(206, 74, r=17, rot=22)
-        + bear_arm((102, 192), (64, 180), (90, 142), 13.8, 11.8, 10.2)
-        + bear_arm((198, 192), (236, 180), (210, 142), 13.8, 11.8, 10.2)
+        + bear_body(
+            150, 210, pose="jump", paws="none",
+            arms=[
+                arm_spec((114, 194), (64, 180), (90, 142), 13.8, 11.8, 10.2, layer="over_head", t_oh=0.22),
+                arm_spec((186, 194), (236, 180), (210, 142), 13.8, 11.8, 10.2, layer="over_head", t_oh=0.22),
+            ],
+            head_svg=bear_head(150, 118, expr="wink", strong_blush=True, rot=5) + daisy(206, 74, r=17, rot=22),
+        )
         # Floating soft white daisy petals + golden sparkles
         + '<ellipse cx="52" cy="94" rx="10" ry="5.5" transform="rotate(-28 52 94)" fill="#FFFFFF" stroke="#C99A6B" stroke-width="1.8"/>'
         + '<ellipse cx="254" cy="116" rx="10" ry="5.5" transform="rotate(32 254 116)" fill="#FFFFFF" stroke="#C99A6B" stroke-width="1.8"/>'
@@ -1266,25 +1605,36 @@ def _lavender_headband(cx=150, cy=70, bouncy=False, rot=0) -> str:
 
 def build_79_bunny_selfcare() -> list[tuple[str, Image.Image]]:
     s0 = render_svg(
-        shadow() + bear_body(150, 218, pose="sit", paws="none", lean=-4)
-        + _bunny_phone(148, 212)
-        + bear_arm((102, 198), (94, 224), (132, 220), 13.8, 11.8, 10.2)
-        + bear_arm((198, 198), (206, 224), (166, 220), 13.8, 11.8, 10.2)
-        + bear_head(146, 124, expr="curious", rot=-7)
+        shadow() + bear_body(
+            150, 218, pose="sit", paws="none", lean=-4,
+            mid_props=_bunny_phone(148, 222, s=0.90),
+            arms=[
+                arm_spec((114, 198), (94, 226), (132, 224), 13.8, 11.8, 10.2, layer="front"),
+                arm_spec((186, 198), (206, 226), (166, 224), 13.8, 11.8, 10.2, layer="front"),
+            ],
+            head_svg=bear_head(146, 124, expr="curious", rot=-7),
+        )
     )
     s1 = render_svg(
-        shadow() + bear_body(150, 218, pose="sit", paws="none", lean=4)
-        + '<g transform="translate(152,218) scale(0.64)">' + _lavender_headband(0, 0) + '</g>'
-        + bear_arm((102, 198), (94, 224), (126, 222), 13.8, 11.8, 10.2)
-        + bear_arm((198, 198), (206, 224), (176, 222), 13.8, 11.8, 10.2)
-        + bear_head(154, 122, expr="smile", rot=6)
+        shadow() + bear_body(
+            150, 218, pose="sit", paws="none", lean=4,
+            mid_props='<g transform="translate(152,222) scale(0.62)">' + _lavender_headband(0, 0) + '</g>',
+            arms=[
+                arm_spec((114, 198), (94, 226), (126, 224), 13.8, 11.8, 10.2, layer="front"),
+                arm_spec((186, 198), (206, 226), (176, 224), 13.8, 11.8, 10.2, layer="front"),
+            ],
+            head_svg=bear_head(154, 122, expr="smile", rot=6),
+        )
     )
     s2 = render_svg(
-        shadow() + bear_body(150, 216, pose="stand", paws="none", lean=-4)
-        + bear_head(148, 124, expr="smile", strong_blush=True, rot=-6)
-        + _lavender_headband(144, 72, rot=-6)
-        + bear_arm((102, 196), (68, 146), (92, 86), 13.8, 11.8, 10.2)
-        + bear_arm((198, 196), (232, 146), (204, 86), 13.8, 11.8, 10.2)
+        shadow() + bear_body(
+            150, 216, pose="stand", paws="none", lean=-4,
+            arms=[
+                arm_spec((114, 200), (50, 138), (94, 86), 13.8, 11.8, 10.2, layer="over_head", t_oh=0.58),
+                arm_spec((186, 200), (250, 138), (202, 86), 13.8, 11.8, 10.2, layer="over_head", t_oh=0.58),
+            ],
+            head_svg=bear_head(148, 124, expr="smile", strong_blush=True, rot=-6) + _lavender_headband(144, 72, rot=-6),
+        )
     )
     s3 = render_svg(
         shadow() + bear_body(150, 218, pose="sit", paws="down")
@@ -1353,10 +1703,12 @@ def _strawberry_cupcake(cx=150, cy=212, s=1.0) -> str:
     return (
         f'<g transform="translate({cx},{cy}) scale({s})">'
         f'<polygon points="-20,4 20,4 15,28 -15,28" fill="#F5CB69" stroke="{OL}" stroke-width="2.6" stroke-linejoin="round"/>'
-        f'<path d="M -24,4 C -26,-12 -10,-20 0,-18 C 10,-20 26,-12 24,4 Z" fill="#FFFDF5" stroke="#D9A8B8" stroke-width="2.6"/>'
-        f'<rect x="-3" y="-36" width="6" height="18" rx="2" fill="#F396B4" stroke="{OL}" stroke-width="2.0"/>'
-        f'<path d="M 0,-48 C -6,-40 -4,-35 0,-35 C 4,-35 6,-40 0,-48 Z" fill="#FDE047" stroke="#EA580C" stroke-width="1.8"/>'
-        + strawberry(12, -10, s=0.44, ripe=True, rot=14)
+        f'<path d="M -24,4 C -26,-11 -10,-18 0,-16 C 10,-18 26,-11 24,4 Z" fill="#FFFDF5" stroke="#D9A8B8" stroke-width="2.6"/>'
+        f'<rect x="-2.8" y="-28.5" width="5.6" height="12.5" rx="2" fill="#F396B4" stroke="{OL}" stroke-width="1.9"/>'
+        f'<circle cx="0" cy="-34" r="7.5" fill="#FEF08A" fill-opacity="0.45"/>'
+        f'<path d="M 0,-40 C -5.2,-33.5 -3.6,-28.5 0,-28.5 C 3.6,-28.5 5.2,-33.5 0,-40 Z" fill="#FDE047" stroke="#EA580C" stroke-width="1.7"/>'
+        f'<ellipse cx="0" cy="-32" rx="1.6" ry="2.4" fill="#FFFBEB"/>'
+        + strawberry(13, -9, s=0.42, ripe=True, rot=14)
         + '</g>'
     )
 
@@ -1386,21 +1738,28 @@ def build_80_gift_box() -> list[tuple[str, Image.Image]]:
         + _gift_box(150, 224, lid_mode="open")
         + sp4(56, 86, r=9) + sp4(246, 90, r=9)
     )
+    # S3 & S4: Lowered cupcake + compact candle with bright golden flame clearly separated below chin!
     s3 = render_svg(
-        shadow() + bear_body(150, 216, pose="sit", paws="none")
-        + _strawberry_cupcake(150, 216, s=1.08)
-        + bear_arm((102, 198), (94, 224), (128, 220), 13.8, 11.8, 10.2)
-        + bear_arm((198, 198), (206, 224), (172, 220), 13.8, 11.8, 10.2)
-        + bear_head(150, 122, expr="sparkle_eyes", strong_blush=True, rot=4)
-        + _party_hat(154, 62, rot=6)
+        shadow() + bear_body(
+            150, 216, pose="sit", paws="none",
+            mid_props=_strawberry_cupcake(150, 226, s=0.96),
+            arms=[
+                arm_spec((114, 198), (94, 226), (130, 226), 13.8, 11.8, 10.2, layer="front"),
+                arm_spec((186, 198), (206, 226), (170, 226), 13.8, 11.8, 10.2, layer="front"),
+            ],
+            head_svg=bear_head(150, 120, expr="sparkle_eyes", strong_blush=True, rot=4) + _party_hat(154, 60, rot=6),
+        )
     )
     s4 = render_svg(
-        shadow() + bear_body(150, 216, pose="sit", paws="none", lean=-4)
-        + _strawberry_cupcake(148, 216, s=1.10)
-        + bear_arm((102, 198), (94, 224), (126, 220), 13.8, 11.8, 10.2)
-        + bear_arm((198, 198), (206, 224), (170, 220), 13.8, 11.8, 10.2)
-        + bear_head(146, 122, expr="happy_squint", strong_blush=True, rot=-7)
-        + _party_hat(138, 62, rot=-9)
+        shadow() + bear_body(
+            150, 216, pose="sit", paws="none", lean=-4,
+            mid_props=_strawberry_cupcake(148, 226, s=0.98),
+            arms=[
+                arm_spec((114, 198), (94, 226), (128, 226), 13.8, 11.8, 10.2, layer="front"),
+                arm_spec((186, 198), (206, 226), (168, 226), 13.8, 11.8, 10.2, layer="front"),
+            ],
+            head_svg=bear_head(146, 120, expr="happy_squint", strong_blush=True, rot=-7) + _party_hat(138, 60, rot=-9),
+        )
         + star5(52, 82, r=12) + star5(248, 86, r=13) + heart(50, 178, s=11, fill="#F396B4") + heart(250, 178, s=11, fill="#C43E67")
     )
     s5 = with_hero_aura(render_svg(
@@ -1529,8 +1888,8 @@ def main():
         f_title = f_sub = f_row = f_tiny = ImageFont.load_default()
 
     draw.rectangle([0, 0, W, hdr_h], fill=(196, 62, 103))
-    draw.text((pad, 14), "LOTSO CHUBBY PLUSH BEAR COLLECTION — #71–#80 (v4.1 NATURAL ARMS • 60 SPRITES)", fill=(255, 255, 255), font=f_title)
-    draw.text((pad, 50), "Seamless Curved Plush Bear Arms • Rebuilt #77 Flower Picking & #78 Daisy Walk • Transparent 300x300 RGBA • 0/60 Overlaps", fill=(255, 243, 220), font=f_sub)
+    draw.text((pad, 14), "LOTSO CHUBBY PLUSH BEAR COLLECTION — #71–#80 (v4.1 SEAMLESS ARMS • 60 SPRITES)", fill=(255, 255, 255), font=f_title)
+    draw.text((pad, 50), "3-Layer Seamless Plush Bear Arms • Prop Clearance (#72 Milk Pour & #80 Cupcake) • Transparent 300x300 RGBA • 0/60 Overlaps", fill=(255, 243, 220), font=f_sub)
 
     pcts = ["0%", "20%", "40%", "60%", "80%", "100% MAX"]
     verified_cells = 0

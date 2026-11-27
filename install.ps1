@@ -1,7 +1,7 @@
-# Habit Tracker Collection v4.0 Installer (PowerShell 5.1+ / 7+)
+# Habit Tracker Collection v4.1 Installer (PowerShell 5.1+ / 7+)
 <#
 .SYNOPSIS
-    Habit Tracker Collection v4.0 - Interactive Zero-Install Downloader (Windows PowerShell)
+    Habit Tracker Collection v4.1 - Interactive Zero-Install Downloader (Windows PowerShell)
 .DESCRIPTION
     Run in 1 line:
         irm https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu/main/install.ps1 | iex
@@ -190,14 +190,14 @@ New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 
 Write-Host ""
 Write-Host "========================================================================" -ForegroundColor Magenta
-Write-Host "   HABIT TRACKER COLLECTION v4.0 - BY DYU (80 THEMES x 4 EDITIONS)" -ForegroundColor Yellow
+Write-Host "   HABIT TRACKER COLLECTION v4.1 - BY DYU (80 THEMES x 4 EDITIONS)" -ForegroundColor Yellow
 Write-Host "   Turbo 6/7/8-Stage Native Sprite Engine | FX Suite | Ctrl+Z Undo" -ForegroundColor Cyan
 Write-Host "========================================================================" -ForegroundColor Magenta
 Write-Host "  Thu muc luu file: $OutDir" -ForegroundColor Green
 Write-Host ""
 Write-Host "  BUOC 1 - CHON PHIEN BAN PHU HOP (THEO THU TU UU TIEN):" -ForegroundColor White
 Write-Host "  ----------------------------------------------------------------------" -ForegroundColor DarkGray
-Write-Host "  [1] Pro Interactive (.xlsm)  [* KHUYEN DUNG SO 1 - EXCEL 365 TURBO v4.0 *]" -ForegroundColor Green
+Write-Host "  [1] Pro Interactive (.xlsm)  [* KHUYEN DUNG SO 1 - EXCEL 365 TURBO v4.1 *]" -ForegroundColor Green
 Write-Host "      -> Sieu toc ~25-54ms + Full FX Nay/Phao hoa/Toast goc trai duoi + Ctrl+Z Undo" -ForegroundColor DarkGray
 Write-Host "         + Khoa bao ve cong thuc + Tu luu Da Ngay/Thang/Nam (100% Offline)!" -ForegroundColor DarkGray
 Write-Host "  [2] Excel Universal Offline (.xlsx)  [Excel 2016/2019/2021/365]" -ForegroundColor Cyan
@@ -228,8 +228,8 @@ Write-Host ""
 Write-Host "  BUOC 2 - CHON MAU THOI QUEN (80 CHU DE LOTSO, LOOPY, CAPYBARA, DIGIMON & HOA LA):" -ForegroundColor White
 Write-Host "  ----------------------------------------------------------------------" -ForegroundColor DarkGray
 $CatBlocks = @(
-    @{ Key = "LOTSO";    Label = "--- [MOI v4.0] 10 BO GAU DAU LOTSO PASTEL COLLECTION (#71-#80) ---"; Color = "Magenta" }
-    @{ Key = "LOOPY";    Label = "--- [MOI v4.0] 10 BO HAI LY LOOPY PASTEL COLLECTION (#61-#70) ---"; Color = "Yellow" }
+    @{ Key = "LOTSO";    Label = "--- [v4.1] 10 BO GAU DAU LOTSO PASTEL COLLECTION (#71-#80) ---"; Color = "Magenta" }
+    @{ Key = "LOOPY";    Label = "--- [v4.1] 10 BO HAI LY LOOPY PASTEL COLLECTION (#61-#70) ---"; Color = "Yellow" }
     @{ Key = "CAPYBARA"; Label = "--- 13 BO CAPYBARA CHILL COLLECTION DOC BAN (#48-#60) ---"; Color = "Green" }
     @{ Key = "DIGIMON";  Label = "--- 12 BO DIGIMON 7 & 8 CAP TIEN HOA (#36-#47) ---"; Color = "Cyan" }
     @{ Key = "PETS";     Label = "--- THU CUNG SIEU CUTE (Mochi Cat, Bunny, Milk & Mocha, Shiba, Akita, Alpaca...) ---"; Color = "Yellow" }

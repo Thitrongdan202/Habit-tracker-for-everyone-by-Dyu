@@ -1,6 +1,6 @@
-# 🍓🎀 Habit Tracker Collection for Everyone — by Dyu (v4.0 — 80 Themes × 4 Editions)
+# 🍓🎀 Habit Tracker Collection for Everyone — by Dyu (v4.1 — 80 Themes × 4 Editions)
 
-![Version 4.0](https://img.shields.io/badge/Version-4.0_80_Themes-E56B8C?style=for-the-badge)
+![Version 4.1](https://img.shields.io/badge/Version-4.1_80_Themes-E56B8C?style=for-the-badge)
 ![Pro #1 Recommended](https://img.shields.io/badge/⭐_KHUYÊN_DÙNG_%231-Pro_.XLSM_(Excel_365)-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white)
 ![Zero Macro Offline](https://img.shields.io/badge/%232_Offline_No--Macro-.XLSX_(Excel_2016--365)-4E9F76?style=for-the-badge)
 ![Google Sheets Beta](https://img.shields.io/badge/%233_Google_Sheets-Beta_(Đang_thử_nghiệm)-F59E0B?style=for-the-badge&logo=googlesheets&logoColor=white)
@@ -10,7 +10,8 @@
   <tr>
     <td width="74%" valign="middle">
       <p><b>Bộ sưu tập 80 mẫu Habit Tracker hoàn toàn miễn phí mãi mãi cho cộng đồng (320 tệp đủ 4 phiên bản)</b> — chuẩn Digital Planner với <b>495 ảnh hoạt ảnh</b> tự lớn lên & tiến hóa theo % thói quen mỗi ngày (<b>10 chủ đề Gấu Dâu Lotso Pastel #71–#80</b>, <b>10 chủ đề Hải Ly Loopy Pastel #61–#70</b>, <b>13 chủ đề Capybara Chill #48–#60</b>, <b>12 bộ Digimon 7–8 cấp chuẩn canon #36–#47</b>, Thú cưng Kawaii, Alpaca, Gấu trúc, Shiba/Akita & Hoa lá)!</p>
-      <p><b>✨ Có gì mới ở v4.0:</b> Bổ sung 20 chủ đề Loopy & Lotso vẽ vector mượt mà (cánh tay cong tự nhiên, mũ trùm ôm trọn khuôn mặt, cốt truyện 6 giai đoạn liền mạch `0% → 100%`), tối ưu thanh thông báo Toast góc trái dưới trên Pro Macro, đồng bộ trọn bộ <code>install.ps1</code> / <code>install.sh</code> & kiểm toán COM 4 phiên bản.</p>
+      <p><b>Cập nhật v4.1:</b> Hoàn thiện nét vẽ toàn bộ 120 sprites Loopy (#61–#70) &amp; Lotso (#71–#80) bằng kỹ thuật nối thân–tay 3 lớp liền mạch (xóa khấc/gai vai, mượt đường cong khuỷu tay, tách đạo cụ nến cupcake #80 &amp; hộp sữa dâu #72 khỏi viền mặt), đồng bộ lại đủ 4 phiên bản &amp; kiểm toán Excel COM 0 lỗi công thức / 0 lỗi VBA.</p>
+      <p><b>Nền tảng v4.0:</b> 20 chủ đề Loopy &amp; Lotso cốt truyện 6 giai đoạn <code>0% → 100%</code>, thông báo Toast góc trái dưới trên Pro Macro, bộ cài <code>install.ps1</code> / <code>install.sh</code> đồng bộ 80 mẫu.</p>
       <p>Dùng mượt <b>100% Offline trên Microsoft Excel (Windows & Mac)</b> — bản Pro siêu mượt (<code>&lt;150ms</code>, hiệu ứng pháo hoa, tự lưu nhiều Tháng/Ngày/Năm, <code>Ctrl+Z</code> Undo), bản Offline không Macro cho mọi đời Excel 2016–365, kèm bản thử nghiệm cho Google Sheets & Điện thoại.</p>
       <p>🌟 Nếu bộ template giúp bạn duy trì thói quen đều đặn & vui hơn mỗi ngày, hãy bấm tặng repo một nút <b>⭐ Star</b> ở góc trên bên phải để tiếp thêm động lực cho Dyu chia sẻ thêm nhiều mẫu dễ thương mới nhé!</p>
     </td>
@@ -800,7 +801,7 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn** (`0% Digi-E
 | **Số ảnh nén trong `xl/media/`** | 54 bản sao | **6 PNG duy nhất** | **8 PNG duy nhất** | **Siêu gọn nhẹ!** |
 
 ```powershell
-# Sinh 120 sprite v4.0 Loopy (#61–#70) & Lotso (#71–#80) + contact sheets:
+# Sinh 120 sprite v4.1 Loopy (#61–#70) & Lotso (#71–#80) + contact sheets:
 python scripts/generate_loopy_story_assets.py
 python scripts/generate_lotso_story_assets.py
 

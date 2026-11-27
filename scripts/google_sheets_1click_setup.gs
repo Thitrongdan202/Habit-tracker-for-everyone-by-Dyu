@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- *  HABIT TRACKER v4.0 TURBO — 1-CLICK GOOGLE SHEETS SETUP & ZERO-LAG STORAGE
+ *  HABIT TRACKER v4.1 TURBO — 1-CLICK GOOGLE SHEETS SETUP & ZERO-LAG STORAGE
  *  AUTO-DETECTS BOTH:
  *    - Desktop 5-Tab Google Sheets Edition (`templates/google_sheets_edition/`)
  *    - Mobile Portrait Edition (`templates/mobile_portrait_sheets/`)
