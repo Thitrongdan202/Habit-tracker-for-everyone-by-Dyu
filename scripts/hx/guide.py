@@ -44,7 +44,7 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     is_v4 = t.slug.startswith(("loopy_", "lotso_"))
     is_capy = t.slug.startswith("capybara_")
     if is_v4:
-        ver_tag = "v4.0 Turbo" if edition == "pro_xlsm" else "v4.0"
+        ver_tag = "v4.1 Turbo" if edition == "pro_xlsm" else "v4.1"
     elif is_capy:
         ver_tag = "v3.9 Turbo" if edition == "pro_xlsm" else "v3.9"
     elif is_digi:
