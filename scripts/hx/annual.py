@@ -11,7 +11,7 @@ ALL dynamic 6-stage hero & monthly growth animations cleanly across all 3 editio
 from __future__ import annotations
 
 from .core import (Canvas, Styles, acell, cell, colname, qs, rng, donut,
-                   place_chart, axis_font, text_lines, MONTHS_EN, checked_pastel_bg)
+                   place_chart, axis_font, text_lines, MONTHS_EN, checked_pastel_bg, has_vietnamese)
 from .tracker import (CALC_SHEET, CALC_STATE_VAL_COL, CALC_ANN_COL0, CALC_ANN_YG_LBL_COL,
                       CALC_ANN_YG_VAL_COL, N_HABITS, Habit, TrackerRefs,
                       stage6_formula, year_lookup_ref, compute_month_summary_py)
@@ -84,20 +84,28 @@ def build_yearly_goals_v21(wb, styles: Styles, ws_calc, year: int = 2026,
     cv.col(8, 19)
     cv.col(9, 2.4)
 
+    ty = t.typo
+    en_opt = ty.en_optics
+    disp_f = ty.display_en if universal else t.font_title
+    vn_f = ty.title_vn if universal else t.font_title
+    num_f = ty.num_font if universal else t.font_title
+
     cv.row(0, 10)
-    cv.row(1, 36)   # Title banner + Year selector pill (I2)
+    cv.row(1, 38 + en_opt.rh_boost if universal else 36)   # Title banner + Year selector pill (I2)
     cv.row(2, 10)
-    cv.row(3, 26)
+    cv.row(3, 28 if universal else 26)
     cv.row(4, 24)
 
-    cv.merge(1, 1, 1, 5, f"{t.emoji}  YEARLY GOALS & HABITS PLANNER", font_name=t.font_title,
-             font_size=15, bold=True, align="center", bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(1, 1, 1, 5, f"{t.emoji}  YEARLY GOALS & HABITS PLANNER", font_name=disp_f,
+             font_size=(min(21.0, 16.0 + en_opt.size_delta * 0.75) if universal else 15),
+             bold=(en_opt.bold if universal else True), italic=(en_opt.italic if universal else False),
+             align="center", bg_color=t.primary, font_color=t.on_primary)
     cv.box(1, 1, 1, 5, t.line)
 
     # Unmerged Year dropdown pill in H2:I2 (I2 = row 1, col 8 = Excel $I$2!)
     cv.put(1, 7, "📅  NĂM (YEAR):", bold=True, font_size=10, align="center",
            bg_color=t.primary, font_color=t.on_primary)
-    cv.put(1, 8, year, font_name=t.font_title, font_size=14, bold=True, align="center",
+    cv.put(1, 8, year, font_name=num_f, font_size=(15 if universal else 14), bold=True, align="center",
            num_format="0", bg_color=t.soft, font_color=t.ink,
            top=1, top_color=t.primary_dark, bottom=1, bottom_color=t.primary_dark,
            left=1, left_color=t.primary_dark, right=1, right_color=t.primary_dark)
@@ -109,9 +117,11 @@ def build_yearly_goals_v21(wb, styles: Styles, ws_calc, year: int = 2026,
                           if pro_mode else "Chọn năm mục tiêu để đồng bộ với tab 🏆 Tổng Kết & Thành Tựu Năm!"),
     })
 
-    cv.merge(3, 1, 4, 2, "MY GOALS • MỤC TIÊU NĂM", bold=True, font_size=10, align="center",
+    cv.merge(3, 1, 4, 2, "MY GOALS • MỤC TIÊU NĂM", font_name=(vn_f if universal else None),
+             bold=True, font_size=(10.5 if universal else 10), align="center",
              bg_color=t.primary, font_color=t.on_primary)
-    cv.merge(3, 3, 3, 5, "MY HABITS • KẾ HOẠCH HÀNH ĐỘNG", bold=True, font_size=10, align="center",
+    cv.merge(3, 3, 3, 5, "MY HABITS • KẾ HOẠCH HÀNH ĐỘNG", font_name=(vn_f if universal else None),
+             bold=True, font_size=(10.5 if universal else 10), align="center",
              bg_color=t.primary, font_color=t.on_primary)
     cv.put(4, 3, "MONTHLY HABITS (Hàng tháng)", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
     cv.put(4, 4, "WEEKLY HABITS (Hàng tuần)", bold=True, font_size=9.5, align="center", bg_color=t.soft, font_color=t.ink)
@@ -163,7 +173,8 @@ def build_yearly_goals_v21(wb, styles: Styles, ws_calc, year: int = 2026,
     ws_calc.write_formula(6, CALC_STATE_VAL_COL, stage6_formula(acell(5, CALC_STATE_VAL_COL), t.num_stages))
 
     # Sidebar: INSTRUCTIONS card (rows 3..13, cols 7..8)
-    cv.merge(3, 7, 3, 8, "📌  INSTRUCTIONS • HƯỚNG DẪN", bold=True, font_size=9.5, align="center",
+    cv.merge(3, 7, 3, 8, "📌  INSTRUCTIONS • HƯỚNG DẪN", font_name=(vn_f if universal else None),
+             bold=True, font_size=(10 if universal else 9.5), align="center",
              bg_color=t.primary, font_color=t.on_primary)
     inst = [
         "★  Biến Mục tiêu năm thành các Thói quen cụ thể (Tháng → Tuần → Ngày) để duy trì bền vững.",
@@ -183,11 +194,13 @@ def build_yearly_goals_v21(wb, styles: Styles, ws_calc, year: int = 2026,
 
     # Sidebar: DYNAMIC `YOU HAVE PLANTED:` hero card
     rp = r_cur + 1
-    cv.merge(rp, 7, rp, 8, f"{t.emoji}  YOU HAVE PLANTED:", bold=True, font_size=10, align="center",
+    cv.merge(rp, 7, rp, 8, f"{t.emoji}  YOU HAVE PLANTED:", font_name=disp_f,
+             bold=(en_opt.bold if universal else True), italic=(en_opt.italic if universal else False),
+             font_size=(min(13.5, 10.5 + en_opt.size_delta * 0.5) if universal else 10), align="center",
              bg_color=t.primary, font_color=t.on_primary)
     cv.merge(rp + 1, 7, rp + 3, 7, f"={yg_done_ref}", bold=True,
              font_size=28, align="center", bg_color=t.card, font_color=t.primary_dark,
-             font_name=t.font_title)
+             font_name=num_f)
     dyn_anims = []
     if universal:
         cv.merge(rp + 1, 8, rp + 3, 8, "", align="center", bg_color=t.card)
@@ -338,16 +351,23 @@ def build_annual_achievements_sheet(
     ann_yg_pct_q = f"{cq}!{acell(2, CALC_ANN_YG_VAL_COL)}"
 
     # ================================================================== ROW 1..4: HEADER & YEAR PICKER
+    ty = t.typo
+    en_opt = ty.en_optics
+    vn_f = ty.title_vn if universal else t.font_title
+    disp_f = ty.display_en if universal else t.font_title
+    num_f = ty.num_font if universal else t.font_title
+    vn_it = ty.title_vn_italic if universal else False
+
     cv.row(0, 10)
-    cv.row(1, 20)
-    cv.row(2, 30)   # B3 = UNMERGED Year Dropdown!
-    cv.row(3, 18)
+    cv.row(1, 22 if universal else 20)
+    cv.row(2, 32 if universal else 30)   # B3 = UNMERGED Year Dropdown!
+    cv.row(3, 21 if universal else 18)
     cv.row(4, 10)
 
     # Left Year Selector Card (B2:C4)
     cv.merge(1, 1, 1, 2, "📅  CHỌN NĂM • YEAR", bold=True, font_size=8.5, align="center",
              bg_color=t.primary, font_color=t.on_primary)
-    cv.put(2, 1, year, font_name=t.font_title, font_size=16, bold=True, align="center",
+    cv.put(2, 1, year, font_name=num_f, font_size=(16.5 if universal else 16), bold=True, align="center",
            num_format="0", bg_color=t.soft, font_color=t.ink,
            top=1, top_color=t.primary_dark, bottom=1, bottom_color=t.primary_dark,
            left=1, left_color=t.primary_dark, right=1, right_color=t.primary_dark)
@@ -367,11 +387,12 @@ def build_annual_achievements_sheet(
 
     # Right Title Banner (D2:N4)
     cv.merge(1, 3, 2, 13, lore["banner"],
-             font_name=t.font_title, font_size=15.5, bold=True, align="center",
+             font_name=vn_f, font_size=(16.5 if universal else 15.5), bold=True, italic=vn_it, align="center",
              bg_color=t.primary, font_color=t.on_primary)
     cv.merge(3, 3, 3, 13,
              f'="Năm "&{sel_y_local}&"  •  {lore["subtitle"]}"',
-             font_size=9.5, italic=True, align="center", bg_color=t.soft, font_color=t.ink)
+             font_name=(vn_f if universal else None), font_size=(10 if universal else 9.5),
+             italic=True, align="center", bg_color=t.soft, font_color=t.ink)
     cv.box(1, 3, 3, 13, t.line)
 
     # ================================================================== ROW 6..11: 4 EXECUTIVE KPI CARDS
@@ -385,7 +406,7 @@ def build_annual_achievements_sheet(
     cv.merge(5, 1, 5, 3, lore["kpi1"], bold=True, font_size=8.8, align="center",
              bg_color=t.soft, font_color=t.ink)
     cv.merge(6, 1, 9, 3, f"=SUM({ann_done_q})", bold=True, font_size=26, align="center",
-             num_format="#,##0", bg_color=t.card, font_color=t.primary_dark, font_name=t.font_title)
+             num_format="#,##0", bg_color=t.card, font_color=t.primary_dark, font_name=num_f)
     cv.merge(10, 1, 10, 3,
              f'="{t.emoji} "&SUM({ann_grn_q})&" {lore["kpi1_unit"]}"&TEXT(CFG_THR_3,"0%")',
              font_size=8.5, bold=True, align="center", bg_color=t.card, font_color=t.muted)
@@ -395,7 +416,7 @@ def build_annual_achievements_sheet(
     cv.merge(5, 4, 5, 7, "🌟  TIẾN ĐỘ TRUNG BÌNH CẢ NĂM", bold=True, font_size=8.8, align="center",
              bg_color=t.soft, font_color=t.ink)
     cv.merge(6, 4, 9, 5, f"={ann_overall_q}", bold=True, font_size=18, align="center",
-             num_format="0%", bg_color=t.card, font_color=t.primary_dark, font_name=t.font_title)
+             num_format="0%", bg_color=t.card, font_color=t.primary_dark, font_name=num_f)
     d_ann = donut(wb, f"={cq}!{rng(9, CALC_STATE_VAL_COL, 10, CALC_STATE_VAL_COL)}",
                   [t.primary, t.donut_rest], hole=70)
     place_chart(cv, d_ann, 6, 4, 9, 5, pad_x=4, pad_y=2)
@@ -422,7 +443,7 @@ def build_annual_achievements_sheet(
     cv.merge(5, 8, 5, 10, "🔥  CHUỖI & NGÀY HOÀN HẢO", bold=True, font_size=8.8, align="center",
              bg_color=t.soft, font_color=t.ink)
     cv.merge(6, 8, 7, 10, f"=MAX(0,{ann_str_q})", bold=True, font_size=22, align="center",
-             num_format='0" ngày"', bg_color=t.card, font_color=t.primary_dark, font_name=t.font_title)
+             num_format='0" ngày"', bg_color=t.card, font_color=t.primary_dark, font_name=num_f)
     cv.merge(8, 8, 9, 10, f'="✨ "&SUM({ann_prf_q})&" ngày hoàn hảo 100%"', bold=True, font_size=9.5,
              align="center", bg_color=t.card, font_color=t.ink)
     cv.merge(10, 8, 10, 10, f'="Tháng cao nhất: "&TEXT(MAX(0,{ann_pct_q}),"0%")',
@@ -433,7 +454,7 @@ def build_annual_achievements_sheet(
     cv.merge(5, 11, 5, 13, "🎯  MỤC TIÊU NĂM ĐÃ ĐẠT", bold=True, font_size=8.8, align="center",
              bg_color=t.soft, font_color=t.ink)
     cv.merge(6, 11, 8, 13, f'={ann_yg_done_q}&" / "&{ann_yg_tot_q}', bold=True, font_size=24,
-             align="center", bg_color=t.card, font_color=t.primary_dark, font_name=t.font_title)
+             align="center", bg_color=t.card, font_color=t.primary_dark, font_name=num_f)
     cv.merge(9, 11, 9, 13, f"={ann_yg_pct_q}", bold=True, font_size=11, align="center",
              num_format="0%", bg_color=t.card, font_color=t.ink)
     cv.merge(10, 11, 10, 13, f'="Đồng bộ Yearly Goals năm "&{sel_y_local}',
@@ -449,11 +470,12 @@ def build_annual_achievements_sheet(
         cv.row(rr, 20)
     cv.row(r_g + 8, 10)    # Row 21: gutter
 
-    cv.merge(r_g, 1, r_g, 13, lore["garden"],
-             bold=True, font_size=10, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r_g, 1, r_g, 13, lore["garden"], font_name=(vn_f if universal else None),
+             bold=True, font_size=(10.5 if universal else 10), align="left", indent=1,
+             bg_color=t.primary, font_color=t.on_primary)
     cv.put(r_g + 1, 1, "THÁNG (MONTH)", bold=True, font_size=8.8, align="center", bg_color=t.soft, font_color=t.ink)
-    cv.put(r_g + 2, 1, f"{t.emoji}  TĂNG TRƯỞNG", bold=True, font_size=9.5, align="center",
-           bg_color=t.card, font_color=t.primary_dark, font_name=t.font_title)
+    cv.put(r_g + 2, 1, f"{t.emoji}  TĂNG TRƯỞNG", bold=True, font_size=(10 if universal else 9.5), align="center",
+           bg_color=t.card, font_color=t.primary_dark, font_name=vn_f)
     row_labels = [
         ("Hoàn thành (Completed)", "0"),
         ("Mục tiêu (Total Goal)", "0"),
@@ -587,8 +609,9 @@ def build_annual_achievements_sheet(
         cv.row(rr, 34)
     cv.row(r_b0 + 10, 12)
 
-    cv.merge(r_b0, 1, r_b0, 10, lore["wall"],
-             bold=True, font_size=10, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r_b0, 1, r_b0, 10, lore["wall"], font_name=(vn_f if universal else None),
+             bold=True, font_size=(10.5 if universal else 10), align="left", indent=1,
+             bg_color=t.primary, font_color=t.on_primary)
     cv.merge(r_b0 + 1, 1, r_b0 + 1, 3, "HUY HIỆU (BADGE)", bold=True, font_size=8.8, align="center",
              bg_color=t.soft, font_color=t.ink)
     cv.merge(r_b0 + 1, 4, r_b0 + 1, 6, "ĐIỀU KIỆN MỞ KHÓA (REQUIREMENT)", bold=True, font_size=8.8, align="center",
@@ -638,11 +661,15 @@ def build_annual_achievements_sheet(
     })
 
     # Right Achievements Counter Card (L33:N42 -> cols 11..13, rows 32..41)
-    cv.merge(r_b0, 11, r_b0, 13, lore["counter"], bold=True, font_size=9.5, align="center",
+    cnt_f = vn_f if (universal and has_vietnamese(lore["counter"])) else disp_f
+    cv.merge(r_b0, 11, r_b0, 13, lore["counter"], font_name=(cnt_f if universal else None),
+             bold=(en_opt.bold if (universal and cnt_f == disp_f) else True),
+             italic=(en_opt.italic if (universal and cnt_f == disp_f) else False),
+             font_size=(10 if universal else 9.5), align="center",
              bg_color=t.primary, font_color=t.on_primary)
     unlocked_expr = f'COUNTIF($H${r_b_first + 1}:$H${r_b_last + 1},">=1")'
     cv.merge(r_b0 + 1, 11, r_b0 + 3, 13, f'={unlocked_expr}&" / 8"', bold=True, font_size=26,
-             align="center", bg_color=t.card, font_color=t.primary_dark, font_name=t.font_title)
+             align="center", bg_color=t.card, font_color=t.primary_dark, font_name=num_f)
 
     ach_icon_box = (r_b0 + 4, 11, r_b0 + 7, 13)
     if universal:

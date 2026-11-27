@@ -93,7 +93,7 @@ def add_assets_placeholder(wb, styles: Styles):
     ws.write(0, 0, "STAGE", hdr)
     if t.num_stages == 8:
         ws.write(0, 1, "SPRITE (B2:B9)", hdr)
-        ws.write(0, 2, "HƯỚNG DẪN TỰ ĐỔI 8 ẢNH TIẾN HÓA DIGIMON ULTRA (v3.8)", hdr)
+        ws.write(0, 2, "HƯỚNG DẪN TỰ ĐỔI 8 ẢNH TIẾN HÓA DIGIMON ULTRA (v4.2)", hdr)
         names = t.stage_names or [f"Stage {i}" for i in range(8)]
         pcts = ["0%", "1%–14%", "15%–29%", "30%–49%", "50%–69%", "70%–84%", "85%–99%", "100% ✨"]
         stage_notes = [
@@ -104,7 +104,7 @@ def add_assets_placeholder(wb, styles: Styles):
         ]
     elif t.num_stages == 7:
         ws.write(0, 1, "SPRITE (B2:B8)", hdr)
-        ws.write(0, 2, "HƯỚNG DẪN TỰ ĐỔI 7 ẢNH TIẾN HÓA DIGIMON (v3.8)", hdr)
+        ws.write(0, 2, "HƯỚNG DẪN TỰ ĐỔI 7 ẢNH TIẾN HÓA DIGIMON (v4.2)", hdr)
         names = t.stage_names or [f"Stage {i}" for i in range(7)]
         pcts = ["0%", "1%–19%", "20%–39%", "40%–59%", "60%–79%", "80%–99%", "100% ✨"]
         stage_notes = [
@@ -115,7 +115,7 @@ def add_assets_placeholder(wb, styles: Styles):
         ]
     else:
         ws.write(0, 1, "SPRITE (B2:B7)", hdr)
-        ws.write(0, 2, "HƯỚNG DẪN TỰ ĐỔI ẢNH HOẠT ẢNH (v3.7)", hdr)
+        ws.write(0, 2, "HƯỚNG DẪN TỰ ĐỔI ẢNH HOẠT ẢNH (v4.2)", hdr)
         stage_notes = [
             ("Stage 0 (0%)", "Chưa tick thói quen nào — Dán ảnh nền trống vào B2"),
             ("Stage 1 (1%–24%)", "Khởi động — Dán ảnh giai đoạn 1 vào B3"),

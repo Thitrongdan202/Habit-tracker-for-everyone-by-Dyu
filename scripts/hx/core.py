@@ -15,6 +15,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from xlsxwriter.utility import xl_rowcol_to_cell, xl_col_to_name
+from .typography import TypographySpec, get_typography, has_vietnamese
 
 REPO_RAW = "https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu/main/assets/"
 REPO_URL = "https://github.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu"
@@ -90,6 +91,10 @@ class Theme:
     def img_base(self) -> str:
         return REPO_RAW + self.slug + "/"
 
+    @property
+    def typo(self) -> TypographySpec:
+        return get_typography(self.slug)
+
 
 # --------------------------------------------------------------------------- #
 #  Unit helpers (xlsxwriter default font Calibri 11 => max digit width 7px)
@@ -164,7 +169,8 @@ class Styles:
         self._cache: dict = {}
 
     def base(self) -> dict:
-        return {"font_name": self.t.font, "font_size": 10, "font_color": self.t.ink,
+        base_font = "Be Vietnam Pro" if self.gsheets else self.t.typo.body_ui
+        return {"font_name": base_font, "font_size": 10, "font_color": self.t.ink,
                 "valign": "vcenter", "bg_color": self.t.page}
 
     def get(self, props: dict):

@@ -18,7 +18,7 @@ import random
 from dataclasses import dataclass, field
 
 from .core import (Canvas, Styles, Theme, MONTHS_EN, CHECK_ALT, acell, cell, colname,
-                   qs, rng, donut, place_chart, axis_font, checked_pastel_bg)
+                   qs, rng, donut, place_chart, axis_font, checked_pastel_bg, has_vietnamese)
 
 # ---- fixed geometry (0-based) --------------------------------------------- #
 C_NAME = 1
@@ -194,7 +194,7 @@ def init_calc_sheet(wb, active_year: int = 2026, last_loaded_key: str = "2026-10
         ("FX_MSG_MONTH_SWITCH","📅 Đã lưu tháng cũ & mở dữ liệu tháng mới!"),              # BA13
         ("FX_MSG_DAILY_100",   "🎉 Xuất sắc 100%! Toàn bộ nhiệm vụ ngày đã xong!"),        # BA14
         ("FX_MSG_GOAL_DONE",   "🎯 Chúc mừng! Bạn vừa chinh phục thêm Mục Tiêu Năm!"),     # BA15
-        ("FX_MSG_DEMO",        "🎉 Hiệu ứng Pro v3.7 Turbo đang BẬT — Siêu tốc & sống động!" if (theme and theme.num_stages == 7) else "🎉 Hiệu ứng Pro v3.6 Turbo đang BẬT — Siêu tốc & sống động!"), # BA16
+        ("FX_MSG_DEMO",        "🎉 Hiệu ứng Pro v4.2 Turbo đang BẬT — Siêu tốc & sống động!"), # BA16
         ("FX_LBL_ON",          "✨ FX: BẬT"),                                               # BA17
         ("FX_LBL_OFF",         "💤 FX: TẮT"),                                               # BA18
         ("FX_MSG_FX_ON",       "✨ Đã BẬT hiệu ứng Pro (Nảy, Pháo hoa & Toast)!"),         # BA19
@@ -440,12 +440,26 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
         ws_calc.write_formula(rb + 4, hc, f"={cell(rb + 1, hc)}-{cell(rb + 0, hc)}")
 
     # ------------------------------------------------------------------ title card
+    ty = t.typo
+    en_opt = ty.en_optics
+    disp_f = ty.display_en if spec.universal else t.font_title
+    num_f = ty.num_font if spec.universal else t.font_title
+    vn_f = ty.title_vn if spec.universal else t.font_title
     cv.box(R_BAND0, C_NAME, R_BAND1, C_NAME, t.line, fill=t.card)
-    cv.put(R_BAND0, C_NAME, f"{t.emoji}  {spec.label_tag}", bold=True, font_size=8.5, align="center",
-           font_color=t.primary_dark, bg_color=t.card)
+    tag_f = vn_f if (spec.universal and has_vietnamese(spec.label_tag)) else disp_f
+    cv.put(R_BAND0, C_NAME, f"{t.emoji}  {spec.label_tag}", bold=(en_opt.bold if tag_f == disp_f else True),
+           italic=(en_opt.italic if tag_f == disp_f else False),
+           font_name=(tag_f if spec.universal else None),
+           font_size=(min(11.5, 9.0 + en_opt.size_delta * 0.4) if spec.universal else 8.5),
+           align="center", font_color=t.primary_dark, bg_color=t.card)
 
     month_name_disp = MONTHS_EN[spec.fixed_month - 1] if spec.fixed_month else spec.month
-    cv.put(R_BAND0 + 1, C_NAME, month_name_disp, font_name=t.font_title, font_size=16, bold=True,
+    m_size = min(en_opt.max_month_pt, 17.5 + en_opt.size_delta) if spec.universal else 16
+    if spec.universal:
+        cv.row(R_BAND0 + 1, 30 + en_opt.rh_boost)
+    cv.put(R_BAND0 + 1, C_NAME, month_name_disp, font_name=disp_f, font_size=m_size,
+           bold=(en_opt.bold if spec.universal else True),
+           italic=(en_opt.italic if spec.universal else False),
            align="center", bg_color=t.soft, font_color=t.ink,
            top=1, top_color=t.primary, bottom=1, bottom_color=t.primary,
            left=1, left_color=t.primary, right=1, right_color=t.primary)
@@ -453,8 +467,8 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
     if spec.fixed_month is not None:
         cv.put(R_BAND0 + 2, C_NAME, f"Tab Tháng {spec.fixed_month:02d} độc lập  •  Năm theo dõi:",
                italic=True, font_size=7.6, align="center", bg_color=t.card, font_color=t.muted)
-        cv.put(R_BAND0 + 3, C_NAME, f"={cq}!{acell(0, CALC_STATE_VAL_COL)}", font_name=t.font_title,
-               font_size=13.5, bold=True, align="center", bg_color=t.soft, font_color=t.ink,
+        cv.put(R_BAND0 + 3, C_NAME, f"={cq}!{acell(0, CALC_STATE_VAL_COL)}", font_name=num_f,
+               font_size=14 if spec.universal else 13.5, bold=True, align="center", bg_color=t.soft, font_color=t.ink,
                num_format="0", top=1, top_color=t.primary, bottom=1, bottom_color=t.primary,
                left=1, left_color=t.primary, right=1, right_color=t.primary)
         cv.put(R_BAND0 + 4, C_NAME, f'="Tháng "&{S["m"]}&"/"&{S["y"]}&"  •  "&{S["dim"]}&" ngày"',
@@ -466,7 +480,7 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
     else:
         cv.put(R_BAND0 + 2, C_NAME, "▲ Tháng (Month)   •   ▼ Năm (Year)", italic=True, font_size=7.8,
                align="center", bg_color=t.card, font_color=t.muted)
-        cv.put(R_BAND0 + 3, C_NAME, spec.year, font_name=t.font_title, font_size=13.5, bold=True,
+        cv.put(R_BAND0 + 3, C_NAME, spec.year, font_name=num_f, font_size=14 if spec.universal else 13.5, bold=True,
                align="center", bg_color=t.soft, font_color=t.ink, num_format="0",
                top=1, top_color=t.primary, bottom=1, bottom_color=t.primary,
                left=1, left_color=t.primary, right=1, right_color=t.primary)
@@ -581,7 +595,7 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
                  align="center", bg_color=t.soft, font_color=t.ink)
         cd1 = C_R0 + 2
         cv.merge(R_BAND0 + 1, C_R0, R_BAND1, cd1, f"={S['overall']}", bold=True, font_size=15,
-                 align="center", num_format="0%", bg_color=t.card, font_name=t.font_title,
+                 align="center", num_format="0%", bg_color=t.card, font_name=num_f,
                  font_color=t.primary_dark)
         d = donut(wb, f"={cq}!{rng(rb + 0, CALC_DONUT_COL, rb + 1, CALC_DONUT_COL)}",
                   [t.primary, t.donut_rest], hole=70)
@@ -595,16 +609,20 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
                 rr = R_BAND0 + 1 + i * 2
                 cv.merge(rr, kc, rr, C_RE, lab, font_size=7.5, bold=True, align="center",
                          font_color=t.muted, bg_color=t.card)
-                cv.merge(rr + 1, kc, rr + 1, C_RE, f, font_size=12, bold=True, align="center",
-                         font_color=t.ink, bg_color=t.card, font_name=t.font_title)
+                cv.merge(rr + 1, kc, rr + 1, C_RE, f, font_size=12.5 if spec.universal else 12, bold=True, align="center",
+                         font_color=t.ink, bg_color=t.card, font_name=num_f)
             else:
                 cv.merge(R_BAND0 + 5, kc, R_BAND0 + 5, C_RE, f, font_size=8,
                          align="center", font_color=t.primary_dark, bg_color=t.card, bold=True)
 
     # ------------------------------------------------------------------ growth row
     cv.box(R_IMG, C_NAME, R_PCT, C_NAME, t.line, fill=t.card)
-    cv.put(R_IMG, C_NAME, f"{t.emoji}  {spec.garden_label}", bold=True, font_size=11, align="center",
-           bg_color=t.card, font_color=t.primary_dark, font_name=t.font_title)
+    g_f = vn_f if (spec.universal and has_vietnamese(spec.garden_label)) else disp_f
+    g_sz = min(15.5, 11.5 + en_opt.size_delta * 0.55) if (spec.universal and g_f == disp_f) else (12.0 if spec.universal else 11)
+    cv.put(R_IMG, C_NAME, f"{t.emoji}  {spec.garden_label}",
+           bold=(en_opt.bold if (spec.universal and g_f == disp_f) else True),
+           italic=(en_opt.italic if (spec.universal and g_f == disp_f) else (ty.title_vn_italic if spec.universal else False)),
+           font_size=g_sz, align="center", bg_color=t.card, font_color=t.primary_dark, font_name=g_f)
     for r, lab, is_b in ((R_DONE, "COMPLETED  ✓", True), (R_NOT, "NOT COMPLETED", False), (R_PCT, "% COMPLETED", True)):
         cv.put(r, C_NAME, lab, align="right", font_size=8.5, bold=is_b,
                font_color=t.ink if is_b else t.muted,
@@ -652,14 +670,15 @@ def build_tracker(wb, styles: Styles, cv: Canvas, spec: TrackerSpec, ws_calc=Non
                  f"=INDEX(_Assets!{t.assets_range},{hero_stage_cell})",
                  align="center", bg_color=t.card)
     cv.merge(R_DONE, C_R0, R_PCT, split, f"={S['grown']}", bold=True, font_size=26, align="center",
-             bg_color=t.card, font_color=t.primary_dark, font_name=t.font_title)
+             bg_color=t.card, font_color=t.primary_dark, font_name=num_f)
     cv.merge(R_DONE, split + 1, R_PCT, C_RE,
              '="ngày ≥"&TEXT(CFG_THR_3,"0%")&CHAR(10)&"Tháng: "&TEXT(' + S["overall"] + ',"0%")',
              font_size=8.2, bold=True, align="center", text_wrap=True, bg_color=t.card, font_color=t.muted)
 
     # ------------------------------------------------------------------ week band / headers
     cv.merge(R_WEEK, C_NAME, R_WD, C_NAME, f"{spec.habits_label}", bold=True, font_size=11,
-             align="left", indent=1, bg_color=t.primary, font_color=t.on_primary, font_name=t.font_title)
+             align="left", indent=1, bg_color=t.primary, font_color=t.on_primary,
+             font_name=(ty.body_ui if spec.universal else t.font_title))
     cv.put(R_DAY, C_NAME, f'="Thói quen: "&{S["hc"]}&"   •   Ngày: "&{S["dim"]}', font_size=8.5,
            align="left", indent=1, bg_color=t.soft, font_color=t.ink)
     wd_list = WEEKDAYS_LETTER if t.weekday_style == "letter" else WEEKDAYS_SHORT

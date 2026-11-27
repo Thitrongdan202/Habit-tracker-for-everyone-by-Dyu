@@ -107,8 +107,17 @@ def build_daily_tasks_sheet(
     ws_calc.write_formula(17, CALC_STATE_VAL_COL, f"=1-{acell(14, CALC_STATE_VAL_COL)}")
 
     # ------------------------------------------------------------------ TOP BANNER & DATE PICKER
+    ty = t.typo
+    en_opt = ty.en_optics
+    vn_f = ty.title_vn if universal else t.font_title
+    disp_f = ty.display_en if universal else t.font_title
+    num_f = ty.num_font if universal else t.font_title
+    vn_it = ty.title_vn_italic if universal else False
+    if universal:
+        cv.row(1, 34)
+        cv.row(4, 30 + en_opt.rh_boost)
     cv.merge(1, 1, 1, 5, f"{t.emoji}  NHIỆM VỤ TRONG NGÀY  •  DAILY ONE-OFF TASKS",
-             font_name=t.font_title, font_size=14.5, bold=True, align="center",
+             font_name=vn_f, font_size=(15.5 if universal else 14.5), bold=True, italic=vn_it, align="center",
              bg_color=t.primary, font_color=t.on_primary)
     cv.box(1, 1, 1, 5, t.line)
 
@@ -127,17 +136,19 @@ def build_daily_tasks_sheet(
         f'=CHOOSE(WEEKDAY({dt_expr},2),"Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy","Chủ Nhật")'
         f'&", "&TEXT({dt_expr},"dd/mm/yyyy")'
     )
-    cv.merge(4, 1, 4, 2, wd_formula, font_name=t.font_title, font_size=13, bold=True, align="center",
-             bg_color=t.card, font_color=t.primary_dark)
-    cv.put(4, 3, DEFAULT_TASK_DAY, font_name=t.font_title, font_size=13, bold=True, align="center",
+    cv.merge(4, 1, 4, 2, wd_formula, font_name=vn_f, font_size=(13.5 if universal else 13),
+             bold=True, italic=vn_it, align="center", bg_color=t.card, font_color=t.primary_dark)
+    cv.put(4, 3, DEFAULT_TASK_DAY, font_name=num_f, font_size=(13.5 if universal else 13), bold=True, align="center",
            num_format="0", bg_color=t.soft, font_color=t.ink,
            top=1, top_color=t.primary, bottom=1, bottom_color=t.primary,
            left=1, left_color=t.primary, right=1, right_color=t.primary)
-    cv.put(4, 4, DEFAULT_TASK_MONTH, font_name=t.font_title, font_size=12.5, bold=True, align="center",
-           bg_color=t.soft, font_color=t.ink,
+    cv.put(4, 4, DEFAULT_TASK_MONTH, font_name=disp_f,
+           font_size=(min(16.5, 13.0 + en_opt.size_delta * 0.65) if universal else 12.5),
+           bold=(en_opt.bold if universal else True), italic=(en_opt.italic if universal else False),
+           align="center", bg_color=t.soft, font_color=t.ink,
            top=1, top_color=t.primary, bottom=1, bottom_color=t.primary,
            left=1, left_color=t.primary, right=1, right_color=t.primary)
-    cv.put(4, 5, DEFAULT_TASK_YEAR, font_name=t.font_title, font_size=13, bold=True, align="center",
+    cv.put(4, 5, DEFAULT_TASK_YEAR, font_name=num_f, font_size=(13.5 if universal else 13), bold=True, align="center",
            num_format="0", bg_color=t.soft, font_color=t.ink,
            top=1, top_color=t.primary, bottom=1, bottom_color=t.primary,
            left=1, left_color=t.primary, right=1, right_color=t.primary)
@@ -253,7 +264,8 @@ def build_daily_tasks_sheet(
     cv.row(r_note0 + 4, 10)
 
     cv.merge(r_note0, 1, r_note0, 5, "✨  ĐIỂM SÁNG & GHI CHÚ TRONG NGÀY  •  HIGHLIGHT OF THE DAY",
-             bold=True, font_size=9.5, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
+             font_name=(vn_f if universal else None), bold=True, font_size=(10 if universal else 9.5),
+             align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
     # Merged editable cell anchored at B31 (0-based row 30, col 1)!
     cv.merge(r_note0 + 1, 1, r_note0 + 3, 5, DEFAULT_DAILY_HIGHLIGHT, bold=False, font_size=10,
              align="left", indent=1, text_wrap=True, bg_color=t.card, font_color=t.ink)
@@ -261,11 +273,12 @@ def build_daily_tasks_sheet(
 
     # ------------------------------------------------------------------ RIGHT SIDEBAR (COL H = 7): LIVE HERO + DONUT + PRIORITY
     # Card 1 (Rows 2..19, Col H): DAILY HERO GROWTH ANIMATION & PROGRESS
-    cv.put(1, 7, f"{t.emoji}  TIẾN ĐỘ NHIỆM VỤ NGÀY", bold=True, font_size=10.5, align="center",
+    cv.put(1, 7, f"{t.emoji}  TIẾN ĐỘ NHIỆM VỤ NGÀY", font_name=(vn_f if universal else None),
+           bold=True, font_size=(10 if universal else 10.5), align="center",
            bg_color=t.primary, font_color=t.on_primary)
 
     # Donut chart in rows 3..7 (0-based 2..6? Wait: row 2 is 8pt spacer, let's use rows 3..7 = 0-based 3..7!)
-    cv.merge(3, 7, 7, 7, f"={dt_pct_ref}", font_name=t.font_title, font_size=20, bold=True,
+    cv.merge(3, 7, 7, 7, f"={dt_pct_ref}", font_name=num_f, font_size=20, bold=True,
              align="center", num_format="0%", bg_color=t.card, font_color=t.primary_dark)
     d_dt = donut(wb, f"={cq}!{rng(16, CALC_STATE_VAL_COL, 17, CALC_STATE_VAL_COL)}",
                  [t.primary, t.donut_rest], hole=68, name="DailyTasksDonut")
@@ -313,7 +326,8 @@ def build_daily_tasks_sheet(
     cv.box(1, 7, 18, 7, t.line)
 
     # Card 2 (Rows 21..26, Col H): PRIORITY BREAKDOWN LIVE KPI
-    cv.put(20, 7, "🎯  PHÂN BỔ ĐỘ ƯU TIÊN HÔM NAY", bold=True, font_size=9.5, align="center",
+    cv.put(20, 7, "🎯  PHÂN BỔ ĐỘ ƯU TIÊN HÔM NAY", font_name=(vn_f if universal else None),
+           bold=True, font_size=(9.0 if universal else 9.5), align="center",
            bg_color=t.primary, font_color=t.on_primary)
     prio_stats = [
         (21, "🔴 Cao",        "#FEE2E2", "#991B1B"),
@@ -333,7 +347,8 @@ def build_daily_tasks_sheet(
     cv.box(20, 7, 24, 7, t.line)
 
     # Card 3 (Rows 27..33, Col H): QUICK GUIDE CARD
-    cv.put(26, 7, "💡  MẸO DÙNG NHIỆM VỤ NGÀY", bold=True, font_size=9.5, align="center",
+    cv.put(26, 7, "💡  MẸO DÙNG NHIỆM VỤ NGÀY", font_name=(vn_f if universal else None),
+           bold=True, font_size=(9.0 if universal else 9.5), align="center",
            bg_color=t.primary, font_color=t.on_primary)
     tips = [
         "★  Dùng cho việc đột xuất, deadline, lịch hẹn không lặp lại hằng ngày.",

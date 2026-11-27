@@ -38,23 +38,23 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     cv.row(0, 12)
 
     # ------------------------------------------------------------------ HERO BANNER (Rows 2..4)
-    cv.row(1, 38)
-    cv.row(2, 24)
+    ty = t.typo
+    title_f = ty.title_vn if universal else t.font_title
+    title_it = ty.title_vn_italic if universal else False
+    cv.row(1, 42 if universal else 38)
+    cv.row(2, 26 if universal else 24)
     cv.row(3, 24)
-    is_v4 = t.slug.startswith(("loopy_", "lotso_"))
-    is_capy = t.slug.startswith("capybara_")
-    if is_v4:
-        ver_tag = "v4.1 Turbo" if edition == "pro_xlsm" else "v4.1"
-    elif is_capy:
-        ver_tag = "v3.9 Turbo" if edition == "pro_xlsm" else "v3.9"
-    elif is_digi:
-        ver_tag = "v3.8 Turbo" if edition == "pro_xlsm" else "v3.8"
+    if edition == "pro_xlsm":
+        ver_tag = "v4.2 Turbo"
+    elif edition == "offline":
+        ver_tag = "v4.2 Universal"
     else:
-        ver_tag = "v3.6 Turbo" if edition == "pro_xlsm" else "v3.5"
+        ver_tag = "v4.1"
     cv.merge(1, 1, 1, last_c, f"{t.emoji}  {t.name}  —  HƯỚNG DẪN SỬ DỤNG ({ver_tag})",
-             font_name=t.font_title, font_size=15.5, bold=True, align="center",
-             bg_color=t.primary, font_color=t.on_primary)
-    cv.merge(2, 1, 2, last_c, t.tagline_vi, font_size=10, italic=True, align="center",
+             font_name=title_f, font_size=(16.5 if universal else 15.5), bold=True, italic=title_it,
+             align="center", bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(2, 1, 2, last_c, t.tagline_vi, font_name=(title_f if universal else None),
+             font_size=(10.5 if universal else 10), italic=True, align="center",
              bg_color=t.soft, font_color=t.ink)
 
     if edition == "pro_xlsm":
@@ -90,8 +90,9 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     r += 1
 
     # ------------------------------------------------------------------ TAB MAP (5 CLEAN TABS)
-    cv.row(r, 26)
-    cv.merge(r, 1, r, last_c, f"🗂️  CẤU TRÚC 5 SHEET GỌN ĐẸP TRONG FILE ({ver_tag})", bold=True, font_size=10.5,
+    cv.row(r, 28 if universal else 26)
+    cv.merge(r, 1, r, last_c, f"🗂️  CẤU TRÚC 5 SHEET GỌN ĐẸP TRONG FILE ({ver_tag})",
+             font_name=(title_f if universal else None), bold=True, font_size=(11 if universal else 10.5),
              align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
 
     if edition == "pro_xlsm":
@@ -121,8 +122,9 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     cv.row(r - 1, 12)
 
     def info_card(start_r: int, c1: int, c2: int, title: str, bullets: list[str]) -> int:
-        cv.row(start_r, 26)
-        cv.merge(start_r, c1, start_r, c2, title, bold=True, font_size=10, align="left", indent=1,
+        cv.row(start_r, 28 if universal else 26)
+        cv.merge(start_r, c1, start_r, c2, title, font_name=(title_f if universal else None),
+                 bold=True, font_size=(10.5 if universal else 10), align="left", indent=1,
                  bg_color=t.primary, font_color=t.on_primary)
         span_w = sum(cv.widths.get(c, 22.0) for c in range(c1, c2 + 1)) - 4
         cur = start_r + 1
@@ -219,8 +221,9 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
             "🎨  5. HOẠT ẢNH 6 GIAI ĐOẠN (LIVE GROWTH ANIMATION) & TÙY CHỈNH NGƯỠNG"
         )
     )
-    cv.merge(r_cfg, 1, r_cfg, last_c, sec5_title,
-             bold=True, font_size=10.5, align="left", indent=1, bg_color=t.primary, font_color=t.on_primary)
+    cv.merge(r_cfg, 1, r_cfg, last_c, sec5_title, font_name=(title_f if universal else None),
+             bold=True, font_size=(11 if universal else 10.5), align="left", indent=1,
+             bg_color=t.primary, font_color=t.on_primary)
 
     cur_r = r_cfg + 1
     # Threshold bar — 3 thresholds (6-stage), 4 thresholds (7-stage), or 5 thresholds (8-stage Ultra!)
@@ -397,19 +400,21 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
              bg_color=t.warn_fill, font_color=t.ink, indent=1)
     cv.box(r_cfg, 1, r_tip, last_c, t.line)
 
-    # Footer row — generous 28pt height, centered, NEVER clipped!
+    # Footer row — generous 30pt height, centered, NEVER clipped!
     r_foot = r_tip + 2
     cv.row(r_foot - 1, 10)
-    cv.row(r_foot, 28)
+    cv.row(r_foot, 30 if universal else 28)
     cv.row(r_foot + 1, 12)
-    foot_ver = (
-        f"{ver_tag} by Dyu  •  Sub-150ms Native Sprite Engine & Pro FX + Ctrl+Z Undo"
-        if edition == "pro_xlsm" else
-        f"{ver_tag} by Dyu  •  Unified 5-Tab Habit Tracker Collection"
-    )
-    cv.merge(r_foot, 1, r_foot, last_c,
-             f"💛  Habit Tracker Collection {foot_ver}  •  {REPO_URL}",
-             bold=False, font_size=9, italic=True, align="center", bg_color=t.page, font_color=t.muted)
+    if edition == "pro_xlsm":
+        foot_txt = f"💛  © 2026 Dyu (Thân Trọng Duy)  •  Habit Tracker Collection v4.2 Pro Turbo  •  {REPO_URL}"
+    elif edition == "offline":
+        foot_txt = f"💛  © 2026 Dyu (Thân Trọng Duy)  •  Habit Tracker Collection v4.2 Universal  •  {REPO_URL}"
+    else:
+        foot_txt = f"💛  Habit Tracker Collection {ver_tag} by Dyu  •  Unified 5-Tab Habit Tracker Collection  •  {REPO_URL}"
+    cv.merge(r_foot, 1, r_foot, last_c, foot_txt,
+             font_name=(title_f if universal else None),
+             bold=False, font_size=(9.5 if universal else 9), italic=True, align="center",
+             bg_color=t.page, font_color=t.muted)
 
     wb.define_name("ANCHOR_GUIDE", f"={q}!$B$2")
 

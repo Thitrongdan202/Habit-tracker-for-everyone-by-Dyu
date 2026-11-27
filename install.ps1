@@ -1,7 +1,7 @@
-# Habit Tracker Collection v4.1 Installer (PowerShell 5.1+ / 7+)
+# Habit Tracker Collection v4.2 Installer (PowerShell 5.1+ / 7+)
 <#
 .SYNOPSIS
-    Habit Tracker Collection v4.1 - Interactive Zero-Install Downloader (Windows PowerShell)
+    Habit Tracker Collection v4.2 - Interactive Zero-Install Downloader (Windows PowerShell)
 .DESCRIPTION
     Run in 1 line:
         irm https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu/main/install.ps1 | iex
@@ -190,14 +190,14 @@ New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 
 Write-Host ""
 Write-Host "========================================================================" -ForegroundColor Magenta
-Write-Host "   HABIT TRACKER COLLECTION v4.1 - BY DYU (80 THEMES x 4 EDITIONS)" -ForegroundColor Yellow
+Write-Host "   HABIT TRACKER COLLECTION v4.2 - BY DYU (80 THEMES x 4 EDITIONS)" -ForegroundColor Yellow
 Write-Host "   Turbo 6/7/8-Stage Native Sprite Engine | FX Suite | Ctrl+Z Undo" -ForegroundColor Cyan
 Write-Host "========================================================================" -ForegroundColor Magenta
 Write-Host "  Thu muc luu file: $OutDir" -ForegroundColor Green
 Write-Host ""
 Write-Host "  BUOC 1 - CHON PHIEN BAN PHU HOP (THEO THU TU UU TIEN):" -ForegroundColor White
 Write-Host "  ----------------------------------------------------------------------" -ForegroundColor DarkGray
-Write-Host "  [1] Pro Interactive (.xlsm)  [* KHUYEN DUNG SO 1 - EXCEL 365 TURBO v4.1 *]" -ForegroundColor Green
+Write-Host "  [1] Pro Interactive (.xlsm)  [* KHUYEN DUNG SO 1 - EXCEL 365 TURBO v4.2 *]" -ForegroundColor Green
 Write-Host "      -> Sieu toc ~25-54ms + Full FX Nay/Phao hoa/Toast goc trai duoi + Ctrl+Z Undo" -ForegroundColor DarkGray
 Write-Host "         + Khoa bao ve cong thuc + Tu luu Da Ngay/Thang/Nam (100% Offline)!" -ForegroundColor DarkGray
 Write-Host "  [2] Excel Universal Offline (.xlsx)  [Excel 2016/2019/2021/365]" -ForegroundColor Cyan
