@@ -603,14 +603,14 @@ def collect_jobs(edition: str, start: int, end: int, only_ids: list[int] | None 
     jobs = []
     pro_map = {int(p.name[:2]): p for p in sorted(PRO_DIR.glob("[0-9][0-9]_*.xlsm"))}
     off_map = {int(p.name[:2]): p for p in sorted(OFF_DIR.glob("[0-9][0-9]_*.xlsx"))}
-    assert len(pro_map) == 80, f"Expected 80 pro_macro files, got {len(pro_map)}"
-    assert len(off_map) == 80, f"Expected 80 offline files, got {len(off_map)}"
     indices = only_ids if only_ids else list(range(start, end + 1))
     for idx in indices:
         slug = TEMPLATES[idx - 1].theme.slug
         if edition in ("pro", "both"):
+            assert idx in pro_map, f"Missing pro_macro file for #{idx:02d}"
             jobs.append((idx, slug, True, pro_map[idx]))
         if edition in ("offline", "both"):
+            assert idx in off_map, f"Missing offline file for #{idx:02d}"
             jobs.append((idx, slug, False, off_map[idx]))
     return jobs
 
@@ -619,7 +619,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--edition", choices=["pro", "offline", "both"], default="both")
     ap.add_argument("--start", type=int, default=1)
-    ap.add_argument("--end", type=int, default=80)
+    ap.add_argument("--end", type=int, default=len(TEMPLATES))
     ap.add_argument("--ids", type=str, default="")
     ap.add_argument("--recycle", type=int, default=14)
     args = ap.parse_args()

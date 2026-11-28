@@ -441,6 +441,25 @@ THEME_TYPOGRAPHY: dict[str, TypographySpec] = {
     "lotso_daisy_glow":       TypographySpec("Bradley Hand ITC",   "Book Antiqua",      "Constantia",        "Candara",           "Constantia",        True,  True,  "floral"),
     "lotso_bunny_selfcare":   TypographySpec("Lucida Handwriting", "Palatino Linotype", "Candara",           "Corbel",            "Palatino Linotype", True,  True,  "spa"),
     "lotso_gift_box":         TypographySpec("Gabriola",           "Georgia",           "Constantia",        "Candara",           "Palatino Linotype", True,  True,  "party"),
+
+    # === BATCH 10 (#81–#88): Christmas Holiday Collection (Strict Whitelist!) ===
+    "xmas_tree_glow":         TypographySpec("Monotype Corsiva",   "Georgia",           "Palatino Linotype", "Candara",           "Palatino Linotype", True,  True,  "festive"),
+    "xmas_snowman_build":     TypographySpec("Segoe Script",       "Constantia",        "Candara",           "Corbel",            "Constantia",        True,  True,  "winter"),
+    "xmas_gingerbread_bakery":TypographySpec("Lucida Handwriting", "Book Antiqua",      "Constantia",        "Candara",           "Palatino Linotype", True,  True,  "bakery"),
+    "xmas_santa_delivery":    TypographySpec("Georgia",            "Palatino Linotype", "Cambria",           "Segoe UI",          "Cambria",           True,  True,  "festive"),
+    "xmas_hot_cocoa_cafe":    TypographySpec("Gabriola",           "Garamond",          "Palatino Linotype", "Corbel",            "Constantia",        True,  True,  "cozy"),
+    "xmas_reindeer_parade":   TypographySpec("Segoe Print",        "Book Antiqua",      "Candara",           "Candara",           "Cambria",           False, True,  "playful"),
+    "xmas_cozy_village":      TypographySpec("Ink Free",           "Georgia",           "Constantia",        "Corbel",            "Palatino Linotype", True,  True,  "winter"),
+    "xmas_wreath_candle":     TypographySpec("Monotype Corsiva",   "Palatino Linotype", "Palatino Linotype", "Palatino Linotype", "Constantia",        True,  True,  "classic"),
+
+    # === BATCH 11 (#89–#95): New Year Celebration Collection (Strict Whitelist!) ===
+    "ny_fireworks_countdown": TypographySpec("Cambria",            "Sylfaen",           "Cambria",           "Segoe UI",          "Cambria",           False, False, "party"),
+    "ny_lucky_red_envelope":  TypographySpec("Lucida Handwriting", "Georgia",           "Palatino Linotype", "Candara",           "Palatino Linotype", True,  True,  "lucky"),
+    "ny_maneki_neko":         TypographySpec("Segoe Script",       "Constantia",        "Candara",           "Corbel",            "Constantia",        True,  True,  "lucky"),
+    "ny_sakura_blossom":      TypographySpec("Gabriola",           "Garamond",          "Palatino Linotype", "Candara",           "Palatino Linotype", True,  True,  "floral"),
+    "ny_daruma_wish":         TypographySpec("Georgia",            "Book Antiqua",      "Cambria",           "Segoe UI",          "Cambria",           False, False, "goal"),
+    "ny_tea_mochi":           TypographySpec("Bradley Hand ITC",   "Palatino Linotype", "Constantia",        "Corbel",            "Constantia",        True,  True,  "zen"),
+    "ny_festival_lantern":    TypographySpec("Monotype Corsiva",   "Georgia",           "Palatino Linotype", "Candara",           "Palatino Linotype", True,  True,  "festive"),
 }
 
 
@@ -500,7 +519,7 @@ def verify_vietnamese_fonts() -> dict[str, int]:
 
 def validate_matrix(ordered_slugs: list[str] | None = None) -> None:
     slugs = ordered_slugs or list(THEME_TYPOGRAPHY.keys())
-    assert len(slugs) == 80, f"Expected 80 themes, got {len(slugs)}"
+    assert len(slugs) == len(THEME_TYPOGRAPHY), f"Expected {len(THEME_TYPOGRAPHY)} themes, got {len(slugs)}"
     for i, sl in enumerate(slugs):
         assert sl in THEME_TYPOGRAPHY, f"Missing typography for slug: {sl}"
         sp = THEME_TYPOGRAPHY[sl]

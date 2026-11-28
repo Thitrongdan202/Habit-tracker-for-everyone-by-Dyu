@@ -932,6 +932,7 @@ def main():
     rest = args[1:]
     start_idx = None
     end_idx = None
+    no_previews = False
     only = []
     i = 0
     while i < len(rest):
@@ -939,6 +940,8 @@ def main():
             start_idx = int(rest[i + 1]); i += 2
         elif rest[i] == "--end" and i + 1 < len(rest):
             end_idx = int(rest[i + 1]); i += 2
+        elif rest[i] == "--no-previews":
+            no_previews = True; i += 1
         else:
             only.append(rest[i]); i += 1
 
@@ -973,7 +976,7 @@ def main():
     if mode in ("all", "gsheets"):
         build_all_gsheets(only)
 
-    all_jobs = [(m, True) for m in pro_manifests] + [(m, False) for m in off_manifests]
+    all_jobs = [(m, (not no_previews)) for m in pro_manifests] + [(m, False) for m in off_manifests]
     if not all_jobs:
         return
 
