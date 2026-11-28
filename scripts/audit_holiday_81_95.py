@@ -57,10 +57,17 @@ FORMULA_ERRORS = {"#REF!", "#NAME?", "#VALUE!", "#N/A", "#DIV/0!", "#NUM!", "#NU
 HIDDEN_SHEETS = {"_Calc", "_Database", "_Assets", "_YearHistory"}
 
 
-def audit_static_60() -> tuple[bool, list[tuple[str, Path, bool]]]:
+READY_11_NUMS = {81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 92}
+
+
+def audit_static_60(ready_only: bool = False) -> tuple[bool, list[tuple[str, Path, bool]]]:
     vn_safe = set(verify_vietnamese_fonts().keys()) | {"Segoe UI"}
-    tdefs = TEMPLATES[80:95]
-    assert len(tdefs) == 15, f"Expected 15 holiday templates (#81..#95), got {len(tdefs)}"
+    if ready_only:
+        tdefs = [t for i, t in enumerate(TEMPLATES, 1) if i in READY_11_NUMS]
+    else:
+        tdefs = TEMPLATES[80:95]
+    expected_n = 11 if ready_only else 15
+    assert len(tdefs) == expected_n, f"Expected {expected_n} holiday templates, got {len(tdefs)}"
 
     pc_issues = []
     pc_overflows = []
@@ -167,6 +174,18 @@ def audit_static_60() -> tuple[bool, list[tuple[str, Path, bool]]]:
                     w = wb["📱 Tuần Này"]
                     if w["B5"].value != "October" or w["C5"].value != 2026 or not isinstance(w["C21"].value, bool):
                         cloud_issues.append((p.name, "Mobile onEdit anchor mismatch"))
+                    # Verify ALL 7 columns C21:I35 have non-white checkbox font color + =C$20="" CF rule!
+                    for col_i in range(3, 10):
+                        fc = w.cell(21, col_i).font.color
+                        rgb = str(fc.rgb) if (fc and fc.rgb) else ""
+                        if rgb.upper().endswith("FFFFFF") or not rgb:
+                            cloud_issues.append((p.name, f"Mobile Col {col_i} checkbox font is white/empty ({rgb})"))
+                    cf_formulas = []
+                    for cf in w.conditional_formatting:
+                        for rule in cf.rules:
+                            cf_formulas.extend(rule.formula or [])
+                    if not any('C$20=""' in str(f) for f in cf_formulas):
+                        cloud_issues.append((p.name, 'Mobile missing =C$20="" out-of-month CF rule'))
                 else:
                     w = wb[tdef.tracker_name]
                     if w["B3"].value != "October" or w["B5"].value != 2026 or not isinstance(w["C17"].value, bool):
@@ -184,10 +203,10 @@ def audit_static_60() -> tuple[bool, list[tuple[str, Path, bool]]]:
         if len(fn) >= 2 and fn[:2].isdigit() and int(fn[:2]) <= 80:
             touched_old.append(line)
 
-    print("=== STATIC 60-FILE HOLIDAY AUDIT (#81–#95) ===")
-    print(f"  PC issues (30 files)       : {len(pc_issues)}")
-    print(f"  PC PIL overflows (30 files): {len(pc_overflows)}")
-    print(f"  Cloud/Mobile issues (30)   : {len(cloud_issues)}")
+    print(f"=== STATIC {len(tdefs) * 4}-FILE HOLIDAY AUDIT ===")
+    print(f"  PC issues ({len(tdefs) * 2} files)       : {len(pc_issues)}")
+    print(f"  PC PIL overflows ({len(tdefs) * 2} files): {len(pc_overflows)}")
+    print(f"  Cloud/Mobile issues ({len(tdefs) * 2})   : {len(cloud_issues)}")
     print(f"  Touched #01–#80 files      : {len(touched_old)}")
     print(f"  _build_tmp exists          : {(ROOT / '_build_tmp').exists()}")
     for lbl, arr in (("PC ISSUE", pc_issues[:15]), ("PC OVERFLOW", pc_overflows[:15]),
@@ -282,11 +301,87 @@ def audit_com_60(targets: list[tuple[str, Path, bool]]) -> bool:
     return checked == len(targets) and not formula_errs and not prot_errs
 
 
+def test_live_holiday_vba_finale(pro_files: list[Path]) -> bool:
+    """Test LIVE execution of `BtnDemoFX` (Winter Magic Finale & Grand New Year Fireworks Finale)
+    on isolated %TEMP% copies inside Excel COM: verifies 0 VBA runtime errors, DECOR_* shapes
+    preserved cleanly, and ZERO leftover FX_HOL_* / FX_PARTICLE_* orphan shapes!"""
+    tmp_dir = Path(tempfile.mkdtemp(prefix="audit_holiday_vba_"))
+    vba_errs = []
+    tested = 0
+    pythoncom.CoInitialize()
+    xl = None
+    try:
+        xl = win32.DispatchEx("Excel.Application")
+        xl.Visible = False
+        xl.DisplayAlerts = False
+        xl.EnableEvents = False
+        for idx, src in enumerate(pro_files):
+            dst = tmp_dir / f"{idx:02d}_{src.name}"
+            shutil.copy2(src, dst)
+            wb = xl.Workbooks.Open(str(dst.resolve()), UpdateLinks=0, ReadOnly=False)
+            try:
+                ws_g = wb.Worksheets("📖 Hướng Dẫn")
+                ws_g.Activate()
+                decor_before = sum(1 for i in range(1, ws_g.Shapes.Count + 1) if str(ws_g.Shapes(i).Name).startswith("DECOR_"))
+                if decor_before < 2:
+                    vba_errs.append((src.name, f"Missing DECOR_* on Guide (found {decor_before})"))
+                # Run live Holiday Finale macro!
+                xl.Run(f"'{wb.Name}'!BtnDemoFX")
+                # Clean toast timer before closing
+                xl.Run(f"'{wb.Name}'!CleanupAllFX")
+                leftover_fx = [
+                    str(ws_g.Shapes(i).Name)
+                    for i in range(1, ws_g.Shapes.Count + 1)
+                    if str(ws_g.Shapes(i).Name).startswith(("FX_HOL_", "FX_PARTICLE_", "FX_TOAST"))
+                ]
+                decor_after = sum(1 for i in range(1, ws_g.Shapes.Count + 1) if str(ws_g.Shapes(i).Name).startswith("DECOR_"))
+                if leftover_fx:
+                    vba_errs.append((src.name, f"Leftover FX shapes: {leftover_fx}"))
+                if decor_after != decor_before:
+                    vba_errs.append((src.name, f"DECOR count changed: {decor_before} -> {decor_after}"))
+                tested += 1
+            except Exception as e:
+                vba_errs.append((src.name, f"VBA runtime error: {e}"))
+            finally:
+                wb.Close(SaveChanges=False)
+                try:
+                    dst.unlink()
+                except Exception:
+                    pass
+    finally:
+        if xl is not None:
+            try:
+                xl.Quit()
+            except Exception:
+                pass
+            del xl
+            gc.collect()
+            time.sleep(1.2)
+        pythoncom.CoUninitialize()
+        shutil.rmtree(tmp_dir, ignore_errors=True)
+
+    print("=== LIVE VBA HOLIDAY FINALE MACRO AUDIT (%TEMP% COPIES) ===")
+    print(f"  Pro workbooks live-tested  : {tested} / {len(pro_files)}")
+    print(f"  VBA / orphan shape errors  : {len(vba_errs)}")
+    print(f"  Temp VBA dir cleaned       : {not tmp_dir.exists()}")
+    for x in vba_errs:
+        print("  !! VBA ERR:", x)
+    return tested == len(pro_files) and not vba_errs
+
+
 def main():
-    ok_static, targets = audit_static_60()
+    ready_only = ("--ready-only" in sys.argv[1:])
+    ok_static, targets = audit_static_60(ready_only=ready_only)
     ok_com = audit_com_60(targets)
-    print("FINAL 60-FILE HOLIDAY AUDIT:", "PASS (60/60 CLEAN)" if (ok_static and ok_com) else "FAIL")
-    sys.exit(0 if (ok_static and ok_com) else 1)
+    # Test LIVE Holiday VBA Finale on representative Christmas (#81, #84) & New Year (#89, #90, #92) Pro files!
+    vba_samples = [
+        p for (tag, p, is_pro) in targets
+        if is_pro and any(p.name.startswith(pref) for pref in ("81_", "84_", "89_", "90_", "92_"))
+    ]
+    ok_vba = test_live_holiday_vba_finale(vba_samples)
+    total_n = len(targets)
+    print(f"FINAL {total_n}-FILE HOLIDAY AUDIT:", f"PASS ({total_n}/{total_n} CLEAN)" if (ok_static and ok_com and ok_vba) else "FAIL")
+    sys.exit(0 if (ok_static and ok_com and ok_vba) else 1)
 
 
 if __name__ == "__main__":

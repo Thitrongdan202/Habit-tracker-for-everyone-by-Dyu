@@ -69,6 +69,20 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     cv.merge(3, 1, 3, last_c, mode_txt, font_size=9, bold=True, align="center",
              bg_color=t.card, font_color=t.primary_dark)
     cv.box(1, 1, 3, last_c, t.line)
+    # Google Sheets subtle holiday banner corner decor (#81-#95 ONLY — zero impact on cells/onEdit!)
+    if gsheets and (t.slug.startswith("xmas_") or t.slug.startswith("ny_")):
+        from pathlib import Path
+        d_dir = Path(__file__).resolve().parent.parent.parent / "assets" / "_holiday_decor"
+        if t.slug.startswith("xmas_"):
+            dp = "xmas"
+        elif t.slug in ("ny_sakura_blossom", "ny_tea_mochi", "ny_festival_lantern"):
+            dp = "ny_sakura"
+        else:
+            dp = "ny_apricot"
+        p_tl, p_tr = d_dir / f"{dp}_banner_tl.png", d_dir / f"{dp}_banner_tr.png"
+        if p_tl.exists() and p_tr.exists():
+            ws.insert_image(1, 1, str(p_tl), {"x_offset": 4, "y_offset": 3, "x_scale": 0.30, "y_scale": 0.30, "object_position": 1})
+            ws.insert_image(1, last_c, str(p_tr), {"x_offset": 36, "y_offset": 3, "x_scale": 0.30, "y_scale": 0.30, "object_position": 1})
     r = 4
 
     # Google Sheets crisp 1-line 3-second tip banner right under hero!

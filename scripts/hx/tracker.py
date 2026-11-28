@@ -206,6 +206,26 @@ def init_calc_sheet(wb, active_year: int = 2026, last_loaded_key: str = "2026-10
         ("FX_MSG_UNDO_EMPTY",  "ℹ️ Chưa có thao tác nào để hoàn tác!"),                     # BA25
         ("CFG_MAX_STAGE",      (theme.num_stages - 1) if theme else 5),                    # BA26
     ]
+    # ---- Holiday Exclusive FX Config (_Calc!BA27:BA30 — ONLY active for #81–#95!) ----
+    slug_t = theme.slug if theme else ""
+    if slug_t.startswith("xmas_"):
+        hol_mode = "XMAS"
+        hol_sub = "SNOW"
+        hol_perf = "🎄 Giáng Sinh An Lành! Bạn đã hoàn thành trọn vẹn 100% mục tiêu hôm nay! ✨"
+        hol_demo = "❄️ Winter Magic Finale! Hiệu ứng Tuyết rơi & Ánh sao Giáng Sinh đã kích hoạt! 🎄"
+    elif slug_t.startswith("ny_"):
+        hol_mode = "NEWYEAR"
+        hol_sub = "SAKURA" if slug_t in ("ny_sakura_blossom", "ny_tea_mochi", "ny_festival_lantern") else "APRICOT"
+        hol_perf = "🧧 Khai Xuân Rực Rỡ! Chúc mừng bạn đạt 100% mục tiêu — Vạn Sự Như Ý! 🎆"
+        hol_demo = "🎆 Grand New Year Finale! Pháo hoa đa sắc & Hoa Xuân rực rỡ chúc mừng năm mới! 🧧"
+    else:
+        hol_mode, hol_sub, hol_perf, hol_demo = "", "", "", ""
+    fx_rows.extend([
+        ("CFG_HOLIDAY_MODE",       hol_mode),  # BA27
+        ("CFG_HOLIDAY_SUB",        hol_sub),   # BA28
+        ("FX_MSG_HOLIDAY_PERFECT", hol_perf),  # BA29
+        ("FX_MSG_HOLIDAY_DEMO",    hol_demo),  # BA30
+    ])
     for r_idx, (lbl, val) in enumerate(fx_rows):
         ws_calc.write(r_idx, CALC_FX_LBL_COL, lbl)
         if isinstance(val, bool):

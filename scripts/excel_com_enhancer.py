@@ -228,6 +228,95 @@ def add_pro_pill_buttons(wb, meta: dict):
                      bgr_pri, bgr_dk, bgr_onp, "SyncSpritesFromAssets", font_size=9.0)
 
 
+def add_holiday_decor_overlays(wb, meta: dict) -> int:
+    """Place exclusive pastel kawaii holiday corner overlays (ribbons & pine for Christmas #81-#88;
+    Hoa Mai Vàng / Hoa Đào branches for New Year #89-#95) on empty banner & Hero corners ONLY.
+    ZERO impact on #01-#80, ZERO overlap with text, checkboxes, dropdowns, or numbers!"""
+    slug = str(meta.get("slug", ""))
+    decor_dir = ASSETS_DIR / "_holiday_decor"
+    if slug.startswith("xmas_"):
+        prefix = "xmas"
+    elif slug in ("ny_sakura_blossom", "ny_tea_mochi", "ny_festival_lantern"):
+        prefix = "ny_sakura"
+    elif slug.startswith("ny_"):
+        prefix = "ny_apricot"
+    else:
+        return 0
+
+    b_tl = (decor_dir / f"{prefix}_banner_tl.png").resolve()
+    b_tr = (decor_dir / f"{prefix}_banner_tr.png").resolve()
+    h_tl = (decor_dir / f"{prefix}_hero_tl.png").resolve()
+    h_tr = (decor_dir / f"{prefix}_hero_tr.png").resolve()
+    if not (b_tl.exists() and b_tr.exists() and h_tl.exists() and h_tr.exists()):
+        return 0
+
+    def _put_decor(ws, img_p: Path, name: str, left: float, top: float, w: float, h: float):
+        shp = ws.Shapes.AddPicture(
+            Filename=str(img_p), LinkToFile=False, SaveWithDocument=True,
+            Left=left, Top=top, Width=w, Height=h,
+        )
+        shp.Name = name
+        shp.Line.Visible = 0
+        shp.LockAspectRatio = -1
+        shp.Placement = 1  # xlMoveAndSize
+        return shp
+
+    cnt = 0
+    # 1. Guide Banner (`B2:G2`): far-left & far-right empty edges
+    ws_g = wb.Worksheets(GUIDE_SHEET)
+    g_b2 = ws_g.Range("B2")
+    g_g2 = ws_g.Range("G2")
+    bw_g, bh_g = 96.0, min(35.0, g_b2.Height - 4.0)
+    _put_decor(ws_g, b_tl, "DECOR_G_TL", g_b2.Left + 3.0, g_b2.Top + 2.0, bw_g, bh_g); cnt += 1
+    _put_decor(ws_g, b_tr, "DECOR_G_TR", g_g2.Left + g_g2.Width - bw_g - 3.0, g_g2.Top + 2.0, bw_g, bh_g); cnt += 1
+
+    # 2. Monthly Tracker: Hero box top-left/top-right corners (`B9`) + `AI2:AM2` Monthly Progress corners
+    ws_tr = wb.Worksheets(meta["tracker_sheet"])
+    tr_b9 = ws_tr.Range("B9")
+    _put_decor(ws_tr, h_tl, "DECOR_TR_HERO_TL", tr_b9.Left + 2.0, tr_b9.Top + 2.0, 34.0, 34.0); cnt += 1
+    _put_decor(ws_tr, h_tr, "DECOR_TR_HERO_TR", tr_b9.Left + tr_b9.Width - 36.0, tr_b9.Top + 2.0, 34.0, 34.0); cnt += 1
+    try:
+        tr_ai2 = ws_tr.Range("AI2")
+        tr_am2 = ws_tr.Range("AM2")
+        ph = min(16.0, tr_ai2.Height - 2.0)
+        pw = ph * (380.0 / 140.0)
+        _put_decor(ws_tr, b_tl, "DECOR_TR_PROG_TL", tr_ai2.Left + 2.0, tr_ai2.Top + 1.0, pw, ph); cnt += 1
+        _put_decor(ws_tr, b_tr, "DECOR_TR_PROG_TR", tr_am2.Left + tr_am2.Width - pw - 2.0, tr_am2.Top + 1.0, pw, ph); cnt += 1
+    except Exception:
+        pass
+
+    # 3. Daily One-Off Tasks (`B2:F2` banner corners + `H4` Hero top-left corner)
+    ws_dt = wb.Worksheets(DAILY_TASKS_SHEET)
+    dt_b2 = ws_dt.Range("B2")
+    dt_f2 = ws_dt.Range("F2")
+    bh_dt = min(30.0, dt_b2.Height - 3.0)
+    bw_dt = bh_dt * (380.0 / 140.0)
+    _put_decor(ws_dt, b_tl, "DECOR_DT_TL", dt_b2.Left + 2.0, dt_b2.Top + 1.5, bw_dt, bh_dt); cnt += 1
+    _put_decor(ws_dt, b_tr, "DECOR_DT_TR", dt_f2.Left + dt_f2.Width - bw_dt - 2.0, dt_f2.Top + 1.5, bw_dt, bh_dt); cnt += 1
+    dt_h4 = ws_dt.Range("H4")
+    _put_decor(ws_dt, h_tl, "DECOR_DT_HERO_TL", dt_h4.Left + 2.0, dt_h4.Top + 2.0, 30.0, 30.0); cnt += 1
+
+    # 4. Yearly Goals (`B2:F2` banner corners — leaves H2:I2 Year dropdown 100% untouched!)
+    ws_yg = wb.Worksheets(YEARLY_GOALS_SHEET)
+    yg_b2 = ws_yg.Range("B2")
+    yg_f2 = ws_yg.Range("F2")
+    bh_yg = min(34.0, yg_b2.Height - 4.0)
+    bw_yg = bh_yg * (380.0 / 140.0)
+    _put_decor(ws_yg, b_tl, "DECOR_YG_TL", yg_b2.Left + 2.0, yg_b2.Top + 2.0, bw_yg, bh_yg); cnt += 1
+    _put_decor(ws_yg, b_tr, "DECOR_YG_TR", yg_f2.Left + yg_f2.Width - bw_yg - 2.0, yg_f2.Top + 2.0, bw_yg, bh_yg); cnt += 1
+
+    # 5. Annual Achievements (`D2:S2` banner corners — leaves B3 Year dropdown 100% untouched!)
+    ws_ann = wb.Worksheets(ANNUAL_SHEET)
+    ann_d2 = ws_ann.Range("D2")
+    ann_s2 = ws_ann.Range("S2")
+    bh_ann = min(34.0, ann_d2.Height - 4.0)
+    bw_ann = bh_ann * (380.0 / 140.0)
+    _put_decor(ws_ann, b_tl, "DECOR_ANN_TL", ann_d2.Left + 2.0, ann_d2.Top + 2.0, bw_ann, bh_ann); cnt += 1
+    _put_decor(ws_ann, b_tr, "DECOR_ANN_TR", ann_s2.Left + ann_s2.Width - bw_ann - 2.0, ann_s2.Top + 2.0, bw_ann, bh_ann); cnt += 1
+
+    return cnt
+
+
 def _map_anim_to_stack_info(anim_name: str) -> tuple[str, str, bool]:
     """Map legacy `Anim_*` manifest names to v3.6 Pure-ASCII Sprite Stack prefix & `_Calc` stage cell."""
     if anim_name.startswith("Anim_Day"):
@@ -467,10 +556,12 @@ def deduplicate_xlsm_media(xlsm_path: Path, slug: str, n_stages: int = 6) -> tup
             rels_rid_to_stage[rels_name] = rid_map
 
     # Rewrite drawing `.rels` files to point sprite rIds -> `../media/image1.png..image6.png`
+    # and SHA-256 deduplicate any non-sprite media (e.g. `DECOR_*` holiday overlays) into `decor_<hash>.png`!
     rel_tag_pat = re.compile(r'(<Relationship\b[^>]*>)')
     id_pat = re.compile(r'\bId="([^"]+)"')
     tgt_pat = re.compile(r'\bTarget="([^"]+)"')
 
+    dedup_other_blobs: dict[str, bytes] = {}
     updated_blobs: dict[str, bytes] = {}
     for fname, data in blobs.items():
         if fname.endswith(".rels") and b"media/" in data:
@@ -489,13 +580,21 @@ def deduplicate_xlsm_media(xlsm_path: Path, slug: str, n_stages: int = 6) -> tup
                     canon_tgt = f"../media/image{rid_map[rid] + 1}.png"
                     return tgt_pat.sub(f'Target="{canon_tgt}"', tag, count=1)
                 if "media/" in tgt:
-                    referenced_other_media.add("xl/media/" + os.path.basename(tgt))
+                    orig_media = "xl/media/" + os.path.basename(tgt)
+                    if orig_media in blobs:
+                        ext = Path(orig_media).suffix or ".png"
+                        h8 = hashlib.sha256(blobs[orig_media]).hexdigest()[:10]
+                        d_name = f"xl/media/decor_{h8}{ext}"
+                        dedup_other_blobs[d_name] = blobs[orig_media]
+                        referenced_other_media.add(d_name)
+                        return tgt_pat.sub(f'Target="../media/decor_{h8}{ext}"', tag, count=1)
                 return tag
 
             new_txt = rel_tag_pat.sub(_fix_rel, txt)
             updated_blobs[fname] = new_txt.encode("utf-8")
 
     canon_media = {f"xl/media/image{k + 1}.png": stage_bytes[k] for k in range(n_stages)}
+    canon_media.update(dedup_other_blobs)
 
     tmp_path = xlsm_path.with_suffix(".dedup.tmp")
     with zipfile.ZipFile(tmp_path, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=6) as zout:
@@ -505,9 +604,6 @@ def deduplicate_xlsm_media(xlsm_path: Path, slug: str, n_stages: int = 6) -> tup
             if fname.startswith("xl/media/"):
                 if fname in canon_media:
                     zout.writestr(fname, canon_media[fname])
-                    written_media.add(fname)
-                elif fname in referenced_other_media:
-                    zout.writestr(info, blobs[fname])
                     written_media.add(fname)
                 continue
             zout.writestr(info, updated_blobs.get(fname, blobs[fname]))
@@ -777,6 +873,9 @@ def enhance_one(xl, meta: dict, capture_previews: bool = True):
         # 6. Restore calculation & force full rebuild, then sync initial native sprite visibility!
         xl.Calculation = -4105  # xlCalculationAutomatic
         xl.CalculateFullRebuild()
+
+        # 6b. Mount Exclusive Holiday Corner Decorations AFTER CalculateFullRebuild (fast 0-lag on Offline Linked Pictures!)
+        add_holiday_decor_overlays(wb, meta)
         if edition == "pro_xlsm":
             if stack_slots:
                 sync_initial_pro_sprite_visibility(wb, stack_slots, n_stages=n_stages)

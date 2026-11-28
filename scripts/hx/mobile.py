@@ -117,6 +117,14 @@ def _add_mobile_assets_sheet(wb, styles: Styles):
     ws.write(r_blank, 1, "", slot)
     ws.write(r_blank, 2, "GIỮ NGUYÊN Ô TRỐNG — dùng để ẩn ngày ngoài tháng", tip)
 
+    # Optional Animated GIF S5 reference row for Holiday themes (#81-#95, leaves B2:B7 PNG & B8 blank!)
+    if t.slug.startswith("xmas_") or t.slug.startswith("ny_"):
+        gif_base = t.img_base.rsplit("/assets/", 1)[0] + "/assets/previews/holiday/"
+        ws.set_row(r_blank + 1, 28)
+        ws.write(r_blank + 1, 0, "Optional S5 GIF", lab)
+        ws.write(r_blank + 1, 1, "", slot)
+        ws.write(r_blank + 1, 2, f"Tùy chọn thay B7 bằng ảnh GIF động: {gif_base}<num>_{t.slug}_fx.gif", tip)
+
     ws.hide()
     return ws
 

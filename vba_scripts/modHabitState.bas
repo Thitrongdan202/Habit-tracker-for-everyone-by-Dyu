@@ -26,7 +26,9 @@ Private Const N_FORM_ROWS As Long = 20
 Private Const N_GOALS As Long = 20
 Private Const N_TASKS As Long = 20
 
+Private Const MSO_DIAMOND As Long = 4
 Private Const MSO_ROUNDED_RECT As Long = 5
+Private Const MSO_OVAL As Long = 9
 Private Const MSO_HEART As Long = 21
 Private Const MSO_STAR_5 As Long = 92
 Private Const MSO_STAR_4 As Long = 187
@@ -1277,12 +1279,27 @@ End Sub
 
 Public Sub CleanupParticles(ByVal ws As Worksheet)
     On Error Resume Next
-    Dim k As Long
-    For k = 1 To 10
-        ws.Shapes("FX_PARTICLE_" & CStr(k)).Delete
-    Next k
+    Dim idx As Long, nm As String
+    For idx = ws.Shapes.Count To 1 Step -1
+        nm = ws.Shapes(idx).Name
+        If Left$(nm, 12) = "FX_PARTICLE_" Or Left$(nm, 7) = "FX_HOL_" Then
+            ws.Shapes(idx).Delete
+        End If
+    Next idx
     On Error GoTo 0
 End Sub
+
+Private Function GetHolidayMode() As String
+    On Error Resume Next
+    GetHolidayMode = UCase$(Trim$(CStr(GetCalcSheet().Range("BA27").Value2)))
+    On Error GoTo 0
+End Function
+
+Private Function GetHolidaySub() As String
+    On Error Resume Next
+    GetHolidaySub = UCase$(Trim$(CStr(GetCalcSheet().Range("BA28").Value2)))
+    On Error GoTo 0
+End Function
 
 Private Function GetCalcSheet() As Worksheet
     If gWsCalc Is Nothing Then Set gWsCalc = ThisWorkbook.Worksheets(CALC_SHEET)
@@ -1456,6 +1473,347 @@ WipeParticles:
 End Sub
 
 ' =============================================================================
+'  HOLIDAY EXCLUSIVE FINALES (#81-#95 ONLY — 100% PURE ASCII, ZERO ORPHANS!)
+' =============================================================================
+Private Sub GetViewportBounds(ByVal ws As Worksheet, ByRef vL As Single, ByRef vT As Single, _
+                              ByRef vW As Single, ByRef vH As Single)
+    On Error Resume Next
+    Dim vr As Range
+    Set vr = ActiveWindow.VisibleRange
+    If Not vr Is Nothing Then
+        vL = vr.Left
+        vT = vr.Top
+        vW = vr.Width
+        vH = vr.Height
+    End If
+    On Error GoTo 0
+    If vW < 260! Then
+        vL = 16!
+        vT = 16!
+        vW = 780!
+        vH = 440!
+    End If
+End Sub
+
+Public Sub PlayChristmasMagicFinale(ByVal ws As Worksheet, ByVal anchorShapeName As String)
+    If Not IsFXEnabled() Then Exit Sub
+    CleanupParticles ws
+
+    Dim vL As Single, vT As Single, vW As Single, vH As Single
+    GetViewportBounds ws, vL, vT, vW, vH
+
+    Dim cx As Single, cy As Single
+    Dim anchorShp As Shape
+    On Error Resume Next
+    Set anchorShp = ws.Shapes(anchorShapeName)
+    On Error GoTo 0
+    If Not anchorShp Is Nothing Then
+        cx = anchorShp.Left + anchorShp.Width / 2!
+        cy = anchorShp.Top + anchorShp.Height / 2!
+    Else
+        cx = vL + vW * 0.5!
+        cy = vT + vH * 0.35!
+    End If
+
+    ' Capture DECOR_* shapes for gentle shimmer pulse & guaranteed exact restore
+    Dim dShp(1 To 6) As Shape
+    Dim dL(1 To 6) As Single, dT(1 To 6) As Single, dW(1 To 6) As Single, dH(1 To 6) As Single
+    Dim dCnt As Long, sh As Shape
+    dCnt = 0
+    On Error Resume Next
+    For Each sh In ws.Shapes
+        If Left$(sh.Name, 6) = "DECOR_" And dCnt < 6 Then
+            dCnt = dCnt + 1
+            Set dShp(dCnt) = sh
+            dL(dCnt) = sh.Left
+            dT(dCnt) = sh.Top
+            dW(dCnt) = sh.Width
+            dH(dCnt) = sh.Height
+        End If
+    Next sh
+    On Error GoTo WipeXmas
+
+    ' 1. Multi-layer wavy falling snowflakes (18 shapes across viewport)
+    Const N_SNOW As Long = 18
+    Dim snShp(1 To N_SNOW) As Shape
+    Dim snX0(1 To N_SNOW) As Single, snY(1 To N_SNOW) As Single
+    Dim snSpd(1 To N_SNOW) As Single, snAmp(1 To N_SNOW) As Single
+    Dim snPh(1 To N_SNOW) As Double
+    Dim k As Long, szS As Single, sKind As Long
+
+    ' 2. Radiant golden star & pastel bauble burst around Hero (12 shapes)
+    Const N_BURST As Long = 12
+    Dim bShp(1 To N_BURST) As Shape
+    Dim bVx(1 To N_BURST) As Single, bVy(1 To N_BURST) As Single, bSz(1 To N_BURST) As Single
+    Dim bPal As Variant
+    bPal = Array(RGB(251, 191, 36), RGB(225, 29, 72), RGB(52, 211, 153), RGB(254, 240, 138), _
+                 RGB(244, 114, 182), RGB(147, 197, 253))
+    Dim sPal As Variant
+    sPal = Array(RGB(255, 255, 255), RGB(219, 234, 254), RGB(186, 230, 253))
+
+    Application.ScreenUpdating = False
+    For k = 1 To N_SNOW
+        snX0(k) = vL + 18! + (vW - 36!) * (CSng((k * 37) Mod 97) / 97!)
+        snY(k) = vT + 4! + (vH * 0.42!) * (CSng((k * 23) Mod 53) / 53!)
+        snSpd(k) = 5.5! + CSng(k Mod 4) * 2.4!
+        snAmp(k) = 6! + CSng(k Mod 3) * 5.5!
+        snPh(k) = CDbl(k) * 0.72#
+        szS = 6! + CSng(k Mod 4) * 2.2!
+        sKind = IIf((k Mod 2) = 0, MSO_STAR_4, MSO_OVAL)
+        Set snShp(k) = ws.Shapes.AddShape(sKind, snX0(k), snY(k), szS, szS)
+        snShp(k).Name = "FX_HOL_SN_" & CStr(k)
+        snShp(k).Fill.Solid
+        snShp(k).Fill.ForeColor.RGB = CLng(sPal(k Mod 3))
+        snShp(k).Line.Visible = MSO_TRUE
+        snShp(k).Line.ForeColor.RGB = RGB(147, 197, 253)
+        snShp(k).Line.Weight = 0.6
+    Next k
+
+    Dim ang As Double, spd As Single, bk As Long
+    For k = 1 To N_BURST
+        ang = (k - 1) * (6.2831853# / CDbl(N_BURST)) + 0.2#
+        spd = 2.6! + CSng(k Mod 3) * 1.15!
+        bVx(k) = CSng(Cos(ang) * spd)
+        bVy(k) = CSng(Sin(ang) * spd - 0.9#)
+        bSz(k) = 8.5! + CSng(k Mod 3) * 2.8!
+        If (k Mod 3) = 0 Then
+            bk = MSO_OVAL
+        ElseIf (k Mod 2) = 0 Then
+            bk = MSO_STAR_5
+        Else
+            bk = MSO_STAR_4
+        End If
+        Set bShp(k) = ws.Shapes.AddShape(bk, cx - bSz(k) / 2!, cy - bSz(k) / 2!, bSz(k), bSz(k))
+        bShp(k).Name = "FX_HOL_ST_" & CStr(k)
+        bShp(k).Fill.Solid
+        bShp(k).Fill.ForeColor.RGB = CLng(bPal((k - 1) Mod 6))
+        bShp(k).Line.Visible = MSO_FALSE
+    Next k
+    Application.ScreenUpdating = True
+
+    Dim f As Long, bSc As Single, pSc As Single, j As Long
+    For f = 1 To 34
+        For k = 1 To N_SNOW
+            snY(k) = snY(k) + snSpd(k)
+            If snY(k) > vT + vH - 18! Then snY(k) = vT + 4!
+            snShp(k).Top = snY(k)
+            snShp(k).Left = snX0(k) + CSng(Sin(snPh(k) + CDbl(f) * 0.34#) * CDbl(snAmp(k)))
+        Next k
+        bSc = CSng(1# - (CDbl(f) / 38#))
+        If bSc < 0.15! Then bSc = 0.15!
+        For k = 1 To N_BURST
+            bShp(k).Left = bShp(k).Left + bVx(k) * (1! - CSng(f) * 0.015!)
+            bShp(k).Top = bShp(k).Top + bVy(k) + CSng(f) * 0.08!
+            bShp(k).Width = bSz(k) * bSc
+            bShp(k).Height = bSz(k) * bSc
+        Next k
+        If dCnt > 0 And (f Mod 2 = 0) Then
+            pSc = 1! + CSng(0.045# * Abs(Sin(CDbl(f) * 0.35#)))
+            For j = 1 To dCnt
+                dShp(j).Width = dW(j) * pSc
+                dShp(j).Height = dH(j) * pSc
+                dShp(j).Left = dL(j) - (dShp(j).Width - dW(j)) / 2!
+                dShp(j).Top = dT(j) - (dShp(j).Height - dH(j)) / 2!
+            Next j
+        End If
+        WaitSec 0.055
+    Next f
+
+WipeXmas:
+    On Error Resume Next
+    For j = 1 To dCnt
+        dShp(j).Left = dL(j)
+        dShp(j).Top = dT(j)
+        dShp(j).Width = dW(j)
+        dShp(j).Height = dH(j)
+    Next j
+    CleanupParticles ws
+    On Error GoTo 0
+End Sub
+
+Public Sub PlayNewYearFireworksFinale(ByVal ws As Worksheet, ByVal anchorShapeName As String)
+    If Not IsFXEnabled() Then Exit Sub
+    CleanupParticles ws
+
+    Dim vL As Single, vT As Single, vW As Single, vH As Single
+    GetViewportBounds ws, vL, vT, vW, vH
+
+    Dim cx As Single, cy As Single
+    Dim anchorShp As Shape
+    On Error Resume Next
+    Set anchorShp = ws.Shapes(anchorShapeName)
+    On Error GoTo 0
+    If Not anchorShp Is Nothing Then
+        cx = anchorShp.Left + anchorShp.Width / 2!
+        cy = anchorShp.Top + anchorShp.Height / 2!
+    Else
+        cx = vL + vW * 0.5!
+        cy = vT + vH * 0.35!
+    End If
+
+    Dim subMode As String
+    subMode = GetHolidaySub()
+
+    On Error GoTo WipeNY
+    ' 1. 3 Staggered Multi-Color Fireworks Bursts (3 x 10 = 30 sparks)
+    Const N_WAVES As Long = 3
+    Const N_RAYS As Long = 10
+    Const N_FW As Long = 30
+    Dim fwShp(1 To N_FW) As Shape
+    Dim fwX(1 To N_FW) As Single, fwY(1 To N_FW) As Single
+    Dim fwVx(1 To N_FW) As Single, fwVy(1 To N_FW) As Single
+    Dim fwStart(1 To N_FW) As Long, fwSz(1 To N_FW) As Single
+    Dim wCx(1 To 3) As Single, wCy(1 To 3) As Single, wStart(1 To 3) As Long
+    wCx(1) = vL + vW * 0.24!: wCy(1) = vT + vH * 0.24!: wStart(1) = 1
+    wCx(2) = vL + vW * 0.74!: wCy(2) = vT + vH * 0.22!: wStart(2) = 10
+    wCx(3) = cx:              wCy(3) = Application.Max(vT + 48!, cy - 12!): wStart(3) = 20
+
+    Dim fwPal As Variant
+    fwPal = Array(RGB(239, 68, 68), RGB(251, 191, 36), RGB(244, 114, 182), _
+                  RGB(167, 139, 250), RGB(56, 189, 248))
+
+    ' 2. 14 Diagonal Drifting Blossom Petals (Golden Apricot or Pink Sakura)
+    Const N_PET As Long = 14
+    Dim ptShp(1 To N_PET) As Shape
+    Dim ptX(1 To N_PET) As Single, ptY(1 To N_PET) As Single
+    Dim ptVx(1 To N_PET) As Single, ptVy(1 To N_PET) As Single
+    Dim ptPh(1 To N_PET) As Double
+    Dim ptPal As Variant
+    If subMode = "SAKURA" Then
+        ptPal = Array(RGB(249, 168, 212), RGB(251, 207, 232), RGB(244, 114, 182))
+    Else
+        ptPal = Array(RGB(250, 204, 21), RGB(253, 224, 71), RGB(251, 191, 36))
+    End If
+
+    ' 3. 8 Shimmering Golden Coins / Glints around Hero
+    Const N_GL As Long = 8
+    Dim glShp(1 To N_GL) As Shape
+    Dim glSz(1 To N_GL) As Single
+
+    Application.ScreenUpdating = False
+    Dim w As Long, r As Long, idx As Long, ang As Double, spd As Single
+    idx = 0
+    For w = 1 To N_WAVES
+        For r = 1 To N_RAYS
+            idx = idx + 1
+            ang = (r - 1) * (6.2831853# / CDbl(N_RAYS)) + CDbl(w) * 0.25#
+            spd = 3.2! + CSng(r Mod 3) * 1.4!
+            fwX(idx) = wCx(w)
+            fwY(idx) = wCy(w)
+            fwVx(idx) = CSng(Cos(ang) * spd)
+            fwVy(idx) = CSng(Sin(ang) * spd)
+            fwStart(idx) = wStart(w)
+            fwSz(idx) = 7.5! + CSng(r Mod 3) * 2.5!
+            Set fwShp(idx) = ws.Shapes.AddShape(IIf(r Mod 2 = 0, MSO_STAR_5, MSO_STAR_4), fwX(idx), fwY(idx), fwSz(idx), fwSz(idx))
+            fwShp(idx).Name = "FX_HOL_FW_" & CStr(idx)
+            fwShp(idx).Fill.Solid
+            fwShp(idx).Fill.ForeColor.RGB = CLng(fwPal((r + w) Mod 5))
+            fwShp(idx).Line.Visible = MSO_FALSE
+            fwShp(idx).Visible = MSO_FALSE
+        Next r
+    Next w
+
+    Dim k As Long
+    For k = 1 To N_PET
+        ptX(k) = vL + (vW * 0.85!) * (CSng((k * 41) Mod 89) / 89!)
+        ptY(k) = vT + 4! + (vH * 0.38!) * (CSng((k * 19) Mod 47) / 47!)
+        ptVx(k) = 2.6! + CSng(k Mod 3) * 1.1!
+        ptVy(k) = 5.0! + CSng(k Mod 4) * 1.8!
+        ptPh(k) = CDbl(k) * 0.8#
+        Set ptShp(k) = ws.Shapes.AddShape(MSO_OVAL, ptX(k), ptY(k), 10!, 6.5!)
+        ptShp(k).Name = "FX_HOL_PT_" & CStr(k)
+        ptShp(k).Fill.Solid
+        ptShp(k).Fill.ForeColor.RGB = CLng(ptPal(k Mod 3))
+        ptShp(k).Line.Visible = MSO_FALSE
+    Next k
+
+    For k = 1 To N_GL
+        ang = (k - 1) * (6.2831853# / CDbl(N_GL))
+        glSz(k) = 8! + CSng(k Mod 2) * 3!
+        Set glShp(k) = ws.Shapes.AddShape(IIf(k Mod 2 = 0, MSO_OVAL, MSO_DIAMOND), _
+            cx + CSng(Cos(ang) * 44#) - glSz(k) / 2!, cy + CSng(Sin(ang) * 44#) - glSz(k) / 2!, glSz(k), glSz(k))
+        glShp(k).Name = "FX_HOL_GL_" & CStr(k)
+        glShp(k).Fill.Solid
+        glShp(k).Fill.ForeColor.RGB = RGB(251, 191, 36)
+        glShp(k).Line.Visible = MSO_TRUE
+        glShp(k).Line.ForeColor.RGB = RGB(180, 83, 9)
+        glShp(k).Line.Weight = 0.75
+    Next k
+    Application.ScreenUpdating = True
+
+    Dim f As Long, age As Long, sc As Single
+    For f = 1 To 38
+        For idx = 1 To N_FW
+            age = f - fwStart(idx)
+            If age = 0 Then
+                fwShp(idx).Visible = MSO_TRUE
+            End If
+            If age >= 0 And age <= 16 Then
+                fwX(idx) = fwX(idx) + fwVx(idx) * (1! - CSng(age) * 0.035!)
+                fwY(idx) = fwY(idx) + fwVy(idx) * (1! - CSng(age) * 0.035!) + CSng(age) * 0.24!
+                sc = CSng(1.15# - (CDbl(age) / 18#))
+                If sc < 0.18! Then sc = 0.18!
+                fwShp(idx).Left = fwX(idx)
+                fwShp(idx).Top = fwY(idx)
+                fwShp(idx).Width = fwSz(idx) * sc
+                fwShp(idx).Height = fwSz(idx) * sc
+            ElseIf age = 17 Then
+                fwShp(idx).Visible = MSO_FALSE
+            End If
+        Next idx
+
+        For k = 1 To N_PET
+            ptX(k) = ptX(k) + ptVx(k) + CSng(Sin(ptPh(k) + CDbl(f) * 0.35#) * 2.4#)
+            ptY(k) = ptY(k) + ptVy(k)
+            If ptY(k) > vT + vH - 18! Then
+                ptY(k) = vT + 6!
+                ptX(k) = vL + 20! + CSng((k * 53) Mod 300)
+            End If
+            If ptX(k) > vL + vW - 18! Then ptX(k) = vL + 16!
+            ptShp(k).Left = ptX(k)
+            ptShp(k).Top = ptY(k)
+            ptShp(k).Rotation = CSng((f * 18 + k * 25) Mod 360)
+        Next k
+
+        For k = 1 To N_GL
+            sc = CSng(0.55# + 0.55# * Abs(Sin(CDbl(f) * 0.42# + CDbl(k))))
+            glShp(k).Width = glSz(k) * sc
+            glShp(k).Height = glSz(k) * sc
+        Next k
+
+        WaitSec 0.058
+    Next f
+
+WipeNY:
+    CleanupParticles ws
+End Sub
+
+Public Sub PlayCelebrationEffect(ByVal ws As Worksheet, ByVal anchorShapeName As String, _
+                                 ByVal defaultMsgRow As Long, Optional ByVal isDemo As Boolean = False)
+    If Not IsFXEnabled() Then Exit Sub
+    Dim hMode As String
+    hMode = GetHolidayMode()
+    Dim toastMsg As String
+    If hMode = "XMAS" Then
+        toastMsg = GetFxMsg(IIf(isDemo, 30, 29))
+        If Len(toastMsg) = 0 Then toastMsg = GetFxMsg(defaultMsgRow)
+        ShowToast ws, toastMsg
+        PlayHeroBounce ws, anchorShapeName
+        PlayChristmasMagicFinale ws, anchorShapeName
+    ElseIf hMode = "NEWYEAR" Then
+        toastMsg = GetFxMsg(IIf(isDemo, 30, 29))
+        If Len(toastMsg) = 0 Then toastMsg = GetFxMsg(defaultMsgRow)
+        ShowToast ws, toastMsg
+        PlayHeroBounce ws, anchorShapeName
+        PlayNewYearFireworksFinale ws, anchorShapeName
+    Else
+        PlayHeroBounce ws, anchorShapeName
+        PlaySparkleBurst ws, anchorShapeName
+        ShowToast ws, GetFxMsg(defaultMsgRow)
+    End If
+End Sub
+
+' =============================================================================
 '  EFFECT 3: SLEEK NON-BLOCKING FLOATING TOAST BANNER (O(1) AUTO-DISMISS 2s)
 ' =============================================================================
 Public Sub ShowToast(ByVal ws As Worksheet, ByVal msgText As String)
@@ -1470,8 +1828,13 @@ Public Sub ShowToast(ByVal ws As Worksheet, ByVal msgText As String)
     End If
 
     Dim tLeft As Single, tTop As Single, tW As Single, tH As Single
-    tW = 310!
-    tH = 34!
+    If Len(msgText) > 52 Then
+        tW = 396!
+        tH = 38!
+    Else
+        tW = 320!
+        tH = 34!
+    End If
 
     ' Position cleanly at the BOTTOM-LEFT of ActiveWindow.VisibleRange (right above sheet tabs!)
     On Error Resume Next
@@ -1500,6 +1863,8 @@ Public Sub ShowToast(ByVal ws As Worksheet, ByVal msgText As String)
 
     If Not toast Is Nothing Then
         ' Ultra-fast O(1) toast reuse repositioned to current bottom-left viewport
+        toast.Width = tW
+        toast.Height = tH
         toast.TextFrame2.TextRange.Text = msgText
         toast.Top = tTop
         toast.Left = Application.Max(2!, tLeft - 14!)
@@ -1604,9 +1969,7 @@ Public Sub HandleTrackerTick(ByVal ws As Worksheet, ByVal Target As Range)
     Dim heroShpName As String
     heroShpName = GetSlotShapeName("SPR_MHERO_S", gLastMHero)
     If hitPerfect Then
-        PlayHeroBounce ws, heroShpName
-        PlaySparkleBurst ws, heroShpName
-        ShowToast ws, GetFxMsg(8)
+        PlayCelebrationEffect ws, heroShpName, 8, False
     ElseIf hitStreak > 0 Then
         PlayHeroBounce ws, heroShpName
         PlaySparkleBurst ws, heroShpName
@@ -1646,9 +2009,7 @@ Public Sub HandleDailyTaskTick(ByVal ws As Worksheet, ByVal Target As Range)
         If CLng(dtTot) > 0 And CDbl(dtPct) >= 0.999 Then
             Dim heroShpName As String
             heroShpName = GetSlotShapeName("SPR_DHERO_S", gLastDHero)
-            PlayHeroBounce ws, heroShpName
-            PlaySparkleBurst ws, heroShpName
-            ShowToast ws, GetFxMsg(14)
+            PlayCelebrationEffect ws, heroShpName, 14, False
         End If
     End If
 SafeExit:
@@ -1678,9 +2039,12 @@ Public Sub HandleYearlyGoalTick(ByVal ws As Worksheet, ByVal Target As Range)
 
     Dim heroShpName As String
     heroShpName = GetSlotShapeName("SPR_GHERO_S", gLastGHero)
-    PlayHeroBounce ws, heroShpName
-    If hitAll Then PlaySparkleBurst ws, heroShpName
-    ShowToast ws, GetFxMsg(15)
+    If hitAll Then
+        PlayCelebrationEffect ws, heroShpName, 15, False
+    Else
+        PlayHeroBounce ws, heroShpName
+        ShowToast ws, GetFxMsg(15)
+    End If
 SafeExit:
     Application.ScreenUpdating = True
     ArmCtrlZUndo
@@ -1917,9 +2281,7 @@ Public Sub BtnDemoFX()
     gFXCached = True
     Dim demoShp As String
     demoShp = "Guide_Stage" & CStr(GetMaxStage())
-    PlayHeroBounce wsG, demoShp
-    PlaySparkleBurst wsG, demoShp
-    ShowToast wsG, GetFxMsg(16)
+    PlayCelebrationEffect wsG, demoShp, 16, True
     GetCalcSheet().Range("BA1").Value2 = prevFX
     gFXVal = prevFX
 SafeExit:
