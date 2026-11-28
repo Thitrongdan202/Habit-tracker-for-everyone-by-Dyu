@@ -1,9 +1,9 @@
 """
-apply_v42_typography_pc.py — Strict-Whitelist Typography + PIL Pixel Auto-Fit COM Upgrader (160 PC Files).
+apply_v42_typography_pc.py — Strict-Whitelist Typography + PIL Pixel Auto-Fit COM Upgrader (v4.3, up to 200 PC Files).
 
-Applies ONLY Whitelist readable fonts across ALL 160 PC Excel workbooks:
-  - templates/pro_macro/*.xlsm (80 files)
-  - templates/excel_universal_offline/*.xlsx (80 files)
+Applies ONLY Whitelist readable fonts across PC Excel workbooks:
+  - templates/pro_macro/*.xlsm (#01–#95 Habit/Holiday; #96–#100 built via build_vocab_chiikawa.py)
+  - templates/excel_universal_offline/*.xlsx (#01–#95 Habit/Holiday)
 
 Strict guarantees:
   1. ZERO Blacklist fonts (Vivaldi, French Script MT, Freestyle Script, Harlow Solid Italic, etc.).
@@ -64,11 +64,11 @@ def _norm_ver_text(txt: str, is_pro: bool) -> str:
         suffix = m.group(2) or ""
         if is_pro:
             if suffix.strip() == "TURBO" or prefix == "V":
-                return "V4.2 TURBO"
-            return "v4.2 Turbo"
+                return "V4.3 TURBO"
+            return "v4.3 Turbo"
         if suffix.strip() == "UNIVERSAL" or prefix == "V":
-            return "V4.2 UNIVERSAL"
-        return "v4.2 Universal"
+            return "V4.3 UNIVERSAL"
+        return "v4.3 Universal"
 
     return _VER_TOKEN_RE.sub(_repl, txt)
 

@@ -1,6 +1,6 @@
-# 🍓🎀 Habit & Vocabulary Tracker Collection for Everyone — by Dyu (v4.2 — 100 Themes × 4 Editions)
+# 🍓🎀 Habit & Vocabulary Tracker Collection for Everyone — by Dyu (v4.3 — 100 Themes × 4 Editions)
 
-![Version 4.2 - 100 Themes](https://img.shields.io/badge/Milestone-100_Themes_(400_Files)-E56B8C?style=for-the-badge)
+![Version 4.3 - 100 Themes](https://img.shields.io/badge/v4.3_Milestone-100_Themes_(400_Files)-E56B8C?style=for-the-badge)
 ![Pro #1 Recommended](https://img.shields.io/badge/⭐_KHUYÊN_DÙNG_%231-Pro_.XLSM_(Excel_365)-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white)
 ![Zero Macro Offline](https://img.shields.io/badge/%232_Offline_No--Macro-.XLSX_(Excel_2016--365)-4E9F76?style=for-the-badge)
 ![Google Sheets Beta](https://img.shields.io/badge/%233_Google_Sheets-Beta_(Đang_thử_nghiệm)-F59E0B?style=for-the-badge&logo=googlesheets&logoColor=white)
@@ -10,8 +10,8 @@
   <tr>
     <td width="74%" valign="middle">
       <p><b>🎉 CHỐT MỐC 100 TEMPLATE MIỄN PHÍ MÃI MÃI CHO CỘNG ĐỒNG (400 tệp đủ 4 phiên bản)!</b> — Bộ Digital Planner &amp; Vocabulary Tracker với <b>615 ảnh hoạt ảnh</b> tiến hóa <code>0% → 100%</code>: <b>5 bộ Chiikawa Vocabulary Tracker chuyên sâu (#96–#100)</b>, <b>15 chủ đề Lễ Hội Tri Ân Giáng Sinh &amp; Năm Mới (#81–#95)</b>, <b>10 Gấu Dâu Lotso (#71–#80)</b>, <b>10 Hải Ly Loopy (#61–#70)</b>, <b>13 Capybara Chill (#48–#60)</b>, <b>12 Digimon 7–8 cấp (#36–#47)</b>, Thú cưng Kawaii, Alpaca, Gấu trúc, Shiba/Akita &amp; Hoa lá!</p>
-      <p><b>🎄🧧 MỚI — Mốc 100 Template (Nhánh <code>version2</code>):</b> Bổ sung trọn bộ <b>15 chủ đề Lễ Hội (#81–#95)</b> vẽ AI đồng bộ phong cách Kawaii Pastel Chibi kèm trang trí <i>Ruy băng Noel / Cành Mai Vàng &amp; Hoa Đào</i> + <b>Holiday VBA Finale</b> (Tuyết rơi đa tầng / Pháo hoa nổ 3 đợt + Toast góc trái dưới) và <b>5 bộ Chiikawa Vocabulary Tracker (#96–#100)</b> thiết kế riêng biệt (SRS 5 mốc, IELTS Band 7–8.5, Flashcard Quiz 2 chiều, Đa ngôn ngữ Phim/Nhạc, Ôn thi &amp; Từ hay quên) tích hợp <b>VBA Dò Bài Ngẫu Nhiên Pop-up</b>!</p>
-      <p><b>Cập nhật v4.2:</b> Hệ thống <b>Typography 3 tầng</b> (chỉ dùng Whitelist font dễ đọc, tự động PIL Auto-Fit <code>≤ 88%</code> chống tràn chữ, chuẩn Unicode tiếng Việt 0 vỡ dấu) và đồng bộ bản quyền <code>© 2026 Dyu (Thân Trọng Duy)</code>.</p>
+      <p><b>🎄🧧🎀 MỚI v4.3 — 100 Templates Edition (Nhánh <code>version2</code>):</b> Bổ sung trọn bộ <b>15 chủ đề Lễ Hội Giáng Sinh &amp; Năm Mới (#81–#95)</b> vẽ AI đồng bộ Kawaii Pastel Chibi kèm trang trí <i>Ruy băng Noel / Cành Mai Vàng &amp; Hoa Đào</i> + <b>Holiday VBA Finale</b> (Tuyết rơi đa tầng / Pháo hoa nổ 3 đợt + Toast góc trái dưới), <b>5 bộ Chiikawa Vocabulary Tracker (#96–#100)</b> thiết kế riêng biệt (SRS 5 mốc, IELTS Band 7–8.5, Flashcard Quiz 2 chiều, Đa ngôn ngữ Phim/Nhạc, Ôn thi &amp; Từ hay quên) tích hợp <b>VBA Dò Bài Ngẫu Nhiên Pop-up</b>, cùng khối <b>Xem Nhanh Tháng Này</b> &amp; bộ script <code>install.ps1</code> / <code>install.sh</code> / Google Apps Script hỗ trợ trọn vẹn 100 mẫu!</p>
+      <p><b>Nền tảng v4.2 → v4.3:</b> Hệ thống <b>Typography 3 tầng</b> (chỉ dùng Whitelist font dễ đọc, tự động PIL Auto-Fit <code>≤ 88%</code> chống tràn chữ, chuẩn Unicode tiếng Việt 0 vỡ dấu) và đồng bộ bản quyền <code>© 2026 Dyu (Thân Trọng Duy)</code>.</p>
       <p>Dùng mượt <b>100% Offline trên Microsoft Excel (Windows & Mac)</b> — bản Pro siêu mượt (<code>&lt;150ms</code>, hiệu ứng lễ hội &amp; dò bài Flashcard, tự lưu nhiều Tháng/Ngày/Năm, <code>Ctrl+Z</code> Undo), bản Offline không Macro cho mọi đời Excel 2016–365, kèm bản Google Sheets &amp; Mobile Portrait.</p>
       <p>🌟 Nếu bộ 100 template giúp bạn duy trì thói quen &amp; học từ vựng vui hơn mỗi ngày, hãy bấm tặng repo một nút <b>⭐ Star</b> ở góc trên bên phải để tiếp thêm động lực cho Dyu nhé!</p>
     </td>
@@ -70,8 +70,8 @@ Không cần biết kỹ thuật — chỉ cần xem máy tính của bạn đan
 
 > **Người dùng KHÔNG cần cài Python, KHÔNG cần đăng nhập GitHub!** Bạn chọn 1 trong 2 cách dưới đây:
 
-### Cách 1 (Khuyên dùng — Tải tự động 1 dòng lệnh, chọn theo số `1–80` hoặc tải hết)
-Trình tải tương tác sẽ hỏi bạn muốn bản nào (`[1]`–`[4]`) và mẫu số mấy (`71`, `61-70`, `71-80`, `48-60`, hoặc `A` tải toàn bộ 80 mẫu), rồi tự tải sạch đẹp vào thư mục `template/` trên máy bạn:
+### Cách 1 (Khuyên dùng — Tải tự động 1 dòng lệnh, chọn theo số `1–100` hoặc tải hết)
+Trình tải tương tác (`v4.3`) sẽ hỏi bạn muốn bản nào (`[1]`–`[4]`) và mẫu số mấy (`96`, `81-95`, `96-100`, `61-80`, hoặc `A` tải toàn bộ 100 mẫu), rồi tự tải sạch đẹp vào thư mục `template/` trên máy bạn:
 
 - **🪟 Windows:** Nhấn phím **Windows** → gõ **`PowerShell`** → mở *Windows PowerShell* → dán dòng lệnh dưới đây → nhấn **Enter**:
 ```powershell
@@ -84,7 +84,7 @@ curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-ev
 
 ### Cách 2 (Tải thủ công trực tiếp trên web GitHub — Không cần gõ lệnh!)
 Nếu bạn không quen mở PowerShell/Terminal, tải trực tiếp ngay trên trình duyệt chỉ với **3 bước**:
-1. Kéo xuống **[Bảng Tải Trực Tiếp 80 Mẫu Template](#-bảng-tải-trực-tiếp-toàn-bộ-80-mẫu-template-đủ-4-phiên-bản--320-tệp)** bên dưới và **bấm vào link phiên bản bạn muốn** (vd: `_Pro.xlsm` cho Excel 365 hoặc `.xlsx` cho Excel 2016–2021).
+1. Kéo xuống **[Bảng Tải Trực Tiếp 100 Mẫu Template](#-bảng-tải-trực-tiếp-toàn-bộ-100-mẫu-template-đủ-4-phiên-bản--400-tệp)** bên dưới và **bấm vào link phiên bản bạn muốn** (vd: `_Pro.xlsm` cho Excel 365 hoặc `.xlsx` cho Excel 2016–2021).
 2. Ở trang file vừa mở ra, bấm nút **Download raw file** *(biểu tượng **mũi tên tải xuống `⬇`** ở góc trên bên phải khung xem file)*.
 3. Mở file vừa tải về bằng Microsoft Excel *(nếu là bản Pro `.xlsm`, nhớ làm theo **2 bước Unblock + Enable Content** ở mục trên)* và bắt đầu tick ngay!
 
@@ -866,10 +866,10 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn** (`0% Digi-E
 ---
 
 <details>
-<summary>🛠️ Dành Cho Người Yêu Kỹ Thuật & Developer (Benchmark v4.0 Turbo & Lệnh Build)</summary>
+<summary>🛠️ Dành Cho Người Yêu Kỹ Thuật & Developer (Benchmark v4.3 Turbo & Lệnh Build 100 Mẫu)</summary>
 
-### 📊 Benchmark Tốc Độ Thực Tế Excel COM (`Linked Pictures cũ` vs `v4.0 Turbo`)
-| Thao tác thực tế | Linked Pictures cũ | `48_Capybara_Avocado` **v4.0 Turbo** | `44_Digimon_Guilmon` **v4.0 (8-Stage)** | Tăng tốc |
+### 📊 Benchmark Tốc Độ Thực Tế Excel COM (`Linked Pictures cũ` vs `v4.3 Turbo`)
+| Thao tác thực tế | Linked Pictures cũ | `48_Capybara_Avocado` **v4.3 Turbo** | `44_Digimon_Guilmon` **v4.3 (8-Stage)** | Tăng tốc |
 |---|---:|---:|---:|---:|
 | **1. Tick 1 ô Checkbox (`Monthly Tracker`)** | 347.3 ms | **< 40 ms** | **< 40 ms** | **~8–10× nhanh hơn** |
 | **2a. Đổi Tháng bằng Dropdown (`B3`)** | 4,137.1 ms | **21 – 40 ms** | **25 – 47 ms** | **~88–190× nhanh hơn!** |
@@ -879,19 +879,15 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn** (`0% Digi-E
 | **Số ảnh nén trong `xl/media/`** | 54 bản sao | **6 PNG duy nhất** | **8 PNG duy nhất** | **Siêu gọn nhẹ!** |
 
 ```powershell
-# Sinh 120 sprite v4.1 Loopy (#61–#70) & Lotso (#71–#80) + contact sheets:
-python scripts/generate_loopy_story_assets.py
-python scripts/generate_lotso_story_assets.py
+# Build trọn bộ Lễ Hội (#81–#95) & Chiikawa Vocabulary (#96–#100) đủ 4 phiên bản:
+python scripts/build_v30_batch.py --start 81 --end 100
 
-# Build đủ 4 phiên bản theo dải chủ đề (--start 61 --end 80):
-python scripts/excel_com_enhancer.py pro --start 61 --end 80
-python scripts/excel_com_enhancer.py offline --start 61 --end 80
-python scripts/convert_offline_v30.py --start 61 --end 80
-python scripts/excel_com_enhancer.py gsheets --start 61 --end 80
-python scripts/build_mobile_templates.py --start 61 --end 80
+# Xuất bộ GIF preview động Lễ Hội (17 GIF) & Chiikawa Vocabulary (6 GIF):
+python scripts/holiday_gif_maker.py all
+python scripts/vocab_gif_maker.py
 
-# Chạy bộ QA tự động 80 chủ đề (320 tệp) trên bản copy tách biệt:
-python scripts/qa_verify_batch89_v40.py
+# Chạy bộ kiểm toán Excel COM + Live VBA trên toàn bộ 80 file mới (#81–#100):
+python scripts/audit_batch_81_100.py
 ```
 
 </details>

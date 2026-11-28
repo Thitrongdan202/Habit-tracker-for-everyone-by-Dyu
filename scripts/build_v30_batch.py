@@ -1,15 +1,17 @@
 """
-build_v30_batch.py — Clean unified 4-edition batch builder for Habit Tracker v3.0 (Templates 01..31).
+build_v30_batch.py — Unified 4-edition batch builder for Habit & Vocabulary Tracker v4.3 (Templates 01..100).
 
 Runs all 4 editions cleanly with Excel COM recycling every 4-5 templates:
-  1. pro     : templates/pro_macro/*_Pro.xlsm (Native Colored Checkboxes + Pure-ASCII VBA + 54 Linked Pictures)
-  2. offline : templates/excel_universal_offline/*.xlsx (Form Control Checkboxes + `;;;` + 54 Linked Pictures, 0 VBA)
-  3. gsheets : templates/google_sheets_edition/*.xlsx (5 visible tabs + `_Database` + dynamic `=IMAGE()` + SetCheckbox)
-  4. mobile  : templates/mobile_portrait_sheets/*_Mobile.xlsx (8-col Portrait B:I + 4 tabs + dynamic `=IMAGE()`)
+  1. pro     : templates/pro_macro/*_Pro.xlsm (Native Colored Checkboxes + Pure-ASCII VBA + Native Sprites)
+  2. offline : templates/excel_universal_offline/*.xlsx (Form Control Checkboxes + `;;;` + Linked Pictures, 0 VBA)
+  3. gsheets : templates/google_sheets_edition/*.xlsx (Desktop Cloud + dynamic `=IMAGE()` + SetCheckbox)
+  4. mobile  : templates/mobile_portrait_sheets/*_Mobile.xlsx (Portrait + dynamic `=IMAGE()`)
+  - Templates #01..#95 (Habit & Holiday): built via `excel_com_enhancer.py` / `build_mobile_templates.py`
+  - Templates #96..#100 (Chiikawa Vocabulary): automatically delegated to `scripts/build_vocab_chiikawa.py`
 
 Usage:
-    python scripts/build_v30_batch.py --start 20 --end 23
-    python scripts/build_v30_batch.py --start 20 --end 31 --editions gsheets,mobile
+    python scripts/build_v30_batch.py --start 81 --end 100
+    python scripts/build_v30_batch.py --start 81 --end 95 --editions gsheets,mobile
 """
 from __future__ import annotations
 
@@ -126,19 +128,23 @@ def main():
 
     py = sys.executable
     t_all = time.perf_counter()
-    if "pro" in editions:
-        _run_step([py, "scripts/excel_com_enhancer.py", "pro",
-                   "--start", str(start_idx), "--end", str(end_idx)], "PRO .xlsm")
-    if "offline" in editions:
-        _run_step([py, "scripts/excel_com_enhancer.py", "derive-offline",
-                   "--start", str(start_idx), "--end", str(end_idx)], "OFFLINE derive")
-        _run_step([py, "scripts/convert_offline_v30.py",
-                   "--start", str(start_idx), "--end", str(end_idx)], "OFFLINE Form Checkboxes")
-    if "gsheets" in editions:
-        build_gsheets_range(start_idx, end_idx)
-    if "mobile" in editions:
-        _run_step([py, "scripts/build_mobile_templates.py",
-                   "--start", str(start_idx), "--end", str(end_idx)], "MOBILE Portrait")
+    habit_end = min(end_idx, len(TEMPLATES))
+    if start_idx <= habit_end:
+        if "pro" in editions:
+            _run_step([py, "scripts/excel_com_enhancer.py", "pro",
+                       "--start", str(start_idx), "--end", str(habit_end)], "PRO .xlsm")
+        if "offline" in editions:
+            _run_step([py, "scripts/excel_com_enhancer.py", "derive-offline",
+                       "--start", str(start_idx), "--end", str(habit_end)], "OFFLINE derive")
+            _run_step([py, "scripts/convert_offline_v30.py",
+                       "--start", str(start_idx), "--end", str(habit_end)], "OFFLINE Form Checkboxes")
+        if "gsheets" in editions:
+            build_gsheets_range(start_idx, habit_end)
+        if "mobile" in editions:
+            _run_step([py, "scripts/build_mobile_templates.py",
+                       "--start", str(start_idx), "--end", str(habit_end)], "MOBILE Portrait")
+    if end_idx >= 96:
+        _run_step([py, "scripts/build_vocab_chiikawa.py"], "CHIIKAWA VOCAB (#96-#100, 4 Editions)")
 
     print(f"\nALL REQUESTED EDITIONS ({','.join(editions)}) FOR TEMPLATES {start_idx}..{end_idx} "
           f"DONE in {time.perf_counter() - t_all:.1f}s!", flush=True)

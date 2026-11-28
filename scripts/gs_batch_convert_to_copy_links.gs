@@ -1,22 +1,24 @@
 /**
  * ============================================================================
- *  HABIT TRACKER v4.1 — STANDALONE DRIVE BATCH CONVERTER TO 1-CLICK `/copy` LINKS
+ *  HABIT & VOCABULARY TRACKER v4.3 — STANDALONE DRIVE BATCH CONVERTER TO `/copy` LINKS
  *  Repo: https://github.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu
  * ============================================================================
  *
- *  MỤC ĐÍCH (ZERO-FRICTION DISTRIBUTION):
- *    Chuyển đổi hàng loạt toàn bộ 80 file `.xlsx` trong thư mục Google Drive
- *    (`templates/google_sheets_edition/`) thành Google Sheets gốc đã sẵn sàng:
- *      - Đã bật sẵn Native Checkboxes (theo đúng màu pastel từng tuần & từng chủ đề)
+ *  MỤC ĐÍCH (ZERO-FRICTION DISTRIBUTION — ĐỦ 100 TEMPLATE `#01`–`#100`):
+ *    Chuyển đổi hàng loạt toàn bộ 100 file `.xlsx` trong thư mục Google Drive
+ *    (`templates/google_sheets_edition/`, gồm `#01`–`#95` Habit Tracker & Lễ Hội
+ *    + `#96`–`#100` Chiikawa Vocabulary Tracker) thành Google Sheets gốc đã sẵn sàng:
+ *      - Tự nhận diện an toàn cả bố cục 5 tab Habit Tracker lẫn 4 tab Chiikawa Vocabulary (`📚 Kho Từ Vựng`, `🎯 Luyện Tập & Lịch Ôn`)
+ *      - Đã bật sẵn Native Checkboxes đúng tọa độ boolean (tuyệt đối không chạm text/công thức)
  *      - Đã ép font tiếng Việt sắc nét `Be Vietnam Pro` trên toàn bộ tab hiển thị
- *      - Đã ẩn đường lưới mặc định (hidden gridlines) & ẩn 3 sheet hệ thống (`_Calc`, `_Database`, `_Assets`)
+ *      - Đã ẩn đường lưới mặc định (hidden gridlines) & ẩn sheet hệ thống (`_Calc`, `_Database`, `_Assets`)
  *      - Đã nướng sẵn ảnh native `CellImage` vào `_Assets` (loại bỏ hoàn toàn `=IMAGE("https://...")` -> 0 lỗi `#REF!` / không cần bấm "Allow access" trên cả Điện thoại & Máy tính!)
  *      - Đã mở quyền chia sẻ "Anyone with link: Viewer"
- *      - Tự xuất bảng Markdown gồm 80 link `https://docs.google.com/spreadsheets/d/<ID>/copy`
+ *      - Tự xuất bảng Markdown gồm 100 link `https://docs.google.com/spreadsheets/d/<ID>/copy`
  *        để dán thẳng lên README.md (người dùng chỉ cần bấm 1 click -> "Make a copy" là dùng ngay!)
  *
- *  ★ NÂNG CẤP TẠI CHỖ CHO 80 FILE ĐÃ CONVERT (GIỮ NGUYÊN 100% LINK `/copy` CŨ):
- *    - Nếu bạn đã convert sẵn 80 file trên Drive, chỉ cần chọn hàm `upgradeExistingSheetsToCellImages` -> bấm Run!
+ *  ★ NÂNG CẤP TẠI CHỖ CHO 100 FILE ĐÃ CONVERT (GIỮ NGUYÊN 100% LINK `/copy` CŨ):
+ *    - Nếu bạn đã convert sẵn file trên Drive, chỉ cần chọn hàm `upgradeExistingSheetsToCellImages` -> bấm Run!
  *    - Script sẽ nướng `CellImage` trực tiếp vào `_Assets` của từng file hiện có (không đổi File ID, giữ nguyên toàn bộ link `/copy` cũ & tự bỏ qua file đã nướng khi chạy lại!).
  *
  *  HƯỚNG DẪN CHẠY 1 LẦN TRÊN GOOGLE DRIVE (2 PHÚT):
@@ -65,7 +67,7 @@ function batchConvertToCopyLinks() {
   // Map existing native Google Sheets in output folder so reruns resume cleanly
   var existingMap = indexExistingSheets_(outFolder);
 
-  // Gather and numerically sort all `.xlsx` source files (01..60)
+  // Gather and numerically sort all `.xlsx` source files (01..100)
   var xlsxFiles = [];
   var iter = srcFolder.getFiles();
   while (iter.hasNext()) {
@@ -273,7 +275,7 @@ function buildBakedCellImage_(url, altTitle, imageCache) {
  */
 function bakeAssetsAsCellImages_(ss, imageCache) {
   imageCache = imageCache || {};
-  var imgRe = /^=\s*(?:_xlfn\.)?IMAGE\(\s*"([^"]+)"/i;
+  var imgRe = /^=\s*(?:_xlfn\.|_xludf\.)?IMAGE\(\s*"([^"]+)"/i;
   var bakedCount = 0;
   var urlToAssetRef = {};
 
@@ -336,6 +338,8 @@ function polishConvertedSheet_(spreadsheetId, imageCache) {
   var tracker = null;
   var dt = null;
   var yg = null;
+  var wsVocab = null;
+  var wsVocabPrac = null;
 
   for (var i = 0; i < sheets.length; i++) {
     var sh = sheets[i];
@@ -353,7 +357,13 @@ function polishConvertedSheet_(spreadsheetId, imageCache) {
       dr.setFontFamily(PUB_FONT_FAMILY);
     }
 
-    if (nm.indexOf("Nhiệm Vụ Ngày") !== -1) {
+    if (nm.indexOf("Kho Từ Vựng") !== -1) {
+      wsVocab = sh;
+    } else if (nm.indexOf("Luyện Tập") !== -1) {
+      wsVocabPrac = sh;
+    } else if (nm.indexOf("Thống Kê") !== -1) {
+      // Chiikawa Vocabulary Stats tab (charts & KPIs only — no checkboxes)
+    } else if (nm.indexOf("Nhiệm Vụ Ngày") !== -1) {
       dt = sh;
     } else if (nm.indexOf("Yearly Goals") !== -1) {
       yg = sh;
@@ -362,7 +372,20 @@ function polishConvertedSheet_(spreadsheetId, imageCache) {
     }
   }
 
-  // 1) Monthly Tracker Checkboxes (C17:AG36 with per-week pastel colors + optional weekly addons)
+  // Branch A: Chiikawa Vocabulary Tracker (#96-#100) — strictly boolean-safe checkboxes!
+  if (wsVocab) {
+    var vAccent = wsVocab.getRange("B2").getBackground() || "#E27192";
+    pubConvertBoolRange_(wsVocab, "B11:E11", vAccent);
+    pubConvertBoolRange_(wsVocab, "H15:L114", vAccent);
+    if (wsVocabPrac) {
+      pubConvertBoolRange_(wsVocabPrac, "B10:B14", wsVocabPrac.getRange("B2").getBackground() || vAccent);
+    }
+    bakeAssetsAsCellImages_(ss, imageCache);
+    SpreadsheetApp.flush();
+    return;
+  }
+
+  // Branch B: Habit Tracker (#01-#95) — Monthly Tracker + Daily Tasks + Yearly Goals
   if (tracker) {
     var fallbackAccent = tracker.getRange("B14").getBackground() || "#C88E8E";
     var gridRng = tracker.getRange("C17:AG36");

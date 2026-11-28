@@ -1152,7 +1152,7 @@ def build_mobile_workbook(tdef, out_path: Path) -> dict:
     cv3.row(r_cur + 1, 28)
     cv3.row(r_cur + 2, 10)
     cv3.merge(r_cur + 1, 1, r_cur + 1, 6,
-              "💛  Habit Tracker Mobile Portrait v4.1 by Dyu  •  github.com/Thitrongdan202",
+              "💛  Habit Tracker Mobile Portrait v4.3 by Dyu  •  github.com/Thitrongdan202",
               bold=False, font_size=10, italic=True, align="center", text_wrap=True,
               bg_color=t.page, font_color=t.muted)
 

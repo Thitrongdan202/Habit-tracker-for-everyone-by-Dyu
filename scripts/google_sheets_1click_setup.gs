@@ -1,9 +1,11 @@
 /**
  * ============================================================================
- *  HABIT TRACKER v4.1 TURBO — 1-CLICK GOOGLE SHEETS SETUP & ZERO-LAG STORAGE
- *  AUTO-DETECTS BOTH:
- *    - Desktop 5-Tab Google Sheets Edition (`templates/google_sheets_edition/`)
- *    - Mobile Portrait Edition (`templates/mobile_portrait_sheets/`)
+ *  HABIT & VOCABULARY TRACKER v4.3 TURBO — 1-CLICK GOOGLE SHEETS SETUP & STORAGE
+ *  AUTO-DETECTS ALL 100 TEMPLATES ACROSS 4 CLOUD LAYOUTS:
+ *    - Desktop 5-Tab Habit Tracker (`#01`–`#95`, `templates/google_sheets_edition/`)
+ *    - Mobile Portrait Habit Tracker (`#01`–`#95`, `templates/mobile_portrait_sheets/`)
+ *    - Desktop 4-Tab Chiikawa Vocabulary Tracker (`#96`–`#100`)
+ *    - Mobile Portrait Chiikawa Vocabulary Tracker (`#96`–`#100`, strictly <= Col G)
  *  Repo: https://github.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu
  * ============================================================================
  *
@@ -61,21 +63,97 @@ function isMobilePortraitWorkbook_(ss) {
   return false;
 }
 
+function isVocabDesktopWorkbook_(ss) {
+  var sheets = ss.getSheets();
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].getName().indexOf("Kho Từ Vựng") !== -1) return true;
+  }
+  return false;
+}
+
+function isVocabMobileWorkbook_(ss) {
+  var sheets = ss.getSheets();
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].getName().indexOf("Học Từ Hôm Nay") !== -1) return true;
+  }
+  return false;
+}
+
 /**
- * 1-Click Master Setup:
+ * 1-Click Master Setup (v4.3 — supports ALL 100 templates: Habit #01-#95 & Chiikawa Vocab #96-#100):
  *  - Enforces `Be Vietnam Pro` font & hides default gridlines on all visible tabs
- *  - Inserts native themed pastel Checkboxes on all 3 interactive tabs
+ *  - Inserts native themed pastel Checkboxes on ONLY verified boolean ranges
  *  - Hides `_Calc`, `_Database`, `_Assets`
- *  - Initializes `_Database` snapshot for the active Month / Date / Year
+ *  - Initializes `_Database` snapshot for Habit Tracker workbooks (#01-#95)
  *  - Cleans any duplicate installable `onEdit` triggers (simple trigger handles everything!)
  */
 function setupHabitTracker() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  if (isMobilePortraitWorkbook_(ss)) {
+  if (isVocabMobileWorkbook_(ss)) {
+    setupVocabMobile_(ss);
+  } else if (isVocabDesktopWorkbook_(ss)) {
+    setupVocabDesktop_(ss);
+  } else if (isMobilePortraitWorkbook_(ss)) {
     setupMobilePortrait_(ss);
   } else {
     setupDesktopEdition_(ss);
   }
+}
+
+function setupVocabDesktop_(ss) {
+  polishVisibleSheets_(ss);
+  var wsVocab = findSheetContaining_(ss, "Kho Từ Vựng");
+  var wsPrac = findSheetContaining_(ss, "Luyện Tập");
+  var converted = 0;
+
+  if (wsVocab) {
+    var accent = wsVocab.getRange("B2").getBackground() || "#E27192";
+    // Quiz Mode toggles (B11 for all #96-#100, plus E11 on #98 Usagi 2-way Quiz) — boolean-safe!
+    convertBooleanCellsInRange_(wsVocab, "B11:E11", accent);
+    // Mastery / SRS review checkboxes (H15:L114 covers #96 H:L, #97 L, #98 I, #99 J, #100 J) — boolean-safe!
+    convertBooleanCellsInRange_(wsVocab, "H15:L114", accent);
+    converted++;
+  }
+  if (wsPrac) {
+    var pAccent = wsPrac.getRange("B2").getBackground() || "#E27192";
+    convertBooleanCellsInRange_(wsPrac, "B10:B14", pAccent);
+    converted++;
+  }
+
+  cleanDuplicateOnEditTriggers_();
+  SpreadsheetApp.flush();
+  ss.toast(
+    "Đã bật Checkbox Pastel (" + converted + " bảng), font Be Vietnam Pro & ẩn lưới cho Chiikawa Vocabulary!",
+    "Chiikawa Vocab Tracker v4.3 — Sẵn sàng ⚡🎀",
+    7
+  );
+}
+
+function setupVocabMobile_(ss) {
+  polishVisibleSheets_(ss);
+  var wsMain = findSheetContaining_(ss, "Học Từ Hôm Nay");
+  var wsPrac = findSheetContaining_(ss, "Luyện Tập");
+  var converted = 0;
+
+  if (wsMain) {
+    var accent = wsMain.getRange("B2").getBackground() || "#E27192";
+    convertBooleanCellsInRange_(wsMain, "B11:E11", accent);
+    convertBooleanCellsInRange_(wsMain, "B15:B64", accent);
+    converted++;
+  }
+  if (wsPrac) {
+    var pAccent = wsPrac.getRange("B2").getBackground() || "#E27192";
+    convertBooleanCellsInRange_(wsPrac, "B6:B10", pAccent);
+    converted++;
+  }
+
+  cleanDuplicateOnEditTriggers_();
+  SpreadsheetApp.flush();
+  ss.toast(
+    "Đã bật Checkbox Pastel (" + converted + " bảng), font Be Vietnam Pro & ẩn lưới cho Mobile Vocab!",
+    "Chiikawa Vocab Mobile v4.3 — Sẵn sàng ⚡🎀",
+    6
+  );
 }
 
 function polishVisibleSheets_(ss) {
@@ -165,7 +243,7 @@ function setupMobilePortrait_(ss) {
   SpreadsheetApp.flush();
   ss.toast(
     "Đã bật Checkbox Pastel (" + converted + " bảng), font Be Vietnam Pro & ẩn lưới cho bản Mobile!",
-    "Habit Tracker Mobile v4.0 — Sẵn sàng ⚡",
+    "Habit Tracker Mobile v4.3 — Sẵn sàng ⚡",
     6
   );
 }
@@ -214,7 +292,7 @@ function setupDesktopEdition_(ss) {
 
   ss.toast(
     "Đã bật Checkbox Pastel (" + converted + " bảng), font Be Vietnam Pro, ẩn lưới & khởi tạo _Database 0ms!",
-    "Habit Tracker v4.0 Turbo — Sẵn sàng ⚡✨",
+    "Habit Tracker v4.3 Turbo — Sẵn sàng ⚡✨",
     7
   );
 }
@@ -293,7 +371,9 @@ function onEdit(e) {
   var sh = e.range.getSheet();
   var name = sh.getName();
   if (name === HT_CALC_SHEET || name === HT_DB_SHEET || name === HT_ASSETS_SHEET ||
-      name.indexOf("Hướng Dẫn") !== -1 || name.indexOf("Tổng Kết") !== -1) {
+      name.indexOf("Hướng Dẫn") !== -1 || name.indexOf("Tổng Kết") !== -1 ||
+      name.indexOf("Kho Từ Vựng") !== -1 || name.indexOf("Học Từ Hôm Nay") !== -1 ||
+      name.indexOf("Luyện Tập") !== -1 || name.indexOf("Thống Kê") !== -1) {
     return;
   }
 
@@ -959,7 +1039,7 @@ function convertBooleanCellsInRange_(sheet, a1Range, accent) {
 
 function onOpen() {
   SpreadsheetApp.getUi()
-    .createMenu("⚡ Habit Tracker v4.0 Turbo")
+    .createMenu("⚡ Habit & Vocab Tracker v4.3 Turbo")
     .addItem("☑️ Bật Checkbox, Font Đẹp & Lưu 0ms (1-Click)", "setupHabitTracker")
     .addToUi();
 }

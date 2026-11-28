@@ -194,7 +194,7 @@ def build_vocab_desktop_workbook(v: VocabThemeDef, out_path: Path, edition: str 
     title_font = v.font_caps if universal else "Be Vietnam Pro"
     disp_font = v.font_display if universal else "Be Vietnam Pro"
     num_font = v.font_num if universal else "Be Vietnam Pro"
-    ver_tag = "v4.2 Turbo" if pro_mode else ("v4.2 Universal" if universal else "v4.2 Cloud")
+    ver_tag = "v4.3 Turbo" if pro_mode else ("v4.3 Universal" if universal else "v4.3 Cloud")
 
     sch = _mode_schema(v.mode)
     last_c = sch["last_col"]  # 0-based inclusive col index (cols 1..last_c)
@@ -1109,7 +1109,7 @@ def build_vocab_mobile_workbook(v: VocabThemeDef, out_path: Path) -> dict:
             ws_g.merge_range(r_im, c1, r_im, c1 + 1, f"=INDEX({ASSETS_SHEET}!$B$2:$B$7,{k + 1})", f_hero)
             ws_g.merge_range(r_lb, c1, r_lb, c1 + 1, v.stage_names[k], f_klab)
     ws_g.set_row(14, 24)
-    ws_g.merge_range(14, 1, 14, 6, "© 2026 Dyu (Thân Trọng Duy) • Chiikawa Vocab Mobile v4.2", f_sub)
+    ws_g.merge_range(14, 1, 14, 6, "© 2026 Dyu (Thân Trọng Duy) • Chiikawa Vocab Mobile v4.3", f_sub)
 
     wb.close()
     return {

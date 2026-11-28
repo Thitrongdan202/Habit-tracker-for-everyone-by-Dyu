@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================================
-#  Habit Tracker Collection v4.2 — Interactive Zero-Install Downloader (macOS/Linux)
+#  Habit & Vocabulary Tracker Collection v4.3 (100 Themes) — Interactive Downloader (macOS/Linux)
 #  Run in 1 line:
 #    curl -fsSL https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu/main/install.sh | bash
 # ============================================================================
@@ -97,6 +97,26 @@ STEMS=(
   "78_Lotso_Daisy_Cheek_Glow"
   "79_Lotso_Bunny_Headband_Selfcare"
   "80_Lotso_Berry_Gift_Box_Party"
+  "81_Christmas_Tree_Glow"
+  "82_Cozy_Snowman_Build"
+  "83_Gingerbread_Bakery"
+  "84_Santa_Gift_Delivery"
+  "85_Winter_Hot_Cocoa_Cafe"
+  "86_Reindeer_Bell_Parade"
+  "87_Christmas_Snow_Village"
+  "88_Christmas_Wreath_Candle"
+  "89_Fireworks_Countdown"
+  "90_Lucky_Red_Envelope"
+  "91_Maneki_Neko_Fortune"
+  "92_Sakura_Blossom_New_Year"
+  "93_Daruma_Wish_Goal"
+  "94_Cozy_Tea_New_Year_Mochi"
+  "95_New_Year_Festival_Lantern"
+  "96_Chiikawa_SRS_Daily_Vocab"
+  "97_Hachiware_IELTS_Academic_Vocab"
+  "98_Usagi_Flashcard_Quiz_Speaking"
+  "99_Momonga_MultiLang_Media_Vocab"
+  "100_Chiikawa_Exam_Sprint_MistakeBank"
 )
 
 TITLES=(
@@ -181,6 +201,26 @@ TITLES=(
   "Lotso Hoa Cúc Trắng Cài Tai & Áp Má Nháy Mắt"
   "Lotso Bờm Tai Thỏ Spa Self-Care (Sáng-Ngày-Tối)"
   "Lotso Tiệc Hộp Quà Hồng, Cupcake & Confetti 100%"
+  "[Noel] Cây Thông Giáng Sinh & Winter Magic Finale"
+  "[Noel] Đắp Người Tuyết Ấm Áp & Mưa Tuyết Rơi"
+  "[Noel] Tiệm Bánh Gừng & Ngôi Nhà Bánh Kem"
+  "[Noel] Ông Già Noel & Xe Trượt Tuyết Phát Quà"
+  "[Noel] Quán Ca Cao Nóng Kem Tươi & Kẹo Gậy"
+  "[Noel] Bé Tuần Lộc Đèn Sừng & Chuông Giáng Sinh"
+  "[Noel] Ngôi Làng Tuyết & Nhà Gỗ Sáng Đèn"
+  "[Noel] Vòng Nguyệt Quế & Nến Ấm Đêm Đông"
+  "[Năm Mới] Đồng Hồ Giao Thừa & Pháo Hoa 3 Đợt"
+  "[Năm Mới] Bao Lì Xì Mai Vàng & Mưa Xu Lộc"
+  "[Năm Mới] Mèo Thần Tài Vẫy Lộc Phú Quý"
+  "[Năm Mới] Bonsai Hoa Anh Đào Nở Rộ Khai Xuân"
+  "[Năm Mới] Búp Bê Daruma Vẽ Mắt Đạt Ước Nguyện"
+  "[Năm Mới] Khay Trà Matcha & Bánh Kagami Mochi"
+  "[Năm Mới] Đèn Lồng Lễ Hội Hoa Đào Rực Rỡ"
+  "[Vocab] Chiikawa Strawberry Milk — SRS 5 Mốc (1–30d)"
+  "[Vocab] Hachiware Sky Study — IELTS Band 7.0–8.5"
+  "[Vocab] Usagi Honey Flashcard — Quiz 2 Chiều & Speaking"
+  "[Vocab] Momonga Lavender — Đa Ngôn Ngữ Phim/Nhạc/Sách"
+  "[Vocab] Shisa Matcha — Đếm Ngược Thi & Từ Hay Quên"
 )
 
 resolve_out_dir() {
@@ -247,14 +287,14 @@ OUT_DIR="$(resolve_out_dir)"
 mkdir -p "$OUT_DIR"
 
 printf "\n%s========================================================================%s\n" "$C_MAGENTA" "$C_RESET"
-printf "%s   HABIT TRACKER COLLECTION v4.2 — BY DYU (80 THEMES × 4 EDITIONS)%s\n" "$C_YELLOW" "$C_RESET"
-printf "%s   Turbo 6/7/8-Stage Native Sprite Engine • FX Suite • Ctrl+Z Undo%s\n" "$C_CYAN" "$C_RESET"
+printf "%s   HABIT & VOCAB TRACKER COLLECTION v4.3 — BY DYU (100 THEMES × 4)%s\n" "$C_YELLOW" "$C_RESET"
+printf "%s   Holiday Finale FX • Chiikawa Vocab Quiz • Turbo Native Sprites%s\n" "$C_CYAN" "$C_RESET"
 printf "%s========================================================================%s\n" "$C_MAGENTA" "$C_RESET"
 printf "  %sThư mục lưu file:%s %s\n\n" "$C_GREEN" "$C_RESET" "$OUT_DIR"
 
 printf "  %sBƯỚC 1 — CHỌN PHIÊN BẢN PHÙ HỢP (THEO THỨ TỰ ƯU TIÊN):%s\n" "$C_BOLD" "$C_RESET"
 printf "  %s----------------------------------------------------------------------%s\n" "$C_DIM" "$C_RESET"
-printf "  %s[1] Pro Interactive (.xlsm)  [⭐ KHUYÊN DÙNG SỐ 1 — EXCEL 365 TURBO v4.2]%s\n" "$C_GREEN" "$C_RESET"
+printf "  %s[1] Pro Interactive (.xlsm)  [⭐ KHUYÊN DÙNG SỐ 1 — EXCEL 365 TURBO v4.3]%s\n" "$C_GREEN" "$C_RESET"
 printf "      %s-> Siêu tốc ~25–54ms + Full FX Nảy/Pháo hoa/Toast góc trái dưới + Ctrl+Z Undo%s\n" "$C_DIM" "$C_RESET"
 printf "         %s+ Khóa bảo vệ công thức + Tự lưu Đa Ngày/Tháng/Năm (100%% Offline)!%s\n" "$C_DIM" "$C_RESET"
 printf "  %s[2] Excel Universal Offline (.xlsx)  [Excel 2016/2019/2021/365]%s\n" "$C_CYAN" "$C_RESET"
@@ -285,13 +325,21 @@ case "$ED_CHOICE" in
   *) ED_CHOICE="1" ;;
 esac
 
-printf "\n  %sBƯỚC 2 — CHỌN MẪU THÓI QUEN (80 CHỦ ĐỀ LOTSO, LOOPY, CAPYBARA, DIGIMON & HOA LÁ):%s\n" "$C_BOLD" "$C_RESET"
+printf "\n  %sBƯỚC 2 — CHỌN MẪU (100 CHỦ ĐỀ: CHIIKAWA VOCAB, LỄ HỘI, LOTSO, LOOPY, CAPYBARA, DIGIMON):%s\n" "$C_BOLD" "$C_RESET"
 printf "  %s----------------------------------------------------------------------%s\n" "$C_DIM" "$C_RESET"
-printf "  %s--- 🍓 [v4.1] 10 BỘ GẤU DÂU LOTSO PASTEL COLLECTION (#71–#80) ---%s\n" "$C_MAGENTA" "$C_RESET"
-for i in 71 72 73 74 75 76 77 78 79 80; do
-  printf "  [%-2d] %-38s — %s\n" "$i" "${STEMS[$i]}" "${TITLES[$i]}"
+printf "  %s--- 🎀 [v4.3 MỚI] 5 BỘ CHIIKAWA VOCABULARY TRACKER (#96–#100) ---%s\n" "$C_MAGENTA" "$C_RESET"
+for i in 96 97 98 99 100; do
+  printf "  [%-3d] %-38s — %s\n" "$i" "${STEMS[$i]}" "${TITLES[$i]}"
 done
-printf "  %s--- 🎀 [v4.1] 10 BỘ HẢI LY LOOPY PASTEL COLLECTION (#61–#70) ---%s\n" "$C_YELLOW" "$C_RESET"
+printf "  %s--- 🎄🧧 [v4.3 MỚI] 15 BỘ LỄ HỘI GIÁNG SINH & NĂM MỚI (#81–#95) ---%s\n" "$C_CYAN" "$C_RESET"
+for i in 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95; do
+  printf "  [%-3d] %-38s — %s\n" "$i" "${STEMS[$i]}" "${TITLES[$i]}"
+done
+printf "  %s--- 🍓 10 BỘ GẤU DÂU LOTSO PASTEL COLLECTION (#71–#80) ---%s\n" "$C_MAGENTA" "$C_RESET"
+for i in 71 72 73 74 75 76 77 78 79 80; do
+  printf "  [%-3d] %-38s — %s\n" "$i" "${STEMS[$i]}" "${TITLES[$i]}"
+done
+printf "  %s--- 🎀 10 BỘ HẢI LY LOOPY PASTEL COLLECTION (#61–#70) ---%s\n" "$C_YELLOW" "$C_RESET"
 for i in 61 62 63 64 65 66 67 68 69 70; do
   printf "  [%-2d] %-38s — %s\n" "$i" "${STEMS[$i]}" "${TITLES[$i]}"
 done
@@ -320,9 +368,9 @@ for i in 4 6 7 20 24; do
   printf "  [%-2d] %-38s — %s\n" "$i" "${STEMS[$i]}" "${TITLES[$i]}"
 done
 printf "  %s----------------------------------------------------------------------%s\n" "$C_DIM" "$C_RESET"
-printf "  %s[A]%s  Tải TOÀN BỘ 80 mẫu (Download All 80)\n" "$C_GREEN" "$C_RESET"
+printf "  %s[A]%s  Tải TOÀN BỘ 100 mẫu (Download All 100)\n" "$C_GREEN" "$C_RESET"
 printf "  %s[0]%s  Thoát\n\n" "$C_DIM" "$C_RESET"
-printf "  %sGợi ý: Nhập 1 số (vd: 71), nhiều số (vd: 61,70,78), dải (vd: 61-80), hoặc A%s\n" "$C_YELLOW" "$C_RESET"
+printf "  %sGợi ý: Nhập 1 số (vd: 96), nhiều số (vd: 81,91,96), dải (vd: 81-100), hoặc A%s\n" "$C_YELLOW" "$C_RESET"
 
 CHOICE=""
 if [ -n "${HABIT_CHOICE:-}" ]; then
@@ -349,12 +397,12 @@ for tok in $CLEAN; do
       if [[ "$a" =~ ^[0-9]+$ ]] && [[ "$b" =~ ^[0-9]+$ ]]; then
         [ "$a" -gt "$b" ] && { t="$a"; a="$b"; b="$t"; }
         for ((n=a; n<=b; n++)); do
-          [ "$n" -ge 1 ] && [ "$n" -le 80 ] && SEL_IDS+=("$n")
+          [ "$n" -ge 1 ] && [ "$n" -le 100 ] && SEL_IDS+=("$n")
         done
       fi
       ;;
     *)
-      if [[ "$up" =~ ^[0-9]+$ ]] && [ "$up" -ge 1 ] && [ "$up" -le 80 ]; then
+      if [[ "$up" =~ ^[0-9]+$ ]] && [ "$up" -ge 1 ] && [ "$up" -le 100 ]; then
         SEL_IDS+=("$up")
       fi
       ;;
@@ -362,7 +410,8 @@ for tok in $CLEAN; do
 done
 
 if [ "$DO_ALL" -eq 1 ]; then
-  SEL_IDS=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80)
+  SEL_IDS=()
+  for ((n=1; n<=100; n++)); do SEL_IDS+=("$n"); done
 fi
 
 UNIQUE_IDS=()

@@ -189,11 +189,27 @@ def build_vocab_showcase_gif() -> Path:
             px = (px0 + math.sin(u * 2.0 * math.pi + ph) * 10.0) % W
             _draw_4star(d, px, py, pr, p_cols[ci])
 
-        # Bottom-left motivational Toast
-        slide = min(1.0, f / 3.0)
-        tx = int(16 - 40 * (1.0 - slide))
-        d.rounded_rectangle([tx, H - 52, tx + 435, H - 14], radius=18, fill=(196, 82, 114, 245), outline=(255, 232, 240, 255), width=2)
-        d.text((tx + 18, H - 41), "Chiikawa cổ vũ! Bạn đã hoàn thành 100% mục tiêu từ vựng hôm nay!", fill=(255, 255, 255, 255), font=f_tst)
+        # Bottom-left motivational Toast (strictly >= 20px left margin on ALL frames, zero clipping!)
+        toast_msg = "Chiikawa cổ vũ! Bạn đã hoàn thành 100% mục tiêu từ vựng hôm nay!"
+        tb_t = d.textbbox((0, 0), toast_msg, font=f_tst)
+        tw = tb_t[2] - tb_t[0]
+        th = tb_t[3] - tb_t[1]
+        tx = 20
+        pad_x = 20
+        bw = min(W - 40, tw + pad_x * 2)
+        bob = int(round(math.sin(u * 2.0 * math.pi) * 2.0))
+        ty0 = H - 52 + bob
+        ty1 = ty0 + 38
+        d.rounded_rectangle(
+            [tx, ty0, tx + bw, ty1],
+            radius=18,
+            fill=(196, 82, 114, 248),
+            outline=(255, 232, 240, 255),
+            width=2,
+        )
+        text_x = tx + (bw - tw) // 2 - tb_t[0]
+        text_y = ty0 + (38 - th) // 2 - tb_t[1]
+        d.text((text_x, text_y), toast_msg, fill=(255, 255, 255, 255), font=f_tst)
 
         frames.append(im.convert("RGB"))
 

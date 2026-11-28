@@ -45,11 +45,11 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     cv.row(2, 26 if universal else 24)
     cv.row(3, 24)
     if edition == "pro_xlsm":
-        ver_tag = "v4.2 Turbo"
+        ver_tag = "v4.3 Turbo"
     elif edition == "offline":
-        ver_tag = "v4.2 Universal"
+        ver_tag = "v4.3 Universal"
     else:
-        ver_tag = "v4.1"
+        ver_tag = "v4.3"
     cv.merge(1, 1, 1, last_c, f"{t.emoji}  {t.name}  —  HƯỚNG DẪN SỬ DỤNG ({ver_tag})",
              font_name=title_f, font_size=(16.5 if universal else 15.5), bold=True, italic=title_it,
              align="center", bg_color=t.primary, font_color=t.on_primary)
@@ -420,9 +420,9 @@ def build_guide(wb, styles: Styles, tracker_sheet: str, extra_tabs: list[tuple[s
     cv.row(r_foot, 30 if universal else 28)
     cv.row(r_foot + 1, 12)
     if edition == "pro_xlsm":
-        foot_txt = f"💛  © 2026 Dyu (Thân Trọng Duy)  •  Habit Tracker Collection v4.2 Pro Turbo  •  {REPO_URL}"
+        foot_txt = f"💛  © 2026 Dyu (Thân Trọng Duy)  •  Habit Tracker Collection v4.3 Pro Turbo  •  {REPO_URL}"
     elif edition == "offline":
-        foot_txt = f"💛  © 2026 Dyu (Thân Trọng Duy)  •  Habit Tracker Collection v4.2 Universal  •  {REPO_URL}"
+        foot_txt = f"💛  © 2026 Dyu (Thân Trọng Duy)  •  Habit Tracker Collection v4.3 Universal  •  {REPO_URL}"
     else:
         foot_txt = f"💛  Habit Tracker Collection {ver_tag} by Dyu  •  Unified 5-Tab Habit Tracker Collection  •  {REPO_URL}"
     cv.merge(r_foot, 1, r_foot, last_c, foot_txt,

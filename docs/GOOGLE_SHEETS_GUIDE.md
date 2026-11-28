@@ -1,8 +1,9 @@
-# ☁️ Hướng Dẫn Sử Dụng Google Sheets — Desktop & Điện Thoại Khổ Dọc (v4.1)
+# ☁️ Hướng Dẫn Sử Dụng Google Sheets — Desktop & Điện Thoại Khổ Dọc (v4.3 — 100 Templates)
 
-> **1 Script duy nhất (`google_sheets_1click_setup.gs` v4.1 Turbo) tự nhận diện cả 2 bản Cloud (tương thích 100% toàn bộ 80 mẫu: 68 mẫu 6 giai đoạn gồm 13 Capybara `#48`–`#60`, 10 Hải Ly Loopy `#61`–`#70`, 10 Gấu Dâu Lotso `#71`–`#80` & 12 mẫu Digimon 7–8 giai đoạn `#36`–`#47`!):**
-> - **Bản Desktop (`templates/google_sheets_edition/`):** Gọn 5 tab (`📖 Hướng Dẫn`, `Monthly Tracker`, `📝 Nhiệm Vụ Ngày`, `🎯 Yearly Goals & Habits`, `🏆 Tổng Kết & Thành Tựu Năm`), lịch tháng 31 ngày + lưu tự động O(1) từng Ngày & 12 Tháng vào `_Database`.
-> - **Bản Điện Thoại Khổ Dọc (`templates/mobile_portrait_sheets/`):** Gọn 4 tab (`📱 Tuần Này`, `📝 Việc Hôm Nay`, `🎯 Mục Tiêu & Thành Tựu`, `📖 Hướng Dẫn`), vừa khít chiều dọc iPhone/Android **0 cuộn ngang**, ô tick lớn `38pt` dễ bấm bằng ngón cái + tự lưu từng Tuần (`YYYY-MM-W#`) & từng Ngày (`YYYY-MM-DD`) vào `_Database`!
+> **1 Script duy nhất (`google_sheets_1click_setup.gs` v4.3 Turbo) tự nhận diện cả 4 bố cục Cloud cho trọn bộ 100 mẫu (`#01`–`#95` Habit Tracker & Lễ Hội Giáng Sinh/Năm Mới + `#96`–`#100` Chiikawa Vocabulary Tracker!):**
+> - **Bản Desktop Habit (`#01`–`#95`, `templates/google_sheets_edition/`):** Gọn 5 tab (`📖 Hướng Dẫn`, `Monthly Tracker`, `📝 Nhiệm Vụ Ngày`, `🎯 Yearly Goals & Habits`, `🏆 Tổng Kết & Thành Tựu Năm`), lịch tháng 31 ngày + lưu tự động O(1) từng Ngày & 12 Tháng vào `_Database`.
+> - **Bản Desktop Chiikawa Vocabulary (`#96`–`#100`, `templates/google_sheets_edition/`):** Gọn 4 tab (`📚 Kho Từ Vựng`, `🎯 Luyện Tập & Lịch Ôn`, `📊 Thống Kê & Thành Tựu`, `📖 Hướng Dẫn`), tự bật Checkbox Pastel cho công tắc `🙈 Ẩn Nghĩa` / `🙈 Ẩn Từ`, cột SRS/Thuộc bài & Checklist 5 bước!
+> - **Bản Điện Thoại Khổ Dọc (`#01`–`#100`, `templates/mobile_portrait_sheets/`):** Khổ dọc vừa khít iPhone/Android **0 cuộn ngang** (`<= Cột I` cho Habit & `<= Cột G` cho Chiikawa Vocabulary), ô tick lớn dễ bấm bằng ngón cái!
 
 ---
 

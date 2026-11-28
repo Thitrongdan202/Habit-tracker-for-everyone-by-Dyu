@@ -1,6 +1,7 @@
 """
-build_mobile_templates.py — Builds Mobile Portrait Habit Tracker templates (v4.0, 01..80)
-into `templates/mobile_portrait_sheets/01..80_*_Mobile.xlsx`.
+build_mobile_templates.py — Builds Mobile Portrait Habit Tracker templates (v4.3, 01..95)
+into `templates/mobile_portrait_sheets/01..95_*_Mobile.xlsx`.
+(Note: Chiikawa Vocabulary Mobile templates #96..#100 are built via `scripts/build_vocab_chiikawa.py`.)
 
 Pipeline:
   1. Generate mobile portrait `.xlsx` workbooks via `hx.mobile.build_mobile_workbook`

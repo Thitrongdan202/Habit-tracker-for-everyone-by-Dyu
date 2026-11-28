@@ -105,10 +105,10 @@ def run_audit() -> bool:
     vn_report = verify_vietnamese_fonts()
     vn_safe_fonts = set(vn_report.keys()) | {"Segoe UI", "Arial", "Tahoma", "Verdana", "Be Vietnam Pro"}
 
-    pro_files = sorted(PRO_DIR.glob("[0-9][0-9]_*.xlsm"))
-    off_files = sorted(OFF_DIR.glob("[0-9][0-9]_*.xlsx"))
-    assert len(pro_files) == 80, f"Expected 80 pro_macro files, got {len(pro_files)}"
-    assert len(off_files) == 80, f"Expected 80 offline files, got {len(off_files)}"
+    pro_files = sorted(PRO_DIR.glob("[0-9]*_*.xlsm"))
+    off_files = sorted(OFF_DIR.glob("[0-9]*_*.xlsx"))
+    assert len(pro_files) >= 80, f"Expected >= 80 pro_macro files, got {len(pro_files)}"
+    assert len(off_files) >= 80, f"Expected >= 80 offline files, got {len(off_files)}"
 
     blacklist_hits = []
     non_whitelist_hits = []
@@ -156,7 +156,7 @@ def run_audit() -> bool:
                     if not val.startswith("="):
                         if LEGACY_VER_RE.search(val):
                             legacy_hits.append((p.name, sname, cell.coordinate, val[:80]))
-                        if "v4.2" in val or "V4.2" in val:
+                        if any(tok in val for tok in ("v4.2", "V4.2", "v4.3", "V4.3")):
                             found_v42 = True
                         if "© 2026 Dyu (Thân Trọng Duy)" in val:
                             found_copy = True

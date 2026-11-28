@@ -1,8 +1,8 @@
-# 🛠️ Hướng Dẫn Sử Dụng Bộ Macro VBA (Dành Cho Excel Bản Cũ & Offline Pro)
+# 🛠️ Hướng Dẫn Sử Dụng Bộ Macro VBA — Habit & Vocabulary Tracker v4.3 (100 Templates)
 
-> **Lưu ý nhanh cho phiên bản 2.0 Final:**
-> Toàn bộ **10 mẫu chính trong [`templates/`](../templates/)** ĐÃ hoạt động **100% Offline trên mọi phiên bản Excel (2016 / 2019 / 2021 / 365 • Windows & Mac)** bằng Linked Pictures & Form Control Checkboxes — **KHÔNG cần cài VBA hay Macro**!
-> Ngoài ra, người dùng Excel 365 có thêm 10 bản ảnh nhúng trực tiếp vào ô trong [`templates/pro_macro/`](../templates/pro_macro/).
+> **Lưu ý nhanh cho phiên bản v4.3 (100 Templates × 4 Editions):**
+> - **100 mẫu Pro Interactive (`.xlsm`) trong [`templates/pro_macro/`](../templates/pro_macro/)** ĐÃ nhúng sẵn toàn bộ VBA (`modHabitState.bas` cho `#01`–`#95` kèm **Holiday Finale FX** cho `#81`–`#95`, và `modVocabPro.bas` cho 5 bộ **Chiikawa Vocabulary Tracker `#96`–`#100`** kèm **Flashcard Quiz Pop-up**)!
+> - **100 mẫu Offline không Macro (`.xlsx`) trong [`templates/excel_universal_offline/`](../templates/excel_universal_offline/)** hoạt động **100% Offline trên mọi đời Excel (2016 / 2019 / 2021 / 365 • Windows & Mac)** mà **KHÔNG cần cài VBA hay Macro**!
 
 Bộ script VBA trong thư mục này dành cho người dùng **Excel 2016 / 2019 / 2021** (chưa có hàm `=IMAGE()` và Checkbox gốc) hoặc muốn thêm tính năng **nhấn đúp để tick nhanh, thông báo ăn mừng chuỗi 7/14/21/30 ngày, nút Reset tháng mới & xuất PDF 1 trang**.
 

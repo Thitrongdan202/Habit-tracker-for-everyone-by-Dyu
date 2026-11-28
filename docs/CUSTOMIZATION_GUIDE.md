@@ -1,4 +1,4 @@
-# 🎨 Hướng Dẫn Tùy Biến Nâng Cao — Habit Tracker Collection (v4.1)
+# 🎨 Hướng Dẫn Tùy Biến Nâng Cao — Habit & Vocabulary Tracker Collection (v4.3 — 100 Templates)
 
 ---
 
@@ -7,15 +7,15 @@
 2. Quét chọn toàn bộ vùng ô tick từ **`C17:AG36`** (hoặc bấm `Ctrl + G` → gõ `C17:AG36` → `Enter`).
 3. Nhấn phím **`Delete`** (trên Mac: `fn + Backspace`).
 4. Toàn bộ ô Checkbox lập tức trở về trạng thái chưa tick, biểu tượng hoạt ảnh về Stage 0, còn **100% công thức, màu sắc & biểu đồ được giữ nguyên vẹn**!
-   - Trên bản **Pro Interactive (`.xlsm` v4.0)**: Nếu lỡ tay xóa hoặc kéo-fill nhầm, bấm ngay **`Ctrl + Z`** hoặc nút **`↩ Undo`** ở góc trái trên để khôi phục lập tức! Dòng công thức `TOTAL • TỔNG KẾT` (Row 37) được khóa bảo vệ tự động (`UserInterfaceOnly:=True`) nên không bao giờ bị ghi đè.
+   - Trên bản **Pro Interactive (`.xlsm` v4.3)**: Nếu lỡ tay xóa hoặc kéo-fill nhầm, bấm ngay **`Ctrl + Z`** hoặc nút **`↩ Undo`** ở góc trái trên để khôi phục lập tức! Dòng công thức `TOTAL • TỔNG KẾT` (Row 37) được khóa bảo vệ tự động (`UserInterfaceOnly:=True`) nên không bao giờ bị ghi đè.
 
 ---
 
 ## 2. Tự đổi bộ ảnh hoạt ảnh 6, 7 hoặc 8 giai đoạn (Custom Animation)
 
-### ⭐ Trên bản Pro Interactive (`.xlsm` v4.0 Turbo — `templates/pro_macro/`)
+### ⭐ Trên bản Pro Interactive (`.xlsm` v4.3 Turbo — `templates/pro_macro/`)
 1. Chuột phải vào bất kỳ tên tab nào ở thanh dưới cùng → chọn **Unhide (Hiện trang tính)** → chọn sheet **`_Assets`** → bấm **OK**.
-2. Dán **6 ảnh PNG** vào **`B2:B7`** (`#01`–`#35`, Capybara `#48`–`#60`, Loopy `#61`–`#70`, Lotso `#71`–`#80`), **7 ảnh PNG** vào **`B2:B8`** (Digimon 7 cấp `#36`–`#42`, `#45`, `#47`), hoặc **8 ảnh PNG** vào **`B2:B9`** (Digimon 8 cấp Ultra `#43`, `#44`, `#46`).
+2. Dán **6 ảnh PNG** vào **`B2:B7`** (`#01`–`#35`, Capybara `#48`–`#60`, Loopy `#61`–`#70`, Lotso `#71`–`#80`, Lễ Hội `#81`–`#95` & Chiikawa Vocabulary `#96`–`#100`), **7 ảnh PNG** vào **`B2:B8`** (Digimon 7 cấp `#36`–`#42`, `#45`, `#47`), hoặc **8 ảnh PNG** vào **`B2:B9`** (Digimon 8 cấp Ultra `#43`, `#44`, `#46`).
 3. Bấm nút **`🔄 Đồng bộ 6/7/8 ảnh mới (SyncSprites)`** ngay trên sheet `_Assets` → toàn bộ 31 ngày, Hero icon, Daily Tasks, Yearly Goals & 12 tháng Tổng Kết tự động cập nhật sang bộ ảnh mới chỉ trong 1 giây!
 4. Chuột phải tab **`_Assets`** → **Hide** để ẩn lại.
 
@@ -32,7 +32,7 @@
 
 ## 3. Điều chỉnh ngưỡng tăng trưởng (%)
 Trên tab **`📖 Hướng Dẫn`**, bạn có thể sửa trực tiếp các ô ngưỡng màu vàng:
-- **Bộ 6 giai đoạn (`#01`–`#35`, Capybara `#48`–`#60`, Loopy `#61`–`#70` & Lotso `#71`–`#80`):** `CFG_THR_1` (`25%`), `CFG_THR_2` (`50%`), `CFG_THR_3` (`75%`).
+- **Bộ 6 giai đoạn (`#01`–`#35`, Capybara `#48`–`#60`, Loopy `#61`–`#70`, Lotso `#71`–`#80` & Lễ Hội `#81`–`#95`):** `CFG_THR_1` (`25%`), `CFG_THR_2` (`50%`), `CFG_THR_3` (`75%`).
 - **Bộ Digimon 7 giai đoạn (`#36`–`#42`, `#45`, `#47`):** `CFG_THR_0` (`20%`), `CFG_THR_1` (`40%`), `CFG_THR_2` (`60%`), `CFG_THR_3` (`80%` Ultimate — `100%` Mega ✨).
 - **Bộ Digimon 8 giai đoạn Ultra (`#43`, `#44`, `#46`):** `CFG_THR_M1` (`15%`), `CFG_THR_0` (`30%`), `CFG_THR_1` (`50%`), `CFG_THR_2` (`70%`), `CFG_THR_3` (`85%` Mega — `100%` Ultra/Burst Mode ✨).
 
@@ -46,5 +46,5 @@ Trên tab **`📖 Hướng Dẫn`**, bạn có thể sửa trực tiếp các ô
 ---
 
 ## 5. Đổi Tháng / Năm & Lưu Lịch Sử Đa Tháng
-- **Bản Pro Interactive (`.xlsm` v4.0):** Nhấn nút **`◀ Tháng` / `Tháng ▶`** hoặc chọn dropdown **Tháng (`B3`)** / **Năm (`B5`)** — dữ liệu tháng cũ tự động lưu vào `_Database` và tháng mới mở ra siêu tốc (~21–47 ms)! Tương tự với **`📝 Nhiệm Vụ Ngày`** (nút `◀ Hôm qua` · `📅 Hôm nay` · `Ngày mai ▶`) và **`🎯 Yearly Goals & Habits`** (`I2`).
+- **Bản Pro Interactive (`.xlsm` v4.3):** Nhấn nút **`◀ Tháng` / `Tháng ▶`** hoặc chọn dropdown **Tháng (`B3`)** / **Năm (`B5`)** — dữ liệu tháng cũ tự động lưu vào `_Database` và tháng mới mở ra siêu tốc (~21–47 ms)! Tương tự với **`📝 Nhiệm Vụ Ngày`** (nút `◀ Hôm qua` · `📅 Hôm nay` · `Ngày mai ▶`) và **`🎯 Yearly Goals & Habits`** (`I2`). Riêng 5 bộ **Chiikawa Vocabulary (`#96`–`#100`)** tích hợp thêm nút **`🎲 Dò Bài Ngẫu Nhiên`** (Flashcard Pop-up) & **`✨ Chiikawa Cổ Vũ FX`**.
 - **Bản Excel Universal Offline (`.xlsx`):** Đổi Tháng (`B3`) & Năm (`B5`) để tự nhảy lịch 28/29/30/31 ngày. Để sang tháng mới mà vẫn giữ dữ liệu cũ: chuột phải tab Tracker → **Move or Copy...** → tick **☑ Create a copy** → đổi Tháng ở `B3` → reset vùng `C17:AG36` bằng phím `Delete`.

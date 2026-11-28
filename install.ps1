@@ -1,7 +1,7 @@
-# Habit Tracker Collection v4.2 Installer (PowerShell 5.1+ / 7+)
+# Habit Tracker & Vocabulary Collection v4.3 Installer (PowerShell 5.1+ / 7+)
 <#
 .SYNOPSIS
-    Habit Tracker Collection v4.2 - Interactive Zero-Install Downloader (Windows PowerShell)
+    Habit & Vocabulary Tracker Collection v4.3 (100 Themes) - Interactive Zero-Install Downloader (Windows PowerShell)
 .DESCRIPTION
     Run in 1 line:
         irm https://raw.githubusercontent.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu/main/install.ps1 | iex
@@ -101,6 +101,26 @@ $Templates = @(
     @{ Id = 78; Cat = "LOTSO";    Stem = "78_Lotso_Daisy_Cheek_Glow";          Title = "Lotso Hoa Cuc Trang Cai Tai & Ap Ma Nhay Mat" }
     @{ Id = 79; Cat = "LOTSO";    Stem = "79_Lotso_Bunny_Headband_Selfcare";   Title = "Lotso Bom Tai Tho Spa Self-Care (Sang-Ngay-Toi)" }
     @{ Id = 80; Cat = "LOTSO";    Stem = "80_Lotso_Berry_Gift_Box_Party";      Title = "Lotso Tiec Hop Qua Hong, Cupcake & Confetti 100%" }
+    @{ Id = 81; Cat = "HOLIDAY";  Stem = "81_Christmas_Tree_Glow";             Title = "[Noel] Cay Thong Giang Sinh & Winter Magic Finale" }
+    @{ Id = 82; Cat = "HOLIDAY";  Stem = "82_Cozy_Snowman_Build";              Title = "[Noel] Dap Nguoi Tuyet Am Ap & Mua Tuyet Roi" }
+    @{ Id = 83; Cat = "HOLIDAY";  Stem = "83_Gingerbread_Bakery";              Title = "[Noel] Tiem Banh Gung & Ngoi Nha Banh Kem" }
+    @{ Id = 84; Cat = "HOLIDAY";  Stem = "84_Santa_Gift_Delivery";             Title = "[Noel] Ong Gia Noel & Xe Truot Tuyet Phat Qua" }
+    @{ Id = 85; Cat = "HOLIDAY";  Stem = "85_Winter_Hot_Cocoa_Cafe";           Title = "[Noel] Quan Ca Cao Nong Kem Tuoi & Keo Gay" }
+    @{ Id = 86; Cat = "HOLIDAY";  Stem = "86_Reindeer_Bell_Parade";            Title = "[Noel] Be Tuan Loc Den Sung & Chuong Giang Sinh" }
+    @{ Id = 87; Cat = "HOLIDAY";  Stem = "87_Christmas_Snow_Village";          Title = "[Noel] Ngoi Lang Tuyet & Nha Go Sang Den" }
+    @{ Id = 88; Cat = "HOLIDAY";  Stem = "88_Christmas_Wreath_Candle";         Title = "[Noel] Vong Nguyet Que & Nen Am Dem Dong" }
+    @{ Id = 89; Cat = "HOLIDAY";  Stem = "89_Fireworks_Countdown";             Title = "[Nam Moi] Dong Ho Giao Thua & Phao Hoa 3 Dot" }
+    @{ Id = 90; Cat = "HOLIDAY";  Stem = "90_Lucky_Red_Envelope";              Title = "[Nam Moi] Bao Li Xi Mai Vang & Mua Xu Loc" }
+    @{ Id = 91; Cat = "HOLIDAY";  Stem = "91_Maneki_Neko_Fortune";             Title = "[Nam Moi] Meo Than Tai Vay Loc Phu Quy" }
+    @{ Id = 92; Cat = "HOLIDAY";  Stem = "92_Sakura_Blossom_New_Year";         Title = "[Nam Moi] Bonsai Hoa Anh Dao No Ro Khai Xuan" }
+    @{ Id = 93; Cat = "HOLIDAY";  Stem = "93_Daruma_Wish_Goal";                Title = "[Nam Moi] Bup Be Daruma Ve Mat Dat Uoc Nguyen" }
+    @{ Id = 94; Cat = "HOLIDAY";  Stem = "94_Cozy_Tea_New_Year_Mochi";         Title = "[Nam Moi] Khay Tra Matcha & Banh Kagami Mochi" }
+    @{ Id = 95; Cat = "HOLIDAY";  Stem = "95_New_Year_Festival_Lantern";       Title = "[Nam Moi] Den Long Le Hoi Hoa Dao Ruc Ro" }
+    @{ Id = 96; Cat = "VOCAB";    Stem = "96_Chiikawa_SRS_Daily_Vocab";        Title = "[Vocab] Chiikawa Strawberry Milk - SRS 5 Moc (1-30d)" }
+    @{ Id = 97; Cat = "VOCAB";    Stem = "97_Hachiware_IELTS_Academic_Vocab";  Title = "[Vocab] Hachiware Sky Study - IELTS Band 7.0-8.5" }
+    @{ Id = 98; Cat = "VOCAB";    Stem = "98_Usagi_Flashcard_Quiz_Speaking";   Title = "[Vocab] Usagi Honey Flashcard - Quiz 2 Chieu & Speaking" }
+    @{ Id = 99; Cat = "VOCAB";    Stem = "99_Momonga_MultiLang_Media_Vocab";   Title = "[Vocab] Momonga Lavender - Da Ngon Ngu Phim/Nhac/Sach" }
+    @{ Id = 100; Cat = "VOCAB";   Stem = "100_Chiikawa_Exam_Sprint_MistakeBank"; Title = "[Vocab] Shisa Matcha - Dem Nguoc Thi & Tu Hay Quen" }
 )
 
 function Resolve-TargetFolder {
@@ -171,16 +191,16 @@ function Parse-TemplateIds([string]$Raw) {
             $a = [int]$Matches[1]; $b = [int]$Matches[2]
             if ($a -gt $b) { $tmp = $a; $a = $b; $b = $tmp }
             for ($n = $a; $n -le $b; $n++) {
-                if ($n -ge 1 -and $n -le 80 -and -not $selectedIds.Contains($n)) { $selectedIds.Add($n) }
+                if ($n -ge 1 -and $n -le 100 -and -not $selectedIds.Contains($n)) { $selectedIds.Add($n) }
             }
         } elseif ($u -match '^\d+$') {
             $n = [int]$u
-            if ($n -ge 1 -and $n -le 80 -and -not $selectedIds.Contains($n)) { $selectedIds.Add($n) }
+            if ($n -ge 1 -and $n -le 100 -and -not $selectedIds.Contains($n)) { $selectedIds.Add($n) }
         }
     }
     if ($all) {
         $selectedIds.Clear()
-        1..80 | ForEach-Object { $selectedIds.Add($_) }
+        1..100 | ForEach-Object { $selectedIds.Add($_) }
     }
     return @{ Ids = @($selectedIds); Quit = $quit }
 }
@@ -190,14 +210,14 @@ New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 
 Write-Host ""
 Write-Host "========================================================================" -ForegroundColor Magenta
-Write-Host "   HABIT TRACKER COLLECTION v4.2 - BY DYU (80 THEMES x 4 EDITIONS)" -ForegroundColor Yellow
-Write-Host "   Turbo 6/7/8-Stage Native Sprite Engine | FX Suite | Ctrl+Z Undo" -ForegroundColor Cyan
+Write-Host "   HABIT & VOCAB TRACKER COLLECTION v4.3 - BY DYU (100 THEMES x 4)" -ForegroundColor Yellow
+Write-Host "   Holiday Finale FX | Chiikawa Vocab Quiz | Turbo Native Sprites" -ForegroundColor Cyan
 Write-Host "========================================================================" -ForegroundColor Magenta
 Write-Host "  Thu muc luu file: $OutDir" -ForegroundColor Green
 Write-Host ""
 Write-Host "  BUOC 1 - CHON PHIEN BAN PHU HOP (THEO THU TU UU TIEN):" -ForegroundColor White
 Write-Host "  ----------------------------------------------------------------------" -ForegroundColor DarkGray
-Write-Host "  [1] Pro Interactive (.xlsm)  [* KHUYEN DUNG SO 1 - EXCEL 365 TURBO v4.2 *]" -ForegroundColor Green
+Write-Host "  [1] Pro Interactive (.xlsm)  [* KHUYEN DUNG SO 1 - EXCEL 365 TURBO v4.3 *]" -ForegroundColor Green
 Write-Host "      -> Sieu toc ~25-54ms + Full FX Nay/Phao hoa/Toast goc trai duoi + Ctrl+Z Undo" -ForegroundColor DarkGray
 Write-Host "         + Khoa bao ve cong thuc + Tu luu Da Ngay/Thang/Nam (100% Offline)!" -ForegroundColor DarkGray
 Write-Host "  [2] Excel Universal Offline (.xlsx)  [Excel 2016/2019/2021/365]" -ForegroundColor Cyan
@@ -225,11 +245,13 @@ if ($edChoice -eq "M" -or $edChoice -eq "MOBILE") { $edChoice = "4" }
 if ($edChoice -notin @("1", "2", "3", "4")) { $edChoice = "1" }
 
 Write-Host ""
-Write-Host "  BUOC 2 - CHON MAU THOI QUEN (80 CHU DE LOTSO, LOOPY, CAPYBARA, DIGIMON & HOA LA):" -ForegroundColor White
+Write-Host "  BUOC 2 - CHON MAU (100 CHU DE: CHIIKAWA VOCAB, LE HOI, LOTSO, LOOPY, CAPYBARA, DIGIMON):" -ForegroundColor White
 Write-Host "  ----------------------------------------------------------------------" -ForegroundColor DarkGray
 $CatBlocks = @(
-    @{ Key = "LOTSO";    Label = "--- [v4.1] 10 BO GAU DAU LOTSO PASTEL COLLECTION (#71-#80) ---"; Color = "Magenta" }
-    @{ Key = "LOOPY";    Label = "--- [v4.1] 10 BO HAI LY LOOPY PASTEL COLLECTION (#61-#70) ---"; Color = "Yellow" }
+    @{ Key = "VOCAB";    Label = "--- [v4.3 MOI] 5 BO CHIIKAWA VOCABULARY TRACKER (#96-#100) ---"; Color = "Magenta" }
+    @{ Key = "HOLIDAY";  Label = "--- [v4.3 MOI] 15 BO LE HOI GIANG SINH & NAM MOI (#81-#95) ---"; Color = "Cyan" }
+    @{ Key = "LOTSO";    Label = "--- 10 BO GAU DAU LOTSO PASTEL COLLECTION (#71-#80) ---"; Color = "Magenta" }
+    @{ Key = "LOOPY";    Label = "--- 10 BO HAI LY LOOPY PASTEL COLLECTION (#61-#70) ---"; Color = "Yellow" }
     @{ Key = "CAPYBARA"; Label = "--- 13 BO CAPYBARA CHILL COLLECTION DOC BAN (#48-#60) ---"; Color = "Green" }
     @{ Key = "DIGIMON";  Label = "--- 12 BO DIGIMON 7 & 8 CAP TIEN HOA (#36-#47) ---"; Color = "Cyan" }
     @{ Key = "PETS";     Label = "--- THU CUNG SIEU CUTE (Mochi Cat, Bunny, Milk & Mocha, Shiba, Akita, Alpaca...) ---"; Color = "Yellow" }
@@ -240,15 +262,15 @@ $CatBlocks = @(
 foreach ($blk in $CatBlocks) {
     Write-Host ("  " + $blk.Label) -ForegroundColor $blk.Color
     foreach ($t in ($Templates | Where-Object { $_.Cat -eq $blk.Key })) {
-        $num = ("[{0}]" -f $t.Id).PadRight(5)
+        $num = ("[{0}]" -f $t.Id).PadRight(6)
         Write-Host ("  {0} {1,-38} - {2}" -f $num, $t.Stem, $t.Title) -ForegroundColor White
     }
 }
 Write-Host "  ----------------------------------------------------------------------" -ForegroundColor DarkGray
-Write-Host "  [A]   Tai TOAN BO 80 mau (Download All 80)" -ForegroundColor Green
+Write-Host "  [A]   Tai TOAN BO 100 mau (Download All 100)" -ForegroundColor Green
 Write-Host "  [0]   Thoat" -ForegroundColor DarkGray
 Write-Host ""
-Write-Host "  Goi y: Nhap 1 so (vd: 71), nhieu so (vd: 61,70,78), dai (vd: 61-80), hoac A" -ForegroundColor Yellow
+Write-Host "  Goi y: Nhap 1 so (vd: 96), nhieu so (vd: 81,91,96), dai (vd: 81-100), hoac A" -ForegroundColor Yellow
 
 if ($env:HABIT_CHOICE) {
     $choice = $env:HABIT_CHOICE

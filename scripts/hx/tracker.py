@@ -194,7 +194,7 @@ def init_calc_sheet(wb, active_year: int = 2026, last_loaded_key: str = "2026-10
         ("FX_MSG_MONTH_SWITCH","📅 Đã lưu tháng cũ & mở dữ liệu tháng mới!"),              # BA13
         ("FX_MSG_DAILY_100",   "🎉 Xuất sắc 100%! Toàn bộ nhiệm vụ ngày đã xong!"),        # BA14
         ("FX_MSG_GOAL_DONE",   "🎯 Chúc mừng! Bạn vừa chinh phục thêm Mục Tiêu Năm!"),     # BA15
-        ("FX_MSG_DEMO",        "🎉 Hiệu ứng Pro v4.2 Turbo đang BẬT — Siêu tốc & sống động!"), # BA16
+        ("FX_MSG_DEMO",        "🎉 Hiệu ứng Pro v4.3 Turbo đang BẬT — Siêu tốc & sống động!"), # BA16
         ("FX_LBL_ON",          "✨ FX: BẬT"),                                               # BA17
         ("FX_LBL_OFF",         "💤 FX: TẮT"),                                               # BA18
         ("FX_MSG_FX_ON",       "✨ Đã BẬT hiệu ứng Pro (Nảy, Pháo hoa & Toast)!"),         # BA19

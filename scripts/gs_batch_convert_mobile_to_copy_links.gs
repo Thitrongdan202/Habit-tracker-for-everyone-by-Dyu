@@ -1,25 +1,26 @@
 /**
  * ============================================================================
- *  HABIT TRACKER v4.1 MOBILE PORTRAIT — BATCH CONVERTER TO 1-CLICK `/copy` LINKS
+ *  HABIT & VOCABULARY TRACKER v4.3 MOBILE PORTRAIT — BATCH CONVERTER TO `/copy` LINKS
  *  Repo: https://github.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu
  * ============================================================================
  *
- *  MỤC ĐÍCH (ZERO-FRICTION MOBILE DISTRIBUTION):
- *    Chuyển đổi hàng loạt toàn bộ 80 file `*_Mobile.xlsx` trong thư mục Google Drive
- *    (`templates/mobile_portrait_sheets/`) thành Google Sheets khổ dọc gốc đã sẵn sàng
- *    mở 1 chạm trên ứng dụng Google Trang tính điện thoại (iOS / Android):
- *      - Đã bật sẵn Native Checkboxes đúng tọa độ Mobile (`C21:I35`, `B16:B30`, `B11:B22`)
+ *  MỤC ĐÍCH (ZERO-FRICTION MOBILE DISTRIBUTION — ĐỦ 100 TEMPLATE `#01`–`#100`):
+ *    Chuyển đổi hàng loạt toàn bộ 100 file `*_Mobile.xlsx` trong thư mục Google Drive
+ *    (`templates/mobile_portrait_sheets/`, gồm `#01`–`#95` Habit Tracker & Lễ Hội
+ *    + `#96`–`#100` Chiikawa Vocabulary Mobile `<= Cột G`) thành Google Sheets khổ dọc gốc:
+ *      - Tự nhận diện an toàn cả bố cục Mobile Habit (`C21:I35`, `B16:B30`, `B11:B22`)
+ *        lẫn Mobile Chiikawa Vocabulary (`📚 Học Từ Hôm Nay`: `B11:E11`, `B15:B64`; `🎯 Luyện Tập & Tiến Độ`: `B6:B10`)
  *        với bộ lọc boolean an toàn (tuyệt đối không chạm tiêu đề / ngày / dòng tổng!)
  *      - Đã giữ nguyên màu pastel từng ngày T2–CN & màu chủ đề từng template
- *      - Đã ép font tiếng Việt sắc nét `Be Vietnam Pro` trên toàn bộ 4 tab hiển thị
+ *      - Đã ép font tiếng Việt sắc nét `Be Vietnam Pro` trên toàn bộ tab hiển thị
  *      - Đã ẩn đường lưới mặc định (`setHiddenGridlines(true)`) & ẩn `_Calc`, `_Database`, `_Assets`
  *      - Đã nướng sẵn ảnh native `CellImage` vào `_Assets` (loại bỏ hoàn toàn `=IMAGE("https://...")` -> 0 lỗi `#REF!` trên app Google Trang tính điện thoại!)
  *      - Đã mở quyền chia sẻ RIÊNG TỪNG FILE ("Anyone with link: Viewer") — KHÔNG chia sẻ thư mục gốc
- *      - Tự xuất bảng Markdown gồm 80 link `https://docs.google.com/spreadsheets/d/<ID>/copy`
+ *      - Tự xuất bảng Markdown gồm 100 link `https://docs.google.com/spreadsheets/d/<ID>/copy`
  *        vào file `MOBILE_COPY_LINKS_TABLE.md` trong thư mục output!
  *
- *  ★ NÂNG CẤP TẠI CHỖ CHO 80 FILE MOBILE ĐÃ CONVERT (GIỮ NGUYÊN 100% LINK `/copy` CŨ):
- *    - Nếu bạn đã convert sẵn 80 file Mobile trên Drive, chỉ cần chọn hàm `upgradeExistingMobileSheetsToCellImages` -> bấm Run!
+ *  ★ NÂNG CẤP TẠI CHỖ CHO 100 FILE MOBILE ĐÃ CONVERT (GIỮ NGUYÊN 100% LINK `/copy` CŨ):
+ *    - Nếu bạn đã convert sẵn file Mobile trên Drive, chỉ cần chọn hàm `upgradeExistingMobileSheetsToCellImages` -> bấm Run!
  *    - Script sẽ nướng `CellImage` trực tiếp vào `_Assets` của từng file hiện có (không đổi File ID, giữ nguyên toàn bộ link `/copy` cũ & tự bỏ qua file đã nướng khi chạy lại!).
  *
  *  HƯỚNG DẪN CHẠY 1 LẦN TRÊN GOOGLE DRIVE (2 PHÚT):
@@ -75,7 +76,7 @@ function batchConvertMobileToCopyLinks() {
   // Map existing native Google Sheets in output folder so reruns resume cleanly
   var existingMap = mobIndexExistingSheets_(outFolder);
 
-  // Gather and numerically sort all `.xlsx` source files (01..60)
+  // Gather and numerically sort all `.xlsx` source files (01..100)
   var xlsxFiles = [];
   var iter = srcFolder.getFiles();
   while (iter.hasNext()) {
@@ -282,7 +283,7 @@ function mobBuildBakedCellImage_(url, altTitle, imageCache) {
  */
 function bakeAssetsAsCellImages_(ss, imageCache) {
   imageCache = imageCache || {};
-  var imgRe = /^=\s*(?:_xlfn\.)?IMAGE\(\s*"([^"]+)"/i;
+  var imgRe = /^=\s*(?:_xlfn\.|_xludf\.)?IMAGE\(\s*"([^"]+)"/i;
   var bakedCount = 0;
   var urlToAssetRef = {};
 
@@ -345,6 +346,8 @@ function mobPolishConvertedSheet_(spreadsheetId, imageCache) {
   var wsWeek = null;
   var wsTasks = null;
   var wsGoals = null;
+  var wsVocabMain = null;
+  var wsVocabPrac = null;
 
   for (var i = 0; i < sheets.length; i++) {
     var sh = sheets[i];
@@ -355,14 +358,18 @@ function mobPolishConvertedSheet_(spreadsheetId, imageCache) {
       continue;
     }
 
-    // Hide default grey gridlines & enforce crisp Vietnamese font on all 4 visible mobile tabs
+    // Hide default grey gridlines & enforce crisp Vietnamese font on all visible mobile tabs
     sh.setHiddenGridlines(true);
     var dr = sh.getDataRange();
     if (dr.getNumRows() > 0 && dr.getNumColumns() > 0) {
       dr.setFontFamily(MOB_FONT_FAMILY);
     }
 
-    if (nm.indexOf("Tuần Này") !== -1) {
+    if (nm.indexOf("Học Từ Hôm Nay") !== -1) {
+      wsVocabMain = sh;
+    } else if (nm.indexOf("Luyện Tập") !== -1) {
+      wsVocabPrac = sh;
+    } else if (nm.indexOf("Tuần Này") !== -1) {
       wsWeek = sh;
     } else if (nm.indexOf("Việc Hôm Nay") !== -1) {
       wsTasks = sh;
@@ -371,7 +378,21 @@ function mobPolishConvertedSheet_(spreadsheetId, imageCache) {
     }
   }
 
-  // 1) Tab 1 (`📱 Tuần Này`): Boolean-safe Checkboxes on C21:I35 preserving each day column's pastel color!
+  // Branch A: Chiikawa Vocabulary Mobile (#96-#100, <= Col G) — strictly boolean-safe checkboxes!
+  if (wsVocabMain) {
+    var vAccent = mobPickAccentColor_(wsVocabMain, "B15", "B2", "#E27192");
+    mobConvertBoolRange_(wsVocabMain, "B11:E11", vAccent);
+    mobConvertBoolRange_(wsVocabMain, "B15:B64", vAccent);
+    if (wsVocabPrac) {
+      var pAccent = mobPickAccentColor_(wsVocabPrac, "B6", "B2", vAccent);
+      mobConvertBoolRange_(wsVocabPrac, "B6:B10", pAccent);
+    }
+    bakeAssetsAsCellImages_(ss, imageCache);
+    SpreadsheetApp.flush();
+    return;
+  }
+
+  // Branch B: Mobile Habit Tracker (#01-#95) — Tuần Này / Việc Hôm Nay / Mục Tiêu
   if (wsWeek) {
     var weekFallback = wsWeek.getRange("B2").getBackground() || "#C88E8E";
     mobConvertBoolRangePerCol_(wsWeek, MOB_WEEK_RANGE, MOB_WEEK_DAY_COLS, 21, weekFallback);

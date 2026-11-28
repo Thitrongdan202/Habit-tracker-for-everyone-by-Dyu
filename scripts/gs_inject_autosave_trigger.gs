@@ -1,7 +1,9 @@
 /**
  * ============================================================================
- *  HABIT TRACKER — BOUND SIMPLE-TRIGGER `onEdit(e)` AUTO-SAVE INJECTOR
+ *  HABIT TRACKER v4.3 — BOUND SIMPLE-TRIGGER `onEdit(e)` AUTO-SAVE INJECTOR
  *  Repo: https://github.com/Thitrongdan202/Habit-tracker-for-everyone-by-Dyu
+ *  (Hỗ trợ 100 Template `#01`–`#100`: tự gắn Auto-Save cho 95 mẫu Habit Tracker `#01`–`#95`
+ *   & tự động bỏ qua an toàn 5 mẫu Chiikawa Vocabulary `#96`–`#100` vốn lưu Cloud trực tiếp!)
  * ============================================================================
  *
  *  MỤC ĐÍCH:
@@ -125,7 +127,9 @@ var BOUND_CODE = [
   "  var sh = e.range.getSheet();",
   "  var name = sh.getName();",
   "  if (name === HT_CALC || name === HT_DB || name === HT_ASSETS ||",
-  "      name.indexOf('Hướng Dẫn') !== -1 || name.indexOf('Tổng Kết') !== -1) {",
+  "      name.indexOf('Hướng Dẫn') !== -1 || name.indexOf('Tổng Kết') !== -1 ||",
+  "      name.indexOf('Kho Từ Vựng') !== -1 || name.indexOf('Học Từ Hôm Nay') !== -1 ||",
+  "      name.indexOf('Luyện Tập') !== -1 || name.indexOf('Thống Kê') !== -1) {",
   "    return;",
   "  }",
   "",
@@ -785,7 +789,14 @@ function injectAutoSaveToFolder() {
 
     try {
       // 1) Prepare spreadsheet: clean old setup hints + seed _Calc keys & initial _Database snapshot
-      prepareSpreadsheetForAutoSave_(fileId);
+      //    Returns false for Chiikawa Vocabulary Trackers (#96-#100) which have no _Database tab
+      //    and auto-save natively in Google Sheets without needing a bound onEdit trigger!
+      var needsTrigger = prepareSpreadsheetForAutoSave_(fileId);
+      if (!needsTrigger) {
+        skipped++;
+        Logger.log("[" + (i + 1) + "/" + sheetsList.length + "] SKIP (Vocab / no _Database — native cloud auto-save): " + fileName);
+        continue;
+      }
 
       // 2) Attach container-bound script project via Apps Script REST API
       var scriptId = createBoundScriptProject_(fileId, token);
@@ -913,7 +924,7 @@ function prepareSpreadsheetForAutoSave_(spreadsheetId) {
   var ss = SpreadsheetApp.openById(spreadsheetId);
   var wsCalc = ss.getSheetByName("_Calc");
   var wsDb = ss.getSheetByName("_Database");
-  if (!wsCalc || !wsDb) return;
+  if (!wsCalc || !wsDb) return false;
 
   var isMobile = false;
   var sheets = ss.getSheets();
@@ -960,6 +971,7 @@ function prepareSpreadsheetForAutoSave_(spreadsheetId) {
     if (hSh && !hSh.isSheetHidden()) hSh.hideSheet();
   });
   SpreadsheetApp.flush();
+  return true;
 }
 
 function replaceSetupHintIfPlainText_(sheet, a1) {
