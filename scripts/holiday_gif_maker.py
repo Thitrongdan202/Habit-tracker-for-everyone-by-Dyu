@@ -240,7 +240,13 @@ def build_showcase_gif(kind: str) -> Path:
         b_tr = Image.open(DECOR_DIR / "ny_sakura_banner_tr.png").convert("RGBA").resize((142, 52), Image.LANCZOS)
         h_tl = Image.open(DECOR_DIR / "ny_apricot_hero_tl.png").convert("RGBA").resize((48, 48), Image.LANCZOS)
         sp_main = Image.open(ASSETS_DIR / "ny_lucky_red_envelope" / "stage_5.png").convert("RGBA")
-        sp_side = Image.open(ASSETS_DIR / "ny_fireworks_countdown" / "stage_5.png").convert("RGBA")
+        sp_side = Image.open(ASSETS_DIR / "ny_maneki_neko" / "stage_5.png").convert("RGBA")
+        ny_strip = [
+            Image.open(ASSETS_DIR / s / "stage_5.png").convert("RGBA").resize((36, 36), Image.LANCZOS)
+            for s in ("ny_fireworks_countdown", "ny_lucky_red_envelope", "ny_maneki_neko",
+                      "ny_sakura_blossom", "ny_daruma_wish", "ny_tea_mochi", "ny_festival_lantern")
+            if (ASSETS_DIR / s / "stage_5.png").exists()
+        ]
         banner_txt = "NEW YEAR PRO EDITION • GRAND FIREWORKS FINALE"
         toast_vn = "Khai Xuân Rực Rỡ! Chúc mừng đạt 100% — Vạn Sự Như Ý!"
         out_p = OUT_DIR / "holiday_newyear_fx_preview.gif"
@@ -298,11 +304,15 @@ def build_showcase_gif(kind: str) -> Path:
         d.rounded_rectangle([238, 230, W - 16, 312], radius=14, fill=(255, 255, 255, 255), outline=pri_c + (120,), width=2)
         sp_s = sp_side.resize((72, 72), Image.LANCZOS)
         im.alpha_composite(sp_s, (250, 236 - int(4 * bounce)))
-        d.text((334, 244), "PRO MACRO EXCLUSIVE FX", fill=pri_c + (255,), font=f_lbl)
+        d.text((334, 240), "PRO MACRO EXCLUSIVE FX", fill=pri_c + (255,), font=f_lbl)
         sub_line = ("Tuyết rơi đa tầng + Sao lấp lánh + Toast góc trái dưới"
-                    if kind == "xmas" else "Pháo hoa 4 đợt + Cánh Mai/Đào bay + Toast góc trái dưới")
-        d.text((334, 266), sub_line, fill=ink_c + (255,), font=f_sub)
-        d.text((334, 286), "Bật/Tắt linh hoạt • Tự dọn sạch 100% shape tạm!", fill=(115, 105, 110, 255), font=f_sub)
+                    if kind == "xmas" else "Pháo hoa 4 đợt + Cánh Mai/Đào bay + 7 Chủ Đề Năm Mới")
+        d.text((334, 258), sub_line, fill=ink_c + (255,), font=f_sub)
+        if kind == "newyear" and ny_strip:
+            for si, mini in enumerate(ny_strip):
+                im.alpha_composite(mini, (334 + si * 40, 274 - int(2 * abs(math.sin((u + si * 0.14) * 2.0 * math.pi)))))
+        else:
+            d.text((334, 280), "Bật/Tắt linh hoạt • Tự dọn sạch 100% shape tạm!", fill=(115, 105, 110, 255), font=f_sub)
 
         # 4. Animated Holiday FX Layer!
         if kind == "xmas":

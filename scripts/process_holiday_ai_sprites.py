@@ -106,7 +106,7 @@ AI_HOLIDAY_MANIFEST = [
     (
         91, "ny_maneki_neko", "91. Maneki Neko Fortune",
         (255, 248, 242), (189, 54, 48),
-        None, "none",
+        "maneki_neko_fortune_sprite_sheet_1795867290401.jpg", "none",
         ["Mèo ngồi ngoan", "Chuông cổ vàng", "Vẫy gọi lộc", "Ôm đồng vàng", "Túi lộc xu", "Phú quý 100%"],
     ),
     (
@@ -118,19 +118,19 @@ AI_HOLIDAY_MANIFEST = [
     (
         93, "ny_daruma_wish", "93. Daruma Wish Goal",
         (254, 246, 244), (178, 34, 34),
-        None, "none",
+        "daruma_wish_goal_spritesheet_fixed_1795867313807.jpg", "none",
         ["Chưa vẽ mắt", "Vẽ 1 mắt trái", "Má hồng sáng", "Ngồi đệm nơ", "Hào quang ấm", "Đủ 2 mắt 100%"],
     ),
     (
         94, "ny_tea_mochi", "94. Cozy Tea & Mochi",
         (246, 250, 244), (72, 122, 68),
-        None, "none",
+        "theme94_cozy_tea_mochi_sheet_1795867290647.jpg", "none",
         ["Khay ấm trà", "Chén Matcha", "Đĩa bánh Mochi", "Kagami 2 tầng", "Đặt quả quýt", "Tiệc trà 100%"],
     ),
     (
         95, "ny_festival_lantern", "95. New Year Festival",
         (255, 247, 242), (188, 52, 42),
-        None, "pure_holes",
+        "theme95_new_year_festival_lantern_sheet_v2_1795867310289.jpg", "pure_holes",
         ["Đèn giấy mộc", "Đỏ cam sáng", "Tua rua vàng", "Tỏa quầng sáng", "Dây đèn hoa", "Lễ hội 100%"],
     ),
 ]

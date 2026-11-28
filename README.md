@@ -1,6 +1,6 @@
-# 🍓🎀 Habit Tracker Collection for Everyone — by Dyu (v4.2 — 80 Themes × 4 Editions)
+# 🍓🎀 Habit & Vocabulary Tracker Collection for Everyone — by Dyu (v4.2 — 100 Themes × 4 Editions)
 
-![Version 4.2](https://img.shields.io/badge/Version-4.2_80_Themes-E56B8C?style=for-the-badge)
+![Version 4.2 - 100 Themes](https://img.shields.io/badge/Milestone-100_Themes_(400_Files)-E56B8C?style=for-the-badge)
 ![Pro #1 Recommended](https://img.shields.io/badge/⭐_KHUYÊN_DÙNG_%231-Pro_.XLSM_(Excel_365)-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white)
 ![Zero Macro Offline](https://img.shields.io/badge/%232_Offline_No--Macro-.XLSX_(Excel_2016--365)-4E9F76?style=for-the-badge)
 ![Google Sheets Beta](https://img.shields.io/badge/%233_Google_Sheets-Beta_(Đang_thử_nghiệm)-F59E0B?style=for-the-badge&logo=googlesheets&logoColor=white)
@@ -9,11 +9,11 @@
 <table width="100%">
   <tr>
     <td width="74%" valign="middle">
-      <p><b>Bộ sưu tập 80 mẫu Habit Tracker hoàn toàn miễn phí mãi mãi cho cộng đồng (320 tệp đủ 4 phiên bản)</b> — chuẩn Digital Planner với <b>495 ảnh hoạt ảnh</b> tự lớn lên & tiến hóa theo % thói quen mỗi ngày (<b>10 chủ đề Gấu Dâu Lotso Pastel #71–#80</b>, <b>10 chủ đề Hải Ly Loopy Pastel #61–#70</b>, <b>13 chủ đề Capybara Chill #48–#60</b>, <b>12 bộ Digimon 7–8 cấp chuẩn canon #36–#47</b>, Thú cưng Kawaii, Alpaca, Gấu trúc, Shiba/Akita & Hoa lá)!</p>
-      <p><b>Cập nhật v4.2:</b> Nâng cấp toàn diện hệ thống <b>Typography 3 tầng</b> (bộ font bay bổng, thanh lịch, cá nhân hóa riêng từng chủ đề cho Tên template, Tháng, Năm, KPI nổi bật &amp; banner tiêu đề trên cả 5 sheet, chuẩn Unicode tiếng Việt 0 vỡ dấu, tự căn chỉnh cỡ chữ &amp; chiều cao dòng) và đồng bộ phiên bản + bản quyền <code>© 2026 Dyu (Thân Trọng Duy)</code> trên đủ <b>160 file Excel Desktop</b> (<code>pro_macro</code> &amp; <code>excel_universal_offline</code>); giữ nguyên 2 bản Google Sheets &amp; Mobile.</p>
-      <p><b>Nền tảng v4.0–v4.1:</b> 20 chủ đề Loopy &amp; Lotso 120 sprites nối thân–tay 3 lớp liền mạch (<code>0% → 100%</code>), thông báo Toast góc trái dưới trên Pro Macro, bộ cài <code>install.ps1</code> / <code>install.sh</code> đồng bộ 80 mẫu.</p>
-      <p>Dùng mượt <b>100% Offline trên Microsoft Excel (Windows & Mac)</b> — bản Pro siêu mượt (<code>&lt;150ms</code>, hiệu ứng pháo hoa, tự lưu nhiều Tháng/Ngày/Năm, <code>Ctrl+Z</code> Undo), bản Offline không Macro cho mọi đời Excel 2016–365, kèm bản thử nghiệm cho Google Sheets & Điện thoại.</p>
-      <p>🌟 Nếu bộ template giúp bạn duy trì thói quen đều đặn & vui hơn mỗi ngày, hãy bấm tặng repo một nút <b>⭐ Star</b> ở góc trên bên phải để tiếp thêm động lực cho Dyu chia sẻ thêm nhiều mẫu dễ thương mới nhé!</p>
+      <p><b>🎉 CHỐT MỐC 100 TEMPLATE MIỄN PHÍ MÃI MÃI CHO CỘNG ĐỒNG (400 tệp đủ 4 phiên bản)!</b> — Bộ Digital Planner &amp; Vocabulary Tracker với <b>615 ảnh hoạt ảnh</b> tiến hóa <code>0% → 100%</code>: <b>5 bộ Chiikawa Vocabulary Tracker chuyên sâu (#96–#100)</b>, <b>15 chủ đề Lễ Hội Tri Ân Giáng Sinh &amp; Năm Mới (#81–#95)</b>, <b>10 Gấu Dâu Lotso (#71–#80)</b>, <b>10 Hải Ly Loopy (#61–#70)</b>, <b>13 Capybara Chill (#48–#60)</b>, <b>12 Digimon 7–8 cấp (#36–#47)</b>, Thú cưng Kawaii, Alpaca, Gấu trúc, Shiba/Akita &amp; Hoa lá!</p>
+      <p><b>🎄🧧 MỚI — Mốc 100 Template (Nhánh <code>version2</code>):</b> Bổ sung trọn bộ <b>15 chủ đề Lễ Hội (#81–#95)</b> vẽ AI đồng bộ phong cách Kawaii Pastel Chibi kèm trang trí <i>Ruy băng Noel / Cành Mai Vàng &amp; Hoa Đào</i> + <b>Holiday VBA Finale</b> (Tuyết rơi đa tầng / Pháo hoa nổ 3 đợt + Toast góc trái dưới) và <b>5 bộ Chiikawa Vocabulary Tracker (#96–#100)</b> thiết kế riêng biệt (SRS 5 mốc, IELTS Band 7–8.5, Flashcard Quiz 2 chiều, Đa ngôn ngữ Phim/Nhạc, Ôn thi &amp; Từ hay quên) tích hợp <b>VBA Dò Bài Ngẫu Nhiên Pop-up</b>!</p>
+      <p><b>Cập nhật v4.2:</b> Hệ thống <b>Typography 3 tầng</b> (chỉ dùng Whitelist font dễ đọc, tự động PIL Auto-Fit <code>≤ 88%</code> chống tràn chữ, chuẩn Unicode tiếng Việt 0 vỡ dấu) và đồng bộ bản quyền <code>© 2026 Dyu (Thân Trọng Duy)</code>.</p>
+      <p>Dùng mượt <b>100% Offline trên Microsoft Excel (Windows & Mac)</b> — bản Pro siêu mượt (<code>&lt;150ms</code>, hiệu ứng lễ hội &amp; dò bài Flashcard, tự lưu nhiều Tháng/Ngày/Năm, <code>Ctrl+Z</code> Undo), bản Offline không Macro cho mọi đời Excel 2016–365, kèm bản Google Sheets &amp; Mobile Portrait.</p>
+      <p>🌟 Nếu bộ 100 template giúp bạn duy trì thói quen &amp; học từ vựng vui hơn mỗi ngày, hãy bấm tặng repo một nút <b>⭐ Star</b> ở góc trên bên phải để tiếp thêm động lực cho Dyu nhé!</p>
     </td>
     <td width="26%" align="center" valign="middle">
       <img src="assets/donate_qr.png" width="165" alt="VietQR - Than Trong Duy" />
@@ -90,7 +90,65 @@ Nếu bạn không quen mở PowerShell/Terminal, tải trực tiếp ngay trên
 
 ---
 
-## 🎭 Xem Trước 495 Hoạt Ảnh Tiến Hóa (10 Gấu Dâu Lotso • 10 Hải Ly Loopy • 13 Capybara Chill • 12 Digimon 7–8 Cấp • Thú Cưng • Hoa Lá!)
+## 🎄🧧 Bộ Sưu Tập Tri Ân Mùa Lễ Hội — Christmas & New Year Edition (`#81`–`#95`)
+
+> 💛 *Lời tri ân mùa lễ hội từ Dyu: Cảm ơn các bạn đã đồng hành, gửi góp ý và lan tỏa bộ Habit Tracker trong suốt hành trình tiến tới cột mốc **100 Template**. Chúc bạn một mùa Giáng Sinh thật ấm áp và một Năm Mới rực rỡ — kỷ luật nhẹ nhàng, mỗi ngày đều đáng tự hào!*
+
+- **✨ Phong cách mỹ thuật đồng nhất 100% (90 Sprites AI Kawaii Pastel Chibi):** 8 chủ đề Giáng Sinh (`#81`–`#88`) & 7 chủ đề Năm Mới (`#89`–`#95`) tiến hóa mượt trên đúng 1 chủ thể từ `0% → 100%`.
+- **🎀 Trang trí lễ hội độc quyền:** Dải **Ruy băng & Nơ Noel** (`#81`–`#88`), **Cành Mai Vàng** (`#89, #90, #91, #93`) và **Cành Hoa Đào / Anh Đào** (`#92, #94, #95`) gắn tinh tế ở góc banner & khung Hero (không che chữ, không đè ô tick).
+- **🎆 Holiday VBA Celebration Finale (Độc quyền bản Pro `.xlsm`):** Khi hoàn thành 100% hoặc bấm **`🎉 Thử Hiệu Ứng Pro`**, kích hoạt **Winter Magic Finale** (mưa tuyết lượn sóng đa tầng + sao vàng & quả châu + nhịp sáng ruy băng + Toast Giáng Sinh góc trái dưới) hoặc **Grand New Year Fireworks Finale** (pháo hoa nổ 3 đợt đa sắc + cánh mai/đào rơi chéo + đồng xu lấp lánh + Toast Khai Xuân) — tự dọn sạch 100% shape tạm!
+
+<table width="100%">
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <img src="assets/previews/holiday/holiday_christmas_fx_preview.gif" width="100%" alt="Christmas Winter Magic Finale GIF"/><br/>
+      <b>🎄 Christmas Edition (#81–#88) — Winter Magic Finale</b><br/>
+      <sub>Ruy băng Noel + Tuyết rơi đa tầng + Sao lấp lánh + Toast góc trái dưới</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <img src="assets/previews/holiday/holiday_newyear_fx_preview.gif" width="100%" alt="New Year Grand Fireworks Finale GIF"/><br/>
+      <b>🧧 New Year Edition (#89–#95) — Grand Fireworks Finale</b><br/>
+      <sub>Cành Mai Vàng / Hoa Đào + Pháo hoa 3 đợt + Mưa cánh hoa + Toast Khai Xuân</sub>
+    </td>
+  </tr>
+</table>
+
+<details>
+<summary>🎨 Xem trọn bộ Contact Sheet 90 Sprites Lễ Hội (#81–#88 Giáng Sinh & #89–#95 Năm Mới)</summary>
+
+![48 Christmas Kawaii Chibi Sprites Contact Sheet](previews/assets_contact_sheet_christmas_81_88.jpg)
+![42 New Year Kawaii Chibi Sprites Contact Sheet](previews/assets_contact_sheet_newyear_89_95.jpg)
+
+</details>
+
+---
+
+## 🎀📚 Bộ Sưu Tập Chiikawa & Friends Vocabulary Tracker (`#96`–`#100`)
+
+5 mẫu **Vocabulary Tracker** thiết kế riêng cho phái nữ yêu sự dễ thương — **5 nhân vật riêng, 5 bảng màu pastel riêng và 5 phương pháp học chuyên sâu hoàn toàn khác biệt** (kèm 15 từ vựng mẫu thực tế mỗi bộ + nút **`🎲 Dò Bài Ngẫu Nhiên (Flashcard Pop-up)`** trên bản Pro `.xlsm` + công tắc **`🙈 Ẩn Nghĩa`** chạy mượt 0 cần macro trên cả Excel & Google Sheets!):
+
+<p align="center">
+  <img src="assets/previews/vocab/vocab_chiikawa_preview.gif" width="76%" alt="Chiikawa Vocabulary Tracker Showcase GIF"/>
+</p>
+
+| # | Mẫu & Nhân Vật | Bảng Màu Pastel | Phương Pháp & Tính Năng Chuyên Sâu Khác Biệt |
+|---|---|---|---|
+| **96** | 🍓 **Chiikawa Strawberry Milk** *(SRS Daily Vocab)* | Hồng sữa dâu • Kem vani | **SRS 5 mốc (1–3–7–14–30 ngày):** Tự tính *Ngày ôn tiếp theo*, tự báo đỏ `🔴 Hôm nay phải ôn!` |
+| **97** | 📘 **Hachiware Sky Study** *(IELTS Academic)* | Xanh trời pastel • Navy dịu | **Chuyên sâu IELTS/TOEIC Band 7.0–8.5:** Cột `Band (B1–C2)`, `Collocation ăn điểm`, `Synonyms` & Dashboard theo chủ đề thi |
+| **98** | 🍯 **Usagi Honey Flashcard** *(Speaking & Quiz)* | Vàng bơ mật ong • Cam đào | **Flashcard Dò bài 2 chiều** (`🙈 Ẩn Nghĩa` & `🙈 Ẩn Từ`) cho Phrasal Verbs/Idioms + chấm độ tự tin `⭐ 1–5` |
+| **99** | 💜 **Momonga Lavender Media** *(Multi-Language)* | Tím oải hương • Hồng phấn | **Học Đa Ngôn Ngữ (Anh/Trung/Nhật/Hàn) qua Phim/Nhạc/Podcast/Truyện:** IPA/Pinyin/Furigana/Romaji + Sắc thái + Bộ đếm Media |
+| **100** | 🍵 **Shisa Matcha Bookshop** *(Exam Sprint)* | Xanh matcha • Be tiệm sách | **Đếm ngược ngày thi (`TODAY()`) + Ngân hàng 'Từ Hay Quên':** Cặp từ dễ nhầm, Mẹo nhớ Mnemonic & bảng tự động `🚨 CỨU GẤP!` |
+
+<details>
+<summary>🎨 Xem Contact Sheet 30 Sprites Chiikawa & Friends (#96–#100)</summary>
+
+![30 Chiikawa Vocabulary Sprites Contact Sheet](previews/assets_contact_sheet_vocab_chiikawa_96_100.jpg)
+
+</details>
+
+---
+
+## 🎭 Xem Trước 615 Hoạt Ảnh Tiến Hóa (Chiikawa Vocab • 15 Lễ Hội • 10 Gấu Dâu Lotso • 10 Hải Ly Loopy • 13 Capybara Chill • 12 Digimon!)
 
 Mỗi ngày bạn tick hoàn thành thói quen từ `0% → 100%`, linh vật / Gấu Dâu Lotso / Hải Ly Loopy / Capybara / cây hoa / Digimon của ngày đó sẽ tự động lớn lên hoặc tiến hóa ngay trước mắt bạn!
 
@@ -685,7 +743,7 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn** (`0% Digi-E
 
 ---
 
-## 📋 Bảng Tải Trực Tiếp Toàn Bộ 80 Mẫu Template (Đủ 4 Phiên Bản — 320 Tệp)
+## 📋 Bảng Tải Trực Tiếp Toàn Bộ 100 Mẫu Template (Đủ 4 Phiên Bản — 400 Tệp)
 
 > 💡 **Mẹo tải nhanh không cần gõ lệnh:** Bấm vào link bạn chọn bên dưới → bấm biểu tượng **mũi tên tải xuống (`⬇ Download raw file`)** ở góc trên bên phải!
 
@@ -771,6 +829,26 @@ Tiến hóa nhân vật Digimon chuẩn canon qua **7 giai đoạn** (`0% Digi-E
 | **78** | 🌼 **Lotso Daisy Cheek Glow** *(Nhặt Hoa Cúc Cài Tai & Áp Má Nháy Mắt)* | [`_Pro.xlsm`](templates/pro_macro/78_Lotso_Daisy_Cheek_Glow_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/78_Lotso_Daisy_Cheek_Glow.xlsx) | [Desktop](templates/google_sheets_edition/78_Lotso_Daisy_Cheek_Glow.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/78_Lotso_Daisy_Cheek_Glow_Mobile.xlsx) |
 | **79** | 🐰 **Lotso Bunny Headband Selfcare** *(Bờm Tai Thỏ Tím & 3 Thẻ Sáng · Ngày · Tối)* | [`_Pro.xlsm`](templates/pro_macro/79_Lotso_Bunny_Headband_Selfcare_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/79_Lotso_Bunny_Headband_Selfcare.xlsx) | [Desktop](templates/google_sheets_edition/79_Lotso_Bunny_Headband_Selfcare.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/79_Lotso_Bunny_Headband_Selfcare_Mobile.xlsx) |
 | **80** | 🎁 **Lotso Berry Gift Box Party** *(Hộp Quà Hồng, Bánh Cupcake & Confetti 100%)* | [`_Pro.xlsm`](templates/pro_macro/80_Lotso_Berry_Gift_Box_Party_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/80_Lotso_Berry_Gift_Box_Party.xlsx) | [Desktop](templates/google_sheets_edition/80_Lotso_Berry_Gift_Box_Party.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/80_Lotso_Berry_Gift_Box_Party_Mobile.xlsx) |
+| **81** | 🎄 **Christmas Tree Glow** *(Lễ Hội Noel — Ruy Băng & Winter Magic Finale)* | [`_Pro.xlsm`](templates/pro_macro/81_Christmas_Tree_Glow_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/81_Christmas_Tree_Glow.xlsx) | [Desktop](templates/google_sheets_edition/81_Christmas_Tree_Glow.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/81_Christmas_Tree_Glow_Mobile.xlsx) |
+| **82** | ⛄ **Cozy Snowman Build** *(Lễ Hội Noel — Đắp Người Tuyết & Tuyết Rơi)* | [`_Pro.xlsm`](templates/pro_macro/82_Cozy_Snowman_Build_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/82_Cozy_Snowman_Build.xlsx) | [Desktop](templates/google_sheets_edition/82_Cozy_Snowman_Build.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/82_Cozy_Snowman_Build_Mobile.xlsx) |
+| **83** | 🍪 **Gingerbread Bakery** *(Lễ Hội Noel — Bé Bánh Gừng & Nhà Bánh)* | [`_Pro.xlsm`](templates/pro_macro/83_Gingerbread_Bakery_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/83_Gingerbread_Bakery.xlsx) | [Desktop](templates/google_sheets_edition/83_Gingerbread_Bakery.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/83_Gingerbread_Bakery_Mobile.xlsx) |
+| **84** | 🎅 **Santa Gift Delivery** *(Lễ Hội Noel — Ông Già Noel & Xe Trượt Tuyết)* | [`_Pro.xlsm`](templates/pro_macro/84_Santa_Gift_Delivery_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/84_Santa_Gift_Delivery.xlsx) | [Desktop](templates/google_sheets_edition/84_Santa_Gift_Delivery.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/84_Santa_Gift_Delivery_Mobile.xlsx) |
+| **85** | ☕ **Winter Hot Cocoa Cafe** *(Lễ Hội Noel — Ly Ca Cao Kem Tươi & Kẹo Gậy)* | [`_Pro.xlsm`](templates/pro_macro/85_Winter_Hot_Cocoa_Cafe_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/85_Winter_Hot_Cocoa_Cafe.xlsx) | [Desktop](templates/google_sheets_edition/85_Winter_Hot_Cocoa_Cafe.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/85_Winter_Hot_Cocoa_Cafe_Mobile.xlsx) |
+| **86** | 🦌 **Reindeer Bell Parade** *(Lễ Hội Noel — Bé Tuần Lộc Đèn Sừng & Chuông)* | [`_Pro.xlsm`](templates/pro_macro/86_Reindeer_Bell_Parade_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/86_Reindeer_Bell_Parade.xlsx) | [Desktop](templates/google_sheets_edition/86_Reindeer_Bell_Parade.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/86_Reindeer_Bell_Parade_Mobile.xlsx) |
+| **87** | 🏡 **Christmas Snow Village** *(Lễ Hội Noel — Ngôi Nhà Gỗ Tuyết Sáng Đèn)* | [`_Pro.xlsm`](templates/pro_macro/87_Christmas_Snow_Village_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/87_Christmas_Snow_Village.xlsx) | [Desktop](templates/google_sheets_edition/87_Christmas_Snow_Village.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/87_Christmas_Snow_Village_Mobile.xlsx) |
+| **88** | 🕯️ **Christmas Wreath & Candle** *(Lễ Hội Noel — Vòng Nguyệt Quế & Nến Ấm)* | [`_Pro.xlsm`](templates/pro_macro/88_Christmas_Wreath_Candle_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/88_Christmas_Wreath_Candle.xlsx) | [Desktop](templates/google_sheets_edition/88_Christmas_Wreath_Candle.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/88_Christmas_Wreath_Candle_Mobile.xlsx) |
+| **89** | 🎆 **Fireworks Countdown** *(Năm Mới — Đồng Hồ Giao Thừa & Pháo Hoa 3 Đợt)* | [`_Pro.xlsm`](templates/pro_macro/89_Fireworks_Countdown_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/89_Fireworks_Countdown.xlsx) | [Desktop](templates/google_sheets_edition/89_Fireworks_Countdown.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/89_Fireworks_Countdown_Mobile.xlsx) |
+| **90** | 🧧 **Lucky Red Envelope** *(Năm Mới — Bao Lì Xì Mai Vàng & Mưa Xu Lộc)* | [`_Pro.xlsm`](templates/pro_macro/90_Lucky_Red_Envelope_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/90_Lucky_Red_Envelope.xlsx) | [Desktop](templates/google_sheets_edition/90_Lucky_Red_Envelope.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/90_Lucky_Red_Envelope_Mobile.xlsx) |
+| **91** | 🐱 **Maneki Neko Fortune** *(Năm Mới — Mèo Thần Tài Vẫy Lộc Phú Quý)* | [`_Pro.xlsm`](templates/pro_macro/91_Maneki_Neko_Fortune_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/91_Maneki_Neko_Fortune.xlsx) | [Desktop](templates/google_sheets_edition/91_Maneki_Neko_Fortune.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/91_Maneki_Neko_Fortune_Mobile.xlsx) |
+| **92** | 🌸 **Sakura Blossom New Year** *(Năm Mới — Bonsai Hoa Anh Đào Nở Rộ)* | [`_Pro.xlsm`](templates/pro_macro/92_Sakura_Blossom_New_Year_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/92_Sakura_Blossom_New_Year.xlsx) | [Desktop](templates/google_sheets_edition/92_Sakura_Blossom_New_Year.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/92_Sakura_Blossom_New_Year_Mobile.xlsx) |
+| **93** | 🎯 **Daruma Wish Goal** *(Năm Mới — Búp Bê Daruma Vẽ Mắt Đạt Ước Nguyện)* | [`_Pro.xlsm`](templates/pro_macro/93_Daruma_Wish_Goal_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/93_Daruma_Wish_Goal.xlsx) | [Desktop](templates/google_sheets_edition/93_Daruma_Wish_Goal.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/93_Daruma_Wish_Goal_Mobile.xlsx) |
+| **94** | 🍵 **Cozy Tea & New Year Mochi** *(Năm Mới — Khay Trà Matcha & Kagami Mochi)* | [`_Pro.xlsm`](templates/pro_macro/94_Cozy_Tea_New_Year_Mochi_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/94_Cozy_Tea_New_Year_Mochi.xlsx) | [Desktop](templates/google_sheets_edition/94_Cozy_Tea_New_Year_Mochi.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/94_Cozy_Tea_New_Year_Mochi_Mobile.xlsx) |
+| **95** | 🏮 **New Year Festival Lantern** *(Năm Mới — Đèn Lồng Lễ Hội Hoa Đào)* | [`_Pro.xlsm`](templates/pro_macro/95_New_Year_Festival_Lantern_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/95_New_Year_Festival_Lantern.xlsx) | [Desktop](templates/google_sheets_edition/95_New_Year_Festival_Lantern.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/95_New_Year_Festival_Lantern_Mobile.xlsx) |
+| **96** | 🍓 **Chiikawa Strawberry Milk — SRS Daily Vocab** *(Lặp lại 5 mốc 1–30d + Quiz Pop-up)* | [`_Pro.xlsm`](templates/pro_macro/96_Chiikawa_SRS_Daily_Vocab_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/96_Chiikawa_SRS_Daily_Vocab.xlsx) | [Desktop](templates/google_sheets_edition/96_Chiikawa_SRS_Daily_Vocab.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/96_Chiikawa_SRS_Daily_Vocab_Mobile.xlsx) |
+| **97** | 📘 **Hachiware Sky Study — IELTS Academic Vocab** *(Band B1–C2, Collocation & Synonyms)* | [`_Pro.xlsm`](templates/pro_macro/97_Hachiware_IELTS_Academic_Vocab_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/97_Hachiware_IELTS_Academic_Vocab.xlsx) | [Desktop](templates/google_sheets_edition/97_Hachiware_IELTS_Academic_Vocab.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/97_Hachiware_IELTS_Academic_Vocab_Mobile.xlsx) |
+| **98** | 🍯 **Usagi Honey Flashcard — Speaking & 2-Way Quiz** *(Ẩn Nghĩa / Ẩn Từ + Phrasal/Idioms)* | [`_Pro.xlsm`](templates/pro_macro/98_Usagi_Flashcard_Quiz_Speaking_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/98_Usagi_Flashcard_Quiz_Speaking.xlsx) | [Desktop](templates/google_sheets_edition/98_Usagi_Flashcard_Quiz_Speaking.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/98_Usagi_Flashcard_Quiz_Speaking_Mobile.xlsx) |
+| **99** | 💜 **Momonga Lavender — Multi-Lang Media Vocab** *(Anh/Trung/Nhật/Hàn qua Phim/Nhạc)* | [`_Pro.xlsm`](templates/pro_macro/99_Momonga_MultiLang_Media_Vocab_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/99_Momonga_MultiLang_Media_Vocab.xlsx) | [Desktop](templates/google_sheets_edition/99_Momonga_MultiLang_Media_Vocab.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/99_Momonga_MultiLang_Media_Vocab_Mobile.xlsx) |
+| **100** | 🍵 **Shisa Matcha Bookshop — Exam Sprint & Mistake Bank** *(Đếm ngược thi & Từ hay quên)* | [`_Pro.xlsm`](templates/pro_macro/100_Chiikawa_Exam_Sprint_MistakeBank_Pro.xlsm) | [`.xlsx`](templates/excel_universal_offline/100_Chiikawa_Exam_Sprint_MistakeBank.xlsx) | [Desktop](templates/google_sheets_edition/100_Chiikawa_Exam_Sprint_MistakeBank.xlsx) | [📱 Mobile](templates/mobile_portrait_sheets/100_Chiikawa_Exam_Sprint_MistakeBank_Mobile.xlsx) |
 
 ---
 

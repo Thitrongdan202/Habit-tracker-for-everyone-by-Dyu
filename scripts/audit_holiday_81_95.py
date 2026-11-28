@@ -18,6 +18,7 @@ Verifies:
 from __future__ import annotations
 
 import gc
+import re
 import shutil
 import subprocess
 import sys
@@ -200,7 +201,8 @@ def audit_static_60(ready_only: bool = False) -> tuple[bool, list[tuple[str, Pat
         if not line.strip():
             continue
         fn = Path(line[3:].strip().strip('"')).name
-        if len(fn) >= 2 and fn[:2].isdigit() and int(fn[:2]) <= 80:
+        m_num = re.match(r"^(\d+)_", fn)
+        if m_num and int(m_num.group(1)) <= 80:
             touched_old.append(line)
 
     print(f"=== STATIC {len(tdefs) * 4}-FILE HOLIDAY AUDIT ===")
