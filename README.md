@@ -18,7 +18,7 @@
     <td width="26%" align="center" valign="middle">
       <img src="assets/donate_qr.png" width="165" alt="VietQR - Than Trong Duy" />
       <br/>
-      <sub><b>☕ Mời Dyu lon monster tiếp sức</b><br/>Miễn phí 100% — ủng hộ tùy tâm 💛</sub>
+      <sub><b>☕ Mời Dyu lon monster tiếp sức</b><br/>Miễn phí 100% — ủng hộ tùy tâm - cảm ơn mọi người 💛</sub>
     </td>
   </tr>
 </table>
